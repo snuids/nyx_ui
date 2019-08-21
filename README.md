@@ -12,11 +12,24 @@ The NYX UI includes an online configuration tools that can create the following 
 * A Free Text page
 * A Vega graph
 
-
+![Config](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config.png)
 
 ### Generic Table:
 
-![Config](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config.png)
+A generic table is a view on:
+
+* An Elastic Search Collection
+* A PostgreSQL table or Query
+
+It can include:
+
+* a discover graph
+* a map
+* a query
+* download options
+
+![Table1](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_table1.png)
+![Table2](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_table2.png)
 
 
 ## Project setup
