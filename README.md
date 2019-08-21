@@ -40,7 +40,7 @@ To add a new specific table editor
 docker build .
 ```
 
-! Don't forget to issue a **npm run build** first 
+Warning: Don't forget to issue a **npm run build** first 
 
 
 
