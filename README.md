@@ -22,7 +22,7 @@ Lauching application
 
 Rest API swagger
 
-=> Rest API swagger https://app.lass-ds.ovh/api/doc/
+=> Rest API swagger https://YOUR_REST_API_SERVER/api/doc/
 
 ### Extending the ui
 
