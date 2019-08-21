@@ -12,7 +12,12 @@ The NYX UI includes an online configuration tools that can create the following 
 * A Free Text page
 * A Vega graph
 
-![Config](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config.png)
+### Main Config Table
+![Config1](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config1.png)
+
+### An Application configuration panel
+
+![Config2](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config2.png)
 
 ### Generic Table:
 
