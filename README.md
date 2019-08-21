@@ -2,6 +2,16 @@
 
 ## Introduction
 
+The NYX platform is an easy to use application builder that integrates various technologies such as:
+
+* Elastic Search / Kibana
+* PostGreSQL
+* Jupyter Notebooks
+* Node Red
+* Apache ActiveMQ
+* Apache Camel
+
+
 The NYX UI includes an online configuration tools that can create the following pages:
 
 * A Kibana page
