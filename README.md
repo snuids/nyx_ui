@@ -16,7 +16,7 @@ The NYX UI includes an online configuration tools that can create the following 
 
 ### Generic Table:
 
-
+![Config](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config.png)
 
 
 ## Project setup
