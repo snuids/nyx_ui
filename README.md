@@ -30,6 +30,13 @@ The NYX UI includes an online configuration tools that can create the following 
 
 ![Config2](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config2.png)
 
+### Kibana Panel:
+
+A kibana panel is directly linked to a kibana dashboard. It is possible to change the time selector and query the Kibana panel editor.
+
+![Kibana1](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_kibana1.png)
+
+
 ### Generic Table:
 
 A generic table is a view on:
@@ -46,6 +53,13 @@ It can include:
 
 ![Table1](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_table1.png)
 ![Table2](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_table2.png)
+
+### Vega Panel:
+
+A Vega panel uses the Vega framework in order to build interactive dazshboard.
+
+![Vega](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_vega1.png)
+
 
 
 ## Project setup
