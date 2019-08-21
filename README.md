@@ -24,13 +24,13 @@ Rest API swagger
 
 => Rest API swagger https://YOUR_REST_API_SERVER/api/doc/
 
-### Extending the ui
+### Extending the UI
 
-To add a new specific controller
+To add a new specific controller:
 
 => put a new .vue file inside the folder components/external
 
-To add a new specific table editor
+To add a new specific table editor:
 
 => put a new .vue file inside the folder components/tableEditor
 
