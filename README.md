@@ -21,6 +21,7 @@ The NYX UI includes an online configuration tools that can create the following 
 * A Form
 * A Free Text page
 * A Vega graph
+* External URLs
 
 ### Main Config Table
 ![Config1](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_config1.png)
