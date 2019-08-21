@@ -34,8 +34,13 @@ To add a new specific table editor
 
 => put a new .vue file inside the folder components/tableEditor
 
+### Building the container
 
+```
+docker build .
+```
 
+! Don't forget to issue a **npm run build** first 
 
 
 
