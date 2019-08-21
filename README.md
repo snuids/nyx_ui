@@ -1,5 +1,24 @@
 # Nyx User Interface
 
+## Introduction
+
+The NYX UI includes an online configuration tools that can create the following pages:
+
+* A Kibana page
+* A generic table page (PostGreSQL or ElasticSearch)
+* An in house controller
+* An Upload page
+* A Form
+* A Free Text page
+* A Vega graph
+
+
+
+### Generic Table:
+
+
+
+
 ## Project setup
 ```
 npm install
