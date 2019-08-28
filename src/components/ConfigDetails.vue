@@ -87,7 +87,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="2">
-                <v-icon v-if="curConfig.icon" :name="curConfig.icon" scale="2" />
+                &nbsp;&nbsp;<v-icon v-if="curConfig.icon" :name="curConfig.icon" scale="2" />
               </el-col>
             </el-row>
             <el-row v-if="(curConfig.type === 'kibana') || (curConfig.type === 'generic-table')">
