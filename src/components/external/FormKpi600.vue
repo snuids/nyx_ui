@@ -36,7 +36,7 @@
             <el-row  :span="24" class="parameters-selection">
               <el-col  :span="12" style="text-align:left;">
               
-                <el-row>
+                <el-row v-if="lotArray && lotArray.length>1">
                   <el-select 
                     v-model="selectedLot" 
                     size="mini"
@@ -51,7 +51,7 @@
                     </el-select>
                 </el-row>
                 <el-row>
-                  <el-select 
+                  <el-select v-if="selectedLot == 3 || selectedLot == 2"
                     v-model="selectedTec" 
                     :disabled="selectedLot == null"
                     @change="tecChanged()"
@@ -200,6 +200,7 @@ export default {
         this.disable = (moment().subtract(1, 'months') > moment(this.monthSelected).endOf('Month'))
       }
         
+      //this.disable=false
       this.strPeriod1 = 'Vergadering van '+moment(this.monthSelected).subtract(1, 'months').format('21 MMM YYYY') + ' to ' + moment(this.monthSelected).format('14 MMM YYYY')
       this.strPeriod2 = 'Overleg KPI van '+moment(this.monthSelected).startOf('Month').subtract(2, 'months').format('MMM YYYY')
       this.getData()

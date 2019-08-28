@@ -2,7 +2,7 @@
   <el-row class="kpi304-container" :span="24" type="flex" justify="center">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span style="font-weight:bold">KPI304 - Administratieve Vergaderingen</span>
+        <span style="font-weight:bold">KPI304 - Aanwezigheid van de minimale bemanning</span>
       </div>
       <div class="card-body">
         <el-row>
@@ -38,7 +38,7 @@
                   </el-select>
                 </el-row>
                 <el-row>
-                  <el-select
+                  <el-select  v-if="selectedLot == 2"
                     v-model="selectedTec"
                     :disabled="selectedLot == null"
                     @change="tecChanged()"
@@ -64,7 +64,7 @@
           </el-col>
         </el-row>
         <el-row class="row-subtitle">
-          <h3 style="text-align:center; width:100%;">Lot {{selectedLot}} - {{selectedTec}}</h3>
+          <h3 style="text-align:center; width:100%;">Lot {{selectedLot}}{{selectedLot == 2?(" - " +selectedTec):""}}</h3>
         </el-row>
         <el-row :span="24" class="kpi304-switches">
           <el-form style="text-align:left" :model="kpi304Model" ref="formKPI304">
@@ -212,7 +212,7 @@ export default {
             tech2: 1,
             hoofd: 1,
             ppl: {
-              titu: ["Sébastien Docquier", "Patrick Lenaertzs"],
+              titu: ["Sébastien Docquier", "Patrick Lenaertz"],
               backup: ["Michiel Villé", "Dirk Van Leemput"]
             }
           }
