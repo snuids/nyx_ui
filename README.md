@@ -1,5 +1,7 @@
 # Nyx User Interface
 
+![badge](https://img.shields.io/badge/made%20with-vuejs-blue.svg?style=flat-square)
+
 ## Introduction
 
 The NYX platform is an easy to use application builder that integrates various technologies such as:
