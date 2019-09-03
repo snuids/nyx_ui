@@ -137,7 +137,7 @@
             <template slot="header" slot-scope="scope">
               <div>
                 <el-tooltip
-                  v-if="config.config.index.indexOf('*')==-1 && currentRow"
+                  v-if="config.config.index.indexOf('*')==-1 && currentRow && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
                   class="item"
                   effect="light"
                   content="Duplicate"
@@ -152,7 +152,7 @@
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
-                  v-if="config.config.index.indexOf('*')==-1"
+                  v-if="config.config.index.indexOf('*')==-1 && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
                   class="item"
                   effect="light"
                   content="Add"
