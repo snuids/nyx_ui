@@ -315,6 +315,13 @@
             >
               <el-input size="mini" v-model="curConfig.config.controller" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item
+              v-if="(curConfig.type === 'internal')"
+              label="Parameters"
+              :label-width="formLabelWidth"
+            >
+              <el-input size="mini" v-model="curConfig.config.controllerparameters" autocomplete="off"></el-input>
+            </el-form-item>
 
             <!-- Upload -->
             <div v-if="(curConfig.type === 'upload')">
