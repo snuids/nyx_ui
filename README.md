@@ -1,6 +1,8 @@
 # Nyx User Interface
 
 ![badge](https://img.shields.io/badge/made%20with-vuejs-blue.svg?style=flat-square)
+![badge](https://img.shields.io/badge/github/languages/code-size/:user/:repo)
+
 
 ## Introduction
 
