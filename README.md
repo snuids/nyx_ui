@@ -2,7 +2,7 @@
 
 ![badge](https://img.shields.io/badge/made%20with-vuejs-blue.svg?style=flat-square)
 ![badge](https://img.shields.io/github/languages/code-size/snuids/nyx_ui)
-![badge](https://img.shields.io/github/last-commit/code-size/snuids/nyx_ui)
+![badge](https://img.shields.io/github/last-commit/snuids/nyx_ui)
 
 
 ## Introduction
