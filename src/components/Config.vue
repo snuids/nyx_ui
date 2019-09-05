@@ -19,11 +19,15 @@
     ></ConfigDetailsDev> -->
 
     <!-- MAIN TABLE -->
-    <el-table
-      size="mini"
-      :data="tableData.filter(data => !search || ((data._source.title.toLowerCase().includes(search.toLowerCase())) 
+    <!-- :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase())))          
+    :data="tableData.filter(data => !search || ((data._source.title.toLowerCase().includes(search.toLowerCase())) 
       || (data._source.category.toLowerCase().includes(search.toLowerCase()))
       || ((''+data._source.subcategory).toLowerCase().includes(search.toLowerCase()))))"
+      :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase()))))"
+         -->
+    <el-table
+      size="mini"
+      :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase()))))"
       :default-sort="{prop: '_source.title', order: 'descending'}"
       style="width: 100%"
       highlight-current-row

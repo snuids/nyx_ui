@@ -32,7 +32,7 @@ export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
     kibanaurl:"/kibana/",
-    version: "v2.1.9",
+    version: "v2.3.0",
     menus: [],
     menuOpen: true,
     apps: [],
@@ -144,6 +144,7 @@ export default new Vuex.Store({
     login(state, payload) {
       console.log("Login mutation called.");
       state.initialized = false;
+      state.menuOpen=true;
       state.creds = payload.data.cred;
       state.creds.hasPrivilege=function(inPrivilege)
       {
