@@ -61,7 +61,7 @@ It can include:
 
 ### Vega Panel:
 
-A Vega panel uses the Vega framework in order to build interactive dazshboard.
+A Vega panel uses the Vega framework in order to build interactive dashboard.
 
 ![Vega](https://raw.githubusercontent.com/snuids/nyx_ui/master/medias/app_vega1.png)
 
