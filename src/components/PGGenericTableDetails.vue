@@ -109,10 +109,9 @@ export default {
     editMode: {
       type: String
     },
-    tableSchema:{
+    tableSchema: {
       type: Array
     }
-
   },
   watch: {
     recordin: {
@@ -158,41 +157,38 @@ export default {
       console.log("URL=" + url);
       console.log("MODE=" + this.editMode);
 
-      if(this.editMode=="add")
-      {        
-        var newobject={}
-        for(var rec in this.tableSchema)
-        {
-          var field=this.tableSchema[rec];
-          if (this.config.config.pkey==field.col)
-            continue;
-          if(field.type == '1082' || field.type == '1184' || field.type == '1114')
-            newobject[field.col]=  moment().toISOString();//new Date();
-          else
-            newobject[field.col]=  '';
-          newobject[field.col+"_$type"]=  field.type;
+      if (this.editMode == "add") {
+        var newobject = {};
+        for (var rec in this.tableSchema) {
+          var field = this.tableSchema[rec];
+          if (this.config.config.pkey == field.col) continue;
+          if (
+            field.type == "1082" ||
+            field.type == "1184" ||
+            field.type == "1114"
+          )
+            newobject[field.col] = moment().toISOString();
+          //new Date();
+          else newobject[field.col] = "";
+          newobject[field.col + "_$type"] = field.type;
         }
-        this.record._id='NEW';
+        this.record._id = "NEW";
         this.loadedrecord = newobject;
         this.prepareFields();
         return;
       }
-      if(this.editMode=="duplicate")
-      { 
-        
+      if (this.editMode == "duplicate") {
         //alert(JSON.stringify(this.loadedrecord))
-        this.loadedrecord=this.record;
-        for(var rec in this.tableSchema)
-        {
-          var field=this.tableSchema[rec];
-          if (this.config.config.pkey==field.col)
-            continue;
-          this.loadedrecord[field.col+"_$type"]=  field.type;
+        this.loadedrecord = this.record;
+        for (var rec in this.tableSchema) {
+          var field = this.tableSchema[rec];
+          if (this.config.config.pkey == field.col) continue;
+          this.loadedrecord[field.col + "_$type"] = field.type;
         }
-        
+
         //alert(JSON.stringify(this.loadedrecord))
-        this.record._id='NEW';
-        this.prepareFields();        
+        this.record._id = "NEW";
+        this.prepareFields();
         return;
       }
       axios.get(url).then(response => {
@@ -216,40 +212,38 @@ export default {
 
       //alert(JSON.stringify(lines));
     },
-    prepareFields: function()
-    {
-                var lines = [];
-          var curline = [];
+    prepareFields: function() {
+      var lines = [];
+      var curline = [];
 
-          for (var i in this.loadedrecord) {
-            var rec = this.loadedrecord[i];
-            if (i.indexOf("_$type") >= 0) continue;
-            if (i==this.config.config.pkey) continue;
-            if (i=="_id") continue;
+      for (var i in this.loadedrecord) {
+        var rec = this.loadedrecord[i];
+        if (i.indexOf("_$type") >= 0) continue;
+        if (i == this.config.config.pkey) continue;
+        if (i == "_id") continue;
 
-            if (typeof rec == "string" || typeof rec == "number") {
-              var newobj={
-                key: i,
-                value: rec,
-                type: this.loadedrecord[i + "_$type"]
-              };
+        if (typeof rec == "string" || typeof rec == "number") {
+          var newobj = {
+            key: i,
+            value: rec,
+            type: this.loadedrecord[i + "_$type"]
+          };
 
-              curline.push(newobj);
-              if (curline.length >= this.modulo) {
-                lines.push(curline);
-                curline = [];
-              }
-            }
-          }
-          if (curline.length > 0) {
+          curline.push(newobj);
+          if (curline.length >= this.modulo) {
             lines.push(curline);
             curline = [];
           }
-          this.fields = lines;
-          console.log(this.fields);
-          this.orgStringifiedRecord = JSON.stringify(this.fields);
-    }
-    ,
+        }
+      }
+      if (curline.length > 0) {
+        lines.push(curline);
+        curline = [];
+      }
+      this.fields = lines;
+      console.log(this.fields);
+      this.orgStringifiedRecord = JSON.stringify(this.fields);
+    },
     saveRecord: function() {
       // this.$store.commit({
       //   type: "updatePGRecord",
@@ -263,16 +257,15 @@ export default {
       //   position: "bottom-right"
       // });
 
-      var record=[]
-      for (var i=0;i<this.fields.length;i++)
-      {
-        for (var j=0;j<this.fields[i].length;j++)
-          record.push(this.fields[i][j])
+      var record = [];
+      for (var i = 0; i < this.fields.length; i++) {
+        for (var j = 0; j < this.fields[i].length; j++)
+          record.push(this.fields[i][j]);
       }
 
       console.log(record);
 
-      var id=this.record._id;
+      var id = this.record._id;
 
       var url =
         this.$store.getters.apiurl +

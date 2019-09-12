@@ -1,14 +1,14 @@
 <template>
   <!--MAIN DIALOG -->
   <el-row class="query-filter">
-    <div class="select-bar-container" >            
-      <el-col 
-        :span="parseInt(24/queryFilterCopy.config.queryfilters.length)" 
-        :key="queryfilter.key" 
+    <div class="select-bar-container">
+      <el-col
+        :span="parseInt(24/queryFilterCopy.config.queryfilters.length)"
+        :key="queryfilter.key"
         v-for="queryfilter in queryFilterCopy.config.queryfilters"
-        style="text-align:left">
-        {{queryfilter.title}}   
-             
+        style="text-align:left"
+      >
+        {{queryfilter.title}}
         <el-select
           size="mini"
           v-model="queryfilter.default"
@@ -25,39 +25,27 @@
       </el-col>
     </div>
     <div class="refresh-button">
-      <el-button 
-        @click="refresh()" 
-        
-        style="width:90%;" 
-        size="mini" 
-        type="primary">refresh</el-button>
+      <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button>
     </div>
     <div class="download-button" v-if="config && config.downloadChecked">
       <el-popover placement="bottom-start" width="150" trigger="hover">
-          <el-col>
-            <el-row class="popover-title">
-              <span>Download the selection</span>
-            </el-row>
-            <el-row class="button-dl">
-              <el-button
-                v-for="format in exportFormats"
-                :type="format.type"
-                :key="format.value"
-                round
-                size="mini"
-                @click="downloadSelection(format.value)"
-              >{{format.label}}</el-button>
-            </el-row>
-          </el-col>
-           <el-button
-           slot="reference"
-            round
-            type="default"
-            icon="el-icon-download"
-            size="mini"
-          ></el-button>
+        <el-col>
+          <el-row class="popover-title">
+            <span>Download the selection</span>
+          </el-row>
+          <el-row class="button-dl">
+            <el-button
+              v-for="format in exportFormats"
+              :type="format.type"
+              :key="format.value"
+              round
+              size="mini"
+              @click="downloadSelection(format.value)"
+            >{{format.label}}</el-button>
+          </el-row>
+        </el-col>
+        <el-button slot="reference" round type="default" icon="el-icon-download" size="mini"></el-button>
       </el-popover>
-     
     </div>
   </el-row>
 </template>
@@ -65,9 +53,9 @@
 <script>
 export default {
   name: "QueryFilter",
-  data: () => ({ 
-    queryfilter: "" ,
-    queryFilterCopy:undefined,
+  data: () => ({
+    queryfilter: "",
+    queryFilterCopy: undefined,
     exportFormats: [
       {
         label: ".xlsx",
@@ -79,7 +67,7 @@ export default {
         value: "csv",
         type: "success"
       }
-    ],
+    ]
   }),
   props: {
     config: {
@@ -88,7 +76,7 @@ export default {
   },
   computed: {
     configin: function() {
-      this.queryFilterCopy=JSON.parse(JSON.stringify(this.config));
+      this.queryFilterCopy = JSON.parse(JSON.stringify(this.config));
       return this.config;
     },
     query: function() {
@@ -112,7 +100,6 @@ export default {
       },
       deep: true
     }
-    
   },
   methods: {
     refresh: function() {
@@ -123,31 +110,26 @@ export default {
       this.$emit("downloadasked", format);
     },
 
-
     prepareData: function(e) {
-      
       if (this.queryFilterCopy.config.queryfilters != undefined) {
-        
         for (let queryind in this.queryFilterCopy.config.queryfilters) {
           var queryf = this.queryFilterCopy.config.queryfilters[queryind];
-          if (queryf.type == "selecter") {            
+          if (queryf.type == "selecter") {
             queryf.options = [];
             for (var opt in queryf.selectOptions) {
               var selectopt = queryf.selectOptions[opt];
 
-              
-                queryf.options.push({
-                  title: selectopt.split("=")[1],
-                  value: selectopt.split("=")[0]
-                });
+              queryf.options.push({
+                title: selectopt.split("=")[1],
+                value: selectopt.split("=")[0]
+              });
             }
           }
         }
       }
       var querya = [];
       for (let queryind in this.queryFilterCopy.config.queryfilters) {
-
-        if(this.queryFilterCopy.config.queryfilters[queryind].default!="*")
+        if (this.queryFilterCopy.config.queryfilters[queryind].default != "*")
           querya.push(
             this.queryFilterCopy.config.queryfilters[queryind].field +
               ':"' +
@@ -157,8 +139,7 @@ export default {
       }
       this.queryfilter = querya.join(" AND ");
 
-
-      this.refresh()
+      this.refresh();
     }
   },
   created: function() {
@@ -168,14 +149,12 @@ export default {
 </script>
 
 <style>
-
 .query-filter .select-bar-container {
   width: -webkit-calc(100% - 205px);
   width: -moz-calc(100% - 205px);
   width: calc(100% - 205px);
   float: left;
   font-weight: bold;
-
 }
 .query-filter .refresh-button {
   width: 130px;
