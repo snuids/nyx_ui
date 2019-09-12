@@ -8,13 +8,12 @@
     </el-dialog>
 
     <div>
-
       <el-form>
         <el-row>
           <el-col :span="8">
-          <el-form-item label="Filter" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="filter" autocomplete="off"></el-input>
-          </el-form-item>
+            <el-form-item label="Filter" :label-width="formLabelWidth">
+              <el-input size="mini" v-model="filter" autocomplete="off"></el-input>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -32,24 +31,28 @@
           </div>
           <div style="text-align:left;padding:2px;">
             <div style="position:absolute;width:65px;padding:2px;height:65px;">
-              <v-icon :name="Array.isArray(dat.icon) ? dat.icon[0] : dat.icon" scale="3" style="height:60px;color:#555"/>
+              <v-icon
+                :name="Array.isArray(dat.icon) ? dat.icon[0] : dat.icon"
+                scale="3"
+                style="height:60px;color:#555"
+              />
             </div>
             <div style="position:absolute;left:60px;">
               <b>Version</b>
               :{{dat.version}}
-              <br>
+              <br />
               <b>LifeSigns</b>
               :{{dat.count}}
-              <br>
+              <br />
               <b>Messages</b>
               :{{dat.messages}}
-              <br>
+              <br />
               <b>Last Life Sign</b>
               :{{dat.lifesigntime}}
-              <br>
+              <br />
               <b>Start Time</b>
               :{{dat.starttime}}
-              <br>
+              <br />
             </div>
           </div>
         </div>
@@ -71,7 +74,7 @@ export default {
     dialogVisible: false,
     processDetailsData: "",
     formLabelWidth: "120px",
-    filter:""
+    filter: ""
   }),
   props: {
     config: {
@@ -81,10 +84,8 @@ export default {
   computed: {
     filteredData: function() {
       var vm = this;
-      if (vm.filter=="")
-        return this.data;
+      if (vm.filter == "") return this.data;
       return this.data.filter(function(x) {
-        
         return x.name.toLowerCase().indexOf(vm.filter.toLowerCase()) >= 0;
       });
       //+return this.data.filter(function (x) {(x)=>x.name.toLowerCase().indexOf("kizeo")>0});
@@ -240,7 +241,9 @@ export default {
               }
               if (entry.name.toLowerCase().indexOf("activemq") >= 0) {
                 entry.icon = "envelope";
-              } else if (entry.name.toLowerCase().indexOf("reportrunner") >= 0) {
+              } else if (
+                entry.name.toLowerCase().indexOf("reportrunner") >= 0
+              ) {
                 entry.icon = "chart-bar";
               } else if (entry.name.toLowerCase().indexOf("rest") >= 0) {
                 entry.icon = "code";
@@ -284,7 +287,7 @@ export default {
   color: black;
 }
 
-.process_ok:hover { 
+.process_ok:hover {
   background-color: #eee;
 }
 .process_ko {
@@ -296,7 +299,7 @@ export default {
   color: black;
 }
 
-.process_ko:hover { 
+.process_ko:hover {
   background-color: #fcc;
 }
 

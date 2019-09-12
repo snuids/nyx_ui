@@ -46,7 +46,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-        
       </el-row>
 
       <el-row :gutter="20" v-if="curField.type=='string' || curField.type=='number'">
@@ -88,7 +87,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="closeDialog()">Close</el-button>
@@ -106,10 +104,10 @@ export default {
     inputVisible: false,
     curField: {},
     inputValue: "",
-    types: [      
+    types: [
       {
         value: "selecter",
-        label: "Selecter",
+        label: "Selecter"
       }
     ]
   }),
@@ -133,13 +131,10 @@ export default {
       deep: true
     }
   },
-  created: function() {
-    
-    },
+  created: function() {},
   mounted: function() {
     this.prepareData();
     this.visible = true;
-
   },
   methods: {
     prepareData: function() {
@@ -149,7 +144,6 @@ export default {
       this.changeType();
     },
     changeType: function() {
-      
       console.log("changeType -> " + this.curField.type);
 
       for (var i in this.types) {
@@ -187,7 +181,8 @@ export default {
     },
     showInput: function() {
       this.inputVisible = true;
-      this.$nextTick(_ => { // eslint-disable-line
+      this.$nextTick(_ => {
+        // eslint-disable-line
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
