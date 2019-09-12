@@ -76,13 +76,6 @@ npm install
 ```
 npm run serve
 ```
-
-
-
-### Compiles and minifies for production
-```
-npm run build
-```
 Lauching application
 
 ==> http://localhost:8080/?api=https://YOUR_REST_API_SERVER/api/v1/&user=admin&password=*******#/
@@ -90,6 +83,13 @@ Lauching application
 Rest API swagger
 
 => Rest API swagger https://YOUR_REST_API_SERVER/api/doc/
+
+
+
+### Compiles and minifies for production
+```
+npm run build
+```
 
 ### Extending the UI
 
