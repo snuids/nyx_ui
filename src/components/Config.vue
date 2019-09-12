@@ -2,29 +2,13 @@
   <div>
     <!-- MAIN DIALOG -->
     <ConfigDetails
-        v-if="dialogFormVisible"
-        :allPrivileges="privilegesdata"
-        :isAdd="isAdd"
-        :orgConfig="orgConfig"
-        :currentConfig="curConfig"
-        v-on:dialogclose="dialogClosed()"
+      v-if="dialogFormVisible"
+      :allPrivileges="privilegesdata"
+      :isAdd="isAdd"
+      :orgConfig="orgConfig"
+      :currentConfig="curConfig"
+      v-on:dialogclose="dialogClosed()"
     ></ConfigDetails>
-    <!-- <ConfigDetailsDev
-        v-if="dialogFormVisible"
-        :allPrivileges="privilegesdata"
-        :isAdd="isAdd"
-        :orgConfig="orgConfig"
-        :currentConfig="curConfig"
-        v-on:dialogclose="dialogClosed()"
-    ></ConfigDetailsDev> -->
-
-    <!-- MAIN TABLE -->
-    <!-- :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase())))          
-    :data="tableData.filter(data => !search || ((data._source.title.toLowerCase().includes(search.toLowerCase())) 
-      || (data._source.category.toLowerCase().includes(search.toLowerCase()))
-      || ((''+data._source.subcategory).toLowerCase().includes(search.toLowerCase()))))"
-      :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase()))))"
-         -->
     <el-table
       size="mini"
       :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase()))))"
@@ -48,8 +32,10 @@
             title="Privileges"
             width="200"
             trigger="hover"
-            size="mini">
-            <span :key="item" v-for="item in scope.row._source.privileges">&nbsp;
+            size="mini"
+          >
+            <span :key="item" v-for="item in scope.row._source.privileges">
+              &nbsp;
               <el-tag size="mini">{{item}}</el-tag>
             </span>
             <el-button size="mini" slot="reference">{{scope.row._source.privileges.length}}</el-button>
@@ -73,7 +59,6 @@
                 @click="duplicate()"
                 class="dupbutton"
                 type="primary"
-                
                 icon="el-icon-copy-document"
               ></el-button>
             </el-tooltip>
@@ -84,7 +69,6 @@
                 @click="handleAddApp()"
                 class="addbutton"
                 type="primary"
-                
                 icon="el-icon-plus"
               ></el-button>
             </el-tooltip>
@@ -95,12 +79,11 @@
                 @click="reloadConfig()"
                 class="regreshbutton"
                 plain
-                
                 icon="el-icon-refresh"
               ></el-button>
             </el-tooltip>
           </div>
-          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield"/>
+          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield" />
         </template>
         <template slot-scope="scope">
           <v-icon
@@ -111,7 +94,6 @@
           />&nbsp;&nbsp;
           <el-button
             size="mini"
-            
             icon="el-icon-setting"
             plain
             @click="handleEdit(scope.$index, scope.row)"
@@ -221,9 +203,6 @@ export default {
         data: JSON.parse(JSON.stringify(newrec._source))
       });
 
-
-
-
       this.orgConfig = newrec;
       this.dialogHeaderVisible = false;
       this.currentHeader = {};
@@ -240,15 +219,13 @@ export default {
           category: "",
           order: 1000,
           privileges: [],
-          config: { headercolumns: [],queryfilters:[] }
+          config: { headercolumns: [], queryfilters: [] }
         },
 
         _type: "doc"
       };
       this.curConfig = JSON.parse(JSON.stringify(newrec._source));
       this.orgConfig = newrec;
-
-
 
       this.$store.commit({
         type: "setAppConfigObj",
@@ -258,12 +235,9 @@ export default {
           category: "",
           order: 1000,
           privileges: [],
-          config: { headercolumns: [],queryfilters:[] }
+          config: { headercolumns: [], queryfilters: [] }
         }
       });
-
-
-
 
       this.dialogHeaderVisible = false;
       this.currentHeader = {};
@@ -277,7 +251,6 @@ export default {
     },
     handleEdit(index, row) {
       this.curConfig = JSON.parse(JSON.stringify(row._source));
-
 
       this.$store.commit({
         type: "setAppConfigObj",

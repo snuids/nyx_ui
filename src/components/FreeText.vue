@@ -1,10 +1,9 @@
 <template>
-    <!--MAIN DIALOG -->
-    <div style="text-align:left">
+  <!--MAIN DIALOG -->
+  <div style="text-align:left">
     <h1>Free text 3</h1>
-    <span v-html="config.config.freetext">
-      </span>
-    </div>
+    <span v-html="config.config.freetext"></span>
+  </div>
 </template>
 
 <script>
@@ -12,20 +11,14 @@
 
 export default {
   name: "FreeText",
-  data: () => ({
-    
-  }),
+  data: () => ({}),
   props: {
     config: {
       type: Object
     }
   },
-  methods: {
-    
-    
-  },
-  created: function() {    
-  },
+  methods: {},
+  created: function() {},
 
   mounted: function() {},
   beforeDestroy: function() {
@@ -35,6 +28,5 @@ export default {
 </script>
 
 <style>
-
 </style>
 

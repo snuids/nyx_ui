@@ -1,25 +1,5 @@
 <template>
-  <!-- <svg :width="800" :height="height"> -->
-  <!-- <svg :viewBox="viewBox2" width="100%"> -->
-    <!-- <svg width="660px" height="220px" viewBox="0 0 660 160" style="outline: 1px solid red">  
- <defs>  
-   <clipPath id="abc">  
-     <rect x="0" y="0" width="600" height="110" />  
-   </clipPath>  
- </defs>
- <circle cx="110" cy="110" r="50" fill="#9c6" clip-path="url(#abc)" />  
-  <rect x="110" y="50" width="150" height="150" fill="#f00" clip-path="url(#abc)" />  
-</svg>  
-<svg width="660px" height="220px" viewBox="0 0 660 160" style="outline: 1px solid red">  
- <defs>  
-   <clipPath id="abc">  
-     <rect x="0" y="0" width="600" height="110" />  
-   </clipPath>  
- </defs>
- <circle cx="110" cy="110" r="50" fill="#9c6" clip-path="url(#abc)" />  
-  <rect x="110" y="50" width="150" height="150" fill="#f00" clip-path="url(#abc)" />  
-</svg>   -->
-  <svg :viewBox="viewBox2" :width="containerWidth"> 
+  <svg :viewBox="viewBox2" :width="containerWidth">
     <defs>
       <clipPath id="mainrect">
         <rect
@@ -27,11 +7,11 @@
           :y="margintop"
           :width="width-marginleft-marginright"
           :height="height-margintop-marginbottom"
-        ></rect>
+        />
       </clipPath>
     </defs>
 
-    <rect x="0" y="0" :width="width" :height="height" class="barchart_background"></rect>
+    <rect x="0" y="0" :width="width" :height="height" class="barchart_background" />
 
     <rect
       :x="marginleft"
@@ -42,7 +22,7 @@
       @mousedown="backDown"
       @mouseup="backUp"
       @mousemove="backMove"
-    ></rect>
+    />
 
     <rect
       :x="marginleft"
@@ -53,7 +33,7 @@
       @mousedown="backDown"
       @mouseup="backUp"
       @mousemove="backMove"
-    ></rect>
+    />
 
     <line
       :x1="marginleft"
@@ -64,7 +44,7 @@
       @mousedown="backDown"
       @mouseup="backUp"
       @mousemove="backMove"
-    ></line>
+    />
 
     <rect
       v-show="dragStarted"
@@ -75,7 +55,7 @@
       :height="height-margintop-marginbottom"
       class="barchart_selectrect"
       @mouseup="backUp"
-    ></rect>
+    />
 
     <!-- eslint-disable -->
 
@@ -90,7 +70,7 @@
       @mouseout="resetBar(bar)"
       clip-path="url(#mainrect)"
       :pointer-events="pointerevents"
-    ></rect>
+    />
 
     <line
       v-for="tick in ticks"
@@ -99,7 +79,7 @@
       :x2="tick.x"
       :y2="tick.y"
       style="stroke:rgb(128,128,128);stroke-width:2"
-    ></line>
+    />
     <text v-for="tick in ticks" :x="tick.x-16" :y="tick.y+23" class="barchart_tick">{{tick.t}}</text>
 
     <!-- eslint-enable -->
@@ -107,12 +87,10 @@
     <text :x="marginleft" y="15" class="barchart_title">{{description}}</text>
     <text x="410" y="15" class="barchart_details">{{selectedText}}</text>
 
-    <text :x="marginleft-10" :y="margintop+8" text-anchor="end" >{{max}}</text>
-    <text :x="marginleft-10" :y="height-marginbottom" text-anchor="end" >0</text>
+    <text :x="marginleft-10" :y="margintop+8" text-anchor="end">{{max}}</text>
+    <text :x="marginleft-10" :y="height-marginbottom" text-anchor="end">0</text>
     <text :x="marginleft/2" :y="height/2" writing-mode="tb" text-anchor="middle">Documents</text>
   </svg>
-
-  
 </template>
 
 <script>
@@ -122,7 +100,7 @@ import moment from "moment";
 export default {
   name: "BarChart",
   data: () => ({
-    viewBox:"0 0 1100 150",
+    viewBox: "0 0 1100 150",
     marginleft: 80,
     marginright: 10,
     margintop: 20,
@@ -140,7 +118,7 @@ export default {
     dragWidth: 100,
     max: 0,
     dragStarted: false,
-    pointerevents:"auto"
+    pointerevents: "auto"
   }),
   props: {
     config: {
@@ -148,35 +126,31 @@ export default {
     },
     series: {
       type: Array
-    }
-    ,
-    autotime:{
+    },
+    autotime: {
       type: String
     }
-    
   },
   computed: {
     seriesIn: function() {
       return this.series;
     },
-    viewBox2: function(){
-      var left=210;
-      if(!this.$store.state.menuOpen)
-        left=0;
+    viewBox2: function() {
+      var left = 210;
+      if (!this.$store.state.menuOpen) left = 0;
 
-      return "0 0 "+(this.$store.getters.containerSize.width-left)+" 200";
+      return "0 0 " + (this.$store.getters.containerSize.width - left) + " 200";
     },
     containerWidth: function() {
-      var left=210;
-      if(!this.$store.state.menuOpen)
-        left=0;
+      var left = 210;
+      if (!this.$store.state.menuOpen) left = 0;
 
-      this.width=this.$store.getters.containerSize.width-left;
-      console.log("CONTAINER W="+this.width);
+      this.width = this.$store.getters.containerSize.width - left;
+      console.log("CONTAINER W=" + this.width);
 
-      return (this.$store.getters.containerSize.width-left-50) + "px";
+      return this.$store.getters.containerSize.width - left - 50 + "px";
       //return "1400px";
-    },
+    }
   },
   watch: {
     seriesIn: {
@@ -188,10 +162,15 @@ export default {
   },
   methods: {
     backDown: function(evt) {
-      if(!(this.config.timeSelectorType==undefined|| this.config.timeSelectorType=="classic"))
+      if (
+        !(
+          this.config.timeSelectorType == undefined ||
+          this.config.timeSelectorType == "classic"
+        )
+      )
         return;
 
-      this.pointerevents="none"
+      this.pointerevents = "none";
       var e = evt.target;
       var dim = e.getBoundingClientRect();
       var x = evt.clientX - dim.left;
@@ -201,7 +180,7 @@ export default {
         (x * (this.width - this.marginleft - this.marginright)) / dim.width;
       this.movedragXRef = this.startdragXRef;
       //alert("D x: "+x+" y:"+y);
-//      console.log("DOWN:" + x + " y:" + y);
+      //      console.log("DOWN:" + x + " y:" + y);
       this.dragStarted = true;
     },
     backMove: function(evt) {
@@ -216,11 +195,16 @@ export default {
       //console.log("MOVE: " + x + " y:" + y);
     },
     backUp: function(evt) {
-      if(!(this.config.timeSelectorType==undefined|| this.config.timeSelectorType=="classic"))
+      if (
+        !(
+          this.config.timeSelectorType == undefined ||
+          this.config.timeSelectorType == "classic"
+        )
+      )
         return;
 
       this.dragStarted = false;
-      this.pointerevents="auto"
+      this.pointerevents = "auto";
       var e = evt.target;
       var dim = e.getBoundingClientRect();
       var x = evt.clientX - dim.left;
@@ -257,13 +241,13 @@ export default {
       }
     },
     barClicked: function(bar) {
-      this.pointerevents="auto"
+      this.pointerevents = "auto";
       this.dragStarted = false;
       this.selectedTick = bar;
       this.selectedText = "" + bar.date + "  (" + bar.count + ")";
     },
     resetBar: function(bar) {
-      this.pointerevents="auto"
+      this.pointerevents = "auto";
       this.dragStarted = false;
       this.selectedTick = bar;
       this.selectedText = "" + bar.date + "  (" + bar.count + ")";
@@ -271,39 +255,35 @@ export default {
 
     prepareData: function() {
       console.log("=====> COMPUTING GRAPH");
-      var left=210;
-      if(!this.$store.state.menuOpen)
-        left=0;
+      var left = 210;
+      if (!this.$store.state.menuOpen) left = 0;
 
-      this.width=this.$store.getters.containerSize.width-left;
-      console.log("CONTAINER W="+this.width);
+      this.width = this.$store.getters.containerSize.width - left;
+      console.log("CONTAINER W=" + this.width);
 
       var rangetouse;
       //console.log(this.config);
-      console.log("=====> "+this.width);
-      console.log("=====> "+this.config.timeSelectorType);
-      switch(this.config.timeSelectorType)
-      {
-        case 'week':
-          rangetouse=this.$store.getters.timeRangeWeek;
+      console.log("=====> " + this.width);
+      console.log("=====> " + this.config.timeSelectorType);
+      switch (this.config.timeSelectorType) {
+        case "week":
+          rangetouse = this.$store.getters.timeRangeWeek;
           break;
-        case 'month':
-          rangetouse=this.$store.getters.timeRangeMonth;
+        case "month":
+          rangetouse = this.$store.getters.timeRangeMonth;
           break;
-        case 'year':
-          rangetouse=this.$store.getters.timeRangeYear;
+        case "year":
+          rangetouse = this.$store.getters.timeRangeYear;
           break;
         default:
-          rangetouse=this.$store.getters.timeRange;
+          rangetouse = this.$store.getters.timeRange;
           break;
       }
 
-      var totalSeconds =
-        (rangetouse[1] - rangetouse[0]) /
-        1000;
+      var totalSeconds = (rangetouse[1] - rangetouse[0]) / 1000;
       this.bars = [];
 
-      var widthX = this.width - this.marginleft - this.marginright;      
+      var widthX = this.width - this.marginleft - this.marginright;
       var startTime = rangetouse[0].valueOf();
 
       var max = 0;
@@ -472,13 +452,9 @@ export default {
         bar.h = (dat[1] * sizeY) / max;
         bar.y -= bar.h;
       }
-      this.max=max;
-      this.description =        
-        " Total Documents:" +
-        total +
-        " Aggregation:" +
-        this.autotime;
-        
+      this.max = max;
+      this.description =
+        " Total Documents:" + total + " Aggregation:" + this.autotime;
     }
   },
   created: function() {},
@@ -486,11 +462,10 @@ export default {
   mounted: function() {
     console.log("===============  REGISTERING BarChart:");
 
-    this.width=this.$store.getters.containerSize.width;
-    this.viewBox="0 0 "+this.$store.getters.containerSize.width+" 200";//+this.height;
+    this.width = this.$store.getters.containerSize.width;
+    this.viewBox = "0 0 " + this.$store.getters.containerSize.width + " 200"; //+this.height;
     //alert(this.viewBox);
 
-    
     this.prepareData();
 
     this.$globalbus.$on("timerangechanged", () => {
@@ -522,29 +497,28 @@ export default {
   fill: #73a6f8;
   stroke-width: 1;
   /*stroke: #4376c8;*/
-  stroke: #409EFF;
+  stroke: #409eff;
   opacity: 1;
 }
 
 .barchart_bar {
   /*fill: #4376c8;*/
-  fill: #409EFF;
+  fill: #409eff;
   stroke-width: 1;
   /*stroke: #4376c8;*/
-  stroke: #409EFF;
+  stroke: #409eff;
 }
 .barchart_tick {
   font: 13px sans-serif;
   fill: #606266;
   font-weight: 400;
-
 }
-.barchart_title_none {    
+.barchart_title_none {
 }
 .barchart_details {
   font: 14px sans-serif;
   /*stroke: #4376c8;*/
-  fill: #409EFF;
+  fill: #409eff;
 }
 .barchart_selectrect {
   fill: rgb(105, 177, 187);
