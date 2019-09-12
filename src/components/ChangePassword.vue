@@ -7,14 +7,14 @@
   >
     <el-form class="form" :rules="rules" ref="cpform" status-icon label-width="180px">
       <el-form-item :label="$t('changepassword.oldpass')" prop="oldpassword">
-        <el-input type="password" name="password" autocomplete="none" v-model="cpform.oldpassword"/>
+        <el-input type="password" name="password" autocomplete="none" v-model="cpform.oldpassword" />
       </el-form-item>
       <div>&nbsp;</div>
       <el-form-item class="formitem" :label="$t('changepassword.newpass')" prop="newpassword1">
-        <el-input type="password" autocomplete="none" v-model="cpform.newpassword1"/>
+        <el-input type="password" autocomplete="none" v-model="cpform.newpassword1" />
       </el-form-item>
       <el-form-item class="formitem" :label="$t('changepassword.repeatpass')" prop="newpassword2">
-        <el-input type="password" autocomplete="none" v-model="cpform.newpassword2"/>
+        <el-input type="password" autocomplete="none" v-model="cpform.newpassword2" />
       </el-form-item>
     </el-form>
     {{errorstr}}
@@ -50,16 +50,12 @@ export default {
     return {
       visible: true,
       actionunderway: false,
-      errorstr:"",
+      errorstr: "",
       cpform: { newpassword1: "", newpassword2: "", oldpassword: "" },
       rules: {
         oldpassword: [],
         newpassword1: [],
         newpassword2: [{ validator: validatePass2, trigger: "blur" }]
-
-        /*newpassword2: [
-            { validator: validatePass2, trigger: 'blur' }
-          ]*/
       }
     };
   },
@@ -71,21 +67,26 @@ export default {
       try {
         this.actionunderway = true;
         const response = await axios.post(
-          this.$store.getters.apiurl + "cred/changepassword?token="+this.$store.getters.creds.token,
-          { old_password: this.cpform.oldpassword, new_password: this.cpform.newpassword2 }
+          this.$store.getters.apiurl +
+            "cred/changepassword?token=" +
+            this.$store.getters.creds.token,
+          {
+            old_password: this.cpform.oldpassword,
+            new_password: this.cpform.newpassword2
+          }
         );
         if (response.data.error == "") {
           this.actionunderway = false;
           this.$emit("changepassword_closed");
           this.$notify({
-              title: "Message",
-              message: "Password changed",
-              type: "success",
-              position: "bottom-right"
-            });
+            title: "Message",
+            message: "Password changed",
+            type: "success",
+            position: "bottom-right"
+          });
         } else {
           this.actionunderway = false;
-          this.errorstr=response.data.error;
+          this.errorstr = response.data.error;
         }
       } catch (e) {
         alert(e);
