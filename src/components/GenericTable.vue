@@ -3,7 +3,7 @@
     <!-- <div v-loading="!ready"> -->
     <span v-if="dialogFormVisible">
       <component
-        v-if="config.config.editorComponent!=null"
+        v-if="config.config.editorComponent!=null && config.config.editorComponent!=''"
         v-bind:is="config.config.editorComponent"
         :editMode="editMode"
         :record="currentRecord.original"
