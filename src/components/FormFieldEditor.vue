@@ -306,7 +306,8 @@ export default {
     },
     showInput: function() {
       this.inputVisible = true;
-      this.$nextTick(_ => { // eslint-disable-line
+      this.$nextTick(_ => {
+        // eslint-disable-line
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },

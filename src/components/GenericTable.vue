@@ -3,7 +3,7 @@
     <!-- <div v-loading="!ready"> -->
     <span v-if="dialogFormVisible">
       <component
-        v-if="config.config.editorComponent!=null"
+        v-if="config.config.editorComponent!=null && config.config.editorComponent!=''"
         v-bind:is="config.config.editorComponent"
         :editMode="editMode"
         :record="currentRecord.original"
@@ -21,7 +21,7 @@
     </span>
 
     <el-row v-if="config.queryBarChecked">
-      <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked"  :config="config"></QueryBar>
+      <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
     </el-row>
 
     <el-row v-if="config.queryFilterChecked">
@@ -32,62 +32,18 @@
         v-on:queryfilter_changed="queryfilterchanged"
       ></QueryFilter>
     </el-row>
-
-    <!-- <el-row v-if="config.queryFilterChecked">
-      <el-col :span="2" style="text-align:left" v-if="config.queryFilterChecked">
-        <span class="input-label">Filter:</span>
-      </el-col>
-      <el-col :span="20+(config.downloadChecked?0:2)" v-if="config.queryFilterChecked">
-        <QueryFilter :config="config" v-on:queryfilter_changed="queryfilterchanged"></QueryFilter>
-      </el-col>
-      <el-col :span="2" style="text-align:left" v-if="config.queryBarChecked">
-        <span class="input-label">{{$t("generic.query")}}:</span>
-      </el-col>
-      <el-col :span="20+(config.downloadChecked?0:2)" v-if="config.queryBarChecked">
-        <el-input
-          label="coucou"
-          size="mini"
-          :placeholder="this.$t('generic.pleaseinput')"
-          v-model="queryField"
-        ></el-input>
-      </el-col>
-      <el-col :span="2" v-if="config.downloadChecked" style="text-alight:right">
-        <el-dropdown @command="handleCommand">
-          <el-button circle size="mini" type="primary" icon="el-icon-download"></el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="csv">
-              <v-icon class="menuicon" name="file-csv" scale="1"/>
-              &nbsp;&nbsp;{{ $t("generic.downloadascsv") }}
-            </el-dropdown-item>
-            <el-dropdown-item command="xlsx">
-              <v-icon class="menuicon" name="file-excel" scale="1"/>
-              &nbsp;&nbsp;{{ $t("generic.downloadasxls") }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-col>
-    </el-row>-->
     <el-row v-if="config.mapChecked">
       <el-col>
         <Map :config="config" :tableData="tableData" v-on:mapclicked="mapClicked"></Map>
       </el-col>
     </el-row>
     <el-row v-if="config.graphicChecked">
-      <!-- <el-col>
-        <apexchart ref="generic" height="250" type="bar" :options="options" :series="series"></apexchart>
-      </el-col>-->
       <el-col>
         <BarChart :autotime="autotime" :config="config" :series="series"></BarChart>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <!-- <div v-if="!ready">
-          <br/>
-          <br/>
-          <br/>
-        <v-icon style="color:#303133" name="spinner" scale="7" spin />
-        </div>-->
         <el-table
           size="mini"
           :data="tableData"
@@ -333,10 +289,6 @@ export default {
       },
       deep: true
     }
-    // queryField: function() {
-    //   console.log("Query changed.....");
-    //   this.queryChanged();
-    // }
   },
   methods: {
     handleCommand: function(e) {
@@ -723,9 +675,7 @@ export default {
                   data: dates
                 }
               ];
-            }
-            else
-            {
+            } else {
               this.series = [
                 {
                   name: "Documents",
@@ -733,7 +683,6 @@ export default {
                 }
               ];
             }
-            
 
             this.$notify({
               title: this.$t("notifications.data_loaded"), //"Data loaded",
@@ -811,8 +760,6 @@ export default {
         console.log(Date(this.$refs.generic.chart.series.w.globals.maxX));
         console.log(Date(this.$refs.generic.chart.series.w.globals.minX));
         setTimeout(this.updateTimeRange, 1000);
-
-        //this.$globalbus.$emit("charttimerangeupdated",[this.$refs.generic.chart.series.w.globals.minX,this.$refs.generic.chart.series.w.globals.maxX])
       }
       this.previousValue = newvalue;
     },
@@ -856,47 +803,6 @@ export default {
       if (payLoad.subtype == this.config.timeSelectorType) this.loadData();
       else console.log("Ignoring time change.");
     });
-
-    // console.log("===============  REGISTERING: querychanged");
-    // this.$globalbus.$on("querychanged", payLoad => {
-    //   console.log("GLOBALBUS/GENERICTABLE/QUERYCHANGED --> "+payLoad);
-
-    //   if (this.config.queryBarChecked) {
-    //     this.queryField = payLoad;
-
-    //     // check if the active app is the current app (when multiple tabs)
-    //     if(this.$store.getters.activeApp.title == this.config.title) {
-    //       this.ready = false;
-    //       this.refreshData();
-    //     }
-    //   }
-    // });
-
-    // console.log("===============  REGISTERING: queryfilterchanged");
-    // this.$globalbus.$on("queryfilterchanged", payLoad => {
-    //   console.log("GLOBALBUS/GENERICTABLE/QUERYCHANGED --> "+payLoad);
-
-    //   if (this.config.queryFilterChecked) {
-    //       this.queryfilter = payLoad;
-
-    //     // check if the active app is the current app (when multiple tabs)
-    //     if(this.$store.getters.activeApp.title == this.config.title) {
-    //       this.ready = false;
-    //       this.loadData();
-
-    //     }
-    //   }
-    // });
-
-    // console.log("===============  REGISTERING: downloadasked");
-    // this.$globalbus.$on("downloadasked", payLoad => {
-    //   if(this.$store.getters.activeApp.title == this.config.title) {
-    //     console.log("GLOBALBUS/GENERICTABLE/DOWNLOADASKED format -->"+payLoad);
-    //     console.log('going to launch DL')
-    //     this.loadData(true, payLoad);
-
-    //   }
-    // });
   },
   beforeDestroy: function() {
     console.log("===============  UNREGISTERING: timerangechanged");

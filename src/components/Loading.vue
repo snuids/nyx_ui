@@ -9,8 +9,7 @@
 export default {
   name: "FreeText",
   data: () => ({}),
-  props: {    
-  },
+  props: {},
   methods: {},
   created: function() {},
 
