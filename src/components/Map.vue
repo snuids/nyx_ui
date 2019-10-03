@@ -84,9 +84,15 @@ export default {
       {
         var record=this.tableData[rec]._source;
         
-        var res=_.get(record,this.config.config.mapfield);
+        var resorg=_.get(record,this.config.config.mapfield);
         
+        var res=resorg;
+        if (res.lat !=null)
+        {
+          res=[res.lon,res.lat];
+        }
 
+        console.log(res);
         var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[1],res[0])}
         newmarkers.push(newm);
         
