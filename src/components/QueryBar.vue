@@ -1,6 +1,6 @@
 <template>
-  <el-row class="query-bar">    
-    <div class="input-bar">      
+  <el-row class="query-bar">
+    <div class="input-bar">
       <el-input
         placeholder="Search... (e.g. status:200 AND platform:NYX)"
         class="query-input"
@@ -8,7 +8,13 @@
         v-model="query"
       >
         <i slot="prefix" class="prefix-icon el-input__icon el-icon-arrow-right"></i>
-        <el-popover slot="suffix" placement="bottom-start" width="150" trigger="hover" v-if="config && config.downloadChecked">
+        <el-popover
+          slot="suffix"
+          placement="bottom-start"
+          width="150"
+          trigger="hover"
+          v-if="config && config.downloadChecked"
+        >
           <el-col>
             <el-row class="popover-title">
               <span>Download the selection</span>

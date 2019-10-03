@@ -35,7 +35,6 @@
       ></QueryFilter>
     </el-row>
 
-  
     <el-row v-if="config.mapChecked">
       <el-col>
         <Map :config="config" :tableData="tableData" v-on:mapclicked="mapClicked"></Map>
@@ -86,7 +85,7 @@
                   @change="switchChanged(scope.row, header)"
                 ></el-switch>
               </div>
-              <div v-else>                
+              <div v-else>
                 {{computeRec(scope.row,header.field)}}
                 <!-- {{header}} -->
               </div>
@@ -118,7 +117,6 @@
                   content="Add"
                   placement="bottom"
                 >
-                
                   <el-button
                     circle
                     size="mini"
@@ -207,7 +205,7 @@ export default {
     tableSchema: [],
     previousValue: "",
     currentRow: null,
-    colnames:[],
+    colnames: [],
     dialogFormVisible: false,
     editMode: null,
     options: {
@@ -318,31 +316,26 @@ export default {
       // this.dialogFormVisible = true;
       // this.editMode = "duplicate";
 
-      
       this.currentRecord = JSON.parse(JSON.stringify(this.currentRow));
       this.dialogFormVisible = true;
-      console.log("=============++>")
-      console.log(this.currentRecord )
+      console.log("=============++>");
+      console.log(this.currentRecord);
       this.editMode = "duplicate";
     },
     addRecord: function() {
       this.currentRecord = {};
       this.dialogFormVisible = true;
       this.editMode = "add";
-      
     },
     partialUpdateRecord: function(newRec, header) {
       // var headerName = header.field.replace("_source.", "");
       // var newObj = newRec.original;
-
       // // for (var i in newObj._source) {
       // //   if (i == headerName) {
       // //     newObj._source[i] = newRec._source[i];
       // //   }
       // // }
-
       // newObj._source[headerName] = newRec._source[headerName];
-
       // this.$store.commit({
       //   type: "updateRecord",
       //   data: newObj
@@ -405,7 +398,7 @@ export default {
     }, 1500),
     handleView(index, row) {
       this.currentRecord = {}; // required by the detail watcher
-      console.log(row)      
+      console.log(row);
       this.currentRecord = row;
       this.dialogFormVisible = true;
       this.editMode = "edit";
@@ -424,7 +417,7 @@ export default {
           //this.tableData.splice(index, 1);
           this.$store.commit({
             type: "deletePGRecord",
-            data: {"row":row,"config":this.config}
+            data: { row: row, config: this.config }
           });
           setTimeout(() => {
             this.loadData();
@@ -494,7 +487,7 @@ export default {
         "?token=" +
         this.$store.getters.creds.token +
         "&download=" +
-        (download ? 1 : 0)+
+        (download ? 1 : 0) +
         "&output=" +
         exportformat +
         doc_type;
@@ -518,18 +511,16 @@ export default {
             lte: timeRange[1].getTime(),
             format: "epoch_millis"
           };
-          query["range"]=range;
-
-          
-        } 
+          query["range"] = range;
+        }
       }
       if (this.config.queryBarChecked && this.queryField != "") {
         query["query"] = this.queryField;
-      }            
-      
+      }
+
       console.log("JSON.stringify(query)");
       console.log(JSON.stringify(query));
-      
+
       axios
         .post(url, query)
         .then(response => {
@@ -580,8 +571,7 @@ export default {
                 return;
               }
             }
-            this.tableData=[];
-
+            this.tableData = [];
 
             this.$notify({
               title: this.$t("notifications.data_loaded"), //"Data loaded",
@@ -609,17 +599,14 @@ export default {
                       format = curcol.format;
                     }
 
-                    var curtime =
-                      record[curcol.field];
+                    var curtime = record[curcol.field];
                     if (curcol.type == "timestamp") {
                       if (curtime != undefined) {
                         curtime = parseInt(curtime);
                       }
                     }
                     if (curtime != undefined) {
-                      record[
-                        curcol.field
-                      ] = moment(curtime).format(format);
+                      record[curcol.field] = moment(curtime).format(format);
                     }
                   }
                 }
@@ -627,9 +614,9 @@ export default {
             }
 
             this.tableData = response.data.records;
-            this.tableSchema=response.data.colnames;
+            this.tableSchema = response.data.colnames;
             var dates = [];
-            if (response.data.aggs!=null && response.data.aggs["2"] != null) {
+            if (response.data.aggs != null && response.data.aggs["2"] != null) {
               var aggs = response.data.aggs["2"]["buckets"];
               for (let i in aggs) {
                 dates.push([aggs[i].key, aggs[i].doc_count]);
@@ -642,7 +629,7 @@ export default {
                 }
               ];
             }
-            this.autotime=response.data.aggtime;
+            this.autotime = response.data.aggtime;
           }
         })
         .catch(error => {

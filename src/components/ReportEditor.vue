@@ -1,9 +1,5 @@
 <template>
-  <el-dialog width="80%" 
-    :title="title" 
-    :visible.sync="visible"
-    :before-close="closeDialog">
-
+  <el-dialog width="80%" :title="title" :visible.sync="visible" :before-close="closeDialog">
     <el-form v-if="visible" v-model="newRec" :rules="rules" ref="reportForm">
       <el-tabs v-model="activeName">
         <el-tab-pane label="Main" name="main">
@@ -20,7 +16,7 @@
             </el-col>
             <el-col :span="2">
               <el-form-item>
-                <v-icon :name="newRec.icon" scale="2.2"/>
+                <v-icon :name="newRec.icon" scale="2.2" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -60,12 +56,11 @@
               <el-form-item label="Generate PDF" label-width="160px">
                 <el-checkbox v-model="newRec.generatePDF"></el-checkbox>
               </el-form-item>
-            </el-col>      
+            </el-col>
             <el-col :span="6">
               <el-form-item label="Type" :label-width="formLabelWidth">
                 <el-select
                   size="mini"
-                  
                   v-model="newRec.reportType"
                   placeholder="Please select a type"
                 >
@@ -73,14 +68,22 @@
                   <el-option label="Jasper" value="jasper"></el-option>
                 </el-select>
               </el-form-item>
-            </el-col>        
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="Exec" :label-width="formLabelWidth" v-show="newRec.reportType==undefined || newRec.reportType=='python'">
+              <el-form-item
+                label="Exec"
+                :label-width="formLabelWidth"
+                v-show="newRec.reportType==undefined || newRec.reportType=='python'"
+              >
                 <el-input size="mini" v-model="newRec.exec" autocomplete="off"></el-input>
               </el-form-item>
-              <el-form-item label="Jasper Path" :label-width="formLabelWidth" v-show="newRec.reportType=='jasper'">
+              <el-form-item
+                label="Jasper Path"
+                :label-width="formLabelWidth"
+                v-show="newRec.reportType=='jasper'"
+              >
                 <el-input size="mini" v-model="newRec.jasper" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
@@ -145,7 +148,7 @@
                   placeholder="default"
                   autocomplete="off"
                 ></el-input>
-                <el-input 
+                <el-input
                   v-if="param.type=='combo'"
                   type="text"
                   size="mini"
@@ -162,7 +165,7 @@
                   placeholder="now-1d:now"
                   autocomplete="off"
                 ></el-input>
-              </el-form-item>              
+              </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="Hidden" :label-width="formLabelWidth">
@@ -182,7 +185,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-            
+
           <el-row type="flex" justify="space-around" style="margin-bottom:30px">
             <el-col :span="12">
               <el-button round @click="addParameter()" type="primary" size="mini">Add Parameter</el-button>
@@ -206,7 +209,7 @@
               ></el-transfer>
             </div>
           </div>
-          <br>
+          <br />
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -227,20 +230,20 @@ export default {
   name: "ReportEditor",
   data: () => ({
     orgRec: null,
-    newRec: {"title":"NA"},
+    newRec: { title: "NA" },
     formLabelWidth: "100px",
     changed: false,
     activeName: "main",
     inputVisible: false,
     inputValue: "",
-    allPrivileges:[],
-    visible:true,
+    allPrivileges: [],
+    visible: true,
     reportForm: {
-      title: ''
+      title: ""
     },
     rules: {
       title: [
-        { required: true, message: 'Please input a Title', trigger: 'blur' }
+        { required: true, message: "Please input a Title", trigger: "blur" }
       ]
     },
     options: [
@@ -251,8 +254,7 @@ export default {
       {
         value: "date",
         label: "Date"
-      }
-      ,
+      },
       {
         value: "combo",
         label: "Combo Box"
@@ -284,7 +286,7 @@ export default {
   props: {
     record: { type: Object },
     id: { type: String },
-    index: { type: String },    
+    index: { type: String },
     title: { type: String }
   },
   watch: {
@@ -299,7 +301,8 @@ export default {
     this.prepareData();
   },
   methods: {
-    valueChanged: function(item) { // eslint-disable-line
+    valueChanged: function(item) {
+      // eslint-disable-line
       this.changed = true;
     },
     loadPrivileges: function() {
@@ -317,15 +320,16 @@ export default {
       this.newRec = JSON.parse(JSON.stringify(this.record));
       this.activeName = "main";
       this.changed = false;
-      this.inputVisible = false
-      this.inputValue= ""
-      this.loadPrivileges()
+      this.inputVisible = false;
+      this.inputValue = "";
+      this.loadPrivileges();
     },
-    submitForm(formName) { // eslint-disable-line
+    submitForm(formName) {
+      // eslint-disable-line
       //this.$refs[formName].validate((valid) => {
-       // if (valid) {
-          this.saveRecord()
-        /*} else {
+      // if (valid) {
+      this.saveRecord();
+      /*} else {
           console.log('error submit!!');
           return false;
         }
@@ -348,7 +352,7 @@ export default {
         message: "Record updated.",
         position: "bottom-right"
       });
-      this.closeDialog()
+      this.closeDialog();
     },
     addParameter: function() {
       if (this.newRec.parameters === undefined) this.newRec.parameters = [];
@@ -370,18 +374,17 @@ export default {
     },
     handleClose: function(tag) {
       this.newRec.output.splice(this.newRec.output.indexOf(tag), 1);
-      
     },
     showInput: function() {
       this.inputVisible = true;
-      this.$nextTick(_ => { // eslint-disable-line
+      this.$nextTick(_ => {
+        // eslint-disable-line
         this.$refs.saveTagInput.$refs.input.focus();
       });
-    },    
+    },
     handleInputConfirm: function() {
       let inputValue = this.inputValue;
-      if (this.newRec.output==undefined)
-        this.newRec.output=[];
+      if (this.newRec.output == undefined) this.newRec.output = [];
       if (inputValue) {
         this.newRec.output.push(inputValue);
       }

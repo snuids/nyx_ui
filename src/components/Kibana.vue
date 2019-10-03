@@ -1,9 +1,5 @@
 <template slot="items">
-  <!--div v-bind:style="styleContainerComputed" -->   
-  <div>    
-    <!-- <el-row v-if="config.config.specificTimeField">
-      ==|{{this.config.config.specificTimeField}}|===={{specificTime}}===={{timerange}}>>>
-    </el-row> -->
+  <div>
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
     </el-row>
@@ -18,26 +14,31 @@
         <el-dropdown @command="handleCommand">
           <el-button circle size="mini" type="primary" icon="el-icon-download"></el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command='csv'>
-              <v-icon class='menuicon'  name="file-csv" scale="1"/>&nbsp;&nbsp;{{ $t("generic.downloadascsv") }}
+            <el-dropdown-item command="csv">
+              <v-icon class="menuicon" name="file-csv" scale="1" />
+              &nbsp;&nbsp;{{ $t("generic.downloadascsv") }}
             </el-dropdown-item>
             <el-dropdown-item command="xlsx">
-              <v-icon class="menuicon" name="file-excel" scale="1"/>
+              <v-icon class="menuicon" name="file-excel" scale="1" />
               &nbsp;&nbsp;{{ $t("generic.downloadasxls") }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
     </el-row>
-    <h1 class="kibanatitle" v-show="config.config.kibanaTitle !=undefined && config.config.kibanaTitle!=''">{{config.config.kibanaTitle}}</h1>    
-    <iframe id="kibana-iframe" 
-      :src="computedurl" 
-      frameborder="0" 
-      :width="containerWidth" 
-      :height="containerHeight"      
+    <h1
+      class="kibanatitle"
+      v-show="config.config.kibanaTitle !=undefined && config.config.kibanaTitle!=''"
+    >{{config.config.kibanaTitle}}</h1>
+    <iframe
+      id="kibana-iframe"
+      :src="computedurl"
+      frameborder="0"
+      :width="containerWidth"
+      :height="containerHeight"
       ref="iframeContent"
       v-bind:style="iFrameContainerComputed"
-      ></iframe>    
+    ></iframe>
   </div>
 </template>
 
@@ -46,29 +47,23 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
-import Vue from 'vue';
+import Vue from "vue";
 
-
-const $ = require('jquery');
+const $ = require("jquery");
 
 window.$ = $;
-
-
-
-
-
 
 export default {
   name: "Kibana",
   data: () => ({
     url: "",
-    finalquery:"",
+    finalquery: "",
     computedurl: "",
     ready: false,
     queryField: "",
-    queryfilter:"",
-    timerange:"",
-    specificTime:null
+    queryfilter: "",
+    timerange: "",
+    specificTime: null
   }),
   watch: {
     queryField: function() {
@@ -87,91 +82,89 @@ export default {
     }
   },
   computed: {
-    
     configin: function() {
       return this.config;
     },
     containerHeight: function() {
-      var headerheight=0;
-      if(this.$store.getters.currentApps.apps.length>1)
-      {        
-        headerheight+=50;
+      var headerheight = 0;
+      if (this.$store.getters.currentApps.apps.length > 1) {
+        headerheight += 50;
       }
-      if(this.config.queryFilterChecked || this.config.downloadChecked || this.config.queryBarChecked)
-      {
-        headerheight+=50;
+      if (
+        this.config.queryFilterChecked ||
+        this.config.downloadChecked ||
+        this.config.queryBarChecked
+      ) {
+        headerheight += 50;
       }
-      return (this.$store.getters.containerSize.height-64-headerheight) + "px";
+      return (
+        this.$store.getters.containerSize.height - 64 - headerheight + "px"
+      );
       //return "1400px";
     },
     containerWidth: function() {
-      var left=210;
-      if(!this.$store.state.menuOpen)
-        left=0;
+      var left = 210;
+      if (!this.$store.state.menuOpen) left = 0;
 
-      return (this.$store.getters.containerSize.width-left) + "px";
+      return this.$store.getters.containerSize.width - left + "px";
       //return "1400px";
     },
     iFrameContainerComputed: function() {
-      var headerheight=0;
-      if(this.$store.getters.currentApps.apps.length>1)
-      {
-        headerheight+=50;
+      var headerheight = 0;
+      if (this.$store.getters.currentApps.apps.length > 1) {
+        headerheight += 50;
       }
-      if(this.config.queryFilterChecked || this.config.downloadChecked || this.config.queryBarChecked)
-      {
-        headerheight+=50;
+      if (
+        this.config.queryFilterChecked ||
+        this.config.downloadChecked ||
+        this.config.queryBarChecked
+      ) {
+        headerheight += 50;
       }
-    
-      var left=210;
-      if(!this.$store.state.menuOpen)
-        left=0;
+
+      var left = 210;
+      if (!this.$store.state.menuOpen) left = 0;
 
       return {
-        border:"0px solid #888",
+        border: "0px solid #888",
         //overflow: "hidden !important",
-        position:"fixed",
-        top:(64+headerheight)+"px",
-        left:left+"px",
-        right:"0px"        
+        position: "fixed",
+        top: 64 + headerheight + "px",
+        left: left + "px",
+        right: "0px"
       };
-      
-      return {}
+
+      return {};
     },
     styleContainerComputed: function() {
-      
-      if(this.$store.getters.currentApps.apps.length==1)
-      {
+      if (this.$store.getters.currentApps.apps.length == 1) {
         return {
-          border:"10px solid green",
+          border: "10px solid green",
           overflow: "hidden !important",
-          position:"absolute",
-          bottom:"0px",
-          top:"60px",
-          left:"210px",
-          right:"0px"
+          position: "absolute",
+          bottom: "0px",
+          top: "60px",
+          left: "210px",
+          right: "0px"
         };
-      }
-      else{
+      } else {
         return {
-          border:"1px solid red",
+          border: "1px solid red",
           overflow: "auto",
-          position:"absolute !important",
-          bottom:"0px",
-          top:"0px",
-          left:"0px",
-          right:"0px"
+          position: "absolute !important",
+          bottom: "0px",
+          top: "0px",
+          left: "0px",
+          right: "0px"
         };
       }
-    }    
+    }
   },
   methods: {
-    
-    queryfilterchanged: function(query)
-    {
-      this.queryfilter=query;
+    queryfilterchanged: function(query) {
+      this.queryfilter = query;
       this.createUrl();
-    },    
+    },
     handleCommand: function(output) {
       this.$notify({
         title: "Message sent to server", //"Data loaded",
@@ -244,40 +237,76 @@ export default {
       if (this.ready) {
         console.log("UPDATE QUERY...");
         var cururl = this.config.config.url;
-          var startTimeAsUtc = moment(this.$store.getters.timeRange[0]).utc();
-          var endTimeAsUtc = moment(this.$store.getters.timeRange[1]).utc();
+        var startTimeAsUtc = moment(this.$store.getters.timeRange[0]).utc();
+        var endTimeAsUtc = moment(this.$store.getters.timeRange[1]).utc();
 
-          var timestring = "time:(from:'" + startTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z',mode:absolute,to:'" + endTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z')"                        
-        
-        switch(this.config.timeSelectorType)
-        {
-          case 'week':
-            var startTimeAsUtc = moment(this.$store.getters.timeRangeWeek[0]).utc();
-            var endTimeAsUtc = moment(this.$store.getters.timeRangeWeek[1]).utc();
+        var timestring =
+          "time:(from:'" +
+          startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+          "Z',mode:absolute,to:'" +
+          endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+          "Z')";
 
-            timestring = "time:(from:'" + startTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z',mode:absolute,to:'" + endTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z')"                        
+        switch (this.config.timeSelectorType) {
+          case "week":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeWeek[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeWeek[1]
+            ).utc();
+
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
             break;
-          case 'month':
-            var startTimeAsUtc = moment(this.$store.getters.timeRangeMonth[0]).utc();
-            var endTimeAsUtc = moment(this.$store.getters.timeRangeMonth[1]).utc();
+          case "month":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeMonth[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeMonth[1]
+            ).utc();
 
-            timestring = "time:(from:'" + startTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z',mode:absolute,to:'" + endTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z')"                        
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
             break;
-          case 'year':
-            var startTimeAsUtc = moment(this.$store.getters.timeRangeYear[0]).utc();
-            var endTimeAsUtc = moment(this.$store.getters.timeRangeYear[1]).utc();
+          case "year":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeYear[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeYear[1]
+            ).utc();
 
-            timestring = "time:(from:'" + startTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z',mode:absolute,to:'" + endTimeAsUtc.format('YYYY-MM-DDTHH:mm:ss.SSS') + "Z')"                        
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
             break;
         }
-        this.timerange=timestring;
+        this.timerange = timestring;
 
-        this.specificTime=undefined;
+        this.specificTime = undefined;
 
-        if (this.config.config.specificTimeField!=undefined && this.config.config.specificTimeField!="")
-        {
-          var t=moment(this.$store.getters.timeRangeMonth[0]).format(this.config.config.specificTimeFormat);
-          this.specificTime= this.config.config.specificTimeField+":"+"\""+t+"\"";
+        if (
+          this.config.config.specificTimeField != undefined &&
+          this.config.config.specificTimeField != ""
+        ) {
+          var t = moment(this.$store.getters.timeRangeMonth[0]).format(
+            this.config.config.specificTimeFormat
+          );
+          this.specificTime =
+            this.config.config.specificTimeField + ":" + '"' + t + '"';
           console.log(t);
           console.log(timestring);
         }
@@ -285,10 +314,7 @@ export default {
         //alert("====>"+timestring);
 
         if (this.config.timeSelectorChecked && timestring != null)
-          cururl = cururl.replace(
-            /time:\([^\)]*\)/g,
-            timestring
-          );
+          cururl = cururl.replace(/time:\([^\)]*\)/g, timestring);
         this.computedurl = this.updateQuery(cururl);
       }
     },
@@ -320,24 +346,20 @@ export default {
       } else {
         replacement = "(" + queryextract + ") AND (" + curquery + ")";
       }
-      if(this.queryfilter!="" && this.config.queryFilterChecked)
-      {
-        if((replacement=="*" || replacement==""))
-          replacement=this.queryfilter;
-        else
-          replacement="("+replacement+") AND "+this.queryfilter;
+      if (this.queryfilter != "" && this.config.queryFilterChecked) {
+        if (replacement == "*" || replacement == "")
+          replacement = this.queryfilter;
+        else replacement = "(" + replacement + ") AND " + this.queryfilter;
       }
 
-      if(this.specificTime!=undefined)
-      {
-        if((replacement=="*" || replacement==""))
-          replacement=this.specificTime;
-        else
-          replacement="("+replacement+") AND "+this.specificTime;
+      if (this.specificTime != undefined) {
+        if (replacement == "*" || replacement == "")
+          replacement = this.specificTime;
+        else replacement = "(" + replacement + ") AND " + this.specificTime;
       }
 
-      this.finalquery=replacement;
-      console.log("FINAL QUERY:"+this.finalquery);
+      this.finalquery = replacement;
+      console.log("FINAL QUERY:" + this.finalquery);
       replacement = "query:'" + replacement + "'";
 
       var result = fullurl.replace(myregex, replacement);
@@ -345,31 +367,43 @@ export default {
       return result;
     },
     injectStyleIframe: function() {
-      var iframe = document.getElementById('kibana-iframe');
+      var iframe = document.getElementById("kibana-iframe");
 
-      var hideFilterStyle = 'filter-bar {  background-color: white !important; border-bottom:none !important;}  .filter-bar {  background-color: white !important; border-bottom:none !important;} '
+      var hideFilterStyle =
+        "filter-bar {  background-color: white !important; border-bottom:none !important;}  .filter-bar {  background-color: white !important; border-bottom:none !important;} ";
 
-      if(this.config.hideFilter) {
-        hideFilterStyle = '  filter-bar {display: none;}  .filter-bar {   background-color: white !important; border-bottom:none !important; height: 0px;visibility: hidden; padding: 0px !important;}'
+      if (this.config.hideFilter) {
+        hideFilterStyle =
+          "  filter-bar {display: none;}  .filter-bar {   background-color: white !important; border-bottom:none !important; height: 0px;visibility: hidden; padding: 0px !important;}";
       }
 
-      $('iframe').contents().find("head")
-            .append($("<style type='text/css'> dashboard-viewport-provider {background-color: white !important;}  .theme-light .dshDashboardViewport-withMargins{background-color:white !important;} "+ hideFilterStyle+ "  </style>"));
-
+      $("iframe")
+        .contents()
+        .find("head")
+        .append(
+          $(
+            "<style type='text/css'> dashboard-viewport-provider {background-color: white !important;}  .theme-light .dshDashboardViewport-withMargins{background-color:white !important;} " +
+              hideFilterStyle +
+              "  </style>"
+          )
+        );
     }
   },
   created: function() {
     /**
-     * 
-      */
-    setTimeout(function () {
-      this.injectStyleIframe()
-    }.bind(this), 1500)
+     *
+     */
+    setTimeout(
+      function() {
+        this.injectStyleIframe();
+      }.bind(this),
+      1500
+    );
 
     if (this.directLoad) {
       this.ready = true;
       this.createUrl();
-    }    
+    }
   },
   mounted: function() {
     console.log("===============  REGISTERING KIBANA:");
@@ -383,14 +417,15 @@ export default {
         this.ready = true;
       }
 
-      setTimeout(function () {
-        this.injectStyleIframe()
-      }.bind(this), 1500)
-      
-      this.createUrl();
-      
-    });
+      setTimeout(
+        function() {
+          this.injectStyleIframe();
+        }.bind(this),
+        1500
+      );
 
+      this.createUrl();
+    });
   },
   beforeDestroy: function() {
     console.log("===============  UNREGISTERING KIBANA:");
@@ -401,10 +436,8 @@ export default {
 </script>
 
 <style>
-.kibanatitle
-{
-  font-weight:bolder;
+.kibanatitle {
+  font-weight: bolder;
 }
-
 </style>
 

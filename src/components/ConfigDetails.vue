@@ -1,16 +1,12 @@
 <template>
-  
-  
-  <el-dialog 
-      width="80%" 
-      :title="isAdd?'Create Application':'Modify Application'"
-      :visible.sync="dialogFormVisible"
-      :before-close="closeDialog"
-      :close-on-click-modal="false"
-      append-to-body>  
-
-
-
+  <el-dialog
+    width="80%"
+    :title="isAdd?'Create Application':'Modify Application'"
+    :visible.sync="dialogFormVisible"
+    :before-close="closeDialog"
+    :close-on-click-modal="false"
+    append-to-body
+  >
     <el-form :model="curConfig">
       <el-tabs v-model="activeName" @tab-click="refresh2">
         <el-tab-pane label="Main" name="main" key="main">
@@ -87,7 +83,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="2">
-                &nbsp;&nbsp;<v-icon v-if="curConfig.icon" :name="curConfig.icon" scale="2" />
+                &nbsp;&nbsp;
+                <v-icon v-if="curConfig.icon" :name="curConfig.icon" scale="2" />
               </el-col>
             </el-row>
             <el-row v-if="(curConfig.type === 'kibana') || (curConfig.type === 'generic-table')">
@@ -177,7 +174,7 @@
 
                   <el-row>
                     <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
-                  </el-row>                  
+                  </el-row>
 
                   <el-row>
                     <el-select
@@ -192,11 +189,6 @@
                       <el-option label="Year" value="year"></el-option>
                     </el-select>
                   </el-row>
-
-                  
-
-                  
-                  
                 </el-form-item>
               </el-col>
               <el-col :span="8" v-if="(curConfig.type === 'kibana')">
@@ -226,16 +218,16 @@
                       <el-option label="1 minute" value="refreshInterval:(pause:!f,value:60000)"></el-option>
                       <el-option label="5 minutes" value="refreshInterval:(pause:!f,value:300000)"></el-option>
                       <el-option label="15 minutes" value="refreshInterval:(pause:!f,value:900000)"></el-option>
-                      <el-option label="30 minutes" value="refreshInterval:(pause:!f,value:1800000)"></el-option>
+                      <el-option
+                        label="30 minutes"
+                        value="refreshInterval:(pause:!f,value:1800000)"
+                      ></el-option>
                       <el-option label="1 hour" value="refreshInterval:(pause:!f,value:3600000)"></el-option>
                       <el-option label="2 hours" value="refreshInterval:(pause:!f,value:7200000)"></el-option>
                       <el-option label="12 hours" value="refreshInterval:(pause:!f,value:43200000)"></el-option>
                       <el-option label="1 day" value="refreshInterval:(pause:!f,value:86400000)"></el-option>
                     </el-select>
                   </el-row>
-
-                  
-
                 </el-form-item>
               </el-col>
               <el-col
@@ -273,7 +265,11 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="Longitude" :label-width="formLabelWidth">
-                  <el-input-number size="mini" v-model="curConfig.config.maplong" autocomplete="off"></el-input-number>
+                  <el-input-number
+                    size="mini"
+                    v-model="curConfig.config.maplong"
+                    autocomplete="off"
+                  ></el-input-number>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -285,19 +281,27 @@
             <!-- Specific Time -->
             <el-row v-if="curConfig.type === 'kibana'">
               <el-col :span="8">
-                <el-form-item label="Time Field" :label-width="formLabelWidth" >
-                  <el-input size="mini" v-model="curConfig.config.specificTimeField" autocomplete="off" placeholder="Use only if the time field must be formatted"></el-input>
+                <el-form-item label="Time Field" :label-width="formLabelWidth">
+                  <el-input
+                    size="mini"
+                    v-model="curConfig.config.specificTimeField"
+                    autocomplete="off"
+                    placeholder="Use only if the time field must be formatted"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="16">
-        
                 <el-form-item label="Time Format" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.specificTimeFormat" autocomplete="off" placeholder="Use only if the time field must be formatted. (Moment Format)"></el-input>
+                  <el-input
+                    size="mini"
+                    v-model="curConfig.config.specificTimeFormat"
+                    autocomplete="off"
+                    placeholder="Use only if the time field must be formatted. (Moment Format)"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-                  
-                
+
             <!-- URL -->
             <el-form-item
               v-if="(curConfig.type === 'external') || (curConfig.type === 'kibana')"
@@ -320,7 +324,11 @@
               label="Parameters"
               :label-width="formLabelWidth"
             >
-              <el-input size="mini" v-model="curConfig.config.controllerparameters" autocomplete="off"></el-input>
+              <el-input
+                size="mini"
+                v-model="curConfig.config.controllerparameters"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
 
             <!-- Upload -->
@@ -336,22 +344,22 @@
         </el-tab-pane>
         <el-tab-pane label="Privileges" name="privileges" key="privileges">
           <el-card>
-          <div>
-            <div style="display: table;margin: 0 auto;">
-              <el-transfer
-                style="text-align:left;"
-                filterable
-                v-model="curConfig.privileges"
-                :props="{
+            <div>
+              <div style="display: table;margin: 0 auto;">
+                <el-transfer
+                  style="text-align:left;"
+                  filterable
+                  v-model="curConfig.privileges"
+                  :props="{
                   key: 'value',
                   label: 'desc'
                 }"
-                :data="allPrivileges"
-                :titles="['Available', 'Assigned']"
-              ></el-transfer>
+                  :data="allPrivileges"
+                  :titles="['Available', 'Assigned']"
+                ></el-transfer>
+              </div>
             </div>
-          </div>
-          <br />
+            <br />
           </el-card>
         </el-tab-pane>
         <el-tab-pane
@@ -361,309 +369,307 @@
           v-if="(curConfig.type === 'generic-table') || (curConfig.type === 'pgsql-generic-table')"
         >
           <el-card>
-        
-          <!-- GENERIC TABLE -->
-          <div>
-            <el-row>
-              <el-col :span="6">
-                <el-form-item label="Index/Table" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="Time Field" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item
-                  label="Doc Type"
-                  :label-width="formLabelWidth"
-                  v-if="(curConfig.type === 'generic-table')"
-                >
-                  <el-input size="mini" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item
-                  label="PKey"
-                  :label-width="formLabelWidth"
-                  v-if="(curConfig.type === 'pgsql-generic-table')"
-                >
-                  <el-input size="mini" v-model="curConfig.config.pkey" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item
-                  label="Map Field"
-                  :label-width="formLabelWidth"
-                  v-if="curConfig.mapChecked"
-                >
-                  <el-input size="mini" v-model="curConfig.config.mapfield" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row v-if="(curConfig.type === 'pgsql-generic-table')">
-              <el-col :span="24">
-                <el-form-item label="SQL" :label-width="formLabelWidth">
-                  <el-input
-                    placeholder="SQL: select * from my_table"
-                    size="mini"
-                    v-model="curConfig.config.sql"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="Editor" :label-width="formLabelWidth">
-                  <el-input
-                    placeholder="Your specific component url. Eg. specificComponent"
-                    size="mini"
-                    v-model="curConfig.config.editorComponent"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item
-                  label="Default Order"
-                  :label-width="formLabelWidth"
-                  v-if="(curConfig.type === 'generic-table')"
-                >
-                  <el-input size="mini" v-model="curConfig.config.orderField" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item
-                  label
-                  :label-width="formLabelWidth"
-                  v-if="(curConfig.type === 'generic-table')"
-                >
-                  <el-checkbox v-model="curConfig.config.orderDirection">Descending</el-checkbox>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="Export" :label-width="formLabelWidth">
-                  <el-input
-                    placeholder="Columns to export"
-                    size="mini"
-                    v-model="curConfig.config.exportColumns"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="Write Privilege" :label-width="formLabelWidth">
-                  <el-input
-                    size="mini"
-                    v-model="curConfig.config.writeprivileges"
-                    autocomplete="off"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="4">
-                <el-button size="mini" @click="handleAddField()">Add Field</el-button>
-              </el-col>
-              <el-col :span="20">
-                <!-- Header dialog -->
-                <el-dialog
-                  title="Columns"
-                  :visible.sync="dialogHeaderVisible"
-                  width="30%"
-                  append-to-body
-                >
-                  <el-form v-if="currentHeader" :model="currentHeader">
-                    <el-row :gutter="20">
-                      <el-col :span="20">
-                        <el-form-item label="Field" :label-width="formLabelWidth">
-                          <el-input size="mini" v-model="currentHeader.field" autocomplete="off"></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="20">
-                        <el-form-item label="Title" :label-width="formLabelWidth">
-                          <el-input size="mini" v-model="currentHeader.title" autocomplete="off"></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                      <el-col :span="20">
-                        <el-form-item label="Type" :label-width="formLabelWidth">
-                          <el-select
-                            size="mini"
-                            v-model="currentHeader.type"
-                            placeholder="Please select a type"
-                          >
-                            <el-option label="Generic" value="generic"></el-option>
-                            <el-option label="Date" value="date"></el-option>
-                            <el-option label="Timestamp" value="timestamp"></el-option>
-                            <el-option label="Boolean" value="boolean"></el-option>
-                          </el-select>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <el-row
-                      :gutter="20"
-                      v-if="currentHeader.type=='date' || currentHeader.type=='timestamp'"
-                    >
-                      <el-col :span="20">
-                        <el-form-item label="Format" :label-width="formLabelWidth">
-                          <el-input size="mini" v-model="currentHeader.format" autocomplete="off"></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                  </el-form>
-                  <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="dialogHeaderVisible = false">Close</el-button>
-                  </span>
-                </el-dialog>
+            <!-- GENERIC TABLE -->
+            <div>
+              <el-row>
+                <el-col :span="6">
+                  <el-form-item label="Index/Table" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="Time Field" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item
+                    label="Doc Type"
+                    :label-width="formLabelWidth"
+                    v-if="(curConfig.type === 'generic-table')"
+                  >
+                    <el-input size="mini" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item
+                    label="PKey"
+                    :label-width="formLabelWidth"
+                    v-if="(curConfig.type === 'pgsql-generic-table')"
+                  >
+                    <el-input size="mini" v-model="curConfig.config.pkey" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item
+                    label="Map Field"
+                    :label-width="formLabelWidth"
+                    v-if="curConfig.mapChecked"
+                  >
+                    <el-input size="mini" v-model="curConfig.config.mapfield" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row v-if="(curConfig.type === 'pgsql-generic-table')">
+                <el-col :span="24">
+                  <el-form-item label="SQL" :label-width="formLabelWidth">
+                    <el-input
+                      placeholder="SQL: select * from my_table"
+                      size="mini"
+                      v-model="curConfig.config.sql"
+                      autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="Editor" :label-width="formLabelWidth">
+                    <el-input
+                      placeholder="Your specific component url. Eg. specificComponent"
+                      size="mini"
+                      v-model="curConfig.config.editorComponent"
+                      autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item
+                    label="Default Order"
+                    :label-width="formLabelWidth"
+                    v-if="(curConfig.type === 'generic-table')"
+                  >
+                    <el-input size="mini" v-model="curConfig.config.orderField" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item
+                    label
+                    :label-width="formLabelWidth"
+                    v-if="(curConfig.type === 'generic-table')"
+                  >
+                    <el-checkbox v-model="curConfig.config.orderDirection">Descending</el-checkbox>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="Export" :label-width="formLabelWidth">
+                    <el-input
+                      placeholder="Columns to export"
+                      size="mini"
+                      v-model="curConfig.config.exportColumns"
+                      autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="Write Privilege" :label-width="formLabelWidth">
+                    <el-input
+                      size="mini"
+                      v-model="curConfig.config.writeprivileges"
+                      autocomplete="off"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="4">
+                  <el-button size="mini" @click="handleAddField()">Add Field</el-button>
+                </el-col>
+                <el-col :span="20">
+                  <!-- Header dialog -->
+                  <el-dialog
+                    title="Columns"
+                    :visible.sync="dialogHeaderVisible"
+                    width="30%"
+                    append-to-body
+                  >
+                    <el-form v-if="currentHeader" :model="currentHeader">
+                      <el-row :gutter="20">
+                        <el-col :span="20">
+                          <el-form-item label="Field" :label-width="formLabelWidth">
+                            <el-input size="mini" v-model="currentHeader.field" autocomplete="off"></el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row :gutter="20">
+                        <el-col :span="20">
+                          <el-form-item label="Title" :label-width="formLabelWidth">
+                            <el-input size="mini" v-model="currentHeader.title" autocomplete="off"></el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row :gutter="20">
+                        <el-col :span="20">
+                          <el-form-item label="Type" :label-width="formLabelWidth">
+                            <el-select
+                              size="mini"
+                              v-model="currentHeader.type"
+                              placeholder="Please select a type"
+                            >
+                              <el-option label="Generic" value="generic"></el-option>
+                              <el-option label="Date" value="date"></el-option>
+                              <el-option label="Timestamp" value="timestamp"></el-option>
+                              <el-option label="Boolean" value="boolean"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row
+                        :gutter="20"
+                        v-if="currentHeader.type=='date' || currentHeader.type=='timestamp'"
+                      >
+                        <el-col :span="20">
+                          <el-form-item label="Format" :label-width="formLabelWidth">
+                            <el-input size="mini" v-model="currentHeader.format" autocomplete="off"></el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                      <el-button type="primary" @click="dialogHeaderVisible = false">Close</el-button>
+                    </span>
+                  </el-dialog>
 
-                <el-table
-                  class="headertable"
-                  :data="curConfig.config.headercolumns"
-                  @current-change="handleCurrentHeaderChange"
-                  border
-                  style="width: 100%"
-                >
-                  <el-table-column prop="field" label="Field"></el-table-column>
-                  <el-table-column prop="title" label="Title"></el-table-column>
-                  <el-table-column prop="type" label="Type"></el-table-column>
-                  <el-table-column prop="format" label="Format"></el-table-column>
-                  <el-table-column prop="title" label="Action">
-                    <template slot-scope="scope2">
-                      <el-button
-                        size="mini"
-                        circle
-                        @click="handleEditHeader(scope2.$index, scope2.row)"
-                        icon="el-icon-edit"
-                      ></el-button>
-                      <el-button
-                        size="mini"
-                        circle
-                        type="danger"
-                        @click="handleDeleteHeader(scope2.$index, scope2.row)"
-                        icon="el-icon-delete"
-                      ></el-button>
+                  <el-table
+                    class="headertable"
+                    :data="curConfig.config.headercolumns"
+                    @current-change="handleCurrentHeaderChange"
+                    border
+                    style="width: 100%"
+                  >
+                    <el-table-column prop="field" label="Field"></el-table-column>
+                    <el-table-column prop="title" label="Title"></el-table-column>
+                    <el-table-column prop="type" label="Type"></el-table-column>
+                    <el-table-column prop="format" label="Format"></el-table-column>
+                    <el-table-column prop="title" label="Action">
+                      <template slot-scope="scope2">
+                        <el-button
+                          size="mini"
+                          circle
+                          @click="handleEditHeader(scope2.$index, scope2.row)"
+                          icon="el-icon-edit"
+                        ></el-button>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="danger"
+                          @click="handleDeleteHeader(scope2.$index, scope2.row)"
+                          icon="el-icon-delete"
+                        ></el-button>
 
-                      <el-button
-                        size="mini"
-                        circle
-                        type="primary"
-                        @click="handleMoveHeader(scope2.$index, scope2.row,false)"
-                        icon="el-icon-arrow-down"
-                        v-if="scope2.$index<curConfig.config.headercolumns.length-1"
-                      ></el-button>
-                      <el-button
-                        size="mini"
-                        circle
-                        type="primary"
-                        @click="handleMoveHeader(scope2.$index, scope2.row,true)"
-                        icon="el-icon-arrow-up"
-                        v-if="scope2.$index>0"
-                      ></el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-col>
-            </el-row>
-          </div>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="primary"
+                          @click="handleMoveHeader(scope2.$index, scope2.row,false)"
+                          icon="el-icon-arrow-down"
+                          v-if="scope2.$index<curConfig.config.headercolumns.length-1"
+                        ></el-button>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="primary"
+                          @click="handleMoveHeader(scope2.$index, scope2.row,true)"
+                          icon="el-icon-arrow-up"
+                          v-if="scope2.$index>0"
+                        ></el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-col>
+              </el-row>
+            </div>
           </el-card>
         </el-tab-pane>
         <el-tab-pane
           label="Table Dev"
           name="table dev"
           key="table_dev"
-          v-if="(curConfig.type === 'generic-table')" 
+          v-if="(curConfig.type === 'generic-table')"
         >
           <ESTableEditor
-          :allPrivileges="privilegesdata"
-          :currentConfig="curConfig"
-          @configchanged="esTableConfigChanged"
-        ></ESTableEditor>
-
+            :allPrivileges="privilegesdata"
+            :currentConfig="curConfig"
+            @configchanged="esTableConfigChanged"
+          ></ESTableEditor>
         </el-tab-pane>
 
         <!-- ******* FORM ******* -->
         <el-tab-pane label="Form" name="form" key="form" v-if="(curConfig.type === 'form')">
           <el-card>
-          <div>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="Index" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="Form Title" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.formtitle" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="4">
-                <el-button size="mini" @click="handleAddField()">Add Field</el-button>
-              </el-col>
-              <el-col :span="20">
-                <FormFieldEditor
-                  :currentField="currentHeader"
-                  :title="'Form Field Edition'"
-                  v-if="formFielfEditorVisible"
-                  v-on:dialogclose="formFieldEditorClosed"
-                ></FormFieldEditor>
-                <el-table
-                  class="headertable"
-                  :data="curConfig.config.headercolumns"
-                  @current-change="handleCurrentHeaderChange"
-                  border
-                  style="width: 100%"
-                >
-                  <el-table-column prop="field" label="Field"></el-table-column>
-                  <el-table-column prop="title" label="Title"></el-table-column>
-                  <el-table-column prop="type" label="Type"></el-table-column>
-                  <el-table-column prop="default" label="Default"></el-table-column>
-                  <el-table-column prop="title" label="Action">
-                    <template slot-scope="scope2">
-                      <el-button
-                        size="mini"
-                        circle
-                        @click="handleEditFormField(scope2.$index, scope2.row)"
-                        icon="el-icon-edit"
-                      ></el-button>
-                      <el-button
-                        size="mini"
-                        circle
-                        type="danger"
-                        @click="handleDeleteHeader(scope2.$index, scope2.row)"
-                        icon="el-icon-delete"
-                      ></el-button>
+            <div>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="Index" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="Form Title" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.formtitle" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="4">
+                  <el-button size="mini" @click="handleAddField()">Add Field</el-button>
+                </el-col>
+                <el-col :span="20">
+                  <FormFieldEditor
+                    :currentField="currentHeader"
+                    :title="'Form Field Edition'"
+                    v-if="formFielfEditorVisible"
+                    v-on:dialogclose="formFieldEditorClosed"
+                  ></FormFieldEditor>
+                  <el-table
+                    class="headertable"
+                    :data="curConfig.config.headercolumns"
+                    @current-change="handleCurrentHeaderChange"
+                    border
+                    style="width: 100%"
+                  >
+                    <el-table-column prop="field" label="Field"></el-table-column>
+                    <el-table-column prop="title" label="Title"></el-table-column>
+                    <el-table-column prop="type" label="Type"></el-table-column>
+                    <el-table-column prop="default" label="Default"></el-table-column>
+                    <el-table-column prop="title" label="Action">
+                      <template slot-scope="scope2">
+                        <el-button
+                          size="mini"
+                          circle
+                          @click="handleEditFormField(scope2.$index, scope2.row)"
+                          icon="el-icon-edit"
+                        ></el-button>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="danger"
+                          @click="handleDeleteHeader(scope2.$index, scope2.row)"
+                          icon="el-icon-delete"
+                        ></el-button>
 
-                      <el-button
-                        size="mini"
-                        circle
-                        type="primary"
-                        @click="handleMoveHeader(scope2.$index, scope2.row,false)"
-                        icon="el-icon-arrow-down"
-                        v-if="scope2.$index<curConfig.config.headercolumns.length-1"
-                      ></el-button>
-                      <el-button
-                        size="mini"
-                        circle
-                        type="primary"
-                        @click="handleMoveHeader(scope2.$index, scope2.row,true)"
-                        icon="el-icon-arrow-up"
-                        v-if="scope2.$index>0"
-                      ></el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-col>
-            </el-row>
-          </div>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="primary"
+                          @click="handleMoveHeader(scope2.$index, scope2.row,false)"
+                          icon="el-icon-arrow-down"
+                          v-if="scope2.$index<curConfig.config.headercolumns.length-1"
+                        ></el-button>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="primary"
+                          @click="handleMoveHeader(scope2.$index, scope2.row,true)"
+                          icon="el-icon-arrow-up"
+                          v-if="scope2.$index>0"
+                        ></el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-col>
+              </el-row>
+            </div>
           </el-card>
         </el-tab-pane>
         <!-- FREE TEXT -->
@@ -674,18 +680,18 @@
           v-if="(curConfig.type === 'free-text')"
         >
           <el-card>
-          <FreeTextDetails :config="currentConfig" v-on:freetextchanged="freeTextChanged"></FreeTextDetails>
+            <FreeTextDetails :config="currentConfig" v-on:freetextchanged="freeTextChanged"></FreeTextDetails>
           </el-card>
         </el-tab-pane>
         <!-- Vega -->
         <el-tab-pane label="Vega" name="vega" key="vega" v-if="(curConfig.type === 'vega')">
           <el-card>
-          <el-input
-            type="textarea"
-            :rows="10"
-            placeholder="Vega Specification"
-            v-model="curConfig.config.vegaSpec"
-          ></el-input>
+            <el-input
+              type="textarea"
+              :rows="10"
+              placeholder="Vega Specification"
+              v-model="curConfig.config.vegaSpec"
+            ></el-input>
           </el-card>
           <br />
         </el-tab-pane>
@@ -697,83 +703,83 @@
           v-if="((curConfig.type === 'kibana')||(curConfig.type === 'generic-table')) && (curConfig.queryFilterChecked)"
         >
           <el-card>
-          <div>
-            <el-row>
-              <el-col :span="4">
-                <el-button size="mini" @click="handleAddQueryFilterField()">Add Field</el-button>
-              </el-col>
-              <el-col :span="20">
-                <QueryFilterEditor
-                  :currentField="currentQueryFilter"
-                  :title="'Field Edition'"
-                  v-if="queryFilterEditorVisible"
-                  v-on:dialogclose="queryFilterEditorClosed"
-                ></QueryFilterEditor>
-                <el-table
-                  class="headertable"
-                  :data="curConfig.config.queryfilters"
-                  @current-change="handleCurrentQueryFilterChange"
-                  border
-                  style="width: 100%"
-                >
-                  <el-table-column prop="field" label="Field"></el-table-column>
-                  <el-table-column prop="title" label="Title"></el-table-column>
-                  <el-table-column prop="type" label="Type"></el-table-column>
-                  <el-table-column prop="default" label="Default"></el-table-column>
-                  <el-table-column prop="title" label="Action">
-                    <template slot-scope="scope2">
-                      <el-button
-                        size="mini"
-                        circle
-                        @click="handleEditQueryFilterField(scope2.$index, scope2.row)"
-                        icon="el-icon-edit"
-                      ></el-button>
-                      <el-button
-                        size="mini"
-                        circle
-                        type="danger"
-                        @click="handleDeleteQueryFilter(scope2.$index, scope2.row)"
-                        icon="el-icon-delete"
-                      ></el-button>
+            <div>
+              <el-row>
+                <el-col :span="4">
+                  <el-button size="mini" @click="handleAddQueryFilterField()">Add Field</el-button>
+                </el-col>
+                <el-col :span="20">
+                  <QueryFilterEditor
+                    :currentField="currentQueryFilter"
+                    :title="'Field Edition'"
+                    v-if="queryFilterEditorVisible"
+                    v-on:dialogclose="queryFilterEditorClosed"
+                  ></QueryFilterEditor>
+                  <el-table
+                    class="headertable"
+                    :data="curConfig.config.queryfilters"
+                    @current-change="handleCurrentQueryFilterChange"
+                    border
+                    style="width: 100%"
+                  >
+                    <el-table-column prop="field" label="Field"></el-table-column>
+                    <el-table-column prop="title" label="Title"></el-table-column>
+                    <el-table-column prop="type" label="Type"></el-table-column>
+                    <el-table-column prop="default" label="Default"></el-table-column>
+                    <el-table-column prop="title" label="Action">
+                      <template slot-scope="scope2">
+                        <el-button
+                          size="mini"
+                          circle
+                          @click="handleEditQueryFilterField(scope2.$index, scope2.row)"
+                          icon="el-icon-edit"
+                        ></el-button>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="danger"
+                          @click="handleDeleteQueryFilter(scope2.$index, scope2.row)"
+                          icon="el-icon-delete"
+                        ></el-button>
 
-                      <el-button
-                        size="mini"
-                        circle
-                        type="primary"
-                        @click="handleMoveQueryFilter(scope2.$index, scope2.row,false)"
-                        icon="el-icon-arrow-down"
-                        v-if="scope2.$index<curConfig.config.queryfilters.length-1"
-                      ></el-button>
-                      <el-button
-                        size="mini"
-                        circle
-                        type="primary"
-                        @click="handleMoveQueryFilter(scope2.$index, scope2.row,true)"
-                        icon="el-icon-arrow-up"
-                        v-if="scope2.$index>0"
-                      ></el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-col>
-            </el-row>
-          </div>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="primary"
+                          @click="handleMoveQueryFilter(scope2.$index, scope2.row,false)"
+                          icon="el-icon-arrow-down"
+                          v-if="scope2.$index<curConfig.config.queryfilters.length-1"
+                        ></el-button>
+                        <el-button
+                          size="mini"
+                          circle
+                          type="primary"
+                          @click="handleMoveQueryFilter(scope2.$index, scope2.row,true)"
+                          icon="el-icon-arrow-up"
+                          v-if="scope2.$index>0"
+                        ></el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-col>
+              </el-row>
+            </div>
           </el-card>
         </el-tab-pane>
         <!-- Dev mode YAML -->
         <el-tab-pane :label="$t('generictable.new')" key="New" name="New" v-if="!isAdd">
           <el-card>
-          <editor
-            v-model="strNewRec"
-            id="test"
-            @init="editorInit"
-            lang="yaml"
-            theme="chrome"
-            width="99%"
-            style="border: solid 1px #c0c4cc;"
-            height="600"
-          ></editor>
-          <div>&nbsp;</div>
+            <editor
+              v-model="strNewRec"
+              id="test"
+              @init="editorInit"
+              lang="yaml"
+              theme="chrome"
+              width="99%"
+              style="border: solid 1px #c0c4cc;"
+              height="600"
+            ></editor>
+            <div>&nbsp;</div>
           </el-card>
         </el-tab-pane>
       </el-tabs>
@@ -842,11 +848,11 @@ export default {
       return this.currentConfig;
     },
     curConfig: {
-      get () {
-        return this.$store.getters.appConfigObj
+      get() {
+        return this.$store.getters.appConfigObj;
       },
-      set (value) {
-        this.$store.commit('setAppConfigObj', value)
+      set(value) {
+        this.$store.commit("setAppConfigObj", value);
       }
     }
   },
@@ -869,10 +875,14 @@ export default {
   },
   methods: {
     esTableConfigChanged: function(newModel) {
-      console.log('ConfigDetails - esTableConfigChanged')
-      console.log(newModel)
+      console.log("ConfigDetails - esTableConfigChanged");
+      console.log(newModel);
 
-      this.curConfig = Object.assign({}, JSON.parse(JSON.stringify(this.curConfig)), JSON.parse(JSON.stringify(newModel)))
+      this.curConfig = Object.assign(
+        {},
+        JSON.parse(JSON.stringify(this.curConfig)),
+        JSON.parse(JSON.stringify(newModel))
+      );
     },
     closeDialog: function() {
       this.$emit("dialogclose");
@@ -971,12 +981,12 @@ export default {
         console.log("generic-table chosen");
       }
     },
-    
+
     freeTextChanged(newvalue) {
       this.curConfig.config.freetext = newvalue;
     },
     prepareData() {
-      this.dialogFormVisible = true
+      this.dialogFormVisible = true;
       this.curConfig = JSON.parse(JSON.stringify(this.currentConfig));
 
       this.dialogHeaderVisible = false;
@@ -1021,7 +1031,7 @@ export default {
       });
     },
     computeKibanaUrlFromSelectedDash() {
-      var dashdata = this.selectedDash
+      var dashdata = this.selectedDash;
       var url = "";
       url += "/dashboard/" + dashdata.id + "";
       var timek = "from:now-7d,mode:quick,to:now";
@@ -1132,7 +1142,8 @@ export default {
         "." +
         this.$store.getters.kibanaurl.replace("kibana", "kibananyx") +
         space +
-        "/app/kibana#" + this.computeKibanaUrlFromSelectedDash();
+        "/app/kibana#" +
+        this.computeKibanaUrlFromSelectedDash();
 
       var tmp = JSON.parse(JSON.stringify(this.curConfig));
       this.curConfig = null;
