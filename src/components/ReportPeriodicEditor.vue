@@ -66,6 +66,7 @@
               <v-icon v-if="record._source.icon" :name="record._source.icon" scale="2" />
             </el-col>
             
+            
           </el-row>
           <el-row>
             <el-col :span="24">
