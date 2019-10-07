@@ -65,6 +65,14 @@
             <el-col :span="2">
               <v-icon v-if="record._source.icon" :name="record._source.icon" scale="2" />
             </el-col>
+            
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="Path" :label-width="formLabelWidth">
+                <el-input size="mini" placeholder="The path + filename  on the server used to save the report. Empty by default." v-model="record._source.path" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="4">&nbsp;</el-col>
