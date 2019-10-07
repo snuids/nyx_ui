@@ -93,7 +93,6 @@ export default {
           res=[res.lon,res.lat];
         }
 
-        console.log(res);
         var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[1],res[0])}
         newmarkers.push(newm);
 
