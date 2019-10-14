@@ -211,21 +211,30 @@
                       placeholder="Refresh Interval"
                       @change="timeRefreshSelectChange"
                     >
-                      <el-option label="5 seconds" value="refreshInterval:(pause:!f,value:5000)"></el-option>
+                      <el-option label="5 seconds" value="5000"></el-option>
+                      <el-option label="10 seconds" value="10000"></el-option>
+                      <el-option label="30 seconds" value="30000"></el-option>
+                      <el-option label="45 seconds" value="45000"></el-option>
+                      <el-option label="1 minute" value="60000"></el-option>
+                      <el-option label="5 minutes" value="300000"></el-option>
+                      <el-option label="15 minutes" value="900000"></el-option>
+                      <el-option label="30 minutes" value="1800000"></el-option>
+                      <el-option label="1 hour" value="3600000"></el-option>
+                      <el-option label="2 hours" value="7200000"></el-option>
+                      <el-option label="12 hours" value="43200000"></el-option>
+                      <el-option label="1 day" value="86400000"></el-option>
+                      <!-- <el-option label="5 seconds" value="refreshInterval:(pause:!f,value:5000)"></el-option>
                       <el-option label="10 seconds" value="refreshInterval:(pause:!f,value:10000)"></el-option>
                       <el-option label="30 seconds" value="refreshInterval:(pause:!f,value:30000)"></el-option>
                       <el-option label="45 seconds" value="refreshInterval:(pause:!f,value:45000)"></el-option>
                       <el-option label="1 minute" value="refreshInterval:(pause:!f,value:60000)"></el-option>
                       <el-option label="5 minutes" value="refreshInterval:(pause:!f,value:300000)"></el-option>
                       <el-option label="15 minutes" value="refreshInterval:(pause:!f,value:900000)"></el-option>
-                      <el-option
-                        label="30 minutes"
-                        value="refreshInterval:(pause:!f,value:1800000)"
-                      ></el-option>
+                      <el-option label="30 minutes" value="refreshInterval:(pause:!f,value:1800000)"></el-option>
                       <el-option label="1 hour" value="refreshInterval:(pause:!f,value:3600000)"></el-option>
                       <el-option label="2 hours" value="refreshInterval:(pause:!f,value:7200000)"></el-option>
                       <el-option label="12 hours" value="refreshInterval:(pause:!f,value:43200000)"></el-option>
-                      <el-option label="1 day" value="refreshInterval:(pause:!f,value:86400000)"></el-option>
+                      <el-option label="1 day" value="refreshInterval:(pause:!f,value:86400000)"></el-option> -->
                     </el-select>
                   </el-row>
                 </el-form-item>
@@ -279,7 +288,7 @@
               </el-col>
             </el-row>
             <!-- Specific Time -->
-            <el-row v-if="curConfig.type === 'kibana'">
+            <!-- <el-row v-if="curConfig.type === 'kibana'">
               <el-col :span="8">
                 <el-form-item label="Time Field" :label-width="formLabelWidth">
                   <el-input
@@ -300,11 +309,16 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row> -->
 
             <!-- URL -->
-            <el-form-item
+            <!-- <el-form-item
               v-if="(curConfig.type === 'external') || (curConfig.type === 'kibana')"
+              label="Url"
+              :label-width="formLabelWidth"
+            > -->
+            <el-form-item
+              v-if="(curConfig.type === 'external')"
               label="Url"
               :label-width="formLabelWidth"
             >
@@ -996,6 +1010,13 @@ export default {
       if (this.curConfig.config.queryfilters == undefined)
         this.curConfig.config.queryfilters = [];
 
+
+      if(this.currentConfig.timeRefreshValue != null)
+        this.curConfig.timeRefreshValue = this.curConfig.timeRefreshValue.replace('refreshInterval:(pause:!f,value:', '').replace(')', '')
+
+      console.log(this.currentConfig)
+
+
       this.strNewRec = "";
       this.strOrgRec = "";
 
@@ -1031,6 +1052,7 @@ export default {
       });
     },
     computeKibanaUrlFromSelectedDash() {
+      console.log('computeKibanaUrlFromSelectedDash')
       var dashdata = this.selectedDash;
       var url = "";
       url += "/dashboard/" + dashdata.id + "";
@@ -1050,10 +1072,9 @@ export default {
       var strRefresh = "refreshInterval:(pause:!t,value:0)";
 
       if (this.curConfig.timeRefresh && this.curConfig.timeRefreshValue != null)
-        strRefresh = this.curConfig.timeRefreshValue;
+        strRefresh = 'refreshInterval:(pause:!f,value:'+this.curConfig.timeRefreshValue+')'
 
       url +=
-        //"?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(" +
         "?embed=true&_g=(" + strRefresh + ",time:(" + timek + "))";
       url += "&_a=(description:'" + dashdata.attributes.description + "'";
       url += ",filters:!(),fullScreenMode:!f";
@@ -1157,8 +1178,26 @@ export default {
         {
           page: 1,
           per_page: 1000,
-          total: 3,
+          total: 4,
           saved_objects: [
+            {
+              "type": "dashboard",
+              "id": "ede7b7b0-eb5e-11e9-b31c-91fd0a97e7fc",
+              "attributes": {
+                "title": "LUTOSA - Calendar",
+                "hits": 0,
+                "description": "",
+                "panelsJSON": [{"embeddableConfig":{},"gridData":{"h":20,"i":"1","w":41,"x":0,"y":0},"id":"67239870-eb5e-11e9-b31c-91fd0a97e7fc","panelIndex":"1","title":"Calendar","type":"visualization","version":"6.5.4"},{"embeddableConfig":{},"gridData":{"h":10,"i":"2","w":7,"x":41,"y":0},"id":"83795190-eb5e-11e9-b31c-91fd0a97e7fc","panelIndex":"2","title":"Days","type":"visualization","version":"6.5.4"},{"embeddableConfig":{},"gridData":{"h":10,"i":"3","w":7,"x":41,"y":10},"id":"9faf26a0-eb5e-11e9-b31c-91fd0a97e7fc","panelIndex":"3","title":"Open days","type":"visualization","version":"6.5.4"},{"embeddableConfig":{},"gridData":{"h":10,"i":"4","w":48,"x":0,"y":20},"id":"342e2c20-eb6b-11e9-b31c-91fd0a97e7fc","panelIndex":"4","title":"Targets","type":"visualization","version":"6.5.4"}],
+                "optionsJSON": {"darkTheme":false,"hidePanelTitles":false,"useMargins":true},
+                "version": 1,
+                "timeRestore": false,
+                "kibanaSavedObjectMeta": {
+                  "searchSourceJSON": {"query":{"language":"lucene","query":""},"filter":[]}
+                }
+              },
+              "updated_at": "2019-10-10T14:45:45.529Z",
+              "version": 5
+            },
             {
               type: "dashboard",
               id: "0c8aea00-174a-11e9-8fa5-c79677d29cc9",
@@ -1303,14 +1342,23 @@ export default {
       if (this.curConfig.timeRefreshValue != null)
         this.curConfig.timeRefresh = true;
 
+
+      this.computeUrlFromKibana();
+
+
+      var tmp = JSON.parse(JSON.stringify(this.curConfig));
+      this.curConfig = null;
+      this.curConfig = tmp;
+    },
+    timeRefreshSwitchChange() {
+      this.computeUrlFromKibana();
+
+
       var tmp = JSON.parse(JSON.stringify(this.curConfig));
       this.curConfig = null;
       this.curConfig = tmp;
 
-      this.computeUrlFromKibana();
-    },
-    timeRefreshSwitchChange() {
-      this.computeUrlFromKibana();
+      console.log(this.curConfig.config.url)
     },
     timeSelectorTypeChange() {
       if (this.curConfig.timeSelectorType != null)
@@ -1325,6 +1373,7 @@ export default {
       this.computeUrlFromKibana();
     },
     computeUrlFromKibana() {
+      console.log('computeUrlFromKibana')
       if (this.selectedDash != null) {
         var space = "";
         if (this.selectedDash.space != "default") {
