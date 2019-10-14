@@ -88,13 +88,16 @@ export default {
         var resorg=_.get(record,this.config.config.mapfield);
         
         var res=resorg;
-        if (res.lat !=null)
+        if ((res!=null)&&(res.lat !=null))
         {
           res=[res.lon,res.lat];
         }
 
-        var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[1],res[0])}
-        newmarkers.push(newm);
+        if (res!=null)
+        {
+          var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[1],res[0])}
+          newmarkers.push(newm);
+        }
 
         //break;
       }
