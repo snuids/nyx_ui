@@ -1,6 +1,6 @@
 <template>
   <!--div v-bind:style="{ height: 300 + 'px' }" -->
-  <div>
+  <div v-if="$store.getters.activeApp">
     <ChangePassword
       v-if="changePasswordVisible"
       v-on:changepassword_closed="changePasswordVisible=false"
@@ -14,26 +14,26 @@
           </el-col>
           <el-col :span="5" style="text-align: left; font-size: 22px;color:white;">
             <span>
-              <!--v-icon class="menuiconbig" :name="$store.getters.maintitleicon" v-if="$store.getters.maintitleicon && $store.getters.maintitleicon!=''" scale="2"/-->
-              &nbsp;{{$store.getters.maintitle}}{{$store.getters.mainsubtitle}}
+              &nbsp;{{$store.getters.maintitle}}
             </span>
           </el-col>
-          <el-col :span="18" style="text-align: right;">
-            <span
+          <el-col :span="18" style="text-align: right;" class="time-selector-row">
+            <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType==undefined || $store.getters.activeApp.timeSelectorType=='classic')"
             >
               <!-- CLASSIC TIME SELECTED -->
-              <span>
+              <div>
                 <el-popover
                   v-if="$store.getters.activeApp.timeSelectorChecked && (timeType=='relative')"
                   placement="bottom"
                   width="400"
                   trigger="click"
+                  
                   @hide="relativeTimeClosed"
                 >
-                  <el-form>
+                  <el-form style="margin-top: 7px;">
                     <el-row>
-                      <el-col :span="14">
+                      <el-col :span="12">
                         <el-form-item :label="$t('time.last')">
                           <el-input-number
                             :min="1"
@@ -44,8 +44,11 @@
                           ></el-input-number>
                         </el-form-item>
                       </el-col>
-                      <el-col :span="10">
+                      <el-col :span="12">
+                        <el-form-item >
                         <el-select
+                          style="width:97%"
+                          size="mini"
                           v-model="relativeTimeType"
                           placeholder="Please select a value"
                           @change="relativeTimeClosed"
@@ -55,29 +58,37 @@
                           <el-option :label="$t('time.day')" value="d"></el-option>
                           <el-option :label="$t('time.week')" value="w"></el-option>
                         </el-select>
+                        </el-form-item>
                       </el-col>
                     </el-row>
                   </el-form>
                   <el-button
                     size="mini"
                     slot="reference"
+                    style="margin-right:5px;"
                   >{{$t('time.last')}} {{relativeTimeValue}} {{relativeTimeType}}</el-button>
                 </el-popover>
-              </span>
-              <el-date-picker
-                style="top:1px;"
+              </div>
+              <div 
                 v-if="$store.getters.activeApp.timeSelectorChecked && (timeType=='absolute')"
-                :picker-options="rangePickerOptions"
-                v-model="timerange"
-                v-on:change="timeRangeChanged"
-                size="mini"
-                type="datetimerange"
-                range-separator="To"
-                start-placeholder="Start date"
-                end-placeholder="End date"
-                align="center"
-                :default-time="['00:00:00', '23:59:59']"
-              ></el-date-picker>&nbsp;&nbsp;
+              >
+
+                <el-date-picker
+                  style="top:1px;"
+                  :picker-options="rangePickerOptions"
+                  v-model="timerange"
+                  v-on:change="timeRangeChanged"
+                  size="mini"
+                  type="datetimerange"
+                  range-separator="To"
+                  start-placeholder="Start date"
+                  end-placeholder="End date"
+                  align="center"
+                  :clearable="false"
+                  :default-time="['00:00:00', '23:59:59']"
+                  :unlink-panels="true"
+                ></el-date-picker>&nbsp;&nbsp;
+              </div>
               <el-radio-group
                 style="margin-bottom:3px;"
                 @change="timeModeChanged"
@@ -88,12 +99,12 @@
                 <el-radio-button label="absolute">{{$t('time.absolute')}}</el-radio-button>
                 <el-radio-button label="relative">{{$t('time.relative')}}</el-radio-button>
               </el-radio-group>&nbsp;&nbsp;
-            </span>
+            </div>
 
-            <span
+            <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType=='week')"
             >
-              <!-- month TIME SELECTED -->
+              <!-- week TIME SELECTED -->
               <el-date-picker
                 v-model="weekPicker"
                 v-on:change="weekChanged"
@@ -101,9 +112,10 @@
                 type="week"
                 size="mini"
                 placeholder="Pick a week"
+                :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
-            </span>
-            <span
+            </div>
+            <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType=='month')"
             >
               <!-- month TIME SELECTED -->
@@ -113,20 +125,22 @@
                 type="month"
                 size="mini"
                 placeholder="Pick a month"
+                :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
-            </span>
-            <span
+            </div>
+            <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType=='year')"
             >
-              <!-- month TIME SELECTED -->
+              <!-- year TIME SELECTED -->
               <el-date-picker
                 v-model="yearPicker"
                 v-on:change="yearChanged"
                 type="year"
                 size="mini"
                 placeholder="Pick a year"
+                :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
-            </span>
+            </div>
             <!-- </el-col>
             <el-col :span="3" style="text-align:right;">-->
             <Apps v-on:appclicked="appClicked"></Apps>&nbsp;&nbsp;
@@ -208,7 +222,6 @@ export default {
   data: () => ({
     styleContainer: "B",
     maintitle: "NYX",
-
     timerange: "",
     yearPicker: moment(),
     monthPicker: moment(),
@@ -216,31 +229,13 @@ export default {
     menuOpen: true,
     resizeListener: null,
     changePasswordVisible: false,
-    timeType: "absolute",
+    timeType: "relative",
     maintitleicon: "spider",
     relativeTimeType: "h",
     relativeTimeValue: 4,
 
     rangePickerOptions: {
       shortcuts: [
-        /*{
-          text: "Last hour",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Last 4 hours",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 4);
-            picker.$emit("pick", [start, end]);
-          }
-        },*/
         {
           text: "Last 24 hours",
           onClick(picker) {
@@ -400,7 +395,8 @@ export default {
       });
     },
     timeModeChanged(e) {
-      //alert(e);
+      this.timeType = null
+      this.timeType = e
       if (e == "relative") {
         this.relativeTimeClosed();
       } else if (e == "absolute") {
@@ -562,7 +558,7 @@ export default {
       const start = new Date();
       start.setTime(payLoad[0]);
       end.setTime(payLoad[1]);
-      this.timeType = "absolute";
+      this.timeType = "relative";
 
       this.timeRangeChanged([start, end]);
     });
@@ -708,4 +704,9 @@ body {
   background-color: hsla(0, 0%, 100%, 0.7) !important;
   transition: opacity 2.1s !important;
 }
+
+.time-selector-row div {
+  display: inline-block;
+}
+
 </style>
