@@ -223,18 +223,6 @@
                       <el-option label="2 hours" value="7200000"></el-option>
                       <el-option label="12 hours" value="43200000"></el-option>
                       <el-option label="1 day" value="86400000"></el-option>
-                      <!-- <el-option label="5 seconds" value="refreshInterval:(pause:!f,value:5000)"></el-option>
-                      <el-option label="10 seconds" value="refreshInterval:(pause:!f,value:10000)"></el-option>
-                      <el-option label="30 seconds" value="refreshInterval:(pause:!f,value:30000)"></el-option>
-                      <el-option label="45 seconds" value="refreshInterval:(pause:!f,value:45000)"></el-option>
-                      <el-option label="1 minute" value="refreshInterval:(pause:!f,value:60000)"></el-option>
-                      <el-option label="5 minutes" value="refreshInterval:(pause:!f,value:300000)"></el-option>
-                      <el-option label="15 minutes" value="refreshInterval:(pause:!f,value:900000)"></el-option>
-                      <el-option label="30 minutes" value="refreshInterval:(pause:!f,value:1800000)"></el-option>
-                      <el-option label="1 hour" value="refreshInterval:(pause:!f,value:3600000)"></el-option>
-                      <el-option label="2 hours" value="refreshInterval:(pause:!f,value:7200000)"></el-option>
-                      <el-option label="12 hours" value="refreshInterval:(pause:!f,value:43200000)"></el-option>
-                      <el-option label="1 day" value="refreshInterval:(pause:!f,value:86400000)"></el-option> -->
                     </el-select>
                   </el-row>
                 </el-form-item>
@@ -599,14 +587,17 @@
           label="Table Dev"
           name="table dev"
           key="table_dev"
-          v-if="(curConfig.type === 'generic-table') && $store.devMode"
+          v-if="(curConfig.type === 'generic-table') && $store.getters.devMode"
         >
           <ESTableEditor
-            :allPrivileges="privilegesdata"
+            :allPrivileges="allPrivileges"
             :currentConfig="curConfig"
             @configchanged="esTableConfigChanged"
+            :forcestep="isAdd?1:2"
           ></ESTableEditor>
         </el-tab-pane>
+
+     
 
         <!-- ******* FORM ******* -->
         <el-tab-pane label="Form" name="form" key="form" v-if="(curConfig.type === 'form')">
@@ -814,6 +805,8 @@ import freetextdetails from "@/components/FreeTextDetails";
 import formfieldeditor from "@/components/FormFieldEditor";
 import queryfiltereditor from "@/components/QueryFilterEditor";
 import estableeditor from "@/components/ConfigDetailsESTableEditor";
+
+
 import Vue from "vue";
 import axios from "axios";
 import rison from "rison";
@@ -823,6 +816,7 @@ Vue.component("FreeTextDetails", freetextdetails);
 Vue.component("FormFieldEditor", formfieldeditor);
 Vue.component("QueryFilterEditor", queryfiltereditor);
 Vue.component("ESTableEditor", estableeditor);
+
 
 function transformObject(obj) {
   return rison.encode(obj);
@@ -843,14 +837,13 @@ export default {
         currentQueryFilter: {},
         formLabelWidth: "120px",
         privileges: [],
-        privilegesdata: [],
         dashboards: [],
         selectedDash: null,
         selectedDashId: null,
         listLoading: false,
         strOrgRec: "",
         strNewRec: "",
-        esMapping: null
+        esMapping: null,
       }
     );
   },
@@ -888,6 +881,17 @@ export default {
     this.prepareData();
   },
   methods: {
+    loadPrivileges: function() {
+      var data = [];
+      for (var i in this.$store.getters.privileges) {
+        var priv = this.$store.getters.privileges[i];
+        data.push({
+          value: priv._source.value,
+          desc: priv._source.name
+        });
+      }
+      this.allPrivileges = data;
+    },
     esTableConfigChanged: function(newModel) {
       console.log("ConfigDetails - esTableConfigChanged");
       console.log(newModel);
