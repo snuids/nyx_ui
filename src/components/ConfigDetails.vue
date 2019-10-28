@@ -587,7 +587,7 @@
           label="Table Dev"
           name="table dev"
           key="table_dev"
-          v-if="(curConfig.type === 'generic-table') && $store.getters.devMode"
+          v-if="(curConfig.type === 'generic-table')"
         >
           <ESTableEditor
             :allPrivileges="allPrivileges"
