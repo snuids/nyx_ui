@@ -33,7 +33,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     kibanaurl:"/kibana/",
     version: "v2.9.0",
-    devMode: true,
+    devMode: false,
     menus: [],
     menuOpen: true,
     apps: [],
