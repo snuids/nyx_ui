@@ -229,7 +229,7 @@ export default {
     menuOpen: true,
     resizeListener: null,
     changePasswordVisible: false,
-    timeType: "relative",
+    timeType: "absolute",
     maintitleicon: "spider",
     relativeTimeType: "h",
     relativeTimeValue: 4,
