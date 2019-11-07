@@ -699,6 +699,8 @@ export default {
             });
 
             if (this.config.config.headercolumns) {
+              console.log(this.config.config)
+
               for (var col in this.config.config.headercolumns) {
                 var curcol = this.config.config.headercolumns[col];
 
@@ -719,14 +721,19 @@ export default {
                     if (curcol.format != undefined) {
                       format = curcol.format;
                     }
-
+                    
                     var curtime =
                       record["_source"][curcol.field.replace("_source.", "")];
+
+                    var curtime = _.get(record["_source"], curcol.field.replace("_source.", ""))
+
+
                     if (curcol.type == "timestamp") {
                       if (curtime != undefined) {
                         curtime = parseInt(curtime);
                       }
                     }
+
                     if (curtime != undefined) {
                       record["_source"][
                         curcol.field.replace("_source.", "")
