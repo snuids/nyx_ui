@@ -94,24 +94,24 @@
           >Back</el-button>
         </el-col>
       </el-row>
-      <el-row style="text-align:left;">
+     
+      <el-row  v-if="currentConfig.config.timefield && currentConfig.config.timefield!='I don\'t want to use the Time Filter'" 
+              style="text-align:left; margin-top:20px;">
         <el-switch
-          v-if="currentConfig.config.timefield && currentConfig.config.timefield!='I don\'t want to use the Time Filter'"
+         
           v-model="currentConfig.graphicChecked"
           active-text="Graphic"
           >
         </el-switch>
       </el-row>
-      <el-row style="text-align:left;">
-        <!-- <el-col :span="6" style="text-align:left;"> -->
+      <el-row v-if="currentConfig.config.timefield && currentConfig.config.timefield!='I don\'t want to use the Time Filter'"
+              style="text-align:left;">
         <el-switch
-          v-if="currentConfig.config.timefield && currentConfig.config.timefield!='I don\'t want to use the Time Filter'"
+          
           v-model="currentConfig.timeSelectorChecked"
           active-text="Time selector"
           >
         </el-switch>
-        <!-- </el-col>
-        <el-col :span="6" style="text-align:left;"> -->
           <el-select
             v-if="currentConfig.timeSelectorChecked"
             style="margin-left:20px;"
@@ -124,7 +124,24 @@
             <el-option label="Week" value="week"></el-option>
             <el-option label="Year" value="year"></el-option>
           </el-select>
-        <!-- </el-col> -->
+      </el-row>
+       <el-row style="text-align:left;" v-if="!noTimeField">
+        <el-button
+            @click="setFocus('docType')" 
+            type="text">Document type</el-button>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-input
+            placeholder="Default doc"
+            ref="docType"
+            type="text"
+            size="mini"
+            autocomplete="off"
+            v-model="currentConfig.config.doc_type"
+          >
+          </el-input>
+        </el-col>
       </el-row>
       <el-row style="text-align:left;">
         <el-button
@@ -137,7 +154,7 @@
               v-model="fieldsToDisplay" 
               multiple
               filterable
-              @change="selectFieldsToDisplayChanged()"
+              @change="selectFieldsToDisplayChanged"
               ref="fieldsToDisplay"
               placeholder="Field to display"
               size="mini"
@@ -197,6 +214,39 @@
       </el-row>
       <el-row style="text-align:left;">
         <el-button
+            @click="setFocus('order')" 
+            type="text">Sort</el-button>
+      </el-row>
+       <el-row>
+        <el-col :span="12" style="text-align:left;">
+          <el-select 
+              v-model="currentConfig.config.orderField" 
+              filterable
+              clearable
+              ref="order"
+              placeholder="Field to sort on"
+              size="mini"
+              style="width:100%;">
+            <el-option
+              v-for="item in allFields"
+              :key="item.field"
+              :label="item.field"
+              :value="item.field">
+            </el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row v-if="currentConfig.config.orderField"
+              style="text-align:left; margin-top:20px; margin-left:15px;">
+        <el-switch
+          v-model="currentConfig.config.orderDirection"
+          active-text="Descending"
+          inactive-text="Ascending"
+          >
+        </el-switch>
+      </el-row>
+      <el-row style="text-align:left;">
+        <el-button
             @click="setFocus('hiddenQuery')" 
             type="text">Hidden query</el-button>
       </el-row>
@@ -213,7 +263,7 @@
           </el-input>
         </el-col>
       </el-row>
-      <el-row style="text-align:left;">
+      <el-row style="text-align:left; margin-top:20px;">
         <el-switch
           v-model="currentConfig.queryBarChecked"
           active-text="Query bar"
@@ -588,12 +638,33 @@ export default {
       console.log(select)
       this.$nextTick(() => select.focus());
     },
-    selectFieldsToDisplayChanged: function() {
-      console.log('selectFieldsToDisplayChanged')
-      this.currentConfig.config.headercolumns = []
-      for(var i in this.fieldsToDisplay) {
-        this.currentConfig.config.headercolumns.push(this.allFields[this.fieldsToDisplay[i]])
+    selectFieldsToDisplayChanged: function(val) {
+      var tmp = []
+      var flag = false
+      for(var i=0; i<this.fieldsToDisplay.length; i++) {
+        flag = false
+        for(var j=0; i<this.currentConfig.config.headercolumns.length; j++) {
+          if(this.currentConfig.config.headercolumns[j].field == this.fieldsToDisplay[i]) {
+            tmp.push(this.currentConfig.config.headercolumns[j])
+            console.log(this.currentConfig.config.headercolumns[j].field+ ' == '+this.fieldsToDisplay[i])
+            flag = true
+            break
+          }
+        }
+
+        if(!flag) {
+          console.log(flag)
+          console.log(this.fieldsToDisplay[i])
+          console.log(this.allFields[this.fieldsToDisplay[i]])
+
+          tmp.push(this.allFields[this.fieldsToDisplay[i]])
+        }
       }
+
+
+      this.currentConfig.config.headercolumns = []
+      this.currentConfig.config.headercolumns = JSON.parse(JSON.stringify(tmp))
+
     },
     selectFieldsToDownloadChanged: function() {
       console.log('selectFieldsToDisplayChanged')
@@ -623,6 +694,11 @@ export default {
       if(this.currentConfig.config.timefield == '_____________________') {
         this.currentConfig.config.timefield = ''
       }
+
+      if(!this.currentConfig.config.timefield || this.currentConfig.config.timefield=="I don't want to use the Time Filter") {
+        this.currentConfig.graphicChecked = false
+        this.currentConfig.timeSelectorChecked = false
+      }
     },
     goToStep: function(step) {
       console.log('go to step'+step)
@@ -639,10 +715,12 @@ export default {
           '_id': {
             'field':'_id',
             'type':'_id',
+            'title':'_id',
           },
           '_index': {
             'field':'_index',
             'type':'_index',
+            'title':'_index',
           },
         }
 
@@ -683,7 +761,7 @@ export default {
           this.getRecMappings(curpath+i+".",curobj)
         else {
 
-          var obj = {"field":curpath+i,"type":curobj.type}
+          var obj = {"field":curpath+i,"type":curobj.type,"title":curpath+i}
 
           this.allFields[curpath+i] = obj
 
