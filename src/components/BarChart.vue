@@ -11,7 +11,7 @@
       </clipPath>
     </defs>
 
-    <rect x="0" y="0" :width="width" :height="height" class="barchart_background" />
+    <rect x="0" y="0" :width="width" :height="height" class="barchart_background" @mouseup="backgroundUp"/>
 
     <rect
       :x="marginleft"
@@ -24,7 +24,7 @@
       @mousemove="backMove"
     />
 
-    <rect
+    <!--rect
       :x="marginleft"
       :y="margintop+(height-margintop-marginbottom)/4"
       :width="width-marginleft-marginright"
@@ -33,9 +33,9 @@
       @mousedown="backDown"
       @mouseup="backUp"
       @mousemove="backMove"
-    />
+    /-->
 
-    <line
+    <!--line
       :x1="marginleft"
       :y1="margintop+(height-margintop-marginbottom)/2"
       :x2="width-marginright"
@@ -44,13 +44,13 @@
       @mousedown="backDown"
       @mouseup="backUp"
       @mousemove="backMove"
-    />
+    /-->
 
     <rect
       v-show="dragStarted"
-      :x="startdragXRef+marginleft"
+      :x="movedragXRef-startdragXRef>0?startdragXRef+marginleft:startdragXRef+marginleft+(movedragXRef-startdragXRef)"
       :y="margintop"
-      :width="Math.max(5,movedragXRef-startdragXRef)"
+      :width="movedragXRef-startdragXRef>0?Math.max(5,movedragXRef-startdragXRef):Math.max(5,startdragXRef-movedragXRef)"
       pointer-events="none"
       :height="height-margintop-marginbottom"
       class="barchart_selectrect"
@@ -67,10 +67,13 @@
       :height="bar.h"
       class="barchart_bar"
       @mouseover="barClicked(bar)"
-      @mouseout="resetBar(bar)"
+      @mouseout="resetBar(bar)"      
+      
       clip-path="url(#mainrect)"
       :pointer-events="pointerevents"
     />
+<!--
+  -->
 
     <line
       v-for="tick in ticks"
@@ -102,7 +105,7 @@ export default {
   data: () => ({
     viewBox: "0 0 1100 150",
     marginleft: 80,
-    marginright: 10,
+    marginright: 20,
     margintop: 20,
     marginbottom: 30,
     bars: [],
@@ -194,6 +197,10 @@ export default {
 
       //console.log("MOVE: " + x + " y:" + y);
     },
+    backgroundUp: function(evt) {     
+      if(this.dragStarted)
+        this.backUp(evt);
+    },
     backUp: function(evt) {
       if (
         !(
@@ -211,6 +218,13 @@ export default {
       var y = evt.clientY - dim.top;
 
       console.log("UP: " + x + " y:" + y);
+
+      if(this.startdragX>x)
+      {
+        var xtemp=this.startdragX;
+        this.startdragX=x;
+        x=xtemp;
+      }
 
       var totalSeconds =
         (this.$store.getters.timeRange[1] - this.$store.getters.timeRange[0]) /
@@ -263,8 +277,8 @@ export default {
 
       var rangetouse;
       //console.log(this.config);
-      console.log("=====> " + this.width);
-      console.log("=====> " + this.config.timeSelectorType);
+      //console.log("=====> " + this.width);
+      //console.log("=====> " + this.config.timeSelectorType);
       switch (this.config.timeSelectorType) {
         case "week":
           rangetouse = this.$store.getters.timeRangeWeek;
@@ -494,7 +508,7 @@ export default {
   stroke: rgb(200, 200, 200);
 }
 .barchart_bar:hover {
-  fill: #73a6f8;
+  fill: #409EFF;
   stroke-width: 1;
   /*stroke: #4376c8;*/
   stroke: #409eff;
@@ -503,8 +517,8 @@ export default {
 
 .barchart_bar {
   /*fill: #4376c8;*/
-  fill: #409eff;
-  stroke-width: 1;
+  fill: #40a0ff6c;
+  stroke-width: 1.3;
   /*stroke: #4376c8;*/
   stroke: #409eff;
 }
@@ -521,9 +535,9 @@ export default {
   fill: #409eff;
 }
 .barchart_selectrect {
-  fill: rgb(105, 177, 187);
+  fill: rgb(226, 226, 222);
   stroke-width: 1;
-  stroke: rgb(105, 177, 187);
+  stroke: rgb(226, 226, 222);
   opacity: 0.5;
 }
 </style>

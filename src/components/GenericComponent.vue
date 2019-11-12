@@ -101,7 +101,7 @@ import reporttask from "@/components/ReportTask";
 import reportperiodic from "@/components/ReportPeriodic";
 import form from "@/components/Form";
 import freetext from "@/components/FreeText";
-import loading from "@/components/Loading";
+//import loading from "@/components/Loading";
 import queryfilter from "@/components/QueryFilter";
 import vega from "@/components/Vega";
 import Vue from "vue";
@@ -135,7 +135,7 @@ Vue.component("ReportList", ReportList);
 Vue.component("ReportTask", reporttask);
 Vue.component("ReportPeriodic", reportperiodic);
 Vue.component("ProcessList", ProcessList);
-Vue.component("Loading", loading);
+//Vue.component("Loading", loading);
 Vue.component("QueryFilter", queryfilter);
 Vue.component("Vega", vega);
 
