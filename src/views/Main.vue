@@ -17,7 +17,7 @@
               &nbsp;{{$store.getters.maintitle}}
             </span>
           </el-col>
-          <el-col :span="18" style="text-align: right;" class="time-selector-row">
+          <el-col :span="18" style="text-align: right;" class="time-selector-row">           
             <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType==undefined || $store.getters.activeApp.timeSelectorType=='classic')"
             >
@@ -403,7 +403,8 @@ export default {
         this.timeRangeChanged(this.timerange);
       }
     },
-    relativeTimeClosed() {
+    relativeTimeClosed: _.debounce(function() {
+      
       console.log("RELATIVE TIME RANGE CHANGED");
       this.$store.commit({
         type: "setTimeRange",
@@ -417,7 +418,7 @@ export default {
         type: "relative",
         subtype: "classic"
       });
-    },
+    }, 500),    
     logout() {
       console.log("BEFCOMMIT");
       this.$store.commit({
@@ -524,7 +525,7 @@ export default {
           data: e
         });
 
-        this.$router.push("/main/loading/");
+        //this.$router.push("/main/loading/");
         this.$nextTick(() => {
           this.$router.push("/main/" + e.title + "/");
           this.$globalbus.$emit("appchanged", e);
@@ -558,7 +559,8 @@ export default {
       const start = new Date();
       start.setTime(payLoad[0]);
       end.setTime(payLoad[1]);
-      this.timeType = "relative";
+      //this.timeType = "relative";
+      this.timeType = "absolute";
 
       this.timeRangeChanged([start, end]);
     });

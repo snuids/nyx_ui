@@ -360,6 +360,8 @@ export default {
       this.partialUpdateRecord(newRec, header);
     },
     cutRec(aRec) {
+      if (aRec==undefined)
+        return ""
       if (aRec.length > 40) aRec = aRec.substring(0, 50) + "...";
       return aRec;
     },
