@@ -56,6 +56,7 @@ export default new Vuex.Store({
     maintitleicon: "crow",
     containerSize: { "width": 1200, "height": 800 },
     appConfigObj: null,
+    redirection: null,
   },
   getters: {
     apiurl: state => state.apiurl,
@@ -85,6 +86,7 @@ export default new Vuex.Store({
     containerSize: state => state.containerSize,
     version: state => state.version,
     appConfigObj: state => state.appConfigObj,
+    redirection: state => state.redirection,
 
   },
   actions: {
@@ -171,21 +173,57 @@ export default new Vuex.Store({
 
       state.filteredmenus = []
       var cmenus = state.menus;
-      for (var i in cmenus)
+      for (var i in cmenus) {
         if (cmenus[i].category != "apps")
         {
+          cmenus[i].category=cmenus[i].category.replace(/ /g,'').toLowerCase();
           for (var j in cmenus[i].submenus)
           {
-            cmenus[i].submenus[j].fulltitle=cmenus[i].category+"/"+cmenus[i].submenus[j].title;
+            
+            cmenus[i].submenus[j].title=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
+            cmenus[i].submenus[j].fulltitle=(cmenus[i].category+"/"+cmenus[i].submenus[j].title)//.replace(/ /g,'').toLowerCase();
           }
           state.filteredmenus.push(cmenus[i]);
         }
-      // console.log("==================");
-      // console.log(state.filteredmenus[0].category);
-      // console.log(state.filteredmenus[0].submenus[0]);
+      }
+
       state.currentApps = state.filteredmenus[0].submenus[0];
-      state.maintitle = state.filteredmenus[0].submenus[0].loc_title;
-      state.maintitleicon = state.filteredmenus[0].submenus[0].icon;
+
+      // console.log(state.menus)
+
+      if(state.redirection) {
+        console.log('Login REDIRECTION -> '+state.redirection)
+
+        var flag = false
+        for(var i=0; i<state.filteredmenus.length; i++) {
+          // console.log(i)
+          var menu = state.filteredmenus[i]
+
+          for(var j=0; j < menu.submenus.length; j++) {
+            var submenu = menu.submenus[j]
+
+
+            var str_cat = submenu.fulltitle.replace(/ /g,'').toLowerCase().split('/')[0]
+            var str_app = submenu.fulltitle.replace(/ /g,'').toLowerCase().split('/')[1]
+
+            // console.log('/main/'+str_cat+'/'+str_app)
+
+            if('/main/'+str_cat+'/'+str_app == state.redirection) {
+              console.log(submenu)
+
+              state.currentApps = submenu
+              flag = true
+              break
+            }
+          }
+          if(flag)
+            break
+        }
+      }  
+
+
+      state.maintitle = state.currentApps.loc_title;
+      state.maintitleicon = state.currentApps.icon;
 
       if (state.currentApps.apps.length>1)
         state.mainsubtitle=" / "+state.currentApps.apps[0].loc_title;
@@ -243,8 +281,8 @@ export default new Vuex.Store({
     },
 
     changeApps(state, payload) {
-      console.log("VUEX:CURRENT APP:");
-//      console.log(JSON.stringify(payload.data));
+      console.log("VUEX:CHANGE APP:"+payload.data.loc_title);
+      
       state.currentApps = payload.data;
       state.maintitle = payload.data.loc_title;
       state.maintitleicon = payload.data.icon;

@@ -1,7 +1,7 @@
 <template>
   <!--MAIN DIALOG -->
   <div style="text-align:left">
-    <h1>Loading 2</h1>
+    <h1>Loading</h1>
   </div>
 </template>
 

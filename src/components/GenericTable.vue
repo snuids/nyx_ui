@@ -84,12 +84,10 @@
               </div>
               <div v-else>
                 {{computeRec(scope.row,header.field)}}
-                <!-- {{header}} -->
               </div>
             </template>
           </el-table-column>
           <el-table-column label="Actions" align="right">
-            <!-- Removed from line below: slot-scope="scope" -->
             <template slot="header" slot-scope="scope">
               <div>
                 <el-tooltip
@@ -285,7 +283,7 @@ export default {
     configin: {
       handler: function() {
         console.log("Config changed.....");
-        this.loadData();
+        // this.loadData();
       },
       deep: true
     }
@@ -330,12 +328,6 @@ export default {
     partialUpdateRecord: function(newRec, header) {
       var headerName = header.field.replace("_source.", "");
       var newObj = newRec.original;
-
-      // for (var i in newObj._source) {
-      //   if (i == headerName) {
-      //     newObj._source[i] = newRec._source[i];
-      //   }
-      // }
 
       newObj._source[headerName] = newRec._source[headerName];
 
@@ -451,9 +443,9 @@ export default {
       this.loadData();
     },
     loadData: function(download, exportformat) {
-      console.log("=>=>=>+>=>=>=>=> Load DATA");
+      console.log("GENERIC TABLE - Load DATA");
       if (download == undefined) download = false;
-      console.log("LOAD DATA...Download=" + download);
+      // console.log("LOAD DATA...Download=" + download);
 
       var doc_type = "";
       if (
@@ -512,8 +504,8 @@ export default {
         this.config.config.timefield != null &&
         this.config.config.timefield != ""
       ) {
-        console.log(this.config.timeSelectorType);
-        console.log(rangetouse);
+        // console.log(this.config.timeSelectorType);
+        // console.log(rangetouse);
 
         if (rangetouse != null) {
           var timeRange = rangetouse;
@@ -597,10 +589,6 @@ export default {
         order[this.config.config.orderField] = { order: direction };
         query.sort.push(order);
       }
-      console.log(
-        "*************************===================================================="
-      );
-      console.log(JSON.stringify(query));
       if (
         this.config.config.exportColumns != undefined &&
         this.config.config.exportColumns != ""
@@ -610,9 +598,6 @@ export default {
       axios
         .post(url, query)
         .then(response => {
-          console.log(
-            "LOAD DATA RES...Download=" + download + " =>" + exportformat
-          );
 
           this.ready = true;
 
@@ -642,7 +627,7 @@ export default {
               } else {
                 window.open(response.data.url, "_blank");
                 this.$notify({
-                  title: this.$t("notifications.data_loaded"), //"Data loaded",
+                  title: this.$t("notifications.data_loaded"), 
                   message:
                     this.$t("notifications.records") +
                     ": " +
@@ -701,7 +686,7 @@ export default {
             });
 
             if (this.config.config.headercolumns) {
-              console.log(this.config.config)
+              // console.log(this.config.config)
 
               for (var col in this.config.config.headercolumns) {
                 var curcol = this.config.config.headercolumns[col];
@@ -796,11 +781,6 @@ export default {
   created: function() {
     console.log("===============  CREATED:");
     this.loadData();
-  },
-  mounted: function() {
-    if (this.config.graphicChecked) {
-      //      this.$refs.generic.chart.addEventListener("click", this.graphClicked);
-    }
 
     console.log("===============  REGISTERING: timerangechanged");
     this.$globalbus.$on("timerangechanged", payLoad => {

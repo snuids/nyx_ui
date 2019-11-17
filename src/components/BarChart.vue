@@ -268,12 +268,12 @@ export default {
     },
 
     prepareData: function() {
-      console.log("=====> COMPUTING GRAPH");
+      // console.log("=====> COMPUTING GRAPH");
       var left = 210;
       if (!this.$store.state.menuOpen) left = 0;
 
       this.width = this.$store.getters.containerSize.width - left;
-      console.log("CONTAINER W=" + this.width);
+      // console.log("CONTAINER W=" + this.width);
 
       var rangetouse;
       //console.log(this.config);

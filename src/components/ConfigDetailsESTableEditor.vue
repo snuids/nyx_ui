@@ -394,21 +394,6 @@
                     
                 </template>
               </el-table-column>
-              <!-- <el-table-column
-                prop="type"
-                label="Type"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Format">
-                <template slot-scope="scope">
-                  <el-input 
-                      v-if="scope.row.type=='date'"
-                      size="mini"
-                      v-model="scope.row.format"></el-input>
-                    
-                </template>
-              </el-table-column> -->
             </el-table>
           </el-card>
         </el-col>
@@ -500,12 +485,6 @@ export default {
     }
   },
   watch: {
-    curConfigIn: {
-      handler: function() {
-        // this.prepareData();
-      },
-      deep: true
-    },
     indexPattern: {
       handler: function() {
         this.indexPatternChanged();

@@ -172,11 +172,13 @@
                     </template>
                     <el-menu-item
                       v-for="subMenu in menu.submenus"
-                      :index="menu.category+'/'+subMenu.title"
-                      :key="menu.category+'/'+subMenu.title"
+                      :index="subMenu.fulltitle"
+                      :key="subMenu.fulltitle"
                       @click="appClicked(subMenu)"
                       class="submenu-item"
                     >
+                      <!-- :key="menu.category+'/'+subMenu.title" -->
+                      <!-- :index="menu.category+'/'+subMenu.title" -->
                       <v-icon
                         class="menuiconaside"
                         :name="subMenu.icon"
@@ -216,9 +218,6 @@ Vue.component("ChangePassword", changepassword);
 // @ is an alias to /src
 export default {
   name: "home",
-  /*components: {
-    HelloWorld
-  },*/
   data: () => ({
     styleContainer: "B",
     maintitle: "NYX",
@@ -258,7 +257,6 @@ export default {
           text: "Previous month",
           onClick(picker) {
             const start = new Date();
-            //start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
             var dateFrom = moment(start)
               .subtract(1, "months")
               .startOf("month")
@@ -275,8 +273,6 @@ export default {
           onClick(picker) {
             const start = new moment().startOf("month").toDate();
             const end = new moment().endOf("month").toDate();
-
-            //start.setTime(start);
             picker.$emit("pick", [start, end]);
           }
         },
@@ -284,7 +280,6 @@ export default {
           text: "Next month",
           onClick(picker) {
             const start = new Date();
-            //start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
             var dateFrom = moment(start)
               .add(1, "months")
               .startOf("month")
@@ -325,7 +320,6 @@ export default {
               .startOf("day")
               .toDate();
 
-            //start.setTime(start.getTime());
             picker.$emit("pick", [start, end]);
           }
         },
@@ -334,8 +328,6 @@ export default {
           onClick(picker) {
             const start = new moment().startOf("week").toDate();
             const end = new moment().endOf("week").toDate();
-
-            //start.setTime(start);
             picker.$emit("pick", [start, end]);
           }
         },
@@ -344,8 +336,6 @@ export default {
           onClick(picker) {
             const start = new moment().startOf("year").toDate();
             const end = new moment().endOf("year").toDate();
-
-            //start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
             picker.$emit("pick", [start, end]);
           }
         }
@@ -434,9 +424,6 @@ export default {
       });
       this.$router.push("/");
     },
-    user() {
-      this.$router.push("/main/user");
-    },
     weekChanged(e) {
       console.log("WEEK CHANGED");
       var dstart = moment(e);
@@ -504,16 +491,12 @@ export default {
         subtype: "classic"
       });
     },
-    handleAdmin(e) {
-      console.log("admin clicked");
-
-      this.$router.push("/main/" + e + "/");
-    },
     changePassword() {
       this.changePasswordVisible = true;
     },
     appClicked(e) {
       console.log("app clicked");
+      console.log(e);
       if (e.type == "external") {
         window.open(e.config.url);
       } else {
@@ -525,11 +508,12 @@ export default {
           data: e
         });
 
-        //this.$router.push("/main/loading/");
-        this.$nextTick(() => {
-          this.$router.push("/main/" + e.title + "/");
-          this.$globalbus.$emit("appchanged", e);
-        });
+        console.log(this.$route)
+
+        var path = "/main/" + e.fulltitle
+
+        if(path != this.$route.path)
+          this.$router.push(path);
       }
     },
     changeContainerSize: _.debounce(function(newSize) {
@@ -541,9 +525,22 @@ export default {
   },
   created: function() {
     console.log("Main vue created");
+
     if (this.$store.getters.currentApps == undefined) {
-      // bad routing
+
+
+      console.log('NOT LOGGED YET')
+      var path = this.$route.path
+      if(path[path.length-1] == '/')
+	      path = path.substring(0, path.length-1)
+
+
+      this.$store.state.redirection = path
+      console.log(this.$route)
+      
+      
       this.$router.push("/");
+
       return;
     }
     const end = new Date();
@@ -559,7 +556,6 @@ export default {
       const start = new Date();
       start.setTime(payLoad[0]);
       end.setTime(payLoad[1]);
-      //this.timeType = "relative";
       this.timeType = "absolute";
 
       this.timeRangeChanged([start, end]);
@@ -570,7 +566,6 @@ export default {
       type: "changeContainerSize",
       data: { height: window.innerHeight, width: window.innerWidth }
     });
-    //this.changeContainerSize(window);
 
     this.$nextTick(() => {
       this.resizeListener = window.addEventListener("resize", () => {
@@ -600,26 +595,18 @@ export default {
   margin-left: 10px;
 }
 
-/*.el-aside {
-  color: #333;
-}*/
-
 body {
   margin: 0px;
   overflow: hidden;
 }
 
 .aside {
-  /*border-color:red;
-  background-color:#333;  */
   text-align: left;
-
   overflow: none;
   height: 100%;
 }
 .el-menu-vertical:not(.el-menu--collapse) {
   width: 200px;
-  /*  min-height: 400px;*/
 }
 
 .el-submenu__title {
@@ -637,7 +624,6 @@ body {
 
 .menuiconaside {
   margin-bottom: 3px;
-  /*¨olor:green;*/
 }
 .menuiconbig {
   margin-bottom: -8px;
@@ -645,13 +631,7 @@ body {
 }
 .nooverflowmain {
   overflow: hidden !important;
-  /*background-color: yellow;
-  padding:20px;
-  border: solid blue 3px;*/
 }
-/*.is-active {
-  color:red !important;
-}*/
 
 .el-dialog__title {
   color: white !important;
