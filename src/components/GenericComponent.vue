@@ -135,15 +135,6 @@ const myExport = {
       console.log('to')
       console.log(to)
 
-
-      
-
-      if(this.$route.params.app != this.currentApps.title) {
-        // console.log('need to commit current app !!!!!!!!!!!!!!!!!')
-        // console.log(this.$route.params.app)
-        // console.log(this.currentApps.title)
-      }
-
       var filteredmenus = this.$store.getters.filteredmenus
 
       var app = null
@@ -157,8 +148,6 @@ const myExport = {
           console.log(menu)
           for(var j=0; j < menu.submenus.length; j++) {
             var submenu = menu.submenus[j]
-  
-            // console.log(submenu)
   
             var str_app = submenu.title.replace(/ /g,'').toLowerCase()
   
@@ -233,6 +222,8 @@ const myExport = {
     },
     changeApp: function() {
       this.currentApps = null
+
+      this.selectedTab = "TAB-0"
 
       this.$nextTick(() => {
         this.currentApps = JSON.parse(JSON.stringify(this.$store.getters.currentApps))
