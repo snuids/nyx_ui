@@ -1392,12 +1392,9 @@ export default {
       }
     },
     saveRecord() {
-      //alert(this.isAdd);
       if (this.strNewRec != this.strOrgRec && !this.isAdd) {
-        //alert('COMP')
         this.orgConfig._source = YAML.safeLoad(this.strNewRec);
       } else {
-        //alert('REGULAR')
         this.orgConfig._source = this.curConfig;
       }
 
