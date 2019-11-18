@@ -187,7 +187,34 @@ export default {
         data: response.data
       });
       this.loginunderway = false;
-      this.$router.push("/main/start");
+
+
+
+      var app = null
+      try {
+        
+        app  = this.$store.getters.filteredmenus[0].submenus[0]
+      }
+      catch (e) {
+        
+        this.loginunderway = false;
+        console.log(e);
+        this.$router.push("/");
+      }
+
+      var path = "/main/"+app.fulltitle.replace(/ /g,'').toLowerCase()
+
+      if(this.$store.getters.redirection) {
+        console.log('REDIRECTION: '+this.$store.getters.redirection)
+        path = this.$store.getters.redirection
+        this.$store.state.redirection = null
+      }
+
+
+      console.log('push this path: '+path)
+
+
+      this.$router.push(path);
       this.$notify({
         title: this.$t("notifications.message"),
         message:
