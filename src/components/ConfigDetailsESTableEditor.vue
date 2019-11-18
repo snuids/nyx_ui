@@ -67,9 +67,10 @@
           <span v-if="noTimeField">
             The indices which match this index pattern don't contain any time fields.
           </span>
+              <!-- v-model="currentConfig.config.timefield"  -->
           <el-select 
               v-else
-              v-model="currentConfig.config.timefield" 
+              v-model="timefieldSelected" 
               placeholder="Select"
               size="mini"
               ref="timeField"
@@ -394,21 +395,6 @@
                     
                 </template>
               </el-table-column>
-              <!-- <el-table-column
-                prop="type"
-                label="Type"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Format">
-                <template slot-scope="scope">
-                  <el-input 
-                      v-if="scope.row.type=='date'"
-                      size="mini"
-                      v-model="scope.row.format"></el-input>
-                    
-                </template>
-              </el-table-column> -->
             </el-table>
           </el-card>
         </el-col>
@@ -478,6 +464,7 @@ export default {
         allesMapping: null,
         geoFieldSelected: null,
         timeFields: {},
+        timefieldSelected: null,
         geoFields: {},
         allFields: {},
         writePrivileges: [],
@@ -500,15 +487,27 @@ export default {
     }
   },
   watch: {
-    curConfigIn: {
-      handler: function() {
-        // this.prepareData();
-      },
-      deep: true
-    },
     indexPattern: {
       handler: function() {
         this.indexPatternChanged();
+      }
+    },
+    timefieldSelected: {
+      handler: function() {
+        if(this.timefieldSelected == '_____________________') {
+          this.timefieldSelected = null
+          this.currentConfig.config.timefield = null
+          return
+        }
+
+        if(!this.timefieldSelected || this.timefieldSelected=="I don't want to use the Time Filter") {
+          this.currentConfig.config.timefield = null
+          this.currentConfig.graphicChecked = false
+          this.currentConfig.timeSelectorChecked = false
+          return
+        }
+
+        this.currentConfig.config.timefield = this.timefieldSelected
       }
     },
   },
@@ -527,6 +526,14 @@ export default {
 
       this.loadEsMapping()
 
+
+      // instanciate the timefieldSelected field
+      if(this.currentConfig.config && this.currentConfig.config.timefield)
+        this.timefieldSelected = this.currentConfig.config.timefield
+      else
+        this.timefieldSelected = null
+
+      // initialize fieldsToDisplay and fieldsToDownload
       if(this.currentConfig.config.headercolumns != null) {        
         for(var i=0; i<this.currentConfig.config.headercolumns.length; i++) {
           
