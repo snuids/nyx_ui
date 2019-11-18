@@ -33,9 +33,10 @@ export default {
   padding: 30px;
   color:red;
 }
-
+/* 
 .nyxapp
 {
 
-}
+} 
+*/
 </style>
