@@ -184,6 +184,7 @@
                       @change="timeSelectorTypeChange"
                     >
                       <el-option label="Free" value="classic"></el-option>
+                      <el-option label="Day" value="day"></el-option>
                       <el-option label="Month" value="month"></el-option>
                       <el-option label="Week" value="week"></el-option>
                       <el-option label="Year" value="year"></el-option>
