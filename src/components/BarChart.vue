@@ -306,7 +306,7 @@ export default {
       var max = 0;
 
       var auto = this.autotime;
-      console.log(auto)
+
       auto = auto.replace("s", "/60");
       auto = auto.replace("m", "");
       auto = auto.replace("h", "*60");
