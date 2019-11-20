@@ -21,7 +21,6 @@
     </span>
 
     <el-row v-if="config.queryBarChecked">
-      {{config.timeSelectorType}} A {{autotime}}
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
     </el-row>
 
