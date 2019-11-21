@@ -109,6 +109,10 @@ export default {
         value: "selecter",
         label: "Selecter"
       }
+      ,{
+        value: "text",
+        label: "Free Text"
+      }
     ]
   }),
   computed: {

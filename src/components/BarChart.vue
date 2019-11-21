@@ -1,7 +1,8 @@
 <template>
   <svg :viewBox="viewBox2" :width="containerWidth">
     <defs>
-      <clipPath id="mainrect">
+      <!-- <clipPath id="mainrect"> -->
+      <clipPath :id="cid">        
         <rect
           :x="marginleft"
           :y="margintop"
@@ -57,7 +58,7 @@
       @mouseup="backUp"
     />
 
-    <!-- eslint-disable -->
+    <!-- clip-path="url(#mainrect)" -->
 
     <rect
       v-for="bar in bars"
@@ -69,7 +70,7 @@
       @mouseover="barClicked(bar)"
       @mouseout="resetBar(bar)"      
       
-      clip-path="url(#mainrect)"
+      :clip-path="clipurl"
       :pointer-events="pointerevents"
     />
 <!--
@@ -121,7 +122,9 @@ export default {
     dragWidth: 100,
     max: 0,
     dragStarted: false,
-    pointerevents: "auto"
+    pointerevents: "auto",
+    cid:"CID",
+    clipurl:"url(#mainrect)"
   }),
   props: {
     config: {
@@ -478,6 +481,8 @@ export default {
 
     this.width = this.$store.getters.containerSize.width;
     this.viewBox = "0 0 " + this.$store.getters.containerSize.width + " 200"; //+this.height;
+    this.cid="ID_"+new Date().getTime();
+    this.clipurl="url(#"+this.cid+")";
     //alert(this.viewBox);
 
     this.prepareData();

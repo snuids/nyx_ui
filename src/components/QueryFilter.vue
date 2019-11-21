@@ -9,7 +9,9 @@
         style="text-align:left"
       >
         {{queryfilter.title}}
-        <el-select
+        
+        <el-select v-if="queryfilter.type == 'selecter'"
+          filterable
           size="mini"
           v-model="queryfilter.default"
           placeholder="Please select a type"
@@ -22,6 +24,9 @@
             :key="index"
           ></el-option>
         </el-select>
+
+        <el-input @change="prepareData(queryfilter.title)" size="mini" style="width:170px" v-if="queryfilter.type == 'text'" placeholder="Please input" v-model="queryfilter.default"></el-input>
+
       </el-col>
     </div>
     <div class="refresh-button">
@@ -89,6 +94,7 @@ export default {
             '"'
         );
       }
+      console.log( querya.join(" AND "))
       return querya.join(" AND ");
     }
   },
@@ -130,15 +136,30 @@ export default {
       var querya = [];
       for (let queryind in this.queryFilterCopy.config.queryfilters) {
         if (this.queryFilterCopy.config.queryfilters[queryind].default != "*")
-          querya.push(
-            this.queryFilterCopy.config.queryfilters[queryind].field +
-              ':"' +
-              this.queryFilterCopy.config.queryfilters[queryind].default +
-              '"'
-          );
+        {
+          var valq=this.queryFilterCopy.config.queryfilters[queryind].default;
+          if(valq.indexOf("*")>=0 || valq.indexOf("[")>=0 || valq.indexOf("{")>=0)
+          {
+              querya.push(
+              this.queryFilterCopy.config.queryfilters[queryind].field +
+                ':' +
+                this.queryFilterCopy.config.queryfilters[queryind].default +
+                ''
+            );
+          }
+          else
+          {
+            querya.push(
+              this.queryFilterCopy.config.queryfilters[queryind].field +
+                ':"' +
+                this.queryFilterCopy.config.queryfilters[queryind].default +
+                '"'
+            );
+          }
+        }
       }
       this.queryfilter = querya.join(" AND ");
-
+      console.log( querya.join(" AND "))
       this.refresh();
     }
   },
