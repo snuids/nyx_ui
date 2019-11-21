@@ -470,6 +470,12 @@ export default {
           rangetouse = this.$store.getters.timeRangeYear;
           this.autotime = this.$store.getters.autoTimeYear;
           break;
+
+        case "day":
+          rangetouse = this.$store.getters.timeRangeDay;
+          this.autotime = this.$store.getters.autoTimeDay;
+          break;
+
         default:
           rangetouse = this.$store.getters.timeRange;
           this.autotime = this.$store.getters.autoTime;
@@ -504,8 +510,9 @@ export default {
         this.config.config.timefield != null &&
         this.config.config.timefield != ""
       ) {
-        // console.log(this.config.timeSelectorType);
-        // console.log(rangetouse);
+        console.log("We're here")
+        console.log(this.config.timeSelectorType);
+        console.log(rangetouse);
 
         if (rangetouse != null) {
           var timeRange = rangetouse;

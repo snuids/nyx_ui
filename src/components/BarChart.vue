@@ -283,6 +283,9 @@ export default {
       //console.log("=====> " + this.width);
       //console.log("=====> " + this.config.timeSelectorType);
       switch (this.config.timeSelectorType) {
+        case "day":
+          rangetouse = this.$store.getters.timeRangeDay;
+          break;
         case "week":
           rangetouse = this.$store.getters.timeRangeWeek;
           break;
@@ -306,6 +309,7 @@ export default {
       var max = 0;
 
       var auto = this.autotime;
+
       auto = auto.replace("s", "/60");
       auto = auto.replace("m", "");
       auto = auto.replace("h", "*60");
