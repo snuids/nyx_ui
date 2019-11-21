@@ -102,6 +102,21 @@
             </div>
 
             <div
+              v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType=='day')"
+            >
+              <!-- day TIME SELECTED -->
+              <el-date-picker
+                v-model="dayPicker"
+                v-on:change="dayChanged"
+                :picker-options="{firstDayOfWeek:1}"
+                type="date"
+                size="mini"
+                placeholder="Pick a day"
+                :clearable="false"
+              ></el-date-picker>&nbsp;&nbsp;
+            </div>
+
+            <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType=='week')"
             >
               <!-- week TIME SELECTED -->
@@ -225,6 +240,7 @@ export default {
     yearPicker: moment(),
     monthPicker: moment(),
     weekPicker: moment(),
+    dayPicker: moment(),
     menuOpen: true,
     resizeListener: null,
     changePasswordVisible: false,
@@ -423,6 +439,24 @@ export default {
         position: "bottom-right"
       });
       this.$router.push("/");
+    },
+    dayChanged(e) {
+      console.log("DAY CHANGED");
+      var dstart = moment(e);
+      var dend = moment(e);
+      dend.endOf("day");
+
+      var ran = [dstart.toDate(), dend.toDate()];
+      this.timerange = ran;
+      this.$store.commit({
+        type: "setTimeRange",
+        data: { range: ran, type: "absolute", subtype: "day" }
+      });
+      this.$globalbus.$emit("timerangechanged", {
+        range: ran,
+        type: "absolute",
+        subtype: "day"
+      });
     },
     weekChanged(e) {
       console.log("WEEK CHANGED");

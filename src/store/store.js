@@ -43,10 +43,12 @@ export default new Vuex.Store({
     timeRange: null,
     timeRangeWeek: null,
     timeRangeMonth: null,
-    timeRangeYear: null,    
+    timeRangeYear: null,
+    timeRangeDay: null,    
     initialized: false,
     filteredmenus: [],
     autoTime: "10m",
+    autoTimeDay: "5m",
     autoTimeWeek: "4h",
     autoTimeMonth: "1d",
     autoTimeYear: "1w",
@@ -69,12 +71,14 @@ export default new Vuex.Store({
     devMode: state => state.devMode,
     activeApp: state => state.activeApp,
     timeRange: state => state.timeRange,
+    timeRangeDay: state => state.timeRangeDay,
     timeRangeWeek: state => state.timeRangeWeek,
     timeRangeMonth: state => state.timeRangeMonth,
     timeRangeYear: state => state.timeRangeYear,
     initialized: state => state.initialized,
     filteredmenus: state => state.filteredmenus,
     autoTime: state => state.autoTime,
+    autoTimeDay: state => state.autoTimeDay,
     autoTimeWeek: state => state.autoTimeWeek,
     autoTimeMonth: state => state.autoTimeMonth,
     autoTimeYear: state => state.autoTimeYear,
@@ -235,6 +239,12 @@ export default new Vuex.Store({
       var dend;
 
       dstart=moment(e);
+      dstart.startOf('day');
+      dend=moment(e);
+      dend.endOf('day');
+      state.timeRangeDay=[dstart.toDate(),dend.toDate()];
+
+      dstart=moment(e);
       dstart.startOf('week');
       dend=moment(e);
       dend.endOf('week');
@@ -348,6 +358,21 @@ export default new Vuex.Store({
 
       switch(payload.data.subtype)
       {
+        case "day":
+            //alert('Week Change');
+            state.timeRangeDay = payload.data.range;
+            startTime = moment(state.timeRangeDay[0]);
+            endTime = moment(state.timeRangeDay[1]);
+
+            //state.autoTime = "1h";
+            minutes = moment.duration(endTime.diff(startTime)).asMinutes();
+            
+            //state.autoTime = computeAutoTime(minutes);
+
+            startTimeAsUtc = moment(state.timeRangeDay[0]).utc();
+            endTimeAsUtc = moment(state.timeRangeDay[1]).utc();
+
+          break;
         case "week":
             //alert('Week Change');
             state.timeRangeWeek = payload.data.range;
