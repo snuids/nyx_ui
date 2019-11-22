@@ -52,12 +52,12 @@
                 </div>
               </el-form-item>
             </el-col>
-            <el-col :span="8" style="text-align:left">
+            <el-col :span="6" style="text-align:left">
               <el-form-item label="Generate PDF" label-width="160px">
                 <el-checkbox v-model="newRec.generatePDF"></el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="Type" :label-width="formLabelWidth">
                 <el-select
                   size="mini"
@@ -65,6 +65,7 @@
                   placeholder="Please select a type"
                 >
                   <el-option label="Python" value="python"></el-option>
+                  <el-option label="Notebook Doc" value="notebook"></el-option>
                   <el-option label="Jasper" value="jasper"></el-option>
                 </el-select>
               </el-form-item>
@@ -85,6 +86,13 @@
                 v-show="newRec.reportType=='jasper'"
               >
                 <el-input size="mini" v-model="newRec.jasper" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="Notebook Path"
+                :label-width="formLabelWidth"
+                v-show="newRec.reportType=='notebook'"
+              >
+                <el-input size="mini" v-model="newRec.notebook" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -231,7 +239,7 @@ export default {
   data: () => ({
     orgRec: null,
     newRec: { title: "NA" },
-    formLabelWidth: "100px",
+    formLabelWidth: "120px",
     changed: false,
     activeName: "main",
     inputVisible: false,
