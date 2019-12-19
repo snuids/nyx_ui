@@ -19,6 +19,7 @@ import draggable from "vuedraggable";
 
 
 
+
 import '../theme/index.css'
 
 
@@ -34,12 +35,13 @@ Vue.use(Vuex);
 Vue.use(VueI18n) 
 Vue.use(vueNumeralFilterInstaller);
 
+
 Vue.config.productionTip = false
 Vue.prototype.$globalbus = new Vue();
 
 Vue.filter('formatDate', function(value) {
   if (value) {
-    return moment(String(value)).format('MM/DD/YYYY HH:mm')
+    return moment(String(value)).format('DD/MM/YYYY HH:mm')
   }
 });
 
