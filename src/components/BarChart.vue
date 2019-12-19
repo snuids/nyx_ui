@@ -380,7 +380,48 @@ export default {
           });
           dateTimeClean.add(1, "hours");
         }
-      } else if (totalSeconds < 24 * 3600 * 10) {
+      }else if (totalSeconds < 24 * 3600*3) {
+        let start = moment(rangetouse[0]);
+        let end = moment(rangetouse[1]);
+
+        let dateTimeClean = start;
+        console.log("dateTimeClean.hour()");
+        console.log(dateTimeClean.hour());
+        dateTimeClean.set({
+          hours:((dateTimeClean.hour()/4)>>0)*4,
+          seconds: 0,
+          minutes: 0
+        });
+        console.log(dateTimeClean.hour());
+        dateTimeClean.add(4, "hours");
+        while (dateTimeClean < end) {
+//          console.log(dateTimeClean)
+//          console.log(dateTimeClean.hour)
+          if (dateTimeClean.hour()!=0)
+          {
+            this.ticks.push({
+              x:
+                (((dateTimeClean - startTime) / 1000) * widthX) / totalSeconds +
+                this.marginleft,
+              y: this.height - this.marginbottom,
+              t: dateTimeClean.format("H:mm")
+            });
+            dateTimeClean.add(4, "hours");
+          }
+          else
+          {
+            this.ticks.push({
+              x:
+                (((dateTimeClean - startTime) / 1000) * widthX) / totalSeconds +
+                this.marginleft,
+              y: this.height - this.marginbottom,
+              t: dateTimeClean.format("DD/MMM")
+            });
+            dateTimeClean.add(4, "hours");
+          }
+        }
+      }
+       else if (totalSeconds < 24 * 3600 * 15) {
         let start = moment(rangetouse[0]);
         let end = moment(rangetouse[1]);
 
@@ -401,7 +442,7 @@ export default {
           });
           dateTimeClean.add(1, "days");
         }
-      } else if (totalSeconds < 24 * 3600 * 35) {
+      } else if (totalSeconds < 24 * 3600 * 70) {
         let start = moment(rangetouse[0]);
         let end = moment(rangetouse[1]);
 
@@ -421,6 +462,27 @@ export default {
             t: dateTimeClean.format("DD/MMM")
           });
           dateTimeClean.add(5, "days");
+        }
+      }else if (totalSeconds < 24 * 3600 * 140) {
+        let start = moment(rangetouse[0]);
+        let end = moment(rangetouse[1]);
+
+        let dateTimeClean = start;
+        dateTimeClean.set({
+          seconds: 0,
+          minutes: 0,
+          hours: 0
+        });
+        dateTimeClean.add(10, "days");
+        while (dateTimeClean < end) {
+          this.ticks.push({
+            x:
+              (((dateTimeClean - startTime) / 1000) * widthX) / totalSeconds +
+              this.marginleft,
+            y: this.height - this.marginbottom,
+            t: dateTimeClean.format("DD/MMM")
+          });
+          dateTimeClean.add(10, "days");
         }
       } else {
         let start = moment(rangetouse[0]);

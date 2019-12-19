@@ -166,6 +166,7 @@ export default {
           else {
             //console.log(response.data.records);
             for (var i in response.data.records) {
+              console.log(response.data.records[i]._source.report);
               response.data.records[i]._source.report = JSON.parse(
                 response.data.records[i]._source.report
               );
