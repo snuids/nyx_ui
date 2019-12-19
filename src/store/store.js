@@ -14,8 +14,10 @@ function computeAutoTime(minutes)
   return  "5m";
   else if (minutes <= 1440)
   return  "20m";
+  else if (minutes <= 1440 * 2)
+  return  "30m";
   else if (minutes <= 1440 * 3)
-  return  "1h";
+  return  "2h";
   else if (minutes <= 1440 * 7)
   return  "4h";
   else if (minutes <= 1440 * 32)
