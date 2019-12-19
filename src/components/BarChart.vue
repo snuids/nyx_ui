@@ -137,6 +137,7 @@ export default {
       type: String
     }
   },
+  
   computed: {
     seriesIn: function() {
       return this.series;
