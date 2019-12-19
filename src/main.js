@@ -15,6 +15,9 @@ import {i18n} from  './i18n-setup'
 //import {localized_messages} from  './i18n-setup'
 import ElementLocale from 'element-ui/lib/locale'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import draggable from "vuedraggable";
+
+
 
 import '../theme/index.css'
 
@@ -24,6 +27,8 @@ console.log("Starting");
 console.log("===============");
 
 Vue.component('v-icon', Icon)
+Vue.component("draggable", draggable);
+
 Vue.use(ElementUI, {locale:locale_en})
 Vue.use(Vuex);
 Vue.use(VueI18n) 
