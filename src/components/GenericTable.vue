@@ -722,11 +722,11 @@ export default {
                     var curtime = _.get(record["_source"], curcol.field.replace("_source.", ""))
 
 
-                    if (curcol.type == "timestamp") {
-                      if (curtime != undefined) {
-                        curtime = parseInt(curtime);
-                      }
-                    }
+                    // if (curcol.type == "timestamp") {
+                    //   if (curtime != undefined) {
+                    //     curtime = parseInt(curtime);
+                    //   }
+                    // }
 
                     if (curtime != undefined) {
                       record["_source"][
