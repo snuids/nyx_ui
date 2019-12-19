@@ -26,11 +26,45 @@
         </el-dropdown>
       </el-col>
     </el-row>
-    <h1
+    <!-- <h1
       class="kibanatitle"
       v-show="config.config.kibanaTitle !=undefined && config.config.kibanaTitle!=''"
-    >{{config.config.kibanaTitle}}</h1>
+    >{{config.config.kibanaTitle}}</h1> -->
+   
+    <div v-if="urlTooLong()">
+
+        <el-row>
+          <i style="font-size:100px;" class="el-icon-warning-outline"></i>
+        </el-row>
+
+        <el-row>
+          <div style="font-size:20px; margin-top:10px;">
+            The URL is too long ({{computedurl.length}} characters) for your browser ({{$browserDetect.meta.name}})
+          </div>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-card style="width:300px; text-align:center; margin-top:10px;" shadow="never">
+            <el-table
+              :data="browsersData"
+              size="mini"
+              style="">
+              <el-table-column
+                prop="name"
+                label="Browser"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="maxSize"
+                label="Max Size">
+              </el-table-column>
+            </el-table>
+          </el-card>
+        </el-row>
+
+    </div>
     <iframe
+      v-else
       id="kibana-iframe"
       :src="computedurl"
       frameborder="0"
@@ -48,6 +82,10 @@ import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
 import Vue from "vue";
+import browserDetect from "vue-browser-detect-plugin";
+Vue.use(browserDetect);
+
+
 
 const $ = require("jquery");
 
@@ -63,7 +101,33 @@ export default {
     queryField: "",
     queryfilter: "",
     timerange: "",
-    specificTime: null
+    specificTime: null,
+    browsersData: [
+      {
+        name: 'Chrome',
+        maxSize:'32779'
+      }, 
+      {
+        name: 'Android',
+        maxSize:'8192'
+      },
+      {
+        name: 'Firefox',
+        maxSize:'>64k'
+      },
+      {
+        name: 'Safari',
+        maxSize:'>64k'
+      },
+      {
+        name: 'IE11',
+        maxSize:2047
+      },
+      {
+        name: 'Edge 16',
+        maxSize:2047
+      },
+    ],
   }),
   watch: {
     queryField: function() {
@@ -161,6 +225,20 @@ export default {
     }
   },
   methods: {
+    urlTooLong: function() {
+      console.log('urlTooLong')      
+      console.log(this.computedurl.length)      
+      console.log(this.$browserDetect)      
+
+      if((this.$browserDetect.isEdge || this.$browserDetect.isIE) && this.computedurl.length > 2046)
+        return true
+      if(this.$browserDetect.isChrome && this.computedurl.length > 32778)
+        return true
+      if(this.$browserDetect.isChromeIOS > 8192)
+        return true
+
+      return false
+    },
     queryfilterchanged: function(query) {
       this.queryfilter = query;
       this.createUrl();
@@ -390,9 +468,6 @@ export default {
     }
   },
   created: function() {
-    /**
-     *
-     */
     setTimeout(
       function() {
         this.injectStyleIframe();
