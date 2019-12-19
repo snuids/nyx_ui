@@ -171,7 +171,7 @@
       </el-row>
        <el-row>
       </el-row>
-       <el-row>
+       <!-- <el-row>
         <el-col :span="16" >
           <el-card shadow="never" v-if="currentConfig.config.headercolumns.length>0">
             <el-table
@@ -201,18 +201,100 @@
                 label="Format">
                 <template slot-scope="scope">
                   <el-input 
-                      v-if="scope.row.type=='date'"
+                      v-if="scope.row.type=='date' || scope.row.type=='timestamp'"
                       size="mini"
                       placeholder="eg. DD/MM/YYYY HH:mm"
                       v-model="scope.row.format"></el-input>
                     
                 </template>
               </el-table-column>
+              
             </el-table>
           </el-card>
         </el-col>
        
+      </el-row> -->
+
+
+     <el-row>
+        <el-col :span="16" >
+
+          <el-card shadow="hover" v-if="currentConfig.config.headercolumns.length>0">
+            <table class="table-display">
+              <thead class="thead-display">
+                <tr>
+                  <th>Field</th>
+                  <th>Label</th>
+                  
+                  <th>Type</th>
+                  <th>Format</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <draggable @change="draggableChanged('display')" v-bind="dragOptions" v-model="currentConfig.config.headercolumns" tag="tbody" handle=".handle">
+                <tr v-for="(item, index) in currentConfig.config.headercolumns" :key="index">
+                  <td>
+                    {{item.field}}
+                  </td>
+                   <td>
+                    <el-input 
+                      
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="Name" 
+                      v-model="item.title"
+                      size="mini"
+                      >
+                    </el-input>
+                  </td>
+                  <td>
+                    {{item.type}}
+                    
+                  </td>
+                  <td style="width:200px;">
+                    <el-input 
+                      v-if="item.type=='date' || item.type=='timestamp'" 
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="eg. DD/MM/YYYY HH:mm"
+                      v-model="item.format"
+                      size="mini"
+                      >
+                    </el-input>
+                    <el-input 
+                      v-else-if="item.type=='long' || item.type=='double'" 
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="Numeral.js format"
+                      v-model="item.format"
+                      size="mini"
+                      >
+                    </el-input>
+                    <el-select 
+                      v-else-if="item.type=='keyword' || item.type=='text'" 
+                        v-model="item.format" 
+                        filterable
+                        placeholder="Default"
+                        size="mini"
+                        style="width:100%;">
+                      <el-option
+                        label="Default"
+                        value="default">
+                      </el-option>
+                      <el-option
+                        label="Icon"
+                        value="icon">
+                      </el-option>
+                    </el-select>
+                  </td>
+                  <td><i class="el-icon-d-caret handle"></i></td> 
+                </tr>
+              </draggable>
+            </table>
+          </el-card>
+        </el-col>
       </el-row>
+
       <el-row style="text-align:left;">
         <el-button
             @click="setFocus('order')" 
@@ -373,8 +455,11 @@
             </el-option>
           </el-select>
         </el-col>
+        <el-col :span="4" style="text-align:right;">
+          <el-button @click="copyFieldsToDisplayToDownload()" type="text" size="mini">Copy from fields to display</el-button>
+        </el-col>
       </el-row>
-       <el-row  v-if="currentConfig.downloadChecked">
+       <!-- <el-row  v-if="currentConfig.downloadChecked">
         <el-col :span="16" >
           <el-card shadow="never" v-if="currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0">
             <el-table
@@ -399,7 +484,52 @@
           </el-card>
         </el-col>
        
+      </el-row> -->
+
+
+
+      <el-row>
+        <el-col :span="16" >
+
+          <el-card shadow="hover" v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0">
+            <table class="table-display">
+              <thead class="thead-display">
+                <tr>
+                  <th>Field</th>
+                  <th>Label</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <draggable @change="draggableChanged('download')" v-bind="dragOptions" v-model="currentConfig.config.tableFieldsToDownload" tag="tbody" handle=".handle">
+                <tr v-for="(item, index) in currentConfig.config.tableFieldsToDownload" :key="index">
+                  <td>
+                    {{item.field}}
+                  </td>
+                   <td>
+                    <el-input 
+                      
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="Name" 
+                      v-model="item.title"
+                      size="mini"
+                      >
+                    </el-input>
+                  </td>
+                  <td><i class="el-icon-d-caret handle"></i></td> 
+                </tr>
+              </draggable>
+            </table>
+          </el-card>
+        </el-col>
       </el-row>
+
+
+
+
+
+
+
       <el-row style="text-align:left;">
         <el-button
             @click="setFocus('specificEditor')" 
@@ -459,7 +589,9 @@ export default {
     return (
       window.__FORM__ || {
 
-        // blockEventEmission: true,
+        dragging: false,
+        activeName: "first",
+
         esMapping: null,
         allesMapping: null,
         geoFieldSelected: null,
@@ -484,7 +616,15 @@ export default {
     },
     indexPattern: function() {
       return this.currentConfig.config.index;
-    }
+    },
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    },
   },
   watch: {
     indexPattern: {
@@ -510,6 +650,7 @@ export default {
         this.currentConfig.config.timefield = this.timefieldSelected
       }
     },
+    
   },
   props: {
     forcestep: { type: Number },
@@ -520,6 +661,31 @@ export default {
     this.prepareData();
   },
   methods: {
+    copyFieldsToDisplayToDownload() {
+      this.fieldsToDownload = JSON.parse(JSON.stringify(this.fieldsToDisplay))
+      this.selectFieldsToDownloadChanged()
+    },
+    draggableChanged(type) {
+
+      var tmp = []
+
+      if(type == 'display') {
+
+        for(var i=0; i < this.currentConfig.config.headercolumns.length; i++){
+          tmp.push(this.currentConfig.config.headercolumns[i].field)
+        }
+
+        this.fieldsToDisplay = tmp
+      }
+      if(type == 'download') {
+
+        for(var i=0; i < this.currentConfig.config.tableFieldsToDownload.length; i++){
+          tmp.push(this.currentConfig.config.tableFieldsToDownload[i].field)
+        }
+
+        this.fieldsToDownload = tmp
+      }
+    },
     prepareData() {
       console.log('prepareData')
       console.log(this.currentConfig)
@@ -831,4 +997,56 @@ export default {
   outline: none;
   border-color: #409eff;
 }
+
+
+
+
+
+
+
+.table-display {
+  width: 100%;
+  border-spacing: 0px !important;
+  font-size:12px;
+}
+
+.thead-display th{
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+.table-display tr{
+}
+
+.table-display td{
+  padding: 5px 18px 5px 0px;
+  border-top: solid 1px #ebeef5;
+  color: #606266;
+  
+}
+
+
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+.handle {
+  cursor: move;
+}
+
+.ghost {
+  opacity: 0.2;
+  /* background-color: #409eff !important; */
+}
+
+.sortable-chosen {
+  color: white !important;
+  background-color: #1070ff !important;
+}
+
+
+
 </style>
