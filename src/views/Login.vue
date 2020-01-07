@@ -178,8 +178,12 @@ export default {
       }
     },
     authenticate(response) {
-      //this.$i18n.locale = response.data.cred.user.language;
-      //loadLanguageAsync(response.data.cred.user.language);
+      
+      console.log('LOGIN -- authenticate')
+      console.log(response)
+
+      localStorage.authResponse = JSON.stringify(response)
+
       this.$i18n.locale = response.data.cred.user.language;
       response.data.cred.user.user = this.form.login;
       this.$store.commit({
@@ -187,8 +191,6 @@ export default {
         data: response.data
       });
       this.loginunderway = false;
-
-
 
       var app = null
       try {
