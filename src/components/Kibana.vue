@@ -326,6 +326,21 @@ export default {
           "Z')";
 
         switch (this.config.timeSelectorType) {
+          case "day":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeDay[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeDay[1]
+            ).utc();
+
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
+            break;
           case "week":
             var startTimeAsUtc = moment(
               this.$store.getters.timeRangeWeek[0]
