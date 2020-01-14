@@ -189,6 +189,8 @@ export default {
     openLogs(index, row) {
 
       console.log("openLogs");
+      this.logObj = null
+      this.logObj = {}
       this.logObj.indice = "nyx_reportlog";
       this.logObj.id = row._id;
       this.LogViewerVisible = true;
