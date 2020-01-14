@@ -2,9 +2,10 @@
   <el-card v-loading="loading" shadow="never">
     <div v-if="error">
       Unable to retrieve logs <br/>
-      {{error}}
+      {{error}} <br/>
     </div>
     <div v-else>
+      
       <el-table
           class="table-logs"
           size="mini"
@@ -55,18 +56,26 @@ export default {
     error: '',
     
   }),
-  computed: {
-    
-  },
   props: {
     logObj: { type: Object },
   
   },
+  computed: {
+    logObjIn: function() {
+      return this.logObj;
+    },
+  },
+  watch: {
+    logObjIn: {
+      handler: function() {
+        console.log("Log viewer config changed.....");
+        this.prepareData();
+      },
+      deep: true
+    }
+  },
   mounted: function() {
     console.log('created')
-    // setTimeout(() => {
-    //   this.prepareData()
-    //   }, 3000);
     this.prepareData()
   },
   methods: {

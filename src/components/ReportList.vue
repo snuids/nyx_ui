@@ -140,7 +140,7 @@
           <el-tooltip class="item" effect="dark" content="Generate" placement="bottom-start">
             <el-button
               size="mini"
-              icon="el-icon-document"
+              icon="el-icon-caret-right"
               @click="askParameters(scope.$index, scope.row)"
               plain
             ></el-button>
