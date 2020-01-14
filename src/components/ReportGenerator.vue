@@ -191,6 +191,10 @@ export default {
       this.$emit("dialogclose");
     },
     generateReport() {
+
+      console.log('generate report')
+      console.log(this.record)
+
       var url =
         this.$store.getters.apiurl +
         "sendmessage?token=" +
