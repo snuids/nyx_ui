@@ -91,7 +91,7 @@
               <el-form-item
                 label="Notebook Path"
                 :label-width="formLabelWidth"
-                v-show="newRec.reportType=='notebook'"
+                v-show="newRec.reportType=='notebook' || newRec.reportType=='notebook_doc'"
               >
                 <el-input size="mini" v-model="newRec.notebook" autocomplete="off"></el-input>
               </el-form-item>
