@@ -65,7 +65,8 @@
                   placeholder="Please select a type"
                 >
                   <el-option label="Python" value="python"></el-option>
-                  <el-option label="Notebook Doc" value="notebook"></el-option>
+                  <el-option label="Notebook + Word" value="notebook_doc"></el-option>
+                  <el-option label="Notebook" value="notebook"></el-option>
                   <el-option label="Jasper" value="jasper"></el-option>
                 </el-select>
               </el-form-item>
