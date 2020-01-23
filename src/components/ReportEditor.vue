@@ -65,7 +65,8 @@
                   placeholder="Please select a type"
                 >
                   <el-option label="Python" value="python"></el-option>
-                  <el-option label="Notebook Doc" value="notebook"></el-option>
+                  <el-option label="Notebook + Word" value="notebook_doc"></el-option>
+                  <el-option label="Notebook" value="notebook"></el-option>
                   <el-option label="Jasper" value="jasper"></el-option>
                 </el-select>
               </el-form-item>
@@ -90,7 +91,7 @@
               <el-form-item
                 label="Notebook Path"
                 :label-width="formLabelWidth"
-                v-show="newRec.reportType=='notebook'"
+                v-show="newRec.reportType=='notebook' || newRec.reportType=='notebook_doc'"
               >
                 <el-input size="mini" v-model="newRec.notebook" autocomplete="off"></el-input>
               </el-form-item>
