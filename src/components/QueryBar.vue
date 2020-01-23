@@ -6,6 +6,7 @@
         class="query-input"
         size="mini"
         v-model="query"
+        @change="refresh()"
       >
         <i slot="prefix" class="prefix-icon el-input__icon el-icon-arrow-right"></i>
         <el-popover
@@ -53,6 +54,7 @@ export default {
     query: "",
     oldQuery: "",
     blurDebounce: 1000,
+    blockEvent: false,
     exportFormats: [
       {
         label: ".xlsx",
@@ -73,11 +75,22 @@ export default {
   },
   methods: {
     refresh: function() {
+
+      this.blockEvent = true;
+      setTimeout(() => {this.blockEvent = false;}, 1500)
+      
       console.log("refresh");
       this.$emit("querychanged", this.query);
+    
     },
     modifyEvent: _.debounce(function() {
       console.log("modify event");
+
+      if(this.blockEvent) {
+        console.log('event blocked')
+        return
+      }
+
       if (this.query != this.oldQuery) {
         console.log("emit");
         this.$emit("querychanged", this.query);
@@ -86,7 +99,7 @@ export default {
     }, 1500),
     downloadSelection: function(format) {
       this.$emit("downloadasked", format);
-    }
+    },
   },
   computed: {
     configin: function() {

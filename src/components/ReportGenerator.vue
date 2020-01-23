@@ -163,9 +163,14 @@ export default {
       return new Date(eval(inVal) * 1000);
     },
     prepareData: function() {
+      console.log(this.recordin)
+
       this.visible = true;
       for (var i in this.recordin.parameters) {
         var par = this.recordin.parameters[i];
+
+        console.log(par.value)
+        console.log(typeof(par.value))
 
         if (
           par.type == "interval" &&

@@ -116,14 +116,7 @@ export default {
       axios
         .post(url, query)
         .then(response => {
-          if (response.data.error != "") {
-            this.$notify({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              position: "bottom-right"
-            });
-          } else {
+          if (response.data.error == "") {
             this.$notify({
               title: "Success",
               message: "New Password Saved",

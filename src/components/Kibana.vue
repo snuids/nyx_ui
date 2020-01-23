@@ -226,9 +226,9 @@ export default {
   },
   methods: {
     urlTooLong: function() {
-      console.log('urlTooLong')      
-      console.log(this.computedurl.length)      
-      console.log(this.$browserDetect)      
+      // console.log('urlTooLong')      
+      // console.log(this.computedurl.length)      
+      // console.log(this.$browserDetect)      
 
       if((this.$browserDetect.isEdge || this.$browserDetect.isIE) && this.computedurl.length > 2046)
         return true
@@ -265,14 +265,7 @@ export default {
 
         this.ready = true;
 
-        if (response.data.error != "") {
-          this.$notify({
-            title: "Error",
-            message: response.data.error,
-            type: "error",
-            position: "bottom-right"
-          });
-        } else {
+        if (response.data.error == "") {
           if (response.data.type == "mail") {
             this.$notify({
               title: "Data Sent By Mail",
