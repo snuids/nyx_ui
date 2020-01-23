@@ -118,7 +118,7 @@
             effect="dark"
             content="Logs"
             placement="bottom"
-            v-if="scope.row._source.report.reportType=='notebook'"
+            v-if="scope.row._source.report.reportType=='notebook' || scope.row._source.report.reportType=='notebook_doc'"
           >
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
