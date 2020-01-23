@@ -3,9 +3,9 @@
   <el-row class="query-filter">
     <div class="select-bar-container">
       <el-col
-        :span="parseInt(24/queryFilterCopy.config.queryfilters.length)"
+        :span="parseInt(24/queryFilterCopy.length)"
         :key="queryfilter.key"
-        v-for="queryfilter in queryFilterCopy.config.queryfilters"
+        v-for="queryfilter in queryFilterCopy"
         style="text-align:left"
       >
         {{queryfilter.title}}
@@ -13,9 +13,9 @@
         <el-select v-if="queryfilter.type == 'selecter'"
           filterable
           size="mini"
-          v-model="queryfilter.default"
+          v-model="queryfilter.selected"
           placeholder="Please select a type"
-          @change="prepareData(queryfilter.title)"
+          @change="refresh()"
         >
           <el-option
             v-for="(qf, index) in queryfilter.options"
@@ -25,7 +25,7 @@
           ></el-option>
         </el-select>
 
-        <el-input @change="prepareData(queryfilter.title)" size="mini" style="width:170px" v-if="queryfilter.type == 'text'" placeholder="Please input" v-model="queryfilter.default"></el-input>
+        <el-input @change="refresh()" size="mini" style="width:170px" v-if="queryfilter.type == 'text'" placeholder="Please input" v-model="queryfilter.selected"></el-input>
 
       </el-col>
     </div>
@@ -81,45 +81,57 @@ export default {
   },
   computed: {
     configin: function() {
-      this.queryFilterCopy = JSON.parse(JSON.stringify(this.config));
+      this.queryFilterCopy = JSON.parse(JSON.stringify(this.config.config.queryfilters));
       return this.config;
     },
-    query: function() {
-      var querya = [];
-      for (var queryind in this.config.config.queryfilters) {
-        querya.push(
-          this.config.config.queryfilters[queryind].field +
-            ':"' +
-            this.config.config.queryfilters[queryind].default +
-            '"'
-        );
-      }
-      console.log( querya.join(" AND "))
-      return querya.join(" AND ");
-    }
-  },
-  watch: {
-    configin: {
-      handler: function() {
-        //alert('CONFIG UPDATED')
-        this.prepareData(); //??????????????????????????? AMA 28 Mars 2019
-      },
-      deep: true
-    }
   },
   methods: {
-    refresh: function() {
+    refresh: _.throttle(function() {
       console.log("refresh");
+      var querya = [];
+      for (let queryind in this.queryFilterCopy) {
+        if (this.queryFilterCopy[queryind].selected != "*")
+        {
+          var valq=this.queryFilterCopy[queryind].selected;
+          if(valq.indexOf("*")>=0 || valq.indexOf("[")>=0 || valq.indexOf("{")>=0)
+          {
+              querya.push(
+              this.queryFilterCopy[queryind].field +
+                ':' +
+                this.queryFilterCopy[queryind].selected +
+                ''
+            );
+          }
+          else
+          {
+            querya.push(
+              this.queryFilterCopy[queryind].field +
+                ':"' +
+                this.queryFilterCopy[queryind].selected +
+                '"'
+            );
+          }
+        }
+      }
+      this.queryfilter = querya.join(" AND ");
+      console.log('query: '+ querya.join(" AND "))
       this.$emit("queryfilterchanged", this.queryfilter);
-    },
+    }, 1000),
     downloadSelection: function(format) {
       this.$emit("downloadasked", format);
     },
 
     prepareData: function(e) {
-      if (this.queryFilterCopy.config.queryfilters != undefined) {
-        for (let queryind in this.queryFilterCopy.config.queryfilters) {
-          var queryf = this.queryFilterCopy.config.queryfilters[queryind];
+      console.log('prepare data')
+      console.log(this.queryFilterCopy)
+      if (this.queryFilterCopy != undefined) {
+        for (let queryind in this.queryFilterCopy) {
+          var queryf = this.queryFilterCopy[queryind];
+
+          console.log(queryf)
+
+          queryf.selected = queryf.default
+
           if (queryf.type == "selecter") {
             queryf.options = [];
             for (var opt in queryf.selectOptions) {
@@ -133,38 +145,19 @@ export default {
           }
         }
       }
-      var querya = [];
-      for (let queryind in this.queryFilterCopy.config.queryfilters) {
-        if (this.queryFilterCopy.config.queryfilters[queryind].default != "*")
-        {
-          var valq=this.queryFilterCopy.config.queryfilters[queryind].default;
-          if(valq.indexOf("*")>=0 || valq.indexOf("[")>=0 || valq.indexOf("{")>=0)
-          {
-              querya.push(
-              this.queryFilterCopy.config.queryfilters[queryind].field +
-                ':' +
-                this.queryFilterCopy.config.queryfilters[queryind].default +
-                ''
-            );
-          }
-          else
-          {
-            querya.push(
-              this.queryFilterCopy.config.queryfilters[queryind].field +
-                ':"' +
-                this.queryFilterCopy.config.queryfilters[queryind].default +
-                '"'
-            );
-          }
-        }
-      }
-      this.queryfilter = querya.join(" AND ");
-      console.log( querya.join(" AND "))
-      this.refresh();
+
+      var tmp = JSON.parse(JSON.stringify(this.queryFilterCopy))
+      this.queryFilterCopy = null
+      this.queryFilterCopy = tmp
+
     }
   },
   created: function() {
+    console.log('created event');
     this.prepareData();
+  },
+  mounted: function() {
+    this.refresh()
   }
 };
 </script>

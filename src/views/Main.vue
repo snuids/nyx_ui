@@ -426,21 +426,21 @@ export default {
         subtype: "classic"
       });
     }, 500),    
-    logout() {
-      console.log("BEFCOMMIT");
-      this.$store.commit({
-        type: "logout",
-        data: {}
-      });
-      console.log("AFTERCOMMIT");
-      this.$notify({
-        title: "Success",
-        message: "Bye Bye",
-        type: "success",
-        position: "bottom-right"
-      });
-      this.$router.push("/");
-    },
+    // logout() {
+    //   console.log("BEFCOMMIT");
+    //   this.$store.commit({
+    //     type: "logout",
+    //     data: {}
+    //   });
+    //   console.log("AFTERCOMMIT");
+    //   this.$notify({
+    //     title: "Success",
+    //     message: "Bye Bye",
+    //     type: "success",
+    //     position: "bottom-right"
+    //   });
+    //   this.$router.push("/");
+    // },
     dayChanged(e) {
       console.log("DAY CHANGED");
       var dstart = moment(e);
@@ -562,7 +562,7 @@ export default {
     console.log("Main vue created");
 
     if (this.$store.getters.currentApps == undefined && localStorage.authResponse) {
-        console.log(localStorage.authResponse)
+        // console.log(localStorage.authResponse)
         var path = this.$route.path
         if(path[path.length-1] == '/')
           path = path.substring(0, path.length-1)
@@ -579,10 +579,6 @@ export default {
         try {
 
           const response = await axios.get(url)
-
-          console.log('RESPONSE')
-          console.log(response)
-          console.log(authResponse.data.cred.token)
 
           if(response.status == 200 && response.data.error=='') {
             this.$store.commit({

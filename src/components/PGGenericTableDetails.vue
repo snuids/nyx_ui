@@ -178,7 +178,6 @@ export default {
         return;
       }
       if (this.editMode == "duplicate") {
-        //alert(JSON.stringify(this.loadedrecord))
         this.loadedrecord = this.record;
         for (var rec in this.tableSchema) {
           var field = this.tableSchema[rec];
@@ -186,7 +185,6 @@ export default {
           this.loadedrecord[field.col + "_$type"] = field.type;
         }
 
-        //alert(JSON.stringify(this.loadedrecord))
         this.record._id = "NEW";
         this.prepareFields();
         return;
@@ -194,23 +192,11 @@ export default {
       axios.get(url).then(response => {
         console.log("GET DONE");
 
-        if (response.data.error != "") {
-          this.$notify({
-            title: "Error",
-            message: response.data.error,
-            type: "error",
-            position: "bottom-right"
-          });
-        } else {
-          // ******* LOAD FIELDS
-
+        if (response.data.error == "") {
           this.loadedrecord = response.data.data;
           this.prepareFields();
-          // ******* LOAD FIELDS
         }
       });
-
-      //alert(JSON.stringify(lines));
     },
     prepareFields: function() {
       var lines = [];
@@ -286,14 +272,7 @@ export default {
         .then(response => {
           console.log("POST DONE");
 
-          if (response.data.error != "") {
-            this.$notify({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              position: "bottom-right"
-            });
-          } else {
+          if (response.data.error == "") {
             this.$emit("dialogcloseupdated");
             this.$notify({
               title: "Record saved.",

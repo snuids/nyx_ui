@@ -153,7 +153,7 @@ export default {
       if (!this.$store.state.menuOpen) left = 0;
 
       this.width = this.$store.getters.containerSize.width - left;
-      console.log("CONTAINER W=" + this.width);
+      // console.log("CONTAINER W=" + this.width);
 
       return this.$store.getters.containerSize.width - left - 50 + "px";
       //return "1400px";

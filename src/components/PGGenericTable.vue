@@ -530,14 +530,7 @@ export default {
 
           this.ready = true;
 
-          if (response.data.error != "") {
-            this.$notify({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              position: "bottom-right"
-            });
-          } else {
+          if (response.data.error == "") {
             if (download) {
               if (response.data.type == "mail") {
                 this.$notify({

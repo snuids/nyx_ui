@@ -75,9 +75,9 @@
                   ></el-option>
                 </el-select>
               </div>
-              <div v-else-if="(header.type=='long' || header.type=='double') && header.format != null && header.format.length > 0">
-                {{computeRec(scope.row,header.field) | numeral(header.format)}}
-              </div>
+              <div
+                v-else-if="(header.type=='long' || header.type=='double') && header.format != null && header.format.length > 0"
+              >{{computeRec(scope.row,header.field) | numeral(header.format)}}</div>
               <div v-else-if="header.type=='boolean'">
                 <el-switch
                   v-model="scope.row._source[header.field.replace('_source.', '')]"
@@ -85,9 +85,7 @@
                   @change="switchChanged(scope.row, header)"
                 ></el-switch>
               </div>
-              <div v-else>
-                {{computeRec(scope.row,header.field)}}
-              </div>
+              <div v-else>{{computeRec(scope.row,header.field)}}</div>
             </template>
           </el-table-column>
           <el-table-column label="Actions" align="right">
@@ -286,7 +284,6 @@ export default {
     configin: {
       handler: function() {
         console.log("Config changed.....");
-        // this.loadData();
       },
       deep: true
     }
@@ -355,8 +352,7 @@ export default {
       this.partialUpdateRecord(newRec, header);
     },
     cutRec(aRec) {
-      if (aRec==undefined)
-        return ""
+      if (aRec == undefined) return "";
       if (aRec.length > 40) aRec = aRec.substring(0, 50) + "...";
       return aRec;
     },
@@ -388,7 +384,6 @@ export default {
     },
     queryfilterchanged: function(query) {
       this.queryfilter = query;
-
       this.loadData();
     },
     queryChanged: _.debounce(function() {
@@ -445,7 +440,7 @@ export default {
       });
       this.loadData();
     },
-    loadData: function(download, exportformat) {
+    loadData: function(download, exportformat) {  
       console.log("GENERIC TABLE - Load DATA");
       if (download == undefined) download = false;
       // console.log("LOAD DATA...Download=" + download);
@@ -513,10 +508,6 @@ export default {
         this.config.config.timefield != null &&
         this.config.config.timefield != ""
       ) {
-        console.log("We're here")
-        console.log(this.config.timeSelectorType);
-        console.log(rangetouse);
-
         if (rangetouse != null) {
           var timeRange = rangetouse;
 
@@ -608,17 +599,9 @@ export default {
       axios
         .post(url, query)
         .then(response => {
-
           this.ready = true;
 
-          if (response.data.error != "") {
-            this.$notify({
-              title: "Error",
-              message: response.data.error,
-              type: "error",
-              position: "bottom-right"
-            });
-          } else {
+          if (response.data.records != null) {
             if (download) {
               if (response.data.type == "mail") {
                 this.$notify({
@@ -637,7 +620,7 @@ export default {
               } else {
                 window.open(response.data.url, "_blank");
                 this.$notify({
-                  title: this.$t("notifications.data_loaded"), 
+                  title: this.$t("notifications.data_loaded"),
                   message:
                     this.$t("notifications.records") +
                     ": " +
@@ -660,7 +643,7 @@ export default {
             this.tableData = response.data.records;
 
             var dates = [];
-            if (response.data.aggs["2"] != null) {
+            if (response.data.aggs != null && response.data.aggs["2"] != null) {
               var aggs = response.data.aggs["2"]["buckets"];
               for (let i in aggs) {
                 dates.push([aggs[i].key, aggs[i].doc_count]);
@@ -718,18 +701,14 @@ export default {
                     if (curcol.format != undefined) {
                       format = curcol.format;
                     }
-                    
+
                     var curtime =
                       record["_source"][curcol.field.replace("_source.", "")];
 
-                    var curtime = _.get(record["_source"], curcol.field.replace("_source.", ""))
-
-
-                    // if (curcol.type == "timestamp") {
-                    //   if (curtime != undefined) {
-                    //     curtime = parseInt(curtime);
-                    //   }
-                    // }
+                    var curtime = _.get(
+                      record["_source"],
+                      curcol.field.replace("_source.", "")
+                    );
 
                     if (curtime != undefined) {
                       record["_source"][
@@ -745,7 +724,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
           this.$notify({
             title: "Error",
             message: "Query Failed",
@@ -753,6 +732,8 @@ export default {
             position: "bottom-right"
           });
         });
+    
+
     },
     graphClicked() {
       var newvalue =
@@ -777,10 +758,12 @@ export default {
     },
 
     queryBarChanged: function(q) {
+      console.log('********************************queryBarChanged')
       this.queryField = q;
       this.refreshData();
     },
     queryFilterChanged: function(q) {
+      console.log('********************************queryFilterChanged')
       this.queryfilter = q;
       this.refreshData();
     },
@@ -790,7 +773,9 @@ export default {
   },
   created: function() {
     console.log("===============  CREATED:");
-    this.loadData();
+
+    if(!this.config.queryFilterChecked)
+      this.loadData();
 
     console.log("===============  REGISTERING: timerangechanged");
     this.$globalbus.$on("timerangechanged", payLoad => {

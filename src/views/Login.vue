@@ -163,12 +163,7 @@ export default {
               });
           } else {
             this.form.error = response.data.error;
-            this.$notify.error({
-              title: "Error",
-              message: response.data.error,
-              position: "bottom-right",
-              duration: 1000
-            });
+
           }
         }
       } catch (e) {
