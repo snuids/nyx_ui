@@ -774,7 +774,7 @@ export default {
   created: function() {
     console.log("===============  CREATED:");
 
-    if(!this.config.queryFilterChecked)
+    if(!this.config.queryFilterChecked && !this.config.queryBarChecked)
       this.loadData();
 
     console.log("===============  REGISTERING: timerangechanged");

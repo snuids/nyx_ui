@@ -174,6 +174,7 @@ export default {
     search: "",
     dialogFormVisible: false,
     LogViewerVisible: false,
+    loadingData: false,
     formLabelWidth: "120px",
     curReport: {},
     logObj: {},
@@ -272,8 +273,17 @@ export default {
           if (response.data.error != "") console.log("Report list error...");
           else {
             console.log(this);
-            this.$globalbus.$emit("reportgenerated");
+            // this.$globalbus.$emit("reportgenerated");
           }
+
+          this.$notify({
+            title: "Report asked.",
+            type: "success",
+            message: "Regeneration of a report asked",
+            position: "bottom-right"
+          });
+
+          setTimeout(() => {this.loadData()}, 500)
         })
         .catch(error => {
           console.log(error);
@@ -306,7 +316,12 @@ export default {
       // var win =
       window.open(item.url, "_blank");
     },
-    loadData() {
+    loadData : _.throttle(function() {
+      if(this.loadingData)
+        return
+
+      this.loadingData = true
+
       var query = {
         sort: [{ "treatment.creation": { order: "desc" } }],
         size: 100
@@ -331,11 +346,13 @@ export default {
             }
             this.tableData = response.data.records;
           }
+          this.loadingData = false
         })
         .catch(error => {
+          this.loadingData = false
           console.log(error);
         });
-    },
+    },1500),
     closeDialog: function() {
       this.LogViewerVisible = false;
       this.$emit("dialogclose");
