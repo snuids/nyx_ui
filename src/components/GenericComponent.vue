@@ -35,7 +35,6 @@
 
         <el-tab-pane
           v-bind:style="styleContainerComputed"
-          
           v-for="(app,index) in currentApps.apps"
           :key="'TAB-'+index"
           :label="app.loc_title"
