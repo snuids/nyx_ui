@@ -61,6 +61,7 @@ export default new Vuex.Store({
     containerSize: { "width": 1200, "height": 800 },
     appConfigObj: null,
     redirection: null,
+    searchCache: {},
   },
   getters: {
     apiurl: state => state.apiurl,
@@ -93,6 +94,7 @@ export default new Vuex.Store({
     version: state => state.version,
     appConfigObj: state => state.appConfigObj,
     redirection: state => state.redirection,
+    searchCache: state => state.searchCache,
 
   },
   actions: {
@@ -520,5 +522,6 @@ export default new Vuex.Store({
           console.log(error);
         });
     }
+    ,
   }
 })

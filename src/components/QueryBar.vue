@@ -51,10 +51,11 @@
 export default {
   name: "QueryBar",
   data: () => ({
-    query: "",
-    oldQuery: "",
+    query: '',
+    oldQuery: '',
+    storageKey: null,
     blurDebounce: 1000,
-    blockEvent: false,
+    blockEvent: true,
     exportFormats: [
       {
         label: ".xlsx",
@@ -81,19 +82,22 @@ export default {
       
       console.log("refresh");
       this.$emit("querychanged", this.query);
+      
+      this.$store.getters.searchCache[this.config.rec_id] = this.query;
     
     },
     modifyEvent: _.debounce(function() {
-      console.log("modify event");
+      console.log("modify event ");
 
       if(this.blockEvent) {
         console.log('event blocked')
         return
       }
 
-      if (this.query != this.oldQuery) {
+      if (this.query !== this.oldQuery) {
         console.log("emit");
         this.$emit("querychanged", this.query);
+        this.$store.getters.searchCache[this.config.rec_id] = this.query;
         this.oldQuery = this.query;
       }
     }, 1500),
@@ -115,7 +119,17 @@ export default {
       this.modifyEvent();
     }
   },
-  created: function() {}
+  created: function() {
+    console.log('created event')
+    this.blockEvent = true
+    
+    if(this.$store.getters.searchCache[this.config.rec_id] != null)
+      this.query = this.$store.getters.searchCache[this.config.rec_id];
+    
+    console.log('emit')
+    this.$emit("querychanged", this.query);
+    setTimeout(() => {this.blockEvent = false;}, 1700)
+  }
 };
 </script>
 

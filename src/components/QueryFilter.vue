@@ -79,17 +79,26 @@ export default {
       type: Object
     }
   },
-  computed: {
-    configin: function() {
-      this.queryFilterCopy = JSON.parse(JSON.stringify(this.config.config.queryfilters));
-      return this.config;
-    },
-  },
+  // computed: {
+  //   configin: function() {
+  //     this.queryFilterCopy = JSON.parse(JSON.stringify(this.config.config.queryfilters));
+  //     return this.config;
+  //   },
+  // },
   methods: {
+
+
     refresh: _.throttle(function() {
+
       console.log("refresh");
       var querya = [];
       for (let queryind in this.queryFilterCopy) {
+
+
+        // cache the last search
+        var cacheKey = this.config.rec_id+'-'+this.queryFilterCopy[queryind].title
+        this.$store.getters.searchCache[cacheKey] = this.queryFilterCopy[queryind].selected
+
         if (this.queryFilterCopy[queryind].selected != "*")
         {
           var valq=this.queryFilterCopy[queryind].selected;
@@ -116,6 +125,7 @@ export default {
       this.queryfilter = querya.join(" AND ");
       console.log('query: '+ querya.join(" AND "))
       this.$emit("queryfilterchanged", this.queryfilter);
+
     }, 1000),
     downloadSelection: function(format) {
       this.$emit("downloadasked", format);
@@ -123,7 +133,10 @@ export default {
 
     prepareData: function(e) {
       console.log('prepare data')
-      console.log(this.queryFilterCopy)
+
+      this.queryFilterCopy = JSON.parse(JSON.stringify(this.config.config.queryfilters));
+
+
       if (this.queryFilterCopy != undefined) {
         for (let queryind in this.queryFilterCopy) {
           var queryf = this.queryFilterCopy[queryind];
@@ -131,6 +144,12 @@ export default {
           console.log(queryf)
 
           queryf.selected = queryf.default
+
+          // try to retrieve a past search in the cache
+          var cacheKey = this.config.rec_id+'-'+queryf.title
+          if(this.$store.getters.searchCache[cacheKey] != null)
+            queryf.selected = this.$store.getters.searchCache[cacheKey];
+
 
           if (queryf.type == "selecter") {
             queryf.options = [];
@@ -146,6 +165,7 @@ export default {
         }
       }
 
+
       var tmp = JSON.parse(JSON.stringify(this.queryFilterCopy))
       this.queryFilterCopy = null
       this.queryFilterCopy = tmp
@@ -153,7 +173,8 @@ export default {
     }
   },
   created: function() {
-    console.log('created event');
+    console.log('created event')
+
     this.prepareData();
   },
   mounted: function() {
