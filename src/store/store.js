@@ -184,12 +184,15 @@ export default new Vuex.Store({
       for (var i in cmenus) {
         if (cmenus[i].category != "apps")
         {
-          cmenus[i].category=cmenus[i].category.replace(/ /g,'').toLowerCase();
+          // cmenus[i].category=cmenus[i].category.replace(/ /g,'').toLowerCase();
+          cmenus[i].value=cmenus[i].category.replace(/ /g,'').toLowerCase();
           for (var j in cmenus[i].submenus)
           {
             
-            cmenus[i].submenus[j].title=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
-            cmenus[i].submenus[j].fulltitle=(cmenus[i].category+"/"+cmenus[i].submenus[j].title)//.replace(/ /g,'').toLowerCase();
+            // cmenus[i].submenus[j].title=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
+            cmenus[i].submenus[j].value=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
+            cmenus[i].submenus[j].fulltitle=(cmenus[i].value+"/"+cmenus[i].submenus[j].value)//.replace(/ /g,'').toLowerCase();
+            // cmenus[i].submenus[j].fulltitle=(cmenus[i].category+"/"+cmenus[i].submenus[j].title)//.replace(/ /g,'').toLowerCase();
           }
           state.filteredmenus.push(cmenus[i]);
         }
