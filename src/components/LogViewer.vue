@@ -5,11 +5,11 @@
       {{error}} <br/>
     </div>
     <div v-else>
-      
       <el-table
           class="table-logs"
           size="mini"
-          :data="tableLogs"
+          v-if="tableLogs"
+          :data="tableLogs.filter(data => !search || JSON.stringify(data).toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
         >
           <el-table-column
@@ -32,9 +32,33 @@
             </template>
           </el-table-column>
           <el-table-column
+            v-if="logObj.search"
+            label="Message"
+            prop="message"
+            header-align="right">
+            <template slot="header" slot-scope="scope" style="text-align:right">
+              <el-input
+                v-model="search"
+                style="width:50%"
+                size="mini"
+                placeholder="Type to search"/>
+
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-else
             label="Message"
             prop="message">
           </el-table-column>
+          <!-- <el-table-column v-if="logObj"  align="right">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="Type to search"/>
+            </template>
+      
+          </el-table-column> -->
       </el-table>
       
     </div>
@@ -51,6 +75,7 @@ import Vue from "vue";
 export default {
   name: "LogViewer",
   data: () => ({
+    search:'',
     loading: true,
     tableLogs: null,
     error: '',
@@ -84,7 +109,6 @@ export default {
       this.loading = true
       var indice = this.logObj.indice
       var id     = this.logObj.id
-      this.tableLogs = []
 
       var url =
         this.$store.getters.apiurl +
@@ -99,6 +123,7 @@ export default {
             this.error = response.data.error
           } 
           else {
+            var tmp = []
             for(var i=0; i < response.data.data._source.logs.length; i++) {
               var log = response.data.data._source.logs[i].split('\t')
               var obj = {
@@ -106,8 +131,10 @@ export default {
                 severity : log[1],
                 message : log[2],
               }
-              this.tableLogs.push(obj)
+              tmp.push(obj)
             }
+
+            this.tableLogs = tmp
             this.loading = false
             this.error = ''
           }
