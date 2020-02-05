@@ -81,6 +81,7 @@ import config from "@/components/Config";
 import map from "@/components/Map";
 import ReportList from "@/components/ReportList";
 import ProcessList from "@/components/ProcessList";
+import FileSystem from "@/components/FileSystem";
 import reporttask from "@/components/ReportTask";
 import reportperiodic from "@/components/ReportPeriodic";
 import form from "@/components/Form";
@@ -113,7 +114,7 @@ Vue.component("ReportList", ReportList);
 Vue.component("ReportTask", reporttask);
 Vue.component("ReportPeriodic", reportperiodic);
 Vue.component("ProcessList", ProcessList);
-// Vue.component("Loading", loading);
+Vue.component("FileSystem", FileSystem);
 Vue.component("QueryFilter", queryfilter);
 Vue.component("Vega", vega);
 
