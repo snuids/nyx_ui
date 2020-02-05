@@ -426,21 +426,6 @@ export default {
         subtype: "classic"
       });
     }, 500),    
-    // logout() {
-    //   console.log("BEFCOMMIT");
-    //   this.$store.commit({
-    //     type: "logout",
-    //     data: {}
-    //   });
-    //   console.log("AFTERCOMMIT");
-    //   this.$notify({
-    //     title: "Success",
-    //     message: "Bye Bye",
-    //     type: "success",
-    //     position: "bottom-right"
-    //   });
-    //   this.$router.push("/");
-    // },
     dayChanged(e) {
       console.log("DAY CHANGED");
       var dstart = moment(e);

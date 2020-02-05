@@ -141,9 +141,9 @@ export default {
     config: {
       type: Object
     },
-    directLoad: {
-      type: Boolean
-    }
+    // directLoad: {
+    //   type: Boolean
+    // }
   },
   computed: {
     configin: function() {
@@ -482,11 +482,13 @@ export default {
       }.bind(this),
       1500
     );
+      
+    this.createUrl();
 
-    if (this.directLoad) {
-      this.ready = true;
-      this.createUrl();
-    }
+    // if (this.directLoad) {
+    //   this.ready = true;
+    //   this.createUrl();
+    // }
   },
   mounted: function() {
     console.log("===============  REGISTERING KIBANA:");
@@ -494,21 +496,21 @@ export default {
       console.log("GLOBALBUS/KIBANATIMERANGE/");
       this.createUrl();
     });
-    this.$globalbus.$on("kibanaactivated", payLoad => {
-      console.log("GLOBALBUS/KIBANAACTIVATED/");
-      if (payLoad.title == this.config.title && !this.ready) {
-        this.ready = true;
-      }
+    // this.$globalbus.$on("kibanaactivated", payLoad => {
+    //   console.log("GLOBALBUS/KIBANAACTIVATED/");
+    //   if (payLoad.title == this.config.title && !this.ready) {
+    //     this.ready = true;
+    //   }
 
-      setTimeout(
-        function() {
-          this.injectStyleIframe();
-        }.bind(this),
-        1500
-      );
+    //   setTimeout(
+    //     function() {
+    //       this.injectStyleIframe();
+    //     }.bind(this),
+    //     1500
+    //   );
 
-      this.createUrl();
-    });
+    //   this.createUrl();
+    // });
   },
   beforeDestroy: function() {
     console.log("===============  UNREGISTERING KIBANA:");

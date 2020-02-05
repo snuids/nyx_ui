@@ -32,13 +32,13 @@
     <!-- More than one application -->
     <div v-else style="overflow:hidden;">
       <el-tabs v-model="selectedTab" @tab-click="handleTabClick">
-
         <el-tab-pane
           v-bind:style="styleContainerComputed"
           v-for="(app,index) in currentApps.apps"
           :key="'TAB-'+index"
           :label="app.loc_title"
           :name="'TAB-'+index"
+          :lazy="true"
         >
           <div style="overflow:auto !important;border:0px solid pink">
             <div v-if="app.type=='generic-table'">
@@ -48,7 +48,8 @@
               <External :config="app"></External>
             </div>
             <div class="kibana" v-else-if="app.type=='kibana'">
-              <Kibana :config="app" :directLoad="index==0"></Kibana>
+              <Kibana :config="app"></Kibana>
+              <!-- <Kibana :config="app" :directLoad="index==0"></Kibana> -->
             </div>
             <div v-else-if="app.type=='form'">
               <Form :config="app"></Form>
@@ -213,12 +214,12 @@ const myExport = {
         data: this.$store.getters.currentApps.apps[index]
       });
 
-      if (this.$store.getters.currentApps.apps[index].type == "kibana") {
-        this.$globalbus.$emit(
-          "kibanaactivated",
-          this.$store.getters.currentApps.apps[index]
-        );
-      }
+      // if (this.$store.getters.currentApps.apps[index].type == "kibana") {
+      //   this.$globalbus.$emit(
+      //     "kibanaactivated",
+      //     this.$store.getters.currentApps.apps[index]
+      //   );
+      // }
     },
     changeApp: function() {
       this.currentApps = null
