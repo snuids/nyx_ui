@@ -45,6 +45,41 @@ Vue.filter('formatDate', function(value) {
   }
 });
 
+Vue.filter('formatTS', function(value) {
+  if (value) {
+    if(value < 10000000000)
+      value *= 1000 
+
+    return moment(value).format('DD/MM/YYYY HH:mm')
+  }
+});
+
+Vue.filter('prettyBytes', function (num) {
+  // jacked from: https://github.com/sindresorhus/pretty-bytes
+  if (typeof num !== 'number' || isNaN(num)) {
+    throw new TypeError('Expected a number');
+  }
+
+  var exponent;
+  var unit;
+  var neg = num < 0;
+  var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  if (neg) {
+    num = -num;
+  }
+
+  if (num < 1) {
+    return (neg ? '-' : '') + num + ' bytes';
+  }
+
+  exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1);
+  num = (num / Math.pow(1000, exponent)).toFixed(0) * 1;
+  unit = units[exponent];
+
+  return (neg ? '-' : '') + num + ' ' + unit;
+});
+
 function getUrlVars() {
   var vars = {};
   window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
