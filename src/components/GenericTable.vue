@@ -493,7 +493,7 @@ export default {
         doc_type;
 
       var query = {
-        size: download ? 10000 : 200,
+        size: download ? 10000 : 100,
         query: {
           bool: {
             must: [

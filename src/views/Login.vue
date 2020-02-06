@@ -187,10 +187,10 @@ export default {
       });
       this.loginunderway = false;
 
-      var app = null
+      var rec_id = null
       try {
         
-        app  = this.$store.getters.filteredmenus[0].submenus[0]
+        rec_id  = this.$store.getters.filteredmenus[0].submenus[0].apps[0].rec_id
       }
       catch (e) {
         
@@ -199,13 +199,22 @@ export default {
         this.$router.push("/");
       }
 
-      var path = "/main/"+app.fulltitle.replace(/ /g,'').toLowerCase()
+      // var path = "/main/"+app.fulltitle.replace(/ /g,'').toLowerCase()
+      var path = "/main/"+rec_id
+      
 
       if(this.$store.getters.redirection) {
         console.log('REDIRECTION: '+this.$store.getters.redirection)
         path = this.$store.getters.redirection
         this.$store.state.redirection = null
+
+        rec_id = path.replace('/main/', '')
       }
+
+      this.$store.commit({
+        type: "changeApp",
+        data: rec_id
+      });
 
 
       console.log('push this path: '+path)

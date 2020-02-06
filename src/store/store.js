@@ -34,12 +34,12 @@ export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
     kibanaurl:"/kibana/",
-    version: "v2.23.0",
+    version: "v2.25.0",
     devMode: false,
     menus: [],
     menuOpen: true,
     apps: [],
-    currentApps: null,
+    currentSubCategory: null,
     activeApp: null,
     creds: {},
     timeRange: null,
@@ -57,7 +57,6 @@ export default new Vuex.Store({
     privileges: [],
     maintitle: "NYX",
     mainsubtitle:"",
-    maintitleicon: "crow",
     containerSize: { "width": 1200, "height": 800 },
     appConfigObj: null,
     redirection: null,
@@ -70,7 +69,7 @@ export default new Vuex.Store({
     menus: state => state.menus,
     apps: state => state.apps,
     creds: state => state.creds,
-    currentApps: state => state.currentApps,
+    currentSubCategory: state => state.currentSubCategory,
     devMode: state => state.devMode,
     activeApp: state => state.activeApp,
     timeRange: state => state.timeRange,
@@ -89,7 +88,6 @@ export default new Vuex.Store({
     filters: state => state.filters,
     maintitle: state => state.maintitle,
     mainsubtitle: state => state.mainsubtitle,
-    maintitleicon: state => state.maintitleicon,
     containerSize: state => state.containerSize,
     version: state => state.version,
     appConfigObj: state => state.appConfigObj,
@@ -180,66 +178,18 @@ export default new Vuex.Store({
       }
 
       state.filteredmenus = []
+
       var cmenus = state.menus;
       for (var i in cmenus) {
-        if (cmenus[i].category != "apps")
-        {
-          // cmenus[i].category=cmenus[i].category.replace(/ /g,'').toLowerCase();
+        if (cmenus[i].category != "apps") {
           cmenus[i].value=cmenus[i].category.replace(/ /g,'').toLowerCase();
-          for (var j in cmenus[i].submenus)
-          {
-            
-            // cmenus[i].submenus[j].title=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
+          for (var j in cmenus[i].submenus) {
             cmenus[i].submenus[j].value=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
-            cmenus[i].submenus[j].fulltitle=(cmenus[i].value+"/"+cmenus[i].submenus[j].value)//.replace(/ /g,'').toLowerCase();
-            // cmenus[i].submenus[j].fulltitle=(cmenus[i].category+"/"+cmenus[i].submenus[j].title)//.replace(/ /g,'').toLowerCase();
+            cmenus[i].submenus[j].fulltitle=(cmenus[i].value+"/"+cmenus[i].submenus[j].value)
           }
           state.filteredmenus.push(cmenus[i]);
         }
       }
-
-      state.currentApps = state.filteredmenus[0].submenus[0];
-
-      // console.log(state.menus)
-
-      if(state.redirection) {
-        console.log('Login REDIRECTION -> '+state.redirection)
-
-        var flag = false
-        for(var i=0; i<state.filteredmenus.length; i++) {
-          // console.log(i)
-          var menu = state.filteredmenus[i]
-
-          for(var j=0; j < menu.submenus.length; j++) {
-            var submenu = menu.submenus[j]
-
-
-            var str_cat = submenu.fulltitle.replace(/ /g,'').toLowerCase().split('/')[0]
-            var str_app = submenu.fulltitle.replace(/ /g,'').toLowerCase().split('/')[1]
-
-            // console.log('/main/'+str_cat+'/'+str_app)
-
-            if('/main/'+str_cat+'/'+str_app == state.redirection) {
-              console.log(submenu)
-
-              state.currentApps = submenu
-              flag = true
-              break
-            }
-          }
-          if(flag)
-            break
-        }
-      }  
-
-
-      state.maintitle = state.currentApps.loc_title;
-      state.maintitleicon = state.currentApps.icon;
-
-      if (state.currentApps.apps.length>1)
-        state.mainsubtitle=" / "+state.currentApps.apps[0].loc_title;
-      else
-        state.mainsubtitle="";
 
       var e=new Date();
       var dstart=moment(e);
@@ -269,7 +219,6 @@ export default new Vuex.Store({
       dend.endOf('year');
       state.timeRangeYear=[dstart.toDate(),dend.toDate()];
 
-      state.activeApp=state.currentApps.apps[0];
       console.log("Login mutation done.");
     },
     logout(state) {
@@ -296,21 +245,36 @@ export default new Vuex.Store({
       console.log(payload.data);
       state.containerSize = payload.data;
     },
+    changeApp(state, payload) {
+      console.log("changeApp mutation called.");
+      var app = null;
 
-    changeApps(state, payload) {
-      console.log("VUEX:CHANGE APP:"+payload.data.loc_title);
-      
-      state.currentApps = payload.data;
-      state.maintitle = payload.data.loc_title;
-      state.maintitleicon = payload.data.icon;
+      for(var i=0; i < state.filteredmenus.length; i++) {
+        var cat = state.filteredmenus[i]
 
+        for(var j=0; j < cat.submenus.length; j++) {
+          var subcat = cat.submenus[j]
+          for(var k=0; k < subcat.apps.length; k++) {
+            if(subcat.apps[k].rec_id===payload.data) {
+              app = subcat.apps[k]
+              state.currentSubCategory = subcat
+              break
+            }
+          }
+          if(app !== null)
+            break
+        }
+        if(app !== null)
+          break
+      }
       
-      if(payload.data.apps.length>1)
-        state.mainsubtitle = " / "+payload.data.apps[0].loc_title;
-      else
-        state.mainsubtitle = "";
-      state.activeApp=payload.data.apps[0];
+
+
+      state.maintitle = state.currentSubCategory.loc_title;
+      
+      state.activeApp = app
     },
+
      // eslint-disable-next-line
     refreshTimeRange(state, payload) {
       console.log("VUEX:RefreshTimeRange:");
@@ -339,7 +303,7 @@ export default new Vuex.Store({
     setTab(state, payload) {
       console.log("VUEX:Set Tab:");
             
-      if (state.currentApps.apps.length>1)
+      if (state.currentSubCategory.apps.length>1)
         state.mainsubtitle=" / "+payload.data.loc_title;
       else
         state.mainsubtitle="";
@@ -349,7 +313,7 @@ export default new Vuex.Store({
       console.log("VUEX:Set Time Range:");
       console.log(payload);
       
-      console.log("VUEX:Sub Type"+payload.data.subtype);
+      console.log("VUEX:Sub Type "+payload.data.subtype);
       state.lastTimeRangeEvent=payload.data;
 
       if (payload.data.subtype==null)

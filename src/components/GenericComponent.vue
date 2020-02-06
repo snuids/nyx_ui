@@ -1,30 +1,30 @@
 
 <template>
-  <div  v-if="currentApps" style="border: 0px solid pink;height: 100%;overflow:hidden;" >
+  <div  v-if="$store.getters.currentSubCategory" style="border: 0px solid pink;height: 100%;overflow:hidden;" >
     <div
-      v-if="currentApps.apps.length==1"
+      v-if="$store.getters.currentSubCategory.apps.length==1"
       style="border: 20px solid orange;height: 100%;overflow:auto;margin-top:5px;" v-bind:style="singleStyleContainerComputed"
     >
       <div style="overflow:auto;">
-        <div v-if="currentApps.apps[0].type=='generic-table'">
-          <GenericTable :config="currentApps.apps[0]"/>
+        <div v-if="$store.getters.currentSubCategory.apps[0].type=='generic-table'">
+          <GenericTable :config="$store.getters.currentSubCategory.apps[0]"/>
         </div>
-        <div v-else-if="currentApps.apps[0].type=='external'">
-          <External :config="currentApps.apps[0]"></External>          
+        <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='external'">
+          <External :config="$store.getters.currentSubCategory.apps[0]"></External>          
         </div>
-        <div class="kibana" v-else-if="currentApps.apps[0].type=='kibana'">
-          <Kibana :config="currentApps.apps[0]" :directLoad="true"></Kibana>
+        <div class="kibana" v-else-if="$store.getters.currentSubCategory.apps[0].type=='kibana'">
+          <Kibana :config="$store.getters.currentSubCategory.apps[0]" :directLoad="true"></Kibana>
         </div>
-        <div v-else-if="currentApps.apps[0].type=='form'">
-          <Form :config="currentApps.apps[0]"></Form>
+        <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='form'">
+          <Form :config="$store.getters.currentSubCategory.apps[0]"></Form>
         </div>
-        <div v-else-if="currentApps.apps[0].type=='upload'">
-          <Upload :config="currentApps.apps[0]"></Upload>
+        <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='upload'">
+          <Upload :config="$store.getters.currentSubCategory.apps[0]"></Upload>
         </div>
         <div v-else>          
           <component
-            :config="currentApps.apps[0]"
-            v-bind:is="currentApps.apps[0].config.controller"
+            :config="$store.getters.currentSubCategory.apps[0]"
+            v-bind:is="$store.getters.currentSubCategory.apps[0].config.controller"
           ></component>
         </div>
       </div>
@@ -34,12 +34,14 @@
       <el-tabs v-model="selectedTab" @tab-click="handleTabClick">
         <el-tab-pane
           v-bind:style="styleContainerComputed"
-          v-for="(app,index) in currentApps.apps"
-          :key="'TAB-'+index"
+          v-for="(app,index) in $store.getters.currentSubCategory.apps"
+          :key="index"
           :label="app.loc_title"
-          :name="'TAB-'+index"
+          :name="app.rec_id"
           :lazy="true"
         >
+          <!-- :name="'TAB-'+index"
+          :key="'TAB-'+index" -->
           <div style="overflow:auto !important;border:0px solid pink">
             <div v-if="app.type=='generic-table'">
               <GenericTable :config="app"/>
@@ -122,8 +124,8 @@ Vue.component("Vega", vega);
 const myExport = {
 //export default {
   data: () => ({ 
-    selectedTab: "TAB-0", 
-    currentApps: null
+    selectedTab: null, 
+    // currentSubCategory: null
     }),
   components: {
     ...dynamicComponents
@@ -135,50 +137,14 @@ const myExport = {
       console.log(from)
       console.log('to')
       console.log(to)
-
-      var filteredmenus = this.$store.getters.filteredmenus
-
-      var app = null
-      for(var i=0; i < filteredmenus.length; i++) {
-        var menu = filteredmenus[i]
-
-        var str_cat = menu.category.replace(/ /g,'').toLowerCase()
-        
-        if(str_cat == this.$route.params.category) {
-
-          console.log(menu)
-          for(var j=0; j < menu.submenus.length; j++) {
-            var submenu = menu.submenus[j]
-  
-            var str_app = submenu.title.replace(/ /g,'').toLowerCase()
-  
-            if(str_app == this.$route.params.app) {
-              app = submenu
-              break
-            }
-  
-          }
-          if(app !== null)
-            break
-
-        }
-
-      }
-
-      console.log('CHANGE APP')
-      console.log(app)
-
-      this.currentApps = null
-      this.$nextTick(() => {
-        this.currentApps = JSON.parse(JSON.stringify(app))
-      });
+      this.selectedTab=this.$route.params.recid
 
       this.$store.commit({
-        type: "changeApps",
-        data: app
+        type: "changeApp",
+        data: this.$route.params.recid
       });
 
-      this.changeApp()
+
     }
   },
   computed: {
@@ -207,38 +173,22 @@ const myExport = {
   },
   methods: {
     handleTabClick: function(tab) {
-      var index = parseInt(tab.name.substring(4));
-      
-      this.$store.commit({
-        type: "setTab",
-        data: this.$store.getters.currentApps.apps[index]
-      });
+      var path = "/main/" + tab.name
 
-      // if (this.$store.getters.currentApps.apps[index].type == "kibana") {
-      //   this.$globalbus.$emit(
-      //     "kibanaactivated",
-      //     this.$store.getters.currentApps.apps[index]
-      //   );
-      // }
-    },
-    changeApp: function() {
-      this.currentApps = null
-
-      this.selectedTab = "TAB-0"
-
-      this.$nextTick(() => {
-        this.currentApps = JSON.parse(JSON.stringify(this.$store.getters.currentApps))
-      });
+      if(path != this.$route.path)
+        this.$router.push(path);
     },
   },
   mounted: function() {
-    this.currentApps = this.$store.getters.currentApps
+    console.log('mounted')
+    
+    this.selectedTab=this.$store.getters.activeApp.rec_id
 
     this.$globalbus.$on("reportgenerated", () => {
-      for (var i in this.currentApps.apps) {
-        var app = this.currentApps.apps[i];
+      for (var i in this.$store.getters.currentSubCategory.apps) {
+        var app = this.$store.getters.currentSubCategory.apps[i];
         if (app.config.controller == "ReportTask") {
-          this.selectedTab = "TAB-" + i;
+          this.selectedTab = app.rec_id;
           break;
         }
       }
