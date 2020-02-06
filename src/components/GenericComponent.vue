@@ -1,6 +1,6 @@
 
 <template>
-  <div  v-if="$store.getters.currentSubCategory" style="border: 0px solid pink;height: 100%;overflow:hidden;" >
+  <div  v-if="$store.getters.currentSubCategory && !loading" style="border: 0px solid pink;height: 100%;overflow:hidden;"  v-loading="loading">
     <div
       v-if="$store.getters.currentSubCategory.apps.length==1"
       style="border: 20px solid orange;height: 100%;overflow:auto;margin-top:5px;" v-bind:style="singleStyleContainerComputed"
@@ -125,6 +125,7 @@ const myExport = {
 //export default {
   data: () => ({ 
     selectedTab: null, 
+    loading: false,
     // currentSubCategory: null
     }),
   components: {
@@ -137,6 +138,7 @@ const myExport = {
       console.log(from)
       console.log('to')
       console.log(to)
+      this.loading=true
       this.selectedTab=this.$route.params.recid
 
       this.$store.commit({
@@ -144,6 +146,8 @@ const myExport = {
         data: this.$route.params.recid
       });
 
+      this.$nextTick(() => this.loading=false);
+      
 
     }
   },
