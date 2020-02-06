@@ -38,7 +38,7 @@ export default {
     },
     containerHeight: function() {
       var headerheight = 0;
-      if (this.$store.getters.currentApps.apps.length > 1) {
+      if (this.$store.getters.currentSubCategory.apps.length > 1) {
         headerheight += 50;
       }
       if (
@@ -62,7 +62,7 @@ export default {
     },
     iFrameContainerComputed: function() {
       var headerheight = 0;
-      if (this.$store.getters.currentApps.apps.length > 1) {
+      if (this.$store.getters.currentSubCategory.apps.length > 1) {
         headerheight += 50;
       }
       if (

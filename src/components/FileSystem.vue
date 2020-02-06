@@ -92,7 +92,7 @@ export default {
   computed: {
     containerHeight: function() {
       var headerheight = 0;
-      if (this.$store.getters.currentApps.apps.length > 1) {
+      if (this.$store.getters.currentSubCategory.apps.length > 1) {
         headerheight += 50;
       }
       return (
@@ -101,7 +101,7 @@ export default {
     },
     tableHeight: function() {
       var headerheight = 0;
-      if (this.$store.getters.currentApps.apps.length > 1) {
+      if (this.$store.getters.currentSubCategory.apps.length > 1) {
         headerheight += 50;
       }
       return (

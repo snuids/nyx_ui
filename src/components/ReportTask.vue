@@ -12,12 +12,7 @@
 
       <el-collapse>
         <el-collapse-item :title="'Details on run '+selectedReportInfos.id" name="1">
-          <el-table
-            :data="tableInfo"
-            class="table-details-report-run"
-            border
-            :show-header="false"
-          >
+          <el-table :data="tableInfo" class="table-details-report-run" border :show-header="false">
             <!-- style="width: 330px" -->
             <el-table-column prop="attr" label="Attr" width="130"></el-table-column>
             <el-table-column prop="value" label="Value" width="200"></el-table-column>
@@ -189,15 +184,13 @@ export default {
   },
   methods: {
     openLogs(index, row) {
-
       console.log("openLogs");
-      this.logObj = null
-      this.logObj = {}
+      this.logObj = null;
+      this.logObj = {};
       this.logObj.indice = "nyx_reportlog";
       this.logObj.id = row._id;
       this.logObj.search = true;
       this.LogViewerVisible = true;
-
 
       this.selectedReportInfos = JSON.parse(JSON.stringify(row._source));
       this.tableInfo = [];
@@ -285,7 +278,9 @@ export default {
             position: "bottom-right"
           });
 
-          setTimeout(() => {this.loadData()}, 500)
+          setTimeout(() => {
+            this.loadData();
+          }, 500);
         })
         .catch(error => {
           console.log(error);
@@ -318,19 +313,52 @@ export default {
       // var win =
       window.open(item.url, "_blank");
     },
-    loadData : _.throttle(function() {
-      if(this.loadingData)
-        return
+    loadData: _.throttle(function() {
+      if (this.loadingData) return;
 
-      this.loadingData = true
+      this.loadingData = true;
 
       var query = {
-        _source: ['creds.user.id', 'id', 'report.title', 'report.parameters', 'report.icon', 'treatment.status', 'treatment.creation', 
-                  'treatment.error', 'treatment.start', 'treatment.end', 'treatment.duration',
-                  'report.reportType', 'downloads', 'report'],
+        _source: [
+          "creds.user.id",
+          "creds.user.login",
+          "creds.user.user",
+          "id",
+          "report.title",
+          "report.parameters",
+          "report.icon",
+          "treatment.status",
+          "treatment.creation",
+          "treatment.error",
+          "treatment.start",
+          "treatment.end",
+          "treatment.duration",
+          "report.reportType",
+          "downloads",
+          "report"
+        ],
         sort: [{ "treatment.creation": { order: "desc" } }],
         size: 50
       };
+
+      if (_.includes(this.$store.getters.creds.user.privileges, "admin")) {
+        console.log("admin user");
+      } else {
+        console.log("NOT admin user");
+        query.query = {
+          bool: {
+            must: [
+              {
+                match_phrase: {
+                  "creds.user.id": {
+                    query: this.$store.getters.creds.user.id
+                  }
+                }
+              }
+            ]
+          }
+        };
+      }
 
       var url =
         this.$store.getters.apiurl +
@@ -351,13 +379,13 @@ export default {
             }
             this.tableData = response.data.records;
           }
-          this.loadingData = false
+          this.loadingData = false;
         })
         .catch(error => {
-          this.loadingData = false
+          this.loadingData = false;
           console.log(error);
         });
-    },1500),
+    }, 1500),
     closeDialog: function() {
       this.LogViewerVisible = false;
       this.$emit("dialogclose");

@@ -25,11 +25,16 @@ export default new Router({
       name: 'Main',
       component: Main,
       children: [
+        // {
+        //   path: ':category/:subcategory',
+        //   name: 'GenericComponent',
+        //   component: GenericComponent          
+        // },
         {
-          path: ':category/:app',
+          path: ':recid',
           name: 'GenericComponent',
           component: GenericComponent          
-        }
+        },
       ]
     }
   ]
