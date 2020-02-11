@@ -5,8 +5,10 @@
     <h1>{{config.rec_id}}</h1>
     <h1>{{multipleSelection}}</h1> -->
 
-    <el-card class="file-system-card" :body-style="{ padding: '0px' }" shadow="never" :style="'height:'+ containerHeight">
+
+    <el-card class="file-system-card" :body-style="{ padding: '0px' }" shadow="never" :style="'height:'+ containerHeight" :key="config.rec_id">
       <div slot="header" class="clearfix">
+    <!-- <p>{{curPath}}</p> -->
         <el-row style="height:28px;" flex>
           <el-col :span="16">            
             <el-breadcrumb  separator-class="el-icon-arrow-right" style="font-size:18px; margin-top: 8px;">
@@ -94,6 +96,26 @@ export default {
       type: Object
     }
   },
+  watch: {
+    $route(to, from) {
+      if(from.path===to.path && to.params.recid === this.config.rec_id) {
+        console.log('Navigation into the same file system '+this.config.rec_id)
+        console.log(from)
+        console.log(to)
+        if (this.$route.query.path != undefined)
+          this.curPath = this.$route.query.path;
+        else
+          this.curPath = ""
+
+
+        this.generateBreadcrumbObj();
+
+        this.listDir();
+        this.rootRouterPath = this.$route.path;
+      }
+
+    }
+  },
   computed: {
     containerHeight: function() {
       var headerheight = 0;
@@ -133,10 +155,6 @@ export default {
       this.multipleSelection = val;
     },
     rowClick(row, column, event) {
-      console.log(row)
-      console.log(this.$refs.filesTable)
-      console.log(event)
-
       if(this.$refs.filesTable.selection.includes(row)) 
         this.$refs.filesTable.toggleRowSelection(row, false)
       else {
@@ -246,8 +264,6 @@ export default {
       var arr = [];
 
       for (var i = 0; i < path.length; i++) {
-        console.log(path[i]);
-
         if (path[i] != "") {
           tmp += "/" + path[i];
 
@@ -263,10 +279,12 @@ export default {
   },
   created: function() {},
   mounted: function() {
-    console.log(this.$route.query.path);
+    console.log('FILE SYSTEM '+this.config.rec_id+ ' MOUNTED')
 
     if (this.$route.query.path != undefined)
       this.curPath = this.$route.query.path;
+    else
+      this.curPath = ""
 
     this.generateBreadcrumbObj();
 

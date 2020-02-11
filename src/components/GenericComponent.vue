@@ -36,31 +36,32 @@
         <el-tab-pane
           v-bind:style="styleContainerComputed"
           v-for="(app,index) in $store.getters.currentSubCategory.apps"
-          :key="index"
+          :key="app.rec_id"
           :label="app.loc_title"
           :name="app.rec_id"
           :lazy="true"
         >
+            <!-- v-if="!loading" -->
           <div 
-            v-if="!loading"
             style="overflow:auto !important;border:0px solid pink" >
             <div v-if="app.type=='generic-table'">
-              <GenericTable :config="app" :key="app.rec_id" v-if="selectedTab===app.rec_id"/>
+              <GenericTable :config="app" :key="app.rec_id" />
             </div>
             <div v-else-if="app.type=='external'">
-              <External :config="app" :key="app.rec_id" v-if="selectedTab===app.rec_id"></External>
+              <External :config="app" :key="app.rec_id"></External>
             </div>
             <div class="kibana" v-else-if="app.type=='kibana'">
               <Kibana :config="app" :key="app.rec_id"></Kibana>
             </div>
             <div v-else-if="app.type=='form'">
-              <Form :config="app" :key="app.rec_id" v-if="selectedTab===app.rec_id"></Form>
+              <Form :config="app" :key="app.rec_id"></Form>
             </div>
             <div v-else-if="app.type=='upload'">
-              <Upload :config="app" :key="app.rec_id" v-if="selectedTab===app.rec_id"></Upload>
+              <Upload :config="app" :key="app.rec_id"></Upload>
             </div>
             <div v-else>
-              <component :config="app" v-bind:is="app.config.controller" :key="app.rec_id" v-if="selectedTab===app.rec_id"></component>
+               <!-- v-if="selectedTab===app.rec_id" -->
+              <component :config="app" v-bind:is="app.config.controller" :key="app.rec_id"></component>
             </div>
           </div>
           <!-- <div v-else>LOADING</div> -->
@@ -135,6 +136,11 @@ const myExport = {
   watch: {
     $route(to, from) {
       console.log('WATCHER ROUTE GENERIC COMPONENT')
+      if(from.params.recid === to.params.recid) {
+        console.log('Same recid, no need to change app')
+        return
+      }
+
       console.log('from')
       console.log(from)
       console.log('to')
@@ -150,6 +156,7 @@ const myExport = {
       });
 
       this.$nextTick(() => this.loading=false);
+
       // setTimeout(() => {this.loading=false}, 500) 
 
     }
@@ -187,7 +194,7 @@ const myExport = {
     },
   },
   mounted: function() {
-    console.log('mounted')
+    console.log('MOUNTED GenericComponent')
     
     this.selectedTab=this.$store.getters.activeApp.rec_id
 
@@ -219,5 +226,15 @@ export default myExport
 }
 .nooverflow {
   overflow: hidden;
+}
+
+.el-tabs__item {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
 }
 </style>
