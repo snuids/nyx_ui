@@ -10,21 +10,26 @@
         <el-row style="height:28px;" flex>
           <el-col :span="16">            
             <el-breadcrumb  separator-class="el-icon-arrow-right" style="font-size:18px; margin-top: 8px;">
-              <el-breadcrumb-item :to="{ path: rootRouterPath }">{{config.config.foldername}}</el-breadcrumb-item>
+              <el-breadcrumb-item class="noselect" :to="{ path: rootRouterPath }">{{config.config.foldername}}</el-breadcrumb-item>
               <el-breadcrumb-item
+                class="noselect"
                 v-for="item in breadcrumbArr"
                 :key="item.path"
                 :to="{  query: { path: item.path } }"
-              >{{item.name}}</el-breadcrumb-item>
+              >
+              <span v-if="item.name.length>15">{{item.name.substring(0,15)}}...</span>
+              <span v-else>{{item.name}}</span>
+              
+              </el-breadcrumb-item>
             </el-breadcrumb>
           </el-col>
           <el-col :span="8" style="align:right;">
             <el-row style="margin-bottom:0px !important; text-align:right;">
               <el-tooltip class="item" effect="dark" content="Download" placement="bottom" v-if="multipleSelection.length>0" >
-                <el-button size="small" style="font-weight:bold;" @click="downloadBtnClick()" circle plain type="info" icon="el-icon-download"></el-button>
+                <el-button size="small" style="font-weight:bold;" @click="downloadBtnClick()" circle plain icon="el-icon-download"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="Refresh" placement="bottom">
-                <el-button size="small" style="font-weight:bold;" @click="listDir()" circle plain type="info" icon="el-icon-refresh"></el-button>
+                <el-button size="small" style="font-weight:bold;" @click="listDir(refresh=true)"  plain circle icon="el-icon-refresh"></el-button>
               </el-tooltip>
             </el-row>
           </el-col>
@@ -47,7 +52,7 @@
         <el-table-column prop="name" label="Name" sortable>
           <template slot-scope="scope" style="font-weight:bold;">
             <span class="icon-items">
-              <v-icon v-if="scope.row.type=='dir'" name="folder" scale="1.3" />
+              <v-icon v-if="scope.row.type=='dir'" name="regular/folder" scale="1.3" />
               <v-icon v-else-if="scope.row.type=='file' && ['png', 'jpg'].indexOf(scope.row.extension.toLowerCase())>-1" name="regular/image" scale="1.3" />
               <v-icon style="color:#EA4335" v-else-if="scope.row.type=='file' && ['pdf'].indexOf(scope.row.extension.toLowerCase())>-1" name="file-pdf" scale="1.3" />
               <v-icon style="color:#4B87E4" v-else-if="scope.row.type=='file' && ['doc', 'docx'].indexOf(scope.row.extension.toLowerCase())>-1" name="file-word" scale="1.3" />
@@ -60,10 +65,10 @@
             <span  class="noselect">{{scope.row.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Last modified" sortable prop="modification_time">
+        <el-table-column label="Last modified" sortable prop="modification_time" width="150">
           <template slot-scope="scope"><span class="noselect" >{{scope.row.modification_time | formatTS}}</span> </template>
         </el-table-column>
-        <el-table-column prop="size" sortable label="File size">
+        <el-table-column prop="size" sortable label="File size" width="150">
           <template slot-scope="scope"><span  class="noselect" v-if="scope.row.type=='file'">{{scope.row.size | prettyBytes}}</span></template>
         </el-table-column>
       </el-table>
@@ -194,7 +199,7 @@ export default {
           });
         });
     },
-    listDir: function() {
+    listDir: function(refresh=false) {
       var url =
         this.$store.getters.apiurl +
         "listdir?token=" +
@@ -211,6 +216,17 @@ export default {
           console.log(response);
           if (response.data.error == "") {
             this.tableData = response.data.data.sort((a, b) => (a.extension > b.extension) ? 1 : -1);
+
+            if(refresh) {
+
+              this.$notify({
+                title: "Refresh",
+                duration: 500,
+                // message: response.data.error,
+                type: "success",
+                position: "bottom-right"
+              });
+            }
           }
         })
         .catch(error => {
@@ -321,6 +337,10 @@ export default {
 
 .file-system-card .el-card__header {
   padding: 10px 10px;
+}
+
+.file-system-card td {
+  font-weight: bold;
 }
 </style>
 

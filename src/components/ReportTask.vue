@@ -143,7 +143,8 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            plain
+            round
+            style="width:45px; text-align:center; padding:7px 0px;"
             :type="getButtonType(item.extension)"
             v-for="item in scope.row._source.downloads"
             :key="item.url"
