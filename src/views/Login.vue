@@ -233,8 +233,12 @@ export default {
       });
       this.form.login = "";
       this.form.password = "";
-      this.$store.dispatch("privileges");
-      this.$store.dispatch("filters");
+
+      if(response.data.cred.user.privileges.incliudes('admin')) {
+        this.$store.dispatch("privileges");
+        this.$store.dispatch("filters");
+      }
+        
       window.dispatchEvent(new Event("resize"));
     }
   },
