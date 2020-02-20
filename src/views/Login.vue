@@ -175,7 +175,6 @@ export default {
     authenticate(response) {
       
       console.log('LOGIN -- authenticate')
-      console.log(response)
 
       localStorage.authResponse = JSON.stringify(response)
 
@@ -217,8 +216,23 @@ export default {
       });
 
 
-      console.log('push this path: '+path)
 
+      if(response.data.cred.user.privileges.includes('admin')) {
+        // this.$store.dispatch("privileges");
+        // this.$store.dispatch("filters");
+
+        this.$store.commit({
+          type: "privileges",
+          data: response.data.all_priv
+        });
+        this.$store.commit({
+          type: "filters",
+          data: response.data.all_filters
+        });
+      }
+
+
+      console.log('push this path: '+path)
 
       this.$router.push(path);
       this.$notify({
@@ -234,10 +248,7 @@ export default {
       this.form.login = "";
       this.form.password = "";
 
-      if(response.data.cred.user.privileges.incliudes('admin')) {
-        this.$store.dispatch("privileges");
-        this.$store.dispatch("filters");
-      }
+      
         
       window.dispatchEvent(new Event("resize"));
     }

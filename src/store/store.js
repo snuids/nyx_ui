@@ -34,7 +34,7 @@ export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
     kibanaurl:"/kibana/",
-    version: "v2.28.0",
+    version: "v2.29.0",
     devMode: false,
     menus: [],
     menuOpen: true,
@@ -96,46 +96,46 @@ export default new Vuex.Store({
 
   },
   actions: {
-    privileges({ commit, state }) {
-      var url =
-        state.apiurl +
-        "generic_search/nyx_privilege?token=" +
-        state.creds.token;
+    // privileges({ commit, state }) {
+    //   var url =
+    //     state.apiurl +
+    //     "generic_search/nyx_privilege?token=" +
+    //     state.creds.token;
 
-      axios
-        .post(url, {"size":1000})
-        .then(response => {
-          if (response.data.error != "")
-            console.log("Privileges error...");
-          else {
-            console.log("Privileges success...");
-            commit("privileges", response.data.records);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    filters({ commit, state }) {
-      var url =
-        state.apiurl +
-        "generic_search/nyx_filter?token=" +
-        state.creds.token;
+    //   axios
+    //     .post(url, {"size":1000})
+    //     .then(response => {
+    //       if (response.data.error != "")
+    //         console.log("Privileges error...");
+    //       else {
+    //         console.log("Privileges success...");
+    //         commit("privileges", response.data.records);
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // },
+    // filters({ commit, state }) {
+    //   var url =
+    //     state.apiurl +
+    //     "generic_search/nyx_filter?token=" +
+    //     state.creds.token;
 
-      axios
-        .post(url, {})
-        .then(response => {
-          if (response.data.error != "")
-            console.log("Filters error...");
-          else {
-            console.log("Filters success...");
-            commit("filters", response.data.records);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    //   axios
+    //     .post(url, {})
+    //     .then(response => {
+    //       if (response.data.error != "")
+    //         console.log("Filters error...");
+    //       else {
+    //         console.log("Filters success...");
+    //         commit("filters", response.data.records);
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // }
   },
 
   mutations: {
@@ -146,18 +146,17 @@ export default new Vuex.Store({
       state.menuOpen = payload.data;
     },
     filters(state, payload) {
-      state.filters = payload;
+      state.filters = payload.data;
     },
     privileges(state, payload) {
-      state.privileges = payload;
+      state.privileges = payload.data;
     },
     login(state, payload) {
       console.log("Login mutation called.");
       state.initialized = false;
       state.menuOpen=true;
       state.creds = payload.data.cred;
-      state.creds.hasPrivilege=function(inPrivilege)
-      {
+      state.creds.hasPrivilege=function(inPrivilege) {
         if (_.includes(state.creds.user.privileges,"admin"))
           return true;
         if (_.includes(state.creds.user.privileges,inPrivilege))

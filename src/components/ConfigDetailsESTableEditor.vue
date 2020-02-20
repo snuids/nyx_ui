@@ -4,9 +4,7 @@
       <h1 style="text-align:left;">Step 1 of 2: Define index pattern</h1>
 
       <el-row style="text-align:left;">
-        <el-button
-            @click="setFocus('indexPattern')" 
-            type="text">Index pattern</el-button>
+        <el-button @click="setFocus('indexPattern')" type="text">Index pattern</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -17,6 +15,7 @@
             id="indexPattern"
             type="text"
             autocomplete="off"
+            @input="indexPatternChanged()"
             v-model="currentConfig.config.index"
           />
         </el-col>
@@ -47,6 +46,13 @@
                 v-html="helpMessage"
               ></p>
             </template>
+            <template slot-scope="scope">
+              <el-button
+                style="padding: 0px;color: #606266;"
+                @click="setIndex(scope.row.id)"
+                type="text"
+              >{{scope.row.id}}</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-row>
@@ -55,33 +61,35 @@
       <h1 style="text-align:left;">Step 2 of 2: Configure settings</h1>
 
       <el-row style="text-align:left;" v-if="!noTimeField">
-        <span>You've defined <b>{{currentConfig.config.index}}</b> as your index pattern. Now you can specify some settings before we create it.</span>
+        <span>
+          You've defined
+          <b>{{currentConfig.config.index}}</b> as your index pattern. Now you can specify some settings before we create it.
+        </span>
       </el-row>
       <el-row style="text-align:left;" v-if="!noTimeField">
-        <el-button
-            @click="setFocus('timeField')" 
-            type="text">Time Filter field field</el-button>
+        <el-button @click="setFocus('timeField')" type="text">Time Filter field field</el-button>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="12" style="text-align:left;">
-          <span v-if="noTimeField">
-            The indices which match this index pattern don't contain any time fields.
-          </span>
-              <!-- v-model="currentConfig.config.timefield"  -->
-          <el-select 
-              v-else
-              v-model="timefieldSelected" 
-              placeholder="Select"
-              size="mini"
-              ref="timeField"
-              @change="timeFieldChanged()"
-              style="width:100%;">
+          <span
+            v-if="noTimeField"
+          >The indices which match this index pattern don't contain any time fields.</span>
+          <!-- v-model="currentConfig.config.timefield"  -->
+          <el-select
+            v-else
+            v-model="timefieldSelected"
+            placeholder="Select"
+            size="mini"
+            ref="timeField"
+            @change="timeFieldChanged()"
+            style="width:100%;"
+          >
             <el-option
               v-for="item in timeFields"
               :key="item.field"
               :label="item.field"
-              :value="item.field">
-            </el-option>
+              :value="item.field"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :offset="6" :span="6" style="text-align:right;">
@@ -95,24 +103,14 @@
           >Back</el-button>
         </el-col>
       </el-row>
-     
-      <el-row  v-if="currentConfig.config.timefield && currentConfig.config.timefield!='I don\'t want to use the Time Filter'" 
-              style="text-align:left; margin-top:20px;">
-        <el-switch
-         
-          v-model="currentConfig.graphicChecked"
-          active-text="Graphic"
-          >
-        </el-switch>
+      <el-row v-if="hasSelectedTimeField" style="text-align:left; margin-top:20px;">
+        <el-switch v-model="currentConfig.graphicChecked" active-text="Graphic"></el-switch>
       </el-row>
-      <el-row v-if="currentConfig.config.timefield && currentConfig.config.timefield!='I don\'t want to use the Time Filter'"
-              style="text-align:left;">
-        <el-switch
-          
-          v-model="currentConfig.timeSelectorChecked"
-          active-text="Time selector"
-          >
-        </el-switch>
+      <el-row v-if="hasSelectedTimeField" style="text-align:left; min-height:28px;" align="middle">
+        <el-col style="width:150px; margin-top:4px;">
+          <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time selector"></el-switch>
+        </el-col>
+        <el-col style="width:200px">
           <el-select
             v-if="currentConfig.timeSelectorChecked"
             style="margin-left:20px;"
@@ -125,11 +123,10 @@
             <el-option label="Week" value="week"></el-option>
             <el-option label="Year" value="year"></el-option>
           </el-select>
+        </el-col>
       </el-row>
-       <el-row style="text-align:left;" v-if="!noTimeField">
-        <el-button
-            @click="setFocus('docType')" 
-            type="text">Document type</el-button>
+      <el-row style="text-align:left;" v-if="!noTimeField">
+        <el-button @click="setFocus('docType')" type="text">Document type</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -140,38 +137,35 @@
             size="mini"
             autocomplete="off"
             v-model="currentConfig.config.doc_type"
-          >
-          </el-input>
+          ></el-input>
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button
-            @click="setFocus('fieldsToDisplay')" 
-            type="text">Fields to display</el-button>
+        <el-button @click="setFocus('fieldsToDisplay')" type="text">Fields to display</el-button>
       </el-row>
-       <el-row>
+      <el-row>
         <el-col :span="12" style="text-align:left;">
-          <el-select 
-              v-model="fieldsToDisplay" 
-              multiple
-              filterable
-              @change="selectFieldsToDisplayChanged"
-              ref="fieldsToDisplay"
-              placeholder="Field to display"
-              size="mini"
-              style="width:100%;">
+          <el-select
+            v-model="fieldsToDisplay"
+            multiple
+            filterable
+            @change="selectFieldsToDisplayChanged"
+            ref="fieldsToDisplay"
+            placeholder="Field to display"
+            size="mini"
+            style="width:100%;"
+          >
             <el-option
               v-for="item in allFields"
               :key="item.field"
               :label="item.field"
-              :value="item.field">
-            </el-option>
+              :value="item.field"
+            ></el-option>
           </el-select>
         </el-col>
       </el-row>
-       <el-row>
-      </el-row>
-       <!-- <el-row>
+      <el-row></el-row>
+      <!-- <el-row>
         <el-col :span="16" >
           <el-card shadow="never" v-if="currentConfig.config.headercolumns.length>0">
             <el-table
@@ -213,81 +207,73 @@
           </el-card>
         </el-col>
        
-      </el-row> -->
+      </el-row>-->
 
-
-     <el-row>
-        <el-col :span="16" >
-
+      <el-row>
+        <el-col :span="16">
           <el-card shadow="hover" v-if="currentConfig.config.headercolumns.length>0">
             <table class="table-display">
               <thead class="thead-display">
                 <tr>
                   <th>Field</th>
                   <th>Label</th>
-                  
+
                   <th>Type</th>
                   <th>Format</th>
                   <th></th>
                 </tr>
               </thead>
-              <draggable @change="draggableChanged('display')" v-bind="dragOptions" v-model="currentConfig.config.headercolumns" tag="tbody" handle=".handle">
+              <draggable
+                @change="draggableChanged('display')"
+                v-bind="dragOptions"
+                v-model="currentConfig.config.headercolumns"
+                tag="tbody"
+                handle=".handle"
+              >
                 <tr v-for="(item, index) in currentConfig.config.headercolumns" :key="index">
+                  <td>{{item.field}}</td>
                   <td>
-                    {{item.field}}
-                  </td>
-                   <td>
-                    <el-input 
-                      
+                    <el-input
                       class="display-name-input"
                       ref="author"
-                      placeholder="Name" 
+                      placeholder="Name"
                       v-model="item.title"
                       size="mini"
-                      >
-                    </el-input>
+                    ></el-input>
                   </td>
-                  <td>
-                    {{item.type}}
-                    
-                  </td>
+                  <td>{{item.type}}</td>
                   <td style="width:200px;">
-                    <el-input 
-                      v-if="item.type=='date' || item.type=='timestamp'" 
+                    <el-input
+                      v-if="item.type=='date' || item.type=='timestamp'"
                       class="display-name-input"
                       ref="author"
                       placeholder="eg. DD/MM/YYYY HH:mm"
                       v-model="item.format"
                       size="mini"
-                      >
-                    </el-input>
-                    <el-input 
-                      v-else-if="item.type=='long' || item.type=='double'" 
+                    ></el-input>
+                    <el-input
+                      v-else-if="item.type=='long' || item.type=='double'"
                       class="display-name-input"
                       ref="author"
                       placeholder="Numeral.js format"
                       v-model="item.format"
                       size="mini"
-                      >
-                    </el-input>
-                    <el-select 
-                      v-else-if="item.type=='keyword' || item.type=='text'" 
-                        v-model="item.format" 
-                        filterable
-                        placeholder="Default"
-                        size="mini"
-                        style="width:100%;">
-                      <el-option
-                        label="Default"
-                        value="default">
-                      </el-option>
-                      <el-option
-                        label="Icon"
-                        value="icon">
-                      </el-option>
+                    ></el-input>
+                    <el-select
+                      v-else-if="item.type=='keyword' || item.type=='text'"
+                      v-model="item.format"
+                      filterable
+                      placeholder="Default"
+                      size="mini"
+                      style="width:100%;"
+                    >
+                      <el-option label="Default" value="default"></el-option>
+                      <el-option label="Icon" value="icon"></el-option>
                     </el-select>
                   </td>
-                  <td><i class="el-icon-d-caret handle"></i></td> 
+                  <td>
+                    <i class="el-icon-d-caret handle"></i>
+                  </td>
                 </tr>
               </draggable>
             </table>
@@ -296,42 +282,40 @@
       </el-row>
 
       <el-row style="text-align:left;">
-        <el-button
-            @click="setFocus('order')" 
-            type="text">Sort</el-button>
+        <el-button @click="setFocus('order')" type="text">Sort</el-button>
       </el-row>
-       <el-row>
+      <el-row>
         <el-col :span="12" style="text-align:left;">
-          <el-select 
-              v-model="currentConfig.config.orderField" 
-              filterable
-              clearable
-              ref="order"
-              placeholder="Field to sort on"
-              size="mini"
-              style="width:100%;">
+          <el-select
+            v-model="currentConfig.config.orderField"
+            filterable
+            clearable
+            ref="order"
+            placeholder="Field to sort on"
+            size="mini"
+            style="width:100%;"
+          >
             <el-option
               v-for="item in allFields"
               :key="item.field"
               :label="item.field"
-              :value="item.field">
-            </el-option>
+              :value="item.field"
+            ></el-option>
           </el-select>
         </el-col>
       </el-row>
-      <el-row v-if="currentConfig.config.orderField"
-              style="text-align:left; margin-top:20px; margin-left:15px;">
+      <el-row
+        v-if="currentConfig.config.orderField"
+        style="text-align:left; margin-top:20px; margin-left:15px;"
+      >
         <el-switch
           v-model="currentConfig.config.orderDirection"
           active-text="Descending"
           inactive-text="Ascending"
-          >
-        </el-switch>
+        ></el-switch>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button
-            @click="setFocus('hiddenQuery')" 
-            type="text">Hidden query</el-button>
+        <el-button @click="setFocus('hiddenQuery')" type="text">Hidden query</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -342,68 +326,51 @@
             size="mini"
             autocomplete="off"
             v-model="currentConfig.config.hiddenQuery"
-          >
-          </el-input>
+          ></el-input>
         </el-col>
       </el-row>
       <el-row style="text-align:left; margin-top:20px;">
-        <el-switch
-          v-model="currentConfig.queryBarChecked"
-          active-text="Query bar"
-          >
-        </el-switch>
+        <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar"></el-switch>
       </el-row>
       <el-row style="text-align:left;">
-        <el-switch
-          v-model="currentConfig.queryFilterChecked"
-          active-text="Query filter"
-          >
-        </el-switch>
+        <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"></el-switch>
       </el-row>
-      <el-row style="text-align:left;" >
+      <el-row style="text-align:left;">
         <el-switch
           :disabled="isEmpty(geoFields)"
           v-model="currentConfig.mapChecked"
           active-text="Map"
+        ></el-switch>
+      </el-row>
+      <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+        <el-col :span="4">
+          <el-button @click="setFocus('geoField')" type="text">Geo field</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button @click="setFocus('zoom')" type="text">Zoom</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button @click="setFocus('long')" type="text">Lon.</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button @click="setFocus('lat')" type="text">Lat.</el-button>
+        </el-col>
+      </el-row>
+      <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+        <el-col :span="4">
+          <el-select
+            v-model="currentConfig.config.mapfield"
+            placeholder="Select"
+            size="mini"
+            ref="geoField"
+            style="width:90%;"
           >
-        </el-switch>
-      </el-row>
-      <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
-        <el-col :span="4">
-          <el-button
-            @click="setFocus('geoField')" 
-            type="text">Geo field</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button
-            @click="setFocus('zoom')" 
-            type="text">Zoom</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button
-            @click="setFocus('long')" 
-            type="text">Lon.</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button
-            @click="setFocus('lat')" 
-            type="text">Lat.</el-button>
-        </el-col>
-      </el-row>
-      <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
-        <el-col :span="4">
-          <el-select 
-              v-model="currentConfig.config.mapfield" 
-              placeholder="Select"
-              size="mini"
-              ref="geoField"
-              style="width:90%;">
             <el-option
               v-for="item in geoFields"
               :key="item.field"
               :label="item.field"
-              :value="item.field">
-            </el-option>
+              :value="item.field"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="3">
@@ -417,81 +384,62 @@
           ></el-input-number>
         </el-col>
         <el-col :span="3">
-          <el-input-number size="mini" ref="long" v-model="currentConfig.config.maplong" autocomplete="off"></el-input-number>
+          <el-input-number
+            size="mini"
+            ref="long"
+            v-model="currentConfig.config.maplong"
+            autocomplete="off"
+          ></el-input-number>
         </el-col>
         <el-col :span="3">
-          <el-input-number size="mini" ref="lat" v-model="currentConfig.config.maplat" autocomplete="off"></el-input-number>
+          <el-input-number
+            size="mini"
+            ref="lat"
+            v-model="currentConfig.config.maplat"
+            autocomplete="off"
+          ></el-input-number>
         </el-col>
-        
       </el-row>
       <el-row style="text-align:left;">
-        <el-switch
-          v-model="currentConfig.downloadChecked"
-          active-text="Download"
-          >
-        </el-switch>
+        <el-switch v-model="currentConfig.downloadChecked" active-text="Download"></el-switch>
       </el-row>
       <el-row style="text-align:left;" v-if="currentConfig.downloadChecked">
-        <el-button
-            @click="setFocus('fieldsToDownload')" 
-            type="text">Fields to download</el-button>
+        <el-button @click="setFocus('fieldsToDownload')" type="text">Fields to download</el-button>
       </el-row>
-       <el-row v-if="currentConfig.downloadChecked">
+      <el-row v-if="currentConfig.downloadChecked">
         <el-col :span="12" style="text-align:left;">
-          <el-select 
-              v-model="fieldsToDownload" 
-              multiple
-              filterable
-              @change="selectFieldsToDownloadChanged()"
-              ref="fieldsToDownload"
-              placeholder="Field to download"
-              size="mini"
-              style="width:100%;">
+          <el-select
+            v-model="fieldsToDownload"
+            multiple
+            filterable
+            @change="selectFieldsToDownloadChanged()"
+            ref="fieldsToDownload"
+            placeholder="Field to download"
+            size="mini"
+            style="width:100%;"
+          >
             <el-option
               v-for="item in allFields"
               :key="item.field"
               :label="item.field"
-              :value="item.field">
-            </el-option>
+              :value="item.field"
+            ></el-option>
           </el-select>
         </el-col>
         <el-col :span="4" style="text-align:right;">
-          <el-button @click="copyFieldsToDisplayToDownload()" type="text" size="mini">Copy from fields to display</el-button>
+          <el-button
+            @click="copyFieldsToDisplayToDownload()"
+            type="text"
+            size="mini"
+          >Copy from fields to display</el-button>
         </el-col>
       </el-row>
-       <!-- <el-row  v-if="currentConfig.downloadChecked">
-        <el-col :span="16" >
-          <el-card shadow="never" v-if="currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0">
-            <el-table
-              :data="currentConfig.config.tableFieldsToDownload"
-              size="mini"
-              style="width: 100%">
-              <el-table-column
-                prop="field"
-                label="Field"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Label">
-                <template slot-scope="scope">
-                  <el-input 
-                      size="mini"
-                      v-model="scope.row.title"></el-input>
-                    
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-        </el-col>
-       
-      </el-row> -->
-
-
-
       <el-row>
-        <el-col :span="16" >
-
-          <el-card shadow="hover" v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0">
+        <el-col :span="16">
+          <el-card
+            shadow="hover"
+            v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0"
+          >
             <table class="table-display">
               <thead class="thead-display">
                 <tr>
@@ -500,40 +448,38 @@
                   <th></th>
                 </tr>
               </thead>
-              <draggable @change="draggableChanged('download')" v-bind="dragOptions" v-model="currentConfig.config.tableFieldsToDownload" tag="tbody" handle=".handle">
-                <tr v-for="(item, index) in currentConfig.config.tableFieldsToDownload" :key="index">
+              <draggable
+                @change="draggableChanged('download')"
+                v-bind="dragOptions"
+                v-model="currentConfig.config.tableFieldsToDownload"
+                tag="tbody"
+                handle=".handle"
+              >
+                <tr
+                  v-for="(item, index) in currentConfig.config.tableFieldsToDownload"
+                  :key="index"
+                >
+                  <td>{{item.field}}</td>
                   <td>
-                    {{item.field}}
-                  </td>
-                   <td>
-                    <el-input 
-                      
+                    <el-input
                       class="display-name-input"
                       ref="author"
-                      placeholder="Name" 
+                      placeholder="Name"
                       v-model="item.title"
                       size="mini"
-                      >
-                    </el-input>
+                    ></el-input>
                   </td>
-                  <td><i class="el-icon-d-caret handle"></i></td> 
+                  <td>
+                    <i class="el-icon-d-caret handle"></i>
+                  </td>
                 </tr>
               </draggable>
             </table>
           </el-card>
         </el-col>
       </el-row>
-
-
-
-
-
-
-
       <el-row style="text-align:left;">
-        <el-button
-            @click="setFocus('specificEditor')" 
-            type="text">Specific editor</el-button>
+        <el-button @click="setFocus('specificEditor')" type="text">Specific editor</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -544,36 +490,33 @@
             size="mini"
             autocomplete="off"
             v-model="currentConfig.config.editorComponent"
-          >
-          </el-input>
+          ></el-input>
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button
-            @click="setFocus('writePrivileges')" 
-            type="text">Write privileges</el-button>
+        <el-button @click="setFocus('writePrivileges')" type="text">Write privileges</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-select 
-              v-model="writePrivileges" 
-              multiple
-              filterable
-              allow-create
-              ref="writePrivileges"
-              placeholder="write privileges"
-              size="mini"
-              style="width:100%;">
+          <el-select
+            v-model="writePrivileges"
+            multiple
+            filterable
+            allow-create
+            ref="writePrivileges"
+            placeholder="write privileges"
+            size="mini"
+            style="width:100%;"
+          >
             <el-option
               v-for="item in allPrivileges"
               :key="item.value"
               :label="item.value"
-              :value="item.value">
-            </el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-col>
       </el-row>
-      
     </el-card>
   </div>
 </template>
@@ -588,10 +531,8 @@ export default {
   data() {
     return (
       window.__FORM__ || {
-
         dragging: false,
         activeName: "first",
-
         esMapping: null,
         allesMapping: null,
         geoFieldSelected: null,
@@ -605,12 +546,17 @@ export default {
         helpMessage: "",
         succesIndexPatternDefinition: false,
         noTimeField: true,
-        step: 1,
-
+        step: 1
       }
     );
   },
   computed: {
+    hasSelectedTimeField: function() {
+      return (
+        this.timefieldSelected &&
+        this.timefieldSelected != "I don't want to use the Time Filter"
+      );
+    },
     curConfigIn: function() {
       return this.currentConfig;
     },
@@ -624,7 +570,7 @@ export default {
         disabled: false,
         ghostClass: "ghost"
       };
-    },
+    }
   },
   watch: {
     indexPattern: {
@@ -634,23 +580,25 @@ export default {
     },
     timefieldSelected: {
       handler: function() {
-        if(this.timefieldSelected == '_____________________') {
-          this.timefieldSelected = null
-          this.currentConfig.config.timefield = null
-          return
+        if (this.timefieldSelected == "_____________________") {
+          this.timefieldSelected = null;
+          this.currentConfig.config.timefield = null;
+          return;
         }
 
-        if(!this.timefieldSelected || this.timefieldSelected=="I don't want to use the Time Filter") {
-          this.currentConfig.config.timefield = null
-          this.currentConfig.graphicChecked = false
-          this.currentConfig.timeSelectorChecked = false
-          return
+        if (
+          !this.timefieldSelected ||
+          this.timefieldSelected == "I don't want to use the Time Filter"
+        ) {
+          this.currentConfig.config.timefield = null;
+          this.currentConfig.graphicChecked = false;
+          this.currentConfig.timeSelectorChecked = false;
+          return;
         }
 
-        this.currentConfig.config.timefield = this.timefieldSelected
+        this.currentConfig.config.timefield = this.timefieldSelected;
       }
-    },
-    
+    }
   },
   props: {
     forcestep: { type: Number },
@@ -661,84 +609,99 @@ export default {
     this.prepareData();
   },
   methods: {
+    setIndex(indexPattern) {
+      console.log("setindex");
+      console.log(indexPattern);
+
+      this.currentConfig.config.index = "";
+      this.$nextTick(() => (this.currentConfig.config.index = indexPattern));
+      this.indexPatternChanged();
+    },
     copyFieldsToDisplayToDownload() {
-      this.fieldsToDownload = JSON.parse(JSON.stringify(this.fieldsToDisplay))
-      this.selectFieldsToDownloadChanged()
+      this.fieldsToDownload = JSON.parse(JSON.stringify(this.fieldsToDisplay));
+      this.selectFieldsToDownloadChanged();
     },
     draggableChanged(type) {
+      var tmp = [];
 
-      var tmp = []
-
-      if(type == 'display') {
-
-        for(var i=0; i < this.currentConfig.config.headercolumns.length; i++){
-          tmp.push(this.currentConfig.config.headercolumns[i].field)
+      if (type == "display") {
+        for (
+          var i = 0;
+          i < this.currentConfig.config.headercolumns.length;
+          i++
+        ) {
+          tmp.push(this.currentConfig.config.headercolumns[i].field);
         }
 
-        this.fieldsToDisplay = tmp
+        this.fieldsToDisplay = tmp;
       }
-      if(type == 'download') {
-
-        for(var i=0; i < this.currentConfig.config.tableFieldsToDownload.length; i++){
-          tmp.push(this.currentConfig.config.tableFieldsToDownload[i].field)
+      if (type == "download") {
+        for (
+          var i = 0;
+          i < this.currentConfig.config.tableFieldsToDownload.length;
+          i++
+        ) {
+          tmp.push(this.currentConfig.config.tableFieldsToDownload[i].field);
         }
 
-        this.fieldsToDownload = tmp
+        this.fieldsToDownload = tmp;
       }
     },
     prepareData() {
-      console.log('prepareData')
-      console.log(this.currentConfig)
+      console.log("prepareData ConfigDetailsESTableEditor");
+      console.log(this.currentConfig);
 
-      this.loadEsMapping()
-
+      this.loadEsMapping();
 
       // instanciate the timefieldSelected field
-      if(this.currentConfig.config && this.currentConfig.config.timefield)
-        this.timefieldSelected = this.currentConfig.config.timefield
-      else
-        this.timefieldSelected = null
+      if (this.currentConfig.config && this.currentConfig.config.timefield)
+        this.timefieldSelected = this.currentConfig.config.timefield;
+      else this.timefieldSelected = null;
 
       // initialize fieldsToDisplay and fieldsToDownload
-      if(this.currentConfig.config.headercolumns != null) {        
-        for(var i=0; i<this.currentConfig.config.headercolumns.length; i++) {
-          
-          this.fieldsToDisplay.push(this.currentConfig.config.headercolumns[i].field)
+      if (this.currentConfig.config.headercolumns != null) {
+        for (
+          var i = 0;
+          i < this.currentConfig.config.headercolumns.length;
+          i++
+        ) {
+          this.fieldsToDisplay.push(
+            this.currentConfig.config.headercolumns[i].field
+          );
         }
       }
-      if(this.currentConfig.config.exportColumns != null) {      
-        
-        this.currentConfig.config.tableFieldsToDownload = []
-        var tmp = this.currentConfig.config.exportColumns.split(',')
-        
-        console.log(tmp)
+      if (this.currentConfig.config.exportColumns != null) {
+        this.currentConfig.config.tableFieldsToDownload = [];
+        var tmp = this.currentConfig.config.exportColumns.split(",");
 
-        for(var i=0; i<tmp.length; i++) {
-          var obj={
-            'field': tmp[i].split('->')[0],
-            'title': tmp[i].split('->')[1],
-          }
-          this.currentConfig.config.tableFieldsToDownload.push(obj)
-          this.fieldsToDownload.push(tmp[i].split('->')[0])
+        console.log(tmp);
+
+        for (var i = 0; i < tmp.length; i++) {
+          var obj = {
+            field: tmp[i].split("->")[0],
+            title: tmp[i].split("->")[1]
+          };
+          this.currentConfig.config.tableFieldsToDownload.push(obj);
+          this.fieldsToDownload.push(tmp[i].split("->")[0]);
         }
       }
 
-      this.step = this.forcestep
+      this.step = this.forcestep;
     },
     isEmpty: function(obj) {
-      return _.isEmpty(obj)
+      return _.isEmpty(obj);
     },
     indexPatternChanged: function() {
-      this.timeFields = {}
-      this.geoFields = {}
-      this.allFields = {}
-      
+      this.timeFields = {};
+      this.geoFields = {};
+      this.allFields = {};
+
       this.loadEsMapping();
     },
     loadEsMapping: _.debounce(function() {
       var indexToSearch = this.currentConfig.config.index;
 
-      if (indexToSearch == "") indexToSearch = "*";
+      if (indexToSearch == null || indexToSearch == "") indexToSearch = "*";
 
       console.log("load es mapping. filter: " + indexToSearch);
 
@@ -753,11 +716,17 @@ export default {
         .get(url)
         .then(response => {
           console.log("get mapping success");
-          // console.log(response.data.data);
-          if (response.data.data.length > 0) {
+          console.log(response.data);
+          if (response.data.data != null && response.data.data.length > 0) {
             this.esMapping = response.data.data;
-            if (this.currentConfig.config.index == "") {
+
+            console.log(this.currentConfig.config.index);
+            console.log(indexToSearch);
+
+            if (indexToSearch == "*") {
+              console.log("ALL ES MAPPING");
               this.allesMapping = response.data.data;
+              console.log(this.allesMapping);
               this.helpMessage =
                 "Your index pattern can match any of your " +
                 this.esMapping.length +
@@ -769,7 +738,7 @@ export default {
                 this.esMapping.length +
                 " indices.";
               this.succesIndexPatternDefinition = true;
-              this.computeFields()
+              this.computeFields();
             }
           } else {
             this.esMapping = JSON.parse(JSON.stringify(this.allesMapping));
@@ -793,7 +762,7 @@ export default {
         this.$nextTick(() => this.setCursorPosition(input, 0));
       }
     }, 50),
-   
+
     setCursorPosition(el, pos) {
       el.focus();
       el.setSelectionRange(pos, pos);
@@ -803,146 +772,167 @@ export default {
     },
     setFocusInput: function() {
       let input = this.$refs.indexPattern;
-      console.log(input)
+      console.log(input);
       this.$nextTick(() => input.focus());
     },
     setFocusSelect: function() {
       let select = this.$refs.timeField;
-      console.log(select)
+      console.log(select);
       this.$nextTick(() => select.focus());
     },
     selectFieldsToDisplayChanged: function(val) {
-      var tmp = []
-      var flag = false
-      for(var i=0; i<this.fieldsToDisplay.length; i++) {
-        flag = false
-        for(var j=0; i<this.currentConfig.config.headercolumns.length; j++) {
-          if(this.currentConfig.config.headercolumns[j].field == this.fieldsToDisplay[i]) {
-            tmp.push(this.currentConfig.config.headercolumns[j])
-            console.log(this.currentConfig.config.headercolumns[j].field+ ' == '+this.fieldsToDisplay[i])
-            flag = true
-            break
+      var tmp = [];
+      var flag = false;
+      for (var i = 0; i < this.fieldsToDisplay.length; i++) {
+        flag = false;
+        for (
+          var j = 0;
+          i < this.currentConfig.config.headercolumns.length;
+          j++
+        ) {
+          if (
+            this.currentConfig.config.headercolumns[j].field ==
+            this.fieldsToDisplay[i]
+          ) {
+            tmp.push(this.currentConfig.config.headercolumns[j]);
+            console.log(
+              this.currentConfig.config.headercolumns[j].field +
+                " == " +
+                this.fieldsToDisplay[i]
+            );
+            flag = true;
+            break;
           }
         }
 
-        if(!flag) {
-          console.log(flag)
-          console.log(this.fieldsToDisplay[i])
-          console.log(this.allFields[this.fieldsToDisplay[i]])
+        if (!flag) {
+          console.log(flag);
+          console.log(this.fieldsToDisplay[i]);
+          console.log(this.allFields[this.fieldsToDisplay[i]]);
 
-          tmp.push(this.allFields[this.fieldsToDisplay[i]])
+          tmp.push(this.allFields[this.fieldsToDisplay[i]]);
         }
       }
 
-
-      this.currentConfig.config.headercolumns = []
-      this.currentConfig.config.headercolumns = JSON.parse(JSON.stringify(tmp))
-
+      this.currentConfig.config.headercolumns = [];
+      this.currentConfig.config.headercolumns = JSON.parse(JSON.stringify(tmp));
     },
     selectFieldsToDownloadChanged: function() {
-      console.log('selectFieldsToDisplayChanged')
-      this.currentConfig.config.tableFieldsToDownload = []
-      for(var i in this.fieldsToDownload) {
-        this.currentConfig.config.tableFieldsToDownload.push(this.allFields[this.fieldsToDownload[i]])
+      console.log("selectFieldsToDisplayChanged");
+      this.currentConfig.config.tableFieldsToDownload = [];
+      for (var i in this.fieldsToDownload) {
+        this.currentConfig.config.tableFieldsToDownload.push(
+          this.allFields[this.fieldsToDownload[i]]
+        );
       }
 
-      this.currentConfig.config.exportColumns = ''
-      for(var i = 0; i< this.currentConfig.config.tableFieldsToDownload.length; i++){
-        this.currentConfig.config.exportColumns += this.currentConfig.config.tableFieldsToDownload[i].field 
-        
-        if(this.currentConfig.config.tableFieldsToDownload[i].title)
-          this.currentConfig.config.exportColumns += '->' + this.currentConfig.config.tableFieldsToDownload[i].title
-        
-        this.currentConfig.config.exportColumns += ','
+      this.currentConfig.config.exportColumns = "";
+      for (
+        var i = 0;
+        i < this.currentConfig.config.tableFieldsToDownload.length;
+        i++
+      ) {
+        this.currentConfig.config.exportColumns += this.currentConfig.config.tableFieldsToDownload[
+          i
+        ].field;
+
+        if (this.currentConfig.config.tableFieldsToDownload[i].title)
+          this.currentConfig.config.exportColumns +=
+            "->" + this.currentConfig.config.tableFieldsToDownload[i].title;
+
+        this.currentConfig.config.exportColumns += ",";
       }
 
-      if(this.currentConfig.config.exportColumns.length>0) {
-        this.currentConfig.config.exportColumns=this.currentConfig.config.exportColumns.slice(0, -1)
+      if (this.currentConfig.config.exportColumns.length > 0) {
+        this.currentConfig.config.exportColumns = this.currentConfig.config.exportColumns.slice(
+          0,
+          -1
+        );
       }
     },
     resetTest: function() {
       this.fieldsToDisplay = [];
     },
     timeFieldChanged: function() {
-      if(this.currentConfig.config.timefield == '_____________________') {
-        this.currentConfig.config.timefield = ''
+      if (this.currentConfig.config.timefield == "_____________________") {
+        this.currentConfig.config.timefield = "";
       }
 
-      if(!this.currentConfig.config.timefield || this.currentConfig.config.timefield=="I don't want to use the Time Filter") {
-        this.currentConfig.graphicChecked = false
-        this.currentConfig.timeSelectorChecked = false
+      if (
+        !this.currentConfig.config.timefield ||
+        this.currentConfig.config.timefield ==
+          "I don't want to use the Time Filter"
+      ) {
+        // this.currentConfig.graphicChecked = false;
+        // this.currentConfig.timeSelectorChecked = false;
       }
     },
     goToStep: function(step) {
-      console.log('go to step'+step)
-      if(step == 2) {
-        
+      console.log("go to step" + step);
+      if (step == 2) {
       }
 
-      this.step = step
+      this.step = step;
     },
-    computeFields: function(){
-        this.timeFields={}
-        this.geoFields={}
-        this.allFields={
-          '_id': {
-            'field':'_id',
-            'type':'_id',
-            'title':'_id',
-          },
-          '_index': {
-            'field':'_index',
-            'type':'_index',
-            'title':'_index',
-          },
+    computeFields: function() {
+      this.timeFields = {};
+      this.geoFields = {};
+      this.allFields = {
+        _id: {
+          field: "_id",
+          type: "_id",
+          title: "_id"
+        },
+        _index: {
+          field: "_index",
+          type: "_index",
+          title: "_index"
         }
+      };
 
-        for(var idx in this.esMapping) {
-          var indexMapping = this.esMapping[idx]
-          if(indexMapping.obj != null) {
-            
-            if(indexMapping.obj.mappings.properties!=null) {
-              this.getRecMappings('', indexMapping.obj.mappings)
-            }
-            else {
-              for(var _type in indexMapping.obj.mappings) {
-                this.getRecMappings('', indexMapping.obj.mappings[_type])
-              }
+      for (var idx in this.esMapping) {
+        var indexMapping = this.esMapping[idx];
+        if (indexMapping.obj != null) {
+          if (indexMapping.obj.mappings.properties != null) {
+            this.getRecMappings("", indexMapping.obj.mappings);
+          } else {
+            for (var _type in indexMapping.obj.mappings) {
+              this.getRecMappings("", indexMapping.obj.mappings[_type]);
             }
           }
-          else {
+        } else {
+        }
+      }
 
-          }
-        }
-
-        if(Object.keys(this.timeFields).length > 0) {
-          this.timeFields['_____________________'] = {field:'_____________________'}
-          this.timeFields['none'] = {field:'I don\'t want to use the Time Filter'}
-          this.noTimeField = false
-        }
-        else {
-          this.noTimeField = true
-        }
-        
+      if (Object.keys(this.timeFields).length > 0) {
+        this.timeFields["_____________________"] = {
+          field: "_____________________"
+        };
+        this.timeFields["none"] = {
+          field: "I don't want to use the Time Filter"
+        };
+        this.noTimeField = false;
+      } else {
+        this.noTimeField = true;
+      }
     },
-    getRecMappings: function(curpath,curstruct)
-    {
-      for (var i in curstruct.properties)
-      {
-        var curobj=curstruct.properties[i]
-        if (curobj.properties !=null)
-          this.getRecMappings(curpath+i+".",curobj)
+    getRecMappings: function(curpath, curstruct) {
+      for (var i in curstruct.properties) {
+        var curobj = curstruct.properties[i];
+        if (curobj.properties != null)
+          this.getRecMappings(curpath + i + ".", curobj);
         else {
+          var obj = {
+            field: curpath + i,
+            type: curobj.type,
+            title: curpath + i
+          };
 
-          var obj = {"field":curpath+i,"type":curobj.type,"title":curpath+i}
+          this.allFields[curpath + i] = obj;
 
-          this.allFields[curpath+i] = obj
+          if (obj.type == "date") this.timeFields[curpath + i] = obj;
 
-          if(obj.type == 'date')
-            this.timeFields[curpath+i] = obj
-          
-          if(obj.type == 'geo_point')
-            this.geoFields[curpath+i] = obj
+          if (obj.type == "geo_point") this.geoFields[curpath + i] = obj;
         }
       }
     }
@@ -998,34 +988,25 @@ export default {
   border-color: #409eff;
 }
 
-
-
-
-
-
-
 .table-display {
   width: 100%;
   border-spacing: 0px !important;
-  font-size:12px;
+  font-size: 12px;
 }
 
-.thead-display th{
+.thead-display th {
   padding-bottom: 10px;
   text-align: left;
 }
 
-.table-display tr{
+.table-display tr {
 }
 
-.table-display td{
+.table-display td {
   padding: 5px 18px 5px 0px;
   border-top: solid 1px #ebeef5;
   color: #606266;
-  
 }
-
-
 
 .flip-list-move {
   transition: transform 0.5s;
@@ -1046,7 +1027,4 @@ export default {
   color: white !important;
   background-color: #1070ff !important;
 }
-
-
-
 </style>

@@ -35,7 +35,7 @@
         @tab-click="handleTabClick">
         <el-tab-pane
           v-bind:style="styleContainerComputed"
-          v-for="(app,index) in $store.getters.currentSubCategory.apps"
+          v-for="(app, index) in $store.getters.currentSubCategory.apps"
           :key="app.rec_id"
           :label="app.loc_title"
           :name="app.rec_id"
@@ -94,6 +94,7 @@ import freetext from "@/components/FreeText";
 // import loading from "@/components/Loading";
 import queryfilter from "@/components/QueryFilter";
 import vega from "@/components/Vega";
+import LandingPage from "@/components/LandingPage";
 import Vue from "vue";
 
 const req = require.context('../components/external/', true, /\.vue$/)
@@ -122,6 +123,7 @@ Vue.component("ProcessList", ProcessList);
 Vue.component("FileSystem", FileSystem);
 Vue.component("QueryFilter", queryfilter);
 Vue.component("Vega", vega);
+Vue.component("LandingPage", LandingPage);
 
 const myExport = {
 //export default {
