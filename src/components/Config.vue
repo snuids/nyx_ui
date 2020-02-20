@@ -133,6 +133,20 @@ export default {
       isAdd: false
     };
   },
+  computed: {
+    privilegesdata: function() {
+      var data = [];
+      for (var i in this.$store.getters.privileges) {
+        var priv = this.$store.getters.privileges[i];
+        data.push({
+          value: priv._source.value,
+          desc: priv._source.name
+        });
+      }
+
+      return data
+    },
+  },
   methods: {
     dialogClosed() {
       this.dialogFormVisible = false;
@@ -161,16 +175,6 @@ export default {
         });
     },
     loadData() {
-      var data = [];
-      for (var i in this.$store.getters.privileges) {
-        var priv = this.$store.getters.privileges[i];
-        data.push({
-          value: priv._source.value,
-          desc: priv._source.name
-        });
-      }
-      this.privilegesdata = data;
-
       var url =
         this.$store.getters.apiurl +
         "generic_search/nyx_app*?token=" +

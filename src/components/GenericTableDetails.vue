@@ -5,22 +5,11 @@
     :visible.sync="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
+    class="table-details"
   >
     <el-tabs v-model="activeName" @tab-click="refresh">
       <el-tab-pane :label="$t('generictable.fields')" name="first">
-        <el-form>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="ID" :label-width="formLabelWidth">
-                <el-input :disabled="true" size="mini" v-model="record._id" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Index" :label-width="formLabelWidth">
-                <el-input :disabled="true" size="mini" v-model="record._index" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <el-form >
           <el-row v-for="(line,index) in fields" :key="index">
             <el-col :span="24/modulo" v-for="(field,index2) in line" :key="index2">
               <el-form-item :label="field.key" :label-width="formLabelWidth">
@@ -29,6 +18,7 @@
                   effect="dark"
                   :content="field.value"
                   placement="right"
+                  open-delay="1000"
                   v-if="typeof field.value == 'string'"
                 >
                   <el-input
@@ -111,10 +101,10 @@ export default {
     newRec: null,
     strOrgRec: "",
     strNewRec: "",
-    formLabelWidth: "120px",
+    formLabelWidth: "180px",
     fields: [],
     changed: false,
-    modulo: 3
+    modulo: 2
   }),
   computed: {
     recordin: function() {
@@ -268,3 +258,13 @@ export default {
   }
 };
 </script>
+<style>
+.table-details .el-form-item__label{
+  color: #464646;
+  font-weight:600;
+}
+.table-details .el-form-item__content{
+  text-align: left;
+}
+
+</style>

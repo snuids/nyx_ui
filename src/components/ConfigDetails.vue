@@ -367,9 +367,9 @@
         </el-tab-pane>
         <el-tab-pane
           label="Table"
-          name="table"
-          key="table"
-          v-if="(curConfig.type === 'generic-table') || (curConfig.type === 'pgsql-generic-table')"
+          name="pgtable"
+          key="pgtable"
+          v-if="(curConfig.type === 'pgsql-generic-table')"
         >
           <el-card>
             <!-- GENERIC TABLE -->
@@ -585,9 +585,9 @@
           </el-card>
         </el-tab-pane>
         <el-tab-pane
-          label="Table Dev"
-          name="table dev"
-          key="table_dev"
+          label="Table"
+          name="table"
+          key="table"
           v-if="(curConfig.type === 'generic-table')"
         >
           <ESTableEditor
@@ -882,17 +882,18 @@ export default {
     this.prepareData();
   },
   methods: {
-    loadPrivileges: function() {
-      var data = [];
-      for (var i in this.$store.getters.privileges) {
-        var priv = this.$store.getters.privileges[i];
-        data.push({
-          value: priv._source.value,
-          desc: priv._source.name
-        });
-      }
-      this.allPrivileges = data;
-    },
+    // loadPrivileges: function() {
+    //   console.log('load')
+    //   var data = [];
+    //   for (var i in this.$store.getters.privileges) {
+    //     var priv = this.$store.getters.privileges[i];
+    //     data.push({
+    //       value: priv._source.value,
+    //       desc: priv._source.name
+    //     });
+    //   }
+    //   this.allPrivileges = data;
+    // },
     esTableConfigChanged: function(newModel) {
       console.log("ConfigDetails - esTableConfigChanged");
       console.log(newModel);
