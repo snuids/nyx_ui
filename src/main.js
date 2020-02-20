@@ -12,13 +12,9 @@ import moment from "moment";
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/reset.css'
 import {i18n} from  './i18n-setup'
-//import {localized_messages} from  './i18n-setup'
 import ElementLocale from 'element-ui/lib/locale'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import draggable from "vuedraggable";
-
-
-
 
 import '../theme/index.css'
 
@@ -51,6 +47,15 @@ Vue.filter('formatTS', function(value) {
       value *= 1000 
 
     return moment(value).format('DD/MM/YYYY HH:mm')
+  }
+});
+
+Vue.filter('formatTS2', function(value) {
+  if (value) {
+    if(value < 10000000000)
+      value *= 1000 
+
+    return moment.utc(value).local().format('DD/MM HH:mm:ss')
   }
 });
 
