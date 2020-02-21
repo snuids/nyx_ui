@@ -44,6 +44,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
+        
         <el-table
           size="mini"
           :data="tableData"
@@ -52,6 +53,7 @@
           @current-change="handleCurrentRecordChange"
           v-loading="!ready"
         >
+        
           <el-table-column
             v-for="header in config.config.headercolumns"
             :key="header.field"
@@ -60,6 +62,7 @@
             sortable
           >
             <template slot-scope="scope">
+              
               <div v-if="header.type=='select'">
                 <el-select
                   @change="selectChanged(scope.row, header)"
@@ -84,6 +87,14 @@
                   :disabled="header.disabled"
                   @change="switchChanged(scope.row, header)"
                 ></el-switch>
+              </div>
+              <div v-else-if="header.format=='icon'">
+                
+                <!--div style="text-align:center;">
+                  <v-icon name="bug" scale="1.5" />
+              </div-->
+
+                <v-icon :color="computeIconColor(scope.row,header.field)" :name="computeIcon(scope.row,header.field)" scale="1.5" />
               </div>
               <div v-else>{{computeRec(scope.row,header.field)}}</div>
             </template>
@@ -370,6 +381,40 @@ export default {
       if (field.indexOf("@") == -1) return this.cutRec(_.get(rec, field));
       else res = rec[field];
       //return field;
+    },
+    computeIcon: function(row, field) {
+      var rec = row;
+      if (field.indexOf("_source") == 0) {
+        rec = row["_source"];
+        var res = "";
+        if (field.indexOf("@") == -1)
+          res = _.get(rec, field.replace("_source.", ""));
+        else res = rec[field.replace("_source.", "")];
+        if (res == undefined) return "";
+        else return this.cutRec("" + res).split(">")[0];
+      }
+      if (field.indexOf("@") == -1) return this.cutRec(_.get(rec, field)).split(">")[0];
+      else res = rec[field].split(">")[0];
+      //return field;
+    },
+    computeIconColor: function(row, field) {
+      var rec = row;
+      if (field.indexOf("_source") == 0) {
+        rec = row["_source"];
+        var res = "";
+        if (field.indexOf("@") == -1)
+          res = _.get(rec, field.replace("_source.", ""));
+        else 
+        res = rec[field.replace("_source.", "")];
+        if (res == undefined) return "grey";
+
+
+        else 
+          if (field.indexOf(">") == -1)
+            return this.cutRec("" + res).split(">")[1];
+      }
+      
+      return "grey";
     },
     recordUpdated: function() {
       this.dialogFormVisible = false;
