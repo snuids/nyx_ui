@@ -18,7 +18,7 @@
                   effect="dark"
                   :content="field.value"
                   placement="right"
-                  open-delay="1000"
+                  :open-delay="1000"
                   v-if="typeof field.value == 'string'"
                 >
                   <el-input

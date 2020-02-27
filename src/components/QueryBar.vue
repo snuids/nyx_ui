@@ -15,6 +15,7 @@
           width="150"
           trigger="hover"
           v-if="config && config.downloadChecked"
+          :open-delay="1000"
         >
           <el-col>
             <el-row class="popover-title">
