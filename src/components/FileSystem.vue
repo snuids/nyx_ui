@@ -205,6 +205,9 @@ export default {
           link.href = url
           link.setAttribute('download', file_name) //or any other extension
           document.body.appendChild(link)
+
+          console.log(link)
+
           link.click()
         })
         .catch(error => {

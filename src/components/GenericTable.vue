@@ -108,6 +108,7 @@
                   effect="light"
                   content="Duplicate"
                   placement="bottom-end"
+                  :open-delay="1000"
                 >
                   <el-button
                     circle
@@ -123,6 +124,7 @@
                   effect="light"
                   content="Add"
                   placement="bottom"
+                  :open-delay="1000"
                 >
                   <el-button
                     circle
@@ -138,6 +140,7 @@
                   effect="light"
                   content="Refresh"
                   placement="bottom-start"
+                  :open-delay="1000"
                 >
                   <el-button
                     circle

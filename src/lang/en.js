@@ -26,7 +26,8 @@ export const messages = {
         confirm:'Confirm',
         revoke:'Revoke',
         refresh:'Refresh',
-        update:'Update'
+        update:'Update',
+        quit:'Quit',
 
       }
       ,changepassword:{

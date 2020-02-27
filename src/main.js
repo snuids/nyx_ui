@@ -59,6 +59,12 @@ Vue.filter('formatTS2', function(value) {
   }
 });
 
+Vue.filter('capitalize', function (value) {
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+})
+
 Vue.filter('prettyBytes', function (num) {
   // jacked from: https://github.com/sindresorhus/pretty-bytes
   if (typeof num !== 'number' || isNaN(num)) {
