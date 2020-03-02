@@ -34,10 +34,10 @@ export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
     kibanaurl:"/kibana/",
-    version: "v3.0.0",
+    version: "v3.1.0",
     devMode: false,
     menus: [],
-    menuOpen: true,
+    menuOpen: true
     apps: [],
     currentSubCategory: null,
     activeApp: null,
