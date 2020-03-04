@@ -71,6 +71,7 @@
 <script>
 /* eslint-disable */
 
+import Vue from "vue";
 import axios from "axios";
 import { loadLanguageAsync } from "../i18n-setup";
 
@@ -179,6 +180,9 @@ export default {
       localStorage.authResponse = JSON.stringify(response)
 
       this.$i18n.locale = response.data.cred.user.language;
+      Vue.config.lang = response.data.cred.user.language;
+      //alert(this.$i18n.locale);
+
       response.data.cred.user.user = this.form.login;
       this.$store.commit({
         type: "login",
@@ -235,6 +239,10 @@ export default {
       console.log('push this path: '+path)
 
       this.$router.push(path);
+      this.$store.commit({
+        type: "version",
+        data: response.data.version
+      });
       this.$notify({
         title: this.$t("notifications.message"),
         message:

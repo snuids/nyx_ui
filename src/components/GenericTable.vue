@@ -106,7 +106,7 @@
                   v-if="config.config.index.indexOf('*')==-1 && currentRow && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
                   class="item"
                   effect="light"
-                  content="Duplicate"
+                  :content="$t('generic.duplicate')"
                   placement="bottom-end"
                   :open-delay="1000"
                 >
@@ -122,7 +122,7 @@
                   v-if="config.config.index.indexOf('*')==-1 && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
                   class="item"
                   effect="light"
-                  content="Add"
+                  :content="$t('generic.add')"
                   placement="bottom"
                   :open-delay="1000"
                 >
@@ -447,11 +447,12 @@ export default {
     },
     handleDelete(index, row) {
       this.$confirm(
-        "This will permanently delete the record. Continue?",
-        "Warning",
+        this.$t('generic.delete_record')
+        ,
+        this.$t('generic.warning'),
         {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
+          confirmButtonText: this.$t('generic.ok'),
+          cancelButtonText: this.$t('generic.cancel'),
           type: "warning"
         }
       )

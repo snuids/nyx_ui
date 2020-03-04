@@ -40,9 +40,9 @@ export default {
     },
     info() {
       this.$alert(
-        "Nyx version " +
+        "NYX  " +
           this.$store.getters.version +
-          " Window size (" +
+          " API "+this.$store.getters.apiVersion+ " Window size (" +
           this.$store.getters.containerSize.width +
           "," +
           this.$store.getters.containerSize.height +

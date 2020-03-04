@@ -33,6 +33,7 @@ function computeAutoTime(minutes)
 export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
+    apiVersion:"",
     kibanaurl:"/kibana/",
     version: "v3.1.0",
     devMode: false,
@@ -63,6 +64,7 @@ export default new Vuex.Store({
     searchCache: {},
   },
   getters: {
+    apiVersion: state => state.apiVersion,
     apiurl: state => state.apiurl,
     menuOpen: state => state.menuOpen,
     kibanaurl: state => state.kibanaurl,
@@ -150,7 +152,13 @@ export default new Vuex.Store({
     },
     privileges(state, payload) {
       state.privileges = payload.data;
-    },
+    }
+    ,
+    version(state, payload) {
+      console.log("Version mutation called.");
+      state.apiVersion=payload.data;            
+    }
+    ,
     login(state, payload) {
       console.log("Login mutation called.");
       state.initialized = false;
@@ -217,6 +225,8 @@ export default new Vuex.Store({
       dend=moment(e);
       dend.endOf('year');
       state.timeRangeYear=[dstart.toDate(),dend.toDate()];
+
+     
 
       console.log("Login mutation done.");
     },
