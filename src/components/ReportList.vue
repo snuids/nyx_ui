@@ -33,13 +33,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="Report" prop="_id" sortable>
+      <el-table-column :label="$t('report.report')" prop="_id" sortable>
         <template slot-scope="scope">
           <div style="font-weight:bolder">{{scope.row._source.title}}</div>
           <span>{{scope.row._source.description}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Output" width="180">
+      <el-table-column :label="$t('report.output')" width="180">
         <template slot-scope="scope">
           <span v-for="item in scope.row._source.output" :key="item">
             &nbsp;
@@ -49,7 +49,7 @@
       </el-table-column>
 
       <el-table-column
-        label="Privileges"
+        :label="$t('generic.privileges')"
         v-if="$store.getters.creds.hasPrivilege('reporteditor')"
         width="120"
       >
@@ -57,7 +57,7 @@
           <el-popover
             v-if="(scope.row._source.privileges?true:false) && (scope.row._source.privileges.length>0)"
             placement="left-start"
-            title="Privileges"
+            :title="$t('generic.privileges')"
             width="200"
             trigger="hover"
             size="mini"
@@ -73,7 +73,7 @@
       </el-table-column>
 
       <el-table-column
-        label="Parameters"
+        :label="$t('generic.parameters')"
         v-if="$store.getters.creds.hasPrivilege('reporteditor')"
         width="120"
       >
@@ -81,14 +81,14 @@
           <el-popover
             v-if="(scope.row._source.parameters?true:false) && (scope.row._source.parameters.length>0)"
             placement="left-start"
-            title="Parameters"
+            :title="$t('generic.parameters')"
             width="300"
             trigger="hover"
             size="mini"
           >
             <span :key="item.name" v-for="item in scope.row._source.parameters">
               &nbsp;
-              <el-tag size="mini">{{item.value}}</el-tag>
+              <el-tag size="mini">{{item.title}}/{{item.type}}</el-tag>
             </span>
             <el-button size="mini" slot="reference">{{scope.row._source.parameters.length}}</el-button>
           </el-popover>
@@ -134,10 +134,10 @@
               ></el-button>
             </el-tooltip>
           </div>
-          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield" />
+          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="Generate" placement="bottom-start">
+          <el-tooltip class="item" effect="dark" :content="$t('generic.generate')" placement="bottom-start">
             <el-button
               size="mini"
               icon="el-icon-caret-right"
@@ -145,7 +145,7 @@
               plain
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Edit" placement="bottom">
+          <el-tooltip class="item" effect="dark" :content="$t('generic.edit')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="mini"
@@ -154,7 +154,7 @@
               plain
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Delete" placement="bottom-end">
+          <el-tooltip class="item" effect="dark" :content="$t('generic.delete')" placement="bottom-end">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="mini"

@@ -3,7 +3,7 @@
   <div style="text-align:left">
     <el-card class="maincard">
       <div slot="header" class="clearfix">
-        <h3>Send Message</h3>
+        <h3>{{$t('sendmessage.send_message')}}</h3>
       </div>
       <el-form ref="form" :model="form" label-width="120px">
         <el-row>
@@ -16,7 +16,7 @@
           <el-col :span="16">
             <el-form-item label="Destination">
               <el-input
-                placeholder="Please input"
+                :placeholder="this.$t('generic.pleaseinput')"
                 v-model="destination"
                 label="destination"
                 size="mini"
@@ -34,7 +34,7 @@
             size="mini"
             @click="sendMessage()"
             :disabled="message.length==0 || destination.length==0"
-          >Send Message</el-button>
+          >{{$t('sendmessage.send_message')}}</el-button>
         </el-form-item>
       </el-form>
     </el-card>

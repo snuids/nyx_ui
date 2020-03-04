@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="400px"
-    title="New Password"
+    :title="$t('changepassword.newpass')"
     :visible.sync="visible"
     :before-close="closeDialog"
     class="user-reset-password-dialog"
@@ -24,17 +24,17 @@
           style="width:100%"
           type
           @click="generateStrongPassword()"
-        >Generate strong password</el-button>
+        >{{$t('changepassword.generate_strong_password')}}</el-button>
       </el-row>
       <el-row>
         <el-button
           style="width:100%; margin-top:30px;"
           type="primary"
           @click="submitForm('passwordForm')"
-        >Save password</el-button>
+        >{{$t('changepassword.save_password')}}</el-button>
       </el-row>
       <el-row>
-        <el-form-item label="Notify by mail" prop="sendMail">
+        <el-form-item :label="$t('changepassword.notify_by_mail')" prop="sendMail">
           <el-switch size="mini" v-model="sendMail"></el-switch>
         </el-form-item>
       </el-row>

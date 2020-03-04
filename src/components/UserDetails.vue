@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="700px"
-    title="User Form"
+    :title="this.$t('user.user_form')"
     :before-close="closeDialog"
     :visible.sync="dialogFormVisible"
     class="dialog-user"
@@ -13,9 +13,9 @@
     ></UserResetPassword>
     <el-form :model="newRec" ref="newRec" :rules="rules" status-icon>
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="Basics" name="1">
+        <el-collapse-item :title="this.$t('generic.basics')" name="1">
           <el-row>
-            <el-form-item label="ID/Email" :label-width="formLabelWidth" prop="_id">
+            <el-form-item :label="this.$t('user.id_email')" :label-width="formLabelWidth" prop="_id">
               <el-input
                 :disabled="!newRec.isadd"
                 size="mini"
@@ -25,14 +25,14 @@
             </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="Login" :label-width="formLabelWidth" prop="_source.login">
+            <el-form-item :label="this.$t('user.login')" :label-width="formLabelWidth" prop="_source.login">
               <el-input size="mini" v-model="newRec._source.login" autocomplete="off"></el-input>
             </el-form-item>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item
-                label="Firstname"
+                :label="this.$t('user.firstname')"
                 :label-width="formLabelWidth"
                 prop="_source.firstname"
               >
@@ -40,19 +40,19 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="Lastname" :label-width="formLabelWidth" prop="_source.lastname">
+              <el-form-item :label="this.$t('user.lastname')" :label-width="formLabelWidth" prop="_source.lastname">
                 <el-input size="mini" v-model="newRec._source.lastname" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="Phone" :label-width="formLabelWidth" prop="_source.phone">
+              <el-form-item :label="this.$t('user.phone')" :label-width="formLabelWidth" prop="_source.phone">
                 <el-input size="mini" v-model="newRec._source.phone" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" style="text-align:left;">
-              <el-form-item label="MFA" :label-width="formLabelWidth" prop="doublePhase">
+              <el-form-item :label="this.$t('user.mfa')" :label-width="formLabelWidth" prop="doublePhase">
                 <el-switch
                   @change="MFAChanged()"
                   size="mini"
@@ -64,7 +64,7 @@
           </el-row>
           <el-row style="text-align:left;">
             <el-col :span="12">
-              <el-form-item label="Language" :label-width="formLabelWidth" prop="_source.language">
+              <el-form-item :label="this.$t('user.language')" :label-width="formLabelWidth" prop="_source.language">
                 <el-select
                   style="width:210px;"
                   size="mini"
@@ -89,12 +89,12 @@
                   type="danger"
                   icon="el-icon-warning"
                   v-if="!newRec.isadd"
-                >Reset Password</el-button>
+                >{{$t('user.reset_password')}}</el-button>
               </el-form-item>
             </el-col>
           </el-row>
         </el-collapse-item>
-        <el-collapse-item title="Privileges" name="2">
+        <el-collapse-item :label="this.$t('generic.privileges')" name="2">
           <el-row style="padding-left:30px;">
             <el-transfer
               size="mini"
@@ -106,11 +106,11 @@
             label: 'desc'
           }"
               :data="privilegesdata"
-              :titles="['Available', 'Assigned']"
+              :titles="[this.$t('generic.available'), this.$t('generic.assigned')]"
             ></el-transfer>
           </el-row>
         </el-collapse-item>
-        <el-collapse-item title="Filters" name="3">
+        <el-collapse-item :label="this.$t('generic.filters')" name="3">
           <el-row style="padding-left:30px;">
             <el-transfer
               size="mini"
@@ -122,7 +122,7 @@
             label: 'desc'
           }"
               :data="filtersdata"
-              :titles="['Available', 'Assigned']"
+              :titles="[this.$t('generic.available'), this.$t('generic.assigned')]"
             ></el-transfer>
           </el-row>
         </el-collapse-item>
@@ -131,7 +131,7 @@
 
     <span slot="footer" class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
-      <el-button type="primary" :disabled="recModified()" @click="submitForm('newRec')">Confirm</el-button>
+      <el-button type="primary" :disabled="recModified()" @click="submitForm('newRec')">{{this.$t("buttons.cancel")}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -229,8 +229,8 @@ export default {
       },
       languagesAvailable: [
         { label: "English", value: "en" },
-        { label: "French", value: "fr" },
-        { label: "Greek", value: "el" }
+        { label: "Français", value: "fr" },
+        { label: "Ελληνικά", value: "el" }
       ]
     };
   },
