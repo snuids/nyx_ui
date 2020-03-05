@@ -30,9 +30,9 @@
           <el-row>            
             <el-col :span="22">
               <el-form-item label="Report Type" :label-width="formLabelWidth" style="text-align:left">
-                <el-radio-group v-model="newRec.reportType">
-                  <el-radio label="notebook">Notebook</el-radio>
+                <el-radio-group v-model="newRec.reportType" @change="reportTypeChanged">
                   <el-radio label="notebook_doc">Notebook + Word</el-radio>
+                  <el-radio label="notebook">Notebook</el-radio>
                   <el-radio label="python">Python</el-radio>
                   <el-radio label="jasper">Jasper</el-radio>
                 </el-radio-group>
@@ -40,7 +40,7 @@
             </el-col>            
            </el-row >
 
-            <el-row v-if="newRec.reportType=='python'" style="text-align:left;">     
+            <el-row v-if="newRec.reportType=='python'" class="transition-box" style="text-align:left;">     
               <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
               <el-col :span="4" style="text-align:right;padding-right:20px">
                 <v-icon name="code" scale="2.2" />
@@ -53,8 +53,7 @@
               </el-col>
               </el-card>
             </el-row>
-          
-          <el-row v-if="newRec.reportType=='notebook_doc'" style="text-align:left">     
+          <el-row v-if="newRec.reportType=='notebook_doc'" class="transition-box" style="text-align:left">     
             <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
               <v-icon name="regular/file-word" scale="2.2" />
@@ -66,6 +65,7 @@
             </el-col>
             </el-card>
           </el-row>
+          
           <el-row v-if="newRec.reportType=='notebook'" style="text-align:left">     
             <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
@@ -89,6 +89,7 @@
             </el-col>
             </el-card>
           </el-row>
+          
 
           
 
@@ -318,6 +319,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ReportEditor",
   data: () => ({
@@ -394,6 +397,35 @@ export default {
     this.prepareData();
   },
   methods: {
+    reportTypeChanged(){
+      if (this.isAdd)
+      {
+      if (this.newRec.reportType=="python")
+      {
+        this.newRec.output = [
+            "txt"
+        ]
+      }
+      if (this.newRec.reportType=="notebook_doc")
+      {
+        this.newRec.output = [
+            "docx"
+        ]
+      }
+      if (this.newRec.reportType=="notebook")
+      {
+        this.newRec.output = [
+            "xlsx"
+        ]
+      }
+      if (this.newRec.reportType=="jasper")
+      {
+        this.newRec.output = [
+            "pdf"
+        ]
+      }
+      }
+    },
     valueChanged: function(item) {
       // eslint-disable-line
       this.changed = true;
@@ -457,6 +489,35 @@ export default {
         message: "Record updated.",
         position: "bottom-right"
       });
+
+      let url =
+        this.$store.getters.apiurl +
+        "sendmessage?token=" +
+        this.$store.getters.creds.token;
+
+      let message = {
+        destination: "/topic/NYX_REPORTRUNNER_COMMAND",
+        body: JSON.stringify(this.newRec)
+      };
+
+      axios
+        .post(url, message)
+        .then(response => {
+          if (response.data.error != "") {
+            console.log("Unable to send message...");
+            this.$notify({
+              title: "Failed",
+              type: "danger",
+              message: "Unable to send message.",
+              position: "bottom-right"
+            });
+          } else {
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
       this.closeDialog();
     },
     saveRecord: function() {

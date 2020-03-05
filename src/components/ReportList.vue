@@ -250,12 +250,32 @@ export default {
 
       this.curReport = {
         title: "New Report",
-        exec: "",
-        icon: "file",
+        exec: "./reports/pythondef/myreport.py",
+        jasper: "./reports/jasper/myjasper.jrxml",
+        notebook:"mynotebook",
+        icon: "regular/clipboard",
         parameters: [],
         privileges: [],
-        output: [],
-        reportType:"notebook"
+        
+        output : [
+            "docx"
+        ],
+        parameters : [
+          {
+            "name" : "param1",
+            "title" : "param1",
+            "type" : "text",
+            "value" : "TEST PARAM"
+          },
+          {
+            "name" : "param2",
+            "title" : "param2",
+            "type" : "interval",
+            "value" : "now-30d:now"
+          }
+        ],
+
+        reportType:"notebook_doc"
       };
 
       this.reportEditorVisible = true;

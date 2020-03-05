@@ -1,4 +1,6 @@
 export function computeTranslatedText(inText, inLocale) {
+    if (inText == undefined)
+      return "";
     if (!(inText.startsWith("@") && inText.endsWith("@")))
       return inText;
     var res = inText.substring(1, inText.length - 1).split(";");
