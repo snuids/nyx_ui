@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="60" label="Status">
+      <el-table-column width="60" :label="$t('generic.status')">
         <template slot-scope="scope">
           <v-icon
             name="spinner"
@@ -67,7 +67,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="_source.treatment.creation" label="Creation">
+      <el-table-column sortable prop="_source.treatment.creation" :label="$t('generic.creation')">
         <template slot-scope="scope">
           <div>{{scope.row._source.treatment.creation | formatDate}}</div>
           <span
@@ -76,22 +76,22 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Report" prop="_source.report.title" sortable>
+      <el-table-column :label="$t('report.report')" prop="_source.report.title" sortable>
         <template slot-scope="scope">
           <div style="font-weight:bolder">{{scope.row._source.report.title}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="User" prop="_source.creds.user.id" sortable>
+      <el-table-column :label="$t('generic.user')" prop="_source.creds.user.id" sortable>
         <template slot-scope="scope">
           <div style="font-weight:bolder">{{scope.row._source.creds.user.id}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="Parameters" prop="_source.report.parameters.length">
+      <el-table-column :label="$t('generic.parameters')" prop="_source.report.parameters.length">
         <template slot-scope="scope">
           <el-popover
             v-if="scope.row._source.report.parameters?true:false"
             placement="left-start"
-            title="Parameters"
+            :title="$t('generic.parameters')"
             width="400"
             trigger="hover"
           >
@@ -112,7 +112,7 @@
           <el-tooltip
             class="item"
             effect="dark"
-            content="Logs"
+            :content="$t('generic.logs')"
             placement="bottom"
             v-if="scope.row._source.report.reportType=='notebook' || scope.row._source.report.reportType=='notebook_doc'"
           >
@@ -124,7 +124,7 @@
               plain
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Regenerate" placement="bottom">
+          <el-tooltip class="item" effect="dark" :content="$t('report.regenerate')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="mini"
@@ -138,7 +138,7 @@
       <el-table-column prop="_source.downloads.length" align="right">
         <!-- Removed from line below: slot-scope="scope" -->
         <template slot="header" slot-scope="scope">
-          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield" />
+          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">
           <el-button

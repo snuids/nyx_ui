@@ -27,6 +27,71 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>            
+            <el-col :span="22">
+              <el-form-item label="Report Type" :label-width="formLabelWidth" style="text-align:left">
+                <el-radio-group v-model="newRec.reportType">
+                  <el-radio label="notebook">Notebook</el-radio>
+                  <el-radio label="notebook_doc">Notebook + Word</el-radio>
+                  <el-radio label="python">Python</el-radio>
+                  <el-radio label="jasper">Jasper</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>            
+           </el-row >
+
+            <el-row v-if="newRec.reportType=='python'" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="code" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                A simple report based on a python source code that will generate the output. 
+                <br/> 
+                The source code will be saved in the pythondef sub directory.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+          
+          <el-row v-if="newRec.reportType=='notebook_doc'" style="text-align:left">     
+            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
+            <el-col :span="4" style="text-align:right;padding-right:20px">
+              <v-icon name="regular/file-word" scale="2.2" />
+            </el-col>
+            <el-col :span="20">
+              A report that uses a word template with tags and a python notebook to replace the tags by the approriate values.
+               <br/>
+               <br/> 
+            </el-col>
+            </el-card>
+          </el-row>
+          <el-row v-if="newRec.reportType=='notebook'" style="text-align:left">     
+            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
+            <el-col :span="4" style="text-align:right;padding-right:20px">
+              <v-icon name="regular/file-excel" scale="2.2" />
+            </el-col>
+            <el-col :span="20">
+              A report that uses a python notebook to generate the output. Ideal to generate Excel files.
+               <br/> 
+            </el-col>
+            </el-card>
+          </el-row>
+          <el-row v-if="newRec.reportType=='jasper'" style="text-align:left">     
+            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
+            <el-col :span="4" style="text-align:right;padding-right:20px">
+              <v-icon name="regular/file-pdf" scale="2.2" />
+            </el-col>
+            <el-col :span="20">
+              A report that uses Jasper report. In most cases, the output will be a PDF file. <br/>
+              Download Jasper iReport application from the internet in order to create your report.<br/>
+               <br/> 
+            </el-col>
+            </el-card>
+          </el-row>
+
+          
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="Output" :label-width="formLabelWidth">
@@ -58,7 +123,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="Type" :label-width="formLabelWidth">
+              <!-- <el-form-item label="Type" :label-width="formLabelWidth">
                 <el-select
                   size="mini"
                   v-model="newRec.reportType"
@@ -69,7 +134,7 @@
                   <el-option label="Notebook" value="notebook"></el-option>
                   <el-option label="Jasper" value="jasper"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
             </el-col>
           </el-row>
           <el-row>
@@ -224,12 +289,30 @@
     </el-form>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
-      <el-button
-        type="primary"
-        :disabled="!recchanged"
-        @click="submitForm('newRec')"
-      >{{this.$t("buttons.confirm")}}</el-button>
+      <el-row type="flex" class="row-bg" justify="space-between">
+      <el-col>
+        <el-button
+                  style="min-width: 112px;"
+                  icon="el-icon-notebook-2"
+                  @click="openTabCode()"
+                  size="mini"
+                  v-if="!isAdd && (newRec.reportType=='notebook' || newRec.reportType=='notebook_doc')"
+                >{{$t('generic.edit_code')}}</el-button>
+
+      </el-col>
+      <el-col>
+        <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
+        <el-button  v-if="!isAdd"
+          type="primary"
+          :disabled="!recchanged"
+          @click="submitForm('newRec')"
+        >{{this.$t("buttons.confirm")}}</el-button>
+        <el-button  v-if="isAdd"
+          type="primary"        
+          @click="createNewReport()"
+        >{{this.$t("generic.create")}}</el-button>      
+      </el-col>
+      </el-row>
     </span>
   </el-dialog>
 </template>
@@ -296,7 +379,8 @@ export default {
     record: { type: Object },
     id: { type: String },
     index: { type: String },
-    title: { type: String }
+    title: { type: String },
+    isAdd: { type: Boolean }
   },
   watch: {
     recordin: {
@@ -313,6 +397,12 @@ export default {
     valueChanged: function(item) {
       // eslint-disable-line
       this.changed = true;
+    },
+    openTabCode: function() {
+      
+      window.open(
+        "./ipython/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
+      );
     },
     loadPrivileges: function() {
       var data = [];
@@ -343,6 +433,31 @@ export default {
           return false;
         }
       });*/
+    },
+    createNewReport: function()
+    {
+      var obj = {
+        _id: this.id,
+        _index: this.index,
+        _source: this.newRec
+      };
+
+      if(this.newRec.reportType=="python")
+      {
+
+      }
+
+      this.$store.commit({
+        type: "updateRecord",
+        data: obj
+      });
+      this.$notify({
+        title: "Record saved.",
+        type: "success",
+        message: "Record updated.",
+        position: "bottom-right"
+      });
+      this.closeDialog();
     },
     saveRecord: function() {
       var obj = {

@@ -13,8 +13,8 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
-          Drop file here or
-          <em>click to upload</em>
+          {{$t("upload.drop_file_here")}}
+          <em>{{$t("upload.click_to_upload")}}</em>
         </div>
         <div class="el-upload__tip" slot="tip">
           <h2>{{config.config.tip}}</h2>
