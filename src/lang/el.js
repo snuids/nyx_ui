@@ -45,5 +45,6 @@ export const messages = {
       minute:'Λεπτό(ά)',
       week:'Βδομάδα(ες)'   
     }
+    
   }
 }

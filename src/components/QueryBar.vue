@@ -2,7 +2,7 @@
   <el-row class="query-bar">
     <div class="input-bar">
       <el-input
-        placeholder="Search... (e.g. status:200 AND platform:NYX)"
+        :placeholder="this.$t('querybar.default')"
         class="query-input"
         size="mini"
         v-model="query"
@@ -19,7 +19,7 @@
         >
           <el-col>
             <el-row class="popover-title">
-              <span>Download the selection</span>
+              <span>{{this.$t('querybar.download')}}</span>
             </el-row>
             <el-row class="button-dl">
               <el-button
@@ -43,7 +43,7 @@
       </el-input>
     </div>
     <div class="refresh-button">
-      <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button>
+      <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">{{this.$t('generic.refresh')}}</el-button>
     </div>
   </el-row>
 </template>

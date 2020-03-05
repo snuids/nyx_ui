@@ -95,6 +95,7 @@ import freetext from "@/components/FreeText";
 import queryfilter from "@/components/QueryFilter";
 import vega from "@/components/Vega";
 import LandingPage from "@/components/LandingPage";
+import SendMessage from "@/components/SendMessage";
 import Vue from "vue";
 
 const req = require.context('../components/external/', true, /\.vue$/)
@@ -124,6 +125,7 @@ Vue.component("FileSystem", FileSystem);
 Vue.component("QueryFilter", queryfilter);
 Vue.component("Vega", vega);
 Vue.component("LandingPage", LandingPage);
+Vue.component("SendMessage", SendMessage);
 
 const myExport = {
 //export default {

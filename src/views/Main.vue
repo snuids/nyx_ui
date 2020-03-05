@@ -26,7 +26,7 @@
                 <el-popover
                   v-if="$store.getters.activeApp.timeSelectorChecked && (timeType=='relative')"
                   placement="bottom"
-                  width="400"
+                  width="500"
                   trigger="click"
                   
                   @hide="relativeTimeClosed"
@@ -251,112 +251,6 @@ export default {
     relativeTimeValue: 4,
 
     rangePickerOptions: {
-      shortcuts: [
-        {
-          text: "Last 24 hours",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Last 7 days",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Previous month",
-          onClick(picker) {
-            const start = new Date();
-            var dateFrom = moment(start)
-              .subtract(1, "months")
-              .startOf("month")
-              .toDate();
-            var dateTo = moment(start)
-              .subtract(1, "months")
-              .endOf("month")
-              .toDate();
-            picker.$emit("pick", [dateFrom, dateTo]);
-          }
-        },
-        {
-          text: "Current Month",
-          onClick(picker) {
-            const start = new moment().startOf("month").toDate();
-            const end = new moment().endOf("month").toDate();
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Next month",
-          onClick(picker) {
-            const start = new Date();
-            var dateFrom = moment(start)
-              .add(1, "months")
-              .startOf("month")
-              .toDate();
-            var dateTo = moment(start)
-              .add(1, "months")
-              .endOf("month")
-              .toDate();
-            picker.$emit("pick", [dateFrom, dateTo]);
-          }
-        },
-        {
-          text: "Last 3 months",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Last year",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Today",
-          onClick(picker) {
-            const end = moment()
-              .startOf("day")
-              .add(1, "d")
-              .toDate();
-            const start = moment()
-              .startOf("day")
-              .toDate();
-
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Current Week",
-          onClick(picker) {
-            const start = new moment().startOf("week").toDate();
-            const end = new moment().endOf("week").toDate();
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Current Year",
-          onClick(picker) {
-            const start = new moment().startOf("year").toDate();
-            const end = new moment().endOf("year").toDate();
-            picker.$emit("pick", [start, end]);
-          }
-        }
-      ]
     }
   }),
   computed: {
@@ -546,6 +440,116 @@ export default {
   },
   created: async function() {
     console.log("Main vue created");
+
+    this.rangePickerOptions= {
+      shortcuts: [
+        {
+          text: this.$t("datepicker.last_24_hours"),
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          text: this.$t("datepicker.last_7_days"),
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          text: this.$t("datepicker.previous_month"),
+          onClick(picker) {
+            const start = new Date();
+            var dateFrom = moment(start)
+              .subtract(1, "months")
+              .startOf("month")
+              .toDate();
+            var dateTo = moment(start)
+              .subtract(1, "months")
+              .endOf("month")
+              .toDate();
+            picker.$emit("pick", [dateFrom, dateTo]);
+          }
+        },
+        {
+          text: this.$t("datepicker.current_month"),
+          onClick(picker) {
+            const start = new moment().startOf("month").toDate();
+            const end = new moment().endOf("month").toDate();
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          text: this.$t("datepicker.next_month"),
+          onClick(picker) {
+            const start = new Date();
+            var dateFrom = moment(start)
+              .add(1, "months")
+              .startOf("month")
+              .toDate();
+            var dateTo = moment(start)
+              .add(1, "months")
+              .endOf("month")
+              .toDate();
+            picker.$emit("pick", [dateFrom, dateTo]);
+          }
+        },
+        {
+          text: this.$t("datepicker.last_3_months"),
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          text: this.$t("datepicker.last_year"),
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          text: this.$t("datepicker.today"),
+          onClick(picker) {
+            const end = moment()
+              .startOf("day")
+              .add(1, "d")
+              .toDate();
+            const start = moment()
+              .startOf("day")
+              .toDate();
+
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          text: this.$t("datepicker.current_week"),
+          onClick(picker) {
+            const start = new moment().startOf("week").toDate();
+            const end = new moment().endOf("week").toDate();
+            picker.$emit("pick", [start, end]);
+          }
+        },
+        {
+          
+          text: this.$t("datepicker.current_year"),
+          onClick(picker) {
+            const start = new moment().startOf("year").toDate();
+            const end = new moment().endOf("year").toDate();
+            picker.$emit("pick", [start, end]);
+          }
+        }
+      ]
+    }
 
     if (this.$store.getters.currentSubCategory == undefined && localStorage.authResponse) {
         // console.log(localStorage.authResponse)

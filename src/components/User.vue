@@ -17,11 +17,11 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column prop="_id" label="ID" sortable width="250"></el-table-column>
-      <el-table-column prop="_source.firstname" label="Firstname" sortable width="180"></el-table-column>
-      <el-table-column prop="_source.lastname" label="Lastname" sortable width="180"></el-table-column>
-      <el-table-column label="Privileges">
+      <el-table-column prop="_source.firstname" :label="$t('user.firstname')" sortable width="180"></el-table-column>
+      <el-table-column prop="_source.lastname" :label="$t('user.lastname')" sortable width="180"></el-table-column>
+      <el-table-column :label="$t('generic.privileges')">
         <template slot-scope="scope">
-          <el-popover placement="left-start" title="Privileges" width="200" trigger="hover">
+          <el-popover placement="left-start" :title="$t('generic.privileges')" width="200" trigger="hover">
             <span :key="item" v-for="item in scope.row._source.privileges">
               &nbsp;
               <el-tag size="mini">{{item}}</el-tag>
@@ -30,12 +30,12 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="Filters">
+      <el-table-column :label="$t('generic.filters')">
         <template slot-scope="scope">
           <el-popover
             v-if="scope.row._source.filters?true:false"
             placement="left-start"
-            title="Filters"
+            :title="$t('generic.filters')"
             width="200"
             trigger="hover"
           >
@@ -61,7 +61,7 @@
               plain
             ></el-button>
           </div>
-          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield" />
+          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">
           <el-button
