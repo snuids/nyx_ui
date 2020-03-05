@@ -81,7 +81,7 @@
                 @click="openTabCode()"
                 size="mini"
                 v-if="locEditMode=='edit'"
-              >Edit code</el-button>
+              >{{$t('generic.edit_code')}}</el-button>
               <!-- <el-popconfirm
                 v-if="locEditMode!='edit'" 
                 confirmButtonText='GO!'

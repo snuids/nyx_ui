@@ -6,9 +6,11 @@
       :id="curReportId"
       :index="curReportIndex"
       :title="titleEditor"
+      :isAdd="isAdd"
       v-if="reportEditorVisible"
       v-on:dialogclose="reportEditorVisible=false; recordUpdated()"
     ></ReportEditor>
+
 
     <!--DIALOG REPORT GENERATOR -->
     <ReportGenerator
@@ -35,8 +37,8 @@
       </el-table-column>
       <el-table-column :label="$t('report.report')" prop="_id" sortable>
         <template slot-scope="scope">
-          <div style="font-weight:bolder">{{scope.row._source.title}}</div>
-          <span>{{scope.row._source.description}}</span>
+          <div style="font-weight:bolder">{{computeTranslatedText(scope.row._source.title,$store.getters.creds.user.language)}}</div>
+          <span>{{computeTranslatedText(scope.row._source.description,$store.getters.creds.user.language)}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.output')" width="180">
@@ -120,7 +122,7 @@
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               class="item"
               effect="light"
-              content="Add"
+              :content="$t('generic.add')"
               placement="bottom"
             >
               <el-button
@@ -177,16 +179,18 @@ import reportgenerator from "@/components/ReportGenerator";
 import Vue from "vue";
 Vue.component("ReportEditor", reporteditor);
 Vue.component("ReportGenerator", reportgenerator);
+import {computeTranslatedText} from '../globalfunctions'
 
 export default {
   name: "ReportList",
   data: () => ({
+    isAdd:false,
     tableData: [],
     search: "",
     dialogFormVisible: false,
     dialogEditorVisible: false,
     reportGeneratorVisible: false,
-    reportEditorVisible: false,
+    reportEditorVisible: false,    
     formLabelWidth: "120px",
     curReport: {},
     titleEditor: "",
@@ -198,6 +202,10 @@ export default {
     }
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){
+      
+      return computeTranslatedText(inText,inLocale);
+    },
     handleCurrentChange(val) {
       this.currentRow = val;
     },
@@ -206,6 +214,7 @@ export default {
       this.recordUpdated();
     },
     editReport(index, row) {
+      this.isAdd=false;
       this.curReport = JSON.parse(JSON.stringify(row._source));
       this.curReportId = row._id;
       this.curReportIndex = row._index;
@@ -230,6 +239,7 @@ export default {
       this.reportEditorVisible = true;
     },
     addReport() {
+      this.isAdd=true;
       this.curReportId = Math.random()
         .toString(36)
         .replace(/[^a-z]+/g, "")
@@ -239,12 +249,13 @@ export default {
       this.titleEditor = "New Report";
 
       this.curReport = {
-        title: "",
+        title: "New Report",
         exec: "",
         icon: "file",
         parameters: [],
         privileges: [],
-        output: []
+        output: [],
+        reportType:"notebook"
       };
 
       this.reportEditorVisible = true;

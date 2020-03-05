@@ -16,7 +16,8 @@ export const messages = {
       
       }
       ,
-      generic:{  
+      generic:{ 
+        edit_code:"Editer le Code", 
         ok:'OK',
         cancel:'Annuler',        
         warning:'Attention',
@@ -29,7 +30,8 @@ export const messages = {
         user:'Utilisateur',
         status:'Statut', 
         creation:'Création', 
-        pleaseinput:'Tapez votre entrée',
+        create:'Créer', 
+        pleaseinput:'Entrer une requête',
         query:'Requete',
         downloadascsv:'Télécharger comme CSV',
         downloadasxls:'Télécharger comme XLS',
@@ -100,7 +102,11 @@ export const messages = {
       {
         report:"Rapport",
         output:"Formats",
-        regenerate:"Regénérer"
+        regenerate:"Regénérer",
+        next_run:"Prochain",
+        type:"Type",
+        days:"Jours",
+        time:"Heure"
       }
       ,querybar:
       {

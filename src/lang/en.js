@@ -13,7 +13,8 @@ export const messages = {
         byebye:'Bye Bye'    
       }
       ,
-      generic:{  
+      generic:{
+        edit_code:"Edit Code",  
         ok:'OK',
         cancel:'Cancel',
         warning:'Warning',
@@ -25,7 +26,8 @@ export const messages = {
         delete:'Delete',
         user:'User',
         status:'Status', 
-        creation:'Creation', 
+        creation:'Creation',
+        create:'Create', 
         pleaseinput:'Please input',   
         query:'Query',
         downloadascsv:'Download as CSV',
@@ -97,8 +99,11 @@ export const messages = {
       {
         report:"Report",
         output:"Output",
-        regenerate:"Regenerate"
-        
+        regenerate:"Regenerate",
+        next_run:"Next Run",
+        type:"Type",
+        days:"Days",
+        time:"Time"
       }
       ,querybar:
       {
