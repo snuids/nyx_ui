@@ -1,14 +1,28 @@
+
+
 <template>
 
-  <!-- <div> -->
+  <div>
     <!-- <h1>File System</h1>
-    <h1>{{config.rec_id}}</h1>
+        v-on:dialogcloseupdated="recordUpdated()"
     <h1>{{multipleSelection}}</h1> -->
-
+    <span v-if="dialogFileEditor">
+      <component
+        v-if="editorComponent!=null && editorComponent!=''"
+        v-bind:is="editorComponent"
+        :editMode="'edit'"
+        :file="selectedFile"
+        :fileName="selectedFileName"
+        :config="config"
+        v-on:dialogsave="pushFile"
+        v-on:dialogclose="dialogFileEditor=false"
+      ></component>
+    </span>
 
     <el-card class="file-system-card" :body-style="{ padding: '0px' }" shadow="never" :style="'height:'+ containerHeight" :key="config.rec_id">
       <div slot="header" class="clearfix">
-    <!-- <p>{{curPath}}</p> -->
+    <!-- <h1>{{config}}</h1> -->
+    <!-- <p>{{tableData.length}}/{{numberOfItems}}/{{allData.length}}</p> -->
         <el-row style="height:28px;" flex>
           <el-col :span="16">            
             <el-breadcrumb  separator-class="el-icon-arrow-right" style="font-size:18px; margin-top: 8px;">
@@ -42,13 +56,13 @@
         ref="filesTable"
         :data="tableData" 
         size="mini"
-         
+        
         @row-dblclick="rowDoubleClick" 
         @row-click="rowClick" 
         @selection-change="handleSelectionChange"
         :height="tableHeight"
 
-        style="width: 100%;" 
+        style="width: 100%;overflow-y: auto/scroll;" 
         empty-text="This folder is empty">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="name" label="Name" sortable>
@@ -73,23 +87,60 @@
         <el-table-column prop="size" sortable label="File size" width="150">
           <template slot-scope="scope"><span  class="noselect" v-if="scope.row.type=='file'">{{scope.row.size | prettyBytes}}</span></template>
         </el-table-column>
+
+         <infinite-loading
+         :identifier="infiniteId"
+          slot="append"
+          @infinite="loadMore"
+          spinner="spiral"
+          force-use-infinite-wrapper=".el-table__body-wrapper">
+            <div slot="no-more"></div>
+
+        </infinite-loading>
+        
       </el-table>
+      
     </el-card>
-  <!-- </div> -->
+  </div>
 </template>
 
+
 <script>
+
 import axios from "axios";
 
+const req = require.context("../components/fileEditor/", true, /\.vue$/);
+
+const dynamicComponents = {};
+req.keys().forEach(filename => {
+  const name = `${filename.split(".")[1].split("/")[1]}`;
+  const component = req(filename).default;
+  dynamicComponents[name] = component;
+});
+
+console.log(dynamicComponents)
+
 export default {
-  name: "FreeText",
+  name: "FileSystem",
+  components: {
+    ...dynamicComponents
+  },
   data: () => ({
     sortProperty:{prop: 'extension', order: 'descending'},
     curPath: "",
     rootRouterPath: null,
-    tableData: null,
+    numberOfItems:0,
+    allData: [],
+    tableData: [],
     breadcrumbArr: [],
     multipleSelection: [],
+    scrollSize: 30,
+    infiniteId: +new Date(),
+    pagination:0,
+    selectedFile: null,
+    selectedFileName: null,
+    dialogFileEditor:false,
+    editorComponent:null,
   }),
   props: {
     config: {
@@ -137,8 +188,29 @@ export default {
     }
   },
   methods: {
+    loadMore($state) {
+      console.log('load asked')
+      setTimeout(()=>{
+
+
+
+        if(this.numberOfItems == 0) {
+          $state.complete()
+        }
+        else if(this.allData == 0) {
+          $state.loaded()
+          $state.complete()
+        }
+        else {
+          this.pagination += 1;
+
+          this.tableData=this.tableData.concat(this.allData.splice(0, this.scrollSize))
+          $state.loaded()
+        }
+      }, 50)
+    },
     downloadBtnClick() {
-      let files = this.multipleSelection.map(a => a.name).join(',');
+      let files = this.multipleSelection.map(a => a.name)//.join(',');
       this.downloadFiles(files)
     },
     toggleSelection(rows) {
@@ -169,46 +241,139 @@ export default {
       if (row.type == "dir") {
         console.log("explore dir");
         this.curPath += "/" + row.name;
-
-        // this.$router.replace({ query: { path: this.curPath } })
-
         this.$router.push({ query: { path: this.curPath } });
+
       } else if (row.type == "file") {
+        this.selectedFileName = row.name
+
+        if(this.config.config.editors != null) {
+          for (const editorConf of this.config.config.editors) {
+            let extension = ('.'+editorConf.extension).replace('..','.')
+            if(row.name.indexOf(extension)>0) {
+              console.log('open the file with this editor : '+editorConf.editorName)
+              this.editorComponent = editorConf.editorName
+              this.downloadFiles([row.name], true)
+              return
+            }
+          }
+        }
+
+
         console.log("download file");
         console.log(row)
-        this.downloadFiles(row.name)
+        this.downloadFiles([row.name], false)
       }
     },
-    downloadFiles: function(files) {
+    pushFile:function(fileObj) {
+      // console.log('pushFile')
+      // console.log(fileObj)
+      
+      let tmp_file = fileObj.data
+
+      let base64file = btoa(fileObj.data)
+      fileObj.data = base64file
+      
       var url =
         this.$store.getters.apiurl +
-        "downloadfiles?token=" +
+        "files?token=" +
         this.$store.getters.creds.token;
 
+      url += '&rec_id='+this.config.rec_id
+      url += '&path='+this.curPath
+      
+
       var query = {
-        rec_id: this.config.rec_id,
-        path: this.curPath,
-        files: files
+        files: [fileObj]
       };
 
       axios
-        .post(url, query, {responseType: 'arraybuffer'})
+        .post(url, query)
+        .then(response => {
+          if(response.status == 200 && response.data.error == '') {
+            console.log('file saved')
+            this.selectedFile = tmp_file  
+            this.$notify({
+              title: "File saved",
+              type: "success",
+              duration: 1000,
+              position: "bottom-right"
+            });
+          }
+          else {
+            console.log(response);
+            this.$notify({
+              title: "Error",
+              message: "Failed to save file",
+              type: "error",
+              position: "bottom-right"
+            });
+          }
+          
+
+        })
+        .catch(error => {
+          console.log(error);
+          this.$notify({
+            title: "Error",
+            message: "Failed to save file",
+            type: "error",
+            position: "bottom-right"
+          });
+        });
+    },
+    downloadFiles: function(files, specificEditor=null) {
+      var url =
+        this.$store.getters.apiurl +
+        "files?token=" +
+        this.$store.getters.creds.token;
+
+      url += '&rec_id='+this.config.rec_id
+      url += '&path='+this.curPath
+      url += '&files='+files.join(',')
+      url += '&rand='+Math.random(100000)
+
+      console.log('downloadFiles')
+      console.log(url)
+      
+
+      axios
+        .get(url, {responseType: 'blob'})
+        // .get(url, {responseType: 'arraybuffer'})
         .then(response => {
           console.log(response);
 
-          var file_name = 'download.zip'
-          if((files.split(',').length == 1) && (response.headers['content-type'] != "zipfile"))
-            file_name = files
+          if(specificEditor) {
+            
+            this.selectedFile = null;
+            this.dialogFileEditor = true;
+            
+            let reader = new FileReader();
 
-          const url = window.URL.createObjectURL(new Blob([response.data]))
-          const link = document.createElement('a')
-          link.href = url
-          link.setAttribute('download', file_name) //or any other extension
-          document.body.appendChild(link)
+            reader.addEventListener('loadend', (e) => {
+              const text = e.srcElement.result;
+              // console.log(text);
+              this.selectedFile = text
+            }, false);
 
-          console.log(link)
 
-          link.click()
+            reader.readAsText(new Blob([response.data], {type: "text/plain"}))
+          }
+          else {
+            let file_name = 'download.zip'
+            if((files.length == 1) && (response.headers['content-type'] != "zipfile"))
+              file_name = files
+  
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', file_name) //or any other extension
+            document.body.appendChild(link)
+  
+            console.log(link)
+  
+            link.click()
+          }
+
         })
         .catch(error => {
           console.log(error);
@@ -221,12 +386,12 @@ export default {
         });
     },
     listDir: function(refresh=false) {
-      var url =
+      let url =
         this.$store.getters.apiurl +
         "listdir?token=" +
         this.$store.getters.creds.token;
 
-      var query = {
+      let query = {
         rec_id: this.config.rec_id,
         path: this.curPath
       };
@@ -236,7 +401,13 @@ export default {
         .then(response => {
           console.log(response);
           if (response.data.error == "") {
-            this.tableData = response.data.data.sort((a, b) => (a.extension > b.extension) ? 1 : -1);
+            this.tableData = []
+
+            this.allData = response.data.data.sort((a, b) => (a.extension > b.extension) ? 1 : -1)
+            this.numberOfItems = response.data.data.length
+            // this.tableData = this.allData.slice(0, this.scrollSize);
+            this.tableData=this.tableData.concat(this.allData.splice(0, this.scrollSize))
+            this.infiniteId += 1;
 
             if(refresh) {
 
@@ -261,10 +432,10 @@ export default {
         });
     },
     generateBreadcrumbObj: function() {
-      var path = this.curPath.split("/");
+      let path = this.curPath.split("/");
 
-      var tmp = "";
-      var arr = [];
+      let tmp = "";
+      let arr = [];
 
       for (var i = 0; i < path.length; i++) {
         if (path[i] != "") {
