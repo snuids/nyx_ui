@@ -6,35 +6,36 @@ import _ from "lodash";
 
 Vue.use(Vuex);
 
-function computeAutoTime(minutes)
-{
+
+
+function computeAutoTime(minutes) {
   if (minutes <= 120)
     return "1m";
   else if (minutes <= 360)
-  return  "5m";
+    return "5m";
   else if (minutes <= 1440)
-  return  "20m";
+    return "20m";
   else if (minutes <= 1440 * 2)
-  return  "30m";
+    return "30m";
   else if (minutes <= 1440 * 3)
-  return  "2h";
+    return "2h";
   else if (minutes <= 1440 * 7)
-  return  "4h";
+    return "4h";
   else if (minutes <= 1440 * 32)
-  return  "12h";
+    return "12h";
   else if (minutes <= 1440 * 90)
-  return  "1d";
+    return "1d";
   else if (minutes <= 1440 * 180)
-  return  "7d";
+    return "7d";
   else
-  return  "20d";
+    return "20d";
 }
 
 export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
-    apiVersion:"",
-    kibanaurl:"/kibana/",
+    apiVersion: "",
+    kibanaurl: "/kibana/",
     version: "v3.1.0",
     devMode: false,
     menus: [],
@@ -47,7 +48,7 @@ export default new Vuex.Store({
     timeRangeWeek: null,
     timeRangeMonth: null,
     timeRangeYear: null,
-    timeRangeDay: null,    
+    timeRangeDay: null,
     initialized: false,
     filteredmenus: [],
     autoTime: "10m",
@@ -57,7 +58,7 @@ export default new Vuex.Store({
     autoTimeYear: "1w",
     privileges: [],
     maintitle: "NYX",
-    mainsubtitle:"",
+    mainsubtitle: "",
     containerSize: { "width": 1200, "height": 800 },
     appConfigObj: null,
     redirection: null,
@@ -156,18 +157,18 @@ export default new Vuex.Store({
     ,
     version(state, payload) {
       console.log("Version mutation called.");
-      state.apiVersion=payload.data;            
+      state.apiVersion = payload.data;
     }
     ,
     login(state, payload) {
       console.log("Login mutation called.");
       state.initialized = false;
-      state.menuOpen=true;
+      state.menuOpen = true;
       state.creds = payload.data.cred;
-      state.creds.hasPrivilege=function(inPrivilege) {
-        if (_.includes(state.creds.user.privileges,"admin"))
+      state.creds.hasPrivilege = function (inPrivilege) {
+        if (_.includes(state.creds.user.privileges, "admin"))
           return true;
-        if (_.includes(state.creds.user.privileges,inPrivilege))
+        if (_.includes(state.creds.user.privileges, inPrivilege))
           return true;
         return false;
       }
@@ -189,44 +190,44 @@ export default new Vuex.Store({
       var cmenus = state.menus;
       for (var i in cmenus) {
         if (cmenus[i].category != "apps") {
-          cmenus[i].value=cmenus[i].category.replace(/ /g,'').toLowerCase();
+          cmenus[i].value = cmenus[i].category.replace(/ /g, '').toLowerCase();
           for (var j in cmenus[i].submenus) {
-            cmenus[i].submenus[j].value=cmenus[i].submenus[j].title.replace(/ /g,'').toLowerCase();
-            cmenus[i].submenus[j].fulltitle=(cmenus[i].value+"/"+cmenus[i].submenus[j].value)
+            cmenus[i].submenus[j].value = cmenus[i].submenus[j].title.replace(/ /g, '').toLowerCase();
+            cmenus[i].submenus[j].fulltitle = (cmenus[i].value + "/" + cmenus[i].submenus[j].value)
           }
           state.filteredmenus.push(cmenus[i]);
         }
       }
 
-      var e=new Date();
-      var dstart=moment(e);
+      var e = new Date();
+      var dstart = moment(e);
       var dend;
 
-      dstart=moment(e);
+      dstart = moment(e);
       dstart.startOf('day');
-      dend=moment(e);
+      dend = moment(e);
       dend.endOf('day');
-      state.timeRangeDay=[dstart.toDate(),dend.toDate()];
+      state.timeRangeDay = [dstart.toDate(), dend.toDate()];
 
-      dstart=moment(e);
+      dstart = moment(e);
       dstart.startOf('week');
-      dend=moment(e);
+      dend = moment(e);
       dend.endOf('week');
-      state.timeRangeWeek=[dstart.toDate(),dend.toDate()];
+      state.timeRangeWeek = [dstart.toDate(), dend.toDate()];
 
-      dstart=moment(e);
+      dstart = moment(e);
       dstart.startOf('month');
-      dend=moment(e);
+      dend = moment(e);
       dend.endOf('month');
-      state.timeRangeMonth=[dstart.toDate(),dend.toDate()];
+      state.timeRangeMonth = [dstart.toDate(), dend.toDate()];
 
-      dstart=moment(e);
+      dstart = moment(e);
       dstart.startOf('year');
-      dend=moment(e);
+      dend = moment(e);
       dend.endOf('year');
-      state.timeRangeYear=[dstart.toDate(),dend.toDate()];
+      state.timeRangeYear = [dstart.toDate(), dend.toDate()];
 
-     
+
 
       console.log("Login mutation done.");
     },
@@ -258,76 +259,73 @@ export default new Vuex.Store({
       console.log("changeApp mutation called.");
       var app = null;
 
-      for(var i=0; i < state.filteredmenus.length; i++) {
+      for (var i = 0; i < state.filteredmenus.length; i++) {
         var cat = state.filteredmenus[i]
 
-        for(var j=0; j < cat.submenus.length; j++) {
+        for (var j = 0; j < cat.submenus.length; j++) {
           var subcat = cat.submenus[j]
-          for(var k=0; k < subcat.apps.length; k++) {
-            if(subcat.apps[k].rec_id===payload.data) {
+          for (var k = 0; k < subcat.apps.length; k++) {
+            if (subcat.apps[k].rec_id === payload.data) {
               app = subcat.apps[k]
               state.currentSubCategory = subcat
               break
             }
           }
-          if(app !== null)
+          if (app !== null)
             break
         }
-        if(app !== null)
+        if (app !== null)
           break
       }
-      
+
 
 
       state.maintitle = state.currentSubCategory.loc_title;
-      
+
       state.activeApp = app
     },
 
-     // eslint-disable-next-line
+    // eslint-disable-next-line
     refreshTimeRange(state, payload) {
       console.log("VUEX:RefreshTimeRange:");
-      if (state.lastTimeRangeEvent.type=="relative")
-      {// UGLY COPY OF CODE in setTimeRanbge
-        var minutesmulti=1;
-        switch(state.lastTimeRangeEvent.relativeType)
-        {
+      if (state.lastTimeRangeEvent.type == "relative") {// UGLY COPY OF CODE in setTimeRanbge
+        var minutesmulti = 1;
+        switch (state.lastTimeRangeEvent.relativeType) {
           case 'h':
-            minutesmulti=60;
+            minutesmulti = 60;
             break;
           case 'd':
-            minutesmulti=24*60;
-            break;            
+            minutesmulti = 24 * 60;
+            break;
           case 'w':
-            minutesmulti=24*60*7;
-            break;                        
+            minutesmulti = 24 * 60 * 7;
+            break;
         }
-        state.autoTime = computeAutoTime(minutesmulti*state.lastTimeRangeEvent.relativeValue);
-        state.timeRange = [moment().unix()-(minutesmulti*state.lastTimeRangeEvent.relativeValue*60),moment().unix()];
-        state.timeRange[0]=new Date(state.timeRange[0]*1000);
-        state.timeRange[1]=new Date(state.timeRange[1]*1000);
+        state.autoTime = computeAutoTime(minutesmulti * state.lastTimeRangeEvent.relativeValue);
+        state.timeRange = [moment().unix() - (minutesmulti * state.lastTimeRangeEvent.relativeValue * 60), moment().unix()];
+        state.timeRange[0] = new Date(state.timeRange[0] * 1000);
+        state.timeRange[1] = new Date(state.timeRange[1] * 1000);
       }
-      
+
     },
     setTab(state, payload) {
       console.log("VUEX:Set Tab:");
-            
-      if (state.currentSubCategory.apps.length>1)
-        state.mainsubtitle=" / "+payload.data.loc_title;
+
+      if (state.currentSubCategory.apps.length > 1)
+        state.mainsubtitle = " / " + payload.data.loc_title;
       else
-        state.mainsubtitle="";
-        state.activeApp=payload.data;
+        state.mainsubtitle = "";
+      state.activeApp = payload.data;
     },
     setTimeRange(state, payload) {
       console.log("VUEX:Set Time Range:");
       console.log(payload);
-      
-      console.log("VUEX:Sub Type "+payload.data.subtype);
-      state.lastTimeRangeEvent=payload.data;
 
-      if (payload.data.subtype==null)
-      {
-        payload.data.subtype="classic"
+      console.log("VUEX:Sub Type " + payload.data.subtype);
+      state.lastTimeRangeEvent = payload.data;
+
+      if (payload.data.subtype == null) {
+        payload.data.subtype = "classic"
       }
 
       let startTime = null;
@@ -336,51 +334,50 @@ export default new Vuex.Store({
       let startTimeAsUtc = null; // eslint-disable-line
       let endTimeAsUtc = null;  // eslint-disable-line
 
-      switch(payload.data.subtype)
-      {
+      switch (payload.data.subtype) {
         case "day":
-            //alert('Week Change');
-            state.timeRangeDay = payload.data.range;
-            startTime = moment(state.timeRangeDay[0]);
-            endTime = moment(state.timeRangeDay[1]);
+          //alert('Week Change');
+          state.timeRangeDay = payload.data.range;
+          startTime = moment(state.timeRangeDay[0]);
+          endTime = moment(state.timeRangeDay[1]);
 
-            //state.autoTime = "1h";
-            minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-            
-            //state.autoTime = computeAutoTime(minutes);
+          //state.autoTime = "1h";
+          minutes = moment.duration(endTime.diff(startTime)).asMinutes();
 
-            startTimeAsUtc = moment(state.timeRangeDay[0]).utc();
-            endTimeAsUtc = moment(state.timeRangeDay[1]).utc();
+          //state.autoTime = computeAutoTime(minutes);
+
+          startTimeAsUtc = moment(state.timeRangeDay[0]).utc();
+          endTimeAsUtc = moment(state.timeRangeDay[1]).utc();
 
           break;
         case "week":
-            //alert('Week Change');
-            state.timeRangeWeek = payload.data.range;
-            startTime = moment(state.timeRangeWeek[0]);
-            endTime = moment(state.timeRangeWeek[1]);
+          //alert('Week Change');
+          state.timeRangeWeek = payload.data.range;
+          startTime = moment(state.timeRangeWeek[0]);
+          endTime = moment(state.timeRangeWeek[1]);
 
-            //state.autoTime = "1h";
-            minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-            
-            //state.autoTime = computeAutoTime(minutes);
+          //state.autoTime = "1h";
+          minutes = moment.duration(endTime.diff(startTime)).asMinutes();
 
-            startTimeAsUtc = moment(state.timeRangeWeek[0]).utc();
-            endTimeAsUtc = moment(state.timeRangeWeek[1]).utc();
+          //state.autoTime = computeAutoTime(minutes);
+
+          startTimeAsUtc = moment(state.timeRangeWeek[0]).utc();
+          endTimeAsUtc = moment(state.timeRangeWeek[1]).utc();
 
           break;
         case "month":
-            //alert('Month Change');
-            state.timeRangeMonth = payload.data.range;
-            startTime = moment(state.timeRangeMonth[0]);
-            endTime = moment(state.timeRangeMonth[1]);
+          //alert('Month Change');
+          state.timeRangeMonth = payload.data.range;
+          startTime = moment(state.timeRangeMonth[0]);
+          endTime = moment(state.timeRangeMonth[1]);
 
-            //state.autoTime = "1d";
-            minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-            
-            //state.autoTime = computeAutoTime(minutes);
+          //state.autoTime = "1d";
+          minutes = moment.duration(endTime.diff(startTime)).asMinutes();
 
-            startTimeAsUtc = moment(state.timeRangeMonth[0]).utc();
-            endTimeAsUtc = moment(state.timeRangeMonth[1]).utc();
+          //state.autoTime = computeAutoTime(minutes);
+
+          startTimeAsUtc = moment(state.timeRangeMonth[0]).utc();
+          endTimeAsUtc = moment(state.timeRangeMonth[1]).utc();
 
           break;
         case "year":
@@ -391,12 +388,12 @@ export default new Vuex.Store({
 
           //state.autoTime = "1w";
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-          
+
           //state.autoTime = computeAutoTime(minutes);
 
           startTimeAsUtc = moment(state.timeRangeYear[0]).utc();
           endTimeAsUtc = moment(state.timeRangeYear[1]).utc();
-        break;
+          break;
 
         default:
           if (payload.data.type == "absolute") {
@@ -406,32 +403,31 @@ export default new Vuex.Store({
 
             state.autoTime = "1h";
             minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-            
+
             state.autoTime = computeAutoTime(minutes);
 
             startTimeAsUtc = moment(state.timeRange[0]).utc();
             endTimeAsUtc = moment(state.timeRange[1]).utc();
           }
-          else{
+          else {
             //alert('coucou VUEX');
             //alert(JSON.stringify(payload.data));
-            var minutesmulti=1;
-            switch(payload.data.relativeType)
-            {
+            var minutesmulti = 1;
+            switch (payload.data.relativeType) {
               case 'h':
-                minutesmulti=60;
+                minutesmulti = 60;
                 break;
               case 'd':
-                minutesmulti=24*60;
-                break;            
+                minutesmulti = 24 * 60;
+                break;
               case 'w':
-                minutesmulti=24*60*7;
-                break;                        
+                minutesmulti = 24 * 60 * 7;
+                break;
             }
-            state.autoTime = computeAutoTime(minutesmulti*payload.data.relativeValue);
-            state.timeRange = [moment().unix()-(minutesmulti*payload.data.relativeValue*60),moment().unix()];
-            state.timeRange[0]=new Date(state.timeRange[0]*1000);
-            state.timeRange[1]=new Date(state.timeRange[1]*1000);
+            state.autoTime = computeAutoTime(minutesmulti * payload.data.relativeValue);
+            state.timeRange = [moment().unix() - (minutesmulti * payload.data.relativeValue * 60), moment().unix()];
+            state.timeRange[0] = new Date(state.timeRange[0] * 1000);
+            state.timeRange[1] = new Date(state.timeRange[1] * 1000);
           }
           break;
       }

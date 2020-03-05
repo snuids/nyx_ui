@@ -23,23 +23,23 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="Report" prop="_source.title" sortable width="300">
+      <el-table-column :label="$t('report.report')" prop="_source.title" sortable width="300">
         <template slot-scope="scope">
           <div style="font-weight:bolder">{{scope.row._source.title}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="Next Run" prop="_source.nextRun" sortable>
+      <el-table-column :label="$t('report.next_run')" prop="_source.nextRun" sortable>
         <template slot-scope="scope">
           <div>{{scope.row._source.nextRun | formatDate}}</div>
         </template>
       </el-table-column>
-      <el-table-column label="Type">
+      <el-table-column :label="$t('report.type')">
         <template slot-scope="scope">
           <div>{{scope.row._source.trigger.type}}</div>
         </template>
       </el-table-column>
 
-      <el-table-column label="Days">
+      <el-table-column :label="$t('report.days')">
         <template slot-scope="scope">
           <span
             v-if="scope.row._source.trigger.type=='daily'"
@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Time">
+      <el-table-column :label="$t('report.time')">
         <template slot-scope="scope">
           <div>{{scope.row._source.trigger.time}}</div>
         </template>
@@ -87,11 +87,28 @@
                 icon="el-icon-copy-document"
               ></el-button>
             </el-tooltip>
+            <el-tooltip
+              v-if="$store.getters.creds.hasPrivilege('reporteditor')"
+              class="item"
+              effect="light"
+              :content="$t('generic.add')"
+              placement="bottom"
+            >
+              <el-button
+                circle
+                size="mini"
+                @click="addScheduler()"
+                class="addbutton"
+                type="primary"
+                plain
+                icon="el-icon-plus"
+              ></el-button>
+            </el-tooltip>            
           </div>
-          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield" />
+          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="Edit" placement="bottom">
+          <el-tooltip class="item" effect="dark" :content="$t('generic.edit')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="mini"
@@ -100,7 +117,7 @@
               circle
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="Delete" placement="bottom-end">
+          <el-tooltip class="item" effect="dark" :content="$t('generic.delete')" placement="bottom-end">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="mini"
@@ -113,15 +130,7 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-button
-      v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-      style="position:fixed; bottom:30px; right:50%; margin-right:-73px; z-index:100"
-      type="primary"
-      icon="el-icon-plus"
-      @click="addScheduler()"
-      round
-    >New Scheduler</el-button>
+   
   </div>
 </template>
 

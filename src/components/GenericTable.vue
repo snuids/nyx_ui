@@ -57,7 +57,7 @@
           <el-table-column
             v-for="header in config.config.headercolumns"
             :key="header.field"
-            :label="header.title"
+            :label="computeTranslatedText(header.title,$store.getters.creds.user.language)"
             :prop="header.field"
             sortable
           >
@@ -184,6 +184,7 @@ import map from "@/components/Map";
 import barchart from "@/components/BarChart";
 import querybar from "@/components/QueryBar";
 import _ from "lodash";
+import {computeTranslatedText} from '../globalfunctions'
 
 const req = require.context("../components/tableEditor/", true, /\.vue$/);
 
@@ -303,6 +304,10 @@ export default {
     }
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){
+      
+      return computeTranslatedText(inText,inLocale);
+    },
     handleCommand: function(e) {
       console.log("Command changed.....");
       this.loadData(true, e);
@@ -826,6 +831,7 @@ export default {
     if (!this.config.queryFilterChecked && !this.config.queryBarChecked)
       this.loadData();
 
+    
     console.log("===============  REGISTERING: timerangechanged");
     this.$globalbus.$on("timerangechanged", payLoad => {
       console.log("GLOBALBUS/GENERICTABLE/TIMERANGECHANGED");
