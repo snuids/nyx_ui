@@ -28,6 +28,7 @@ export const messages = {
         refresh:'Refresh',
         update:'Update',
         quit:'Quit',
+        save:'Save',
 
       }
       ,changepassword:{

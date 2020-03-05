@@ -448,10 +448,14 @@ export default new Vuex.Store({
     }
     ,
     deleteRecord(state, payload) {
+      console.log('deleteRecord')
+      console.log(payload)
       var url =
         state.apiurl +
         "generic/" + payload.data._index + "/" + payload.data._id + "?token=" +
         state.creds.token;
+
+      if(Object.keys(payload.data).includes('_type'))
 
       axios
         .delete(url)

@@ -206,6 +206,7 @@ export default {
   },
   data: () => ({
     ready: false,
+    loadOnEdit: true,
     autotime: "1d",
     query: "",
     queryField: "",
@@ -439,11 +440,61 @@ export default {
       this.ready = false;
       this.loadData();
     }, 1500),
+    async getRecordFromRow(row) {
+      console.log('getRecordFromRow')
+      console.log(row)
+      try {
+        var url =
+        this.$store.getters.apiurl +
+        "generic/"+row._index+"/" +
+        row._id +
+        "?token=" +
+        this.$store.getters.creds.token +
+        "&doc_type="+row._type;
+      
+        const response = await axios.get(url);
+
+        console.log(response)
+
+        if (response.status == 200) {
+          console.warn("fail to retrieve the document, returning the parameters");
+          return row
+          
+        } else {
+          let updatedRecord = JSON.parse(JSON.stringify(response.data.data));
+          updatedRecord.original = JSON.parse(
+            JSON.stringify(response.data.data)
+          );
+
+          return updatedRecord
+        }
+      } catch (e) {
+        console.error(e);
+        return row;
+      }
+
+
+    },
     handleView(index, row) {
       this.currentRecord = {}; // required by the detail watcher
-      this.currentRecord = row;
-      this.dialogFormVisible = true;
       this.editMode = "edit";
+
+      if(this.loadOnEdit) {
+        this.getRecordFromRow(row)
+        .then(response => {
+          this.currentRecord = response;
+          this.dialogFormVisible = true;
+        })
+        .catch(error => {
+          this.currentRecord = response;
+          this.dialogFormVisible = true;
+          console.log(error);
+        });
+      }
+      else {
+        this.currentRecord = row;
+        this.dialogFormVisible = true;
+      }
     },
     handleDelete(index, row) {
       this.$confirm(

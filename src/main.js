@@ -15,6 +15,8 @@ import {i18n} from  './i18n-setup'
 import ElementLocale from 'element-ui/lib/locale'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import draggable from "vuedraggable";
+import InfiniteLoading from 'vue-infinite-loading';
+
 
 import '../theme/index.css'
 
@@ -30,6 +32,8 @@ Vue.use(ElementUI, {locale:locale_en})
 Vue.use(Vuex);
 Vue.use(VueI18n) 
 Vue.use(vueNumeralFilterInstaller);
+Vue.use(InfiniteLoading, { /* options */ });
+
 
 
 Vue.config.productionTip = false
