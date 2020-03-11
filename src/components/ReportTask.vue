@@ -2,7 +2,7 @@
   <!--MAIN DIALOG -->
   <div>
     <el-dialog
-      title="Logs Viewer"
+      :title="$t('report.logs_viewer')"
       :visible.sync="LogViewerVisible"
       :before-close="closeDialog"
       width="80%"
@@ -11,7 +11,7 @@
       <!-- <div style="max-height:100%;"> -->
 
       <el-collapse>
-        <el-collapse-item :title="'Details on run '+selectedReportInfos.id" name="1">
+        <el-collapse-item :title="$t('report.details_on_run')+selectedReportInfos.id" name="1">
           <el-table :data="tableInfo" class="table-details-report-run" border :show-header="false">
             <!-- style="width: 330px" -->
             <el-table-column prop="attr" label="Attr" width="130"></el-table-column>
@@ -78,7 +78,7 @@
 
       <el-table-column :label="$t('report.report')" prop="_source.report.title" sortable>
         <template slot-scope="scope">
-          <div style="font-weight:bolder">{{scope.row._source.report.title}}</div>
+          <div style="font-weight:bolder">{{computeTranslatedText(scope.row._source.report.title,$store.getters.creds.user.language)}}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('generic.user')" prop="_source.creds.user.id" sortable>
@@ -161,6 +161,7 @@ import axios from "axios";
 import Vue from "vue";
 import moment from "moment";
 import logviewer from "@/components/LogViewer";
+import {computeTranslatedText} from '../globalfunctions'
 
 Vue.component("LogViewer", logviewer);
 
@@ -184,6 +185,10 @@ export default {
     }
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){
+      
+      return computeTranslatedText(inText,inLocale);
+    },
     openLogs(index, row) {
       console.log("openLogs");
       this.logObj = null;
@@ -200,12 +205,12 @@ export default {
         value: row._source.id
       });
 
-      this.tableInfo.push({
-        attr: "Runtime",
-        value: moment(row._source["@timestamp"], moment.ISO_8601).format(
-          "DD MMM YYYY - HH:mm:ss"
-        )
-      });
+      // this.tableInfo.push({
+      //   attr: "Runtime",
+      //   value: moment(row._source["@timestamp"], moment.ISO_8601).format(
+      //     "DD MMM YYYY - HH:mm:ss"
+      //   )
+      // });
       this.tableInfo.push({
         attr: "User",
         value: row._source.creds.user.id

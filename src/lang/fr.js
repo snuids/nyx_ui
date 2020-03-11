@@ -17,6 +17,8 @@ export const messages = {
       }
       ,
       generic:{ 
+        date:'Date',
+        severity:'Sévérité',
         edit_code:"Editer le Code", 
         ok:'OK',
         cancel:'Annuler',        
@@ -100,6 +102,8 @@ export const messages = {
       }
       ,report:
       {
+        details_on_run:'Détails de l\'execution ',
+        logs_viewer:"Visualiseur de journaux",
         report:"Rapport",
         output:"Formats",
         regenerate:"Regénérer",

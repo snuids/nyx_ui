@@ -40,16 +40,21 @@ export default {
     },
     info() {
       this.$alert(
-        "NYX  " +
+        "<strong>UI Version:</strong> " +
           this.$store.getters.version +
-          " API "+this.$store.getters.apiVersion+ " Window size (" +
+          "<br/><strong>API Version:</strong> "+this.$store.getters.apiVersion+ "<br/><strong>Window size:</strong> (" +
           this.$store.getters.containerSize.width +
           "," +
           this.$store.getters.containerSize.height +
-          ")",
-        "Version",
+          ")"
+          +"<br/><strong>Browser:</strong> "+this.$browserDetect.meta.name 
+          +"<br/><strong>Browser Version:</strong> "+this.$browserDetect.meta.version
+          
+          ,
+        "Nyx Version",
         {
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
+          dangerouslyUseHTMLString: true
         }
       );
     },

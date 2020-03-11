@@ -14,14 +14,14 @@
         >
           <el-table-column
             width="90"
-            label="Date"
+            :label="$t('generic.date')"
             prop="date"
             sortable
           >
           </el-table-column>
           <el-table-column
             width="90"
-            label="Severity"
+            :label="$t('generic.severity')"
             prop="severity" 
           >
             <template slot-scope="scope">
@@ -41,7 +41,7 @@
                 v-model="search"
                 style="width:50%"
                 size="mini"
-                placeholder="Type to search"/>
+                :placeholder="$t('generic.type_to_search')"/>
 
             </template>
           </el-table-column>
