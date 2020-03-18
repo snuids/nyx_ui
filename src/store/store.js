@@ -477,6 +477,33 @@ export default new Vuex.Store({
         });
     }
     ,
+    updatePGRecord(state, payload) {
+      var url =
+        state.apiurl +
+        "pg_generic/" +
+        payload.data.config.index +
+        "/" +
+        payload.data.config.pkey +
+        "/" +
+        payload.data.id +
+        "?token=" +
+        state.creds.token;
+
+        console.log("updatePGRecord URL: " + url)
+
+        axios
+          .post(url, { record: payload.data.record, mode: payload.data.mode })
+          .then(response => {
+            if (response.data.error != "")
+              console.log("Save PG object error...");
+            else {
+              console.log("Save PG object success...");
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
     deletePGRecord(state, payload) {
       console.log(payload)
       console.log("====================================================")
