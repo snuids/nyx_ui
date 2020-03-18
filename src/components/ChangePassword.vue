@@ -22,7 +22,7 @@
       <el-button @click="closeDialog()">{{$t('buttons.cancel')}}</el-button>
       <el-button
         type="primary"
-        :disabled="cpform.newpassword1 != cpform.newpassword2 || cpform.newpassword2.length <8  || cpform.oldpassword.length <8"
+        :disabled="cpform.newpassword1 != cpform.newpassword2 || cpform.newpassword2.length <8"
         @click="changePassword()"
       >{{$t('buttons.confirm')}}</el-button>
     </span>
