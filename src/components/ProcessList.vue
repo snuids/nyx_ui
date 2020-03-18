@@ -9,11 +9,26 @@
 
     <div>
       <el-form>
-        <el-row>
-          <el-col :span="8">
+        <el-row :gutter="10">
+          <el-col :span="6"> 
             <el-form-item label="Filter" :label-width="formLabelWidth">
               <el-input size="mini" v-model="filter" autocomplete="off"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="Lifesign Timeframe">
+              <el-select
+              v-model="selectedTimeframe"
+              size="small">
+              <el-option
+                v-for="(value, key) in timeframes"
+                :key="key"
+                :label="value['value']"
+                :value="value['key']">
+              </el-option>
+            </el-select>
+            </el-form-item>
+            
           </el-col>
         </el-row>
       </el-form>
@@ -69,7 +84,18 @@ import YAML from "yamljs";
 
 export default {
   name: "ProcessList",
+  watch: {
+    selectedTimeframe: function (val) {
+      this.loadData();
+    }
+  },
   data: () => ({
+    selectedTimeframe: '7d',
+    timeframes: [
+      {key:"7d", value: "7 days"},
+      {key:"1d", value: "1 day"},
+      {key:"1h", value: "1 hour"}
+    ],
     data: [],
     dialogVisible: false,
     processDetailsData: "",
@@ -184,7 +210,7 @@ export default {
               {
                 range: {
                   "@timestamp": {
-                    gte: "now-7d",
+                    gte: "now-" + this.selectedTimeframe,
                     lte: "now",
                     format: "epoch_millis"
                   }
