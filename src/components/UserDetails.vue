@@ -94,7 +94,7 @@
             </el-col>
           </el-row>
         </el-collapse-item>
-        <el-collapse-item :label="this.$t('generic.privileges')" name="2">
+        <el-collapse-item :title="this.$t('generic.privileges')" name="2">
           <el-row style="padding-left:30px;">
             <el-transfer
               size="mini"
@@ -110,7 +110,7 @@
             ></el-transfer>
           </el-row>
         </el-collapse-item>
-        <el-collapse-item :label="this.$t('generic.filters')" name="3">
+        <el-collapse-item :title="this.$t('generic.filters')" name="3">
           <el-row style="padding-left:30px;">
             <el-transfer
               size="mini"
@@ -131,7 +131,7 @@
 
     <span slot="footer" class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
-      <el-button type="primary" :disabled="recModified()" @click="submitForm('newRec')">{{this.$t("buttons.cancel")}}</el-button>
+      <el-button type="primary" :disabled="recModified()" @click="submitForm('newRec')">{{this.$t("buttons.submit")}}</el-button>
     </span>
   </el-dialog>
 </template>
