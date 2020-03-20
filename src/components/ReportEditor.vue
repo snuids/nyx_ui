@@ -91,12 +91,13 @@
             </el-card>
           </el-row>
           <el-row v-if="newRec.reportType=='jasper_jdbc'" style="text-align:left">     
-            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
+            <el-card shadow="never"  style="height:90px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
               <v-icon name="regular/file-pdf" scale="2.2" />
             </el-col>
             <el-col :span="20">
-              A report that uses Jasper report and a JDBC compliant database such as SQL server or PostgreSQL. In most cases, the output will be a PDF file. <br/>
+              A report that uses Jasper report and a JDBC compliant database such as SQL server or PostgreSQL. <br/>
+              In most cases, the output will be a PDF file. <br/>
               Download Jasper iReport application from the internet in order to create your report.<br/>
                <br/> 
             </el-col>
@@ -151,7 +152,7 @@
               </el-form-item> -->
             </el-col>
           </el-row>
-          <el-row :span="24">
+          <el-row :span="24" v-show="newRec.reportType=='jasper_jdbc'">
             <el-col :span="12">
               <el-form-item
                 label="JDBC Driver"
@@ -169,7 +170,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row :span="24">
+          <el-row :span="24" v-show="newRec.reportType=='jasper_jdbc'">
             <el-col :span="12">
               <el-form-item
                 label="Login"
