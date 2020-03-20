@@ -1,7 +1,9 @@
 <template>
+  
   <div class="login-container">
     <div class="title-icon"></div>
-
+    <div class="login-logo1">
+    </div>
     <div class="title-icon2">
       <v-icon
         style="color:white"
@@ -377,5 +379,16 @@ export default {
   margin-top: 12px;
 
 }
-
+.login-logo1
+{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  background-color: white;
+  background-image: url("https://upload.wikimedia.org/wikipedia/en/b/b2/Engie_new_logo_2018.png");
+  background-position-x: -60px;
+  background-position-Y: -60px;  
+  width:300px;
+  height:120px;
+}
 </style>

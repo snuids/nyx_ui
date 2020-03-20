@@ -35,6 +35,7 @@
                   <el-radio label="notebook">Notebook</el-radio>
                   <el-radio label="python">Python</el-radio>
                   <el-radio label="jasper">Jasper</el-radio>
+                  <el-radio label="jasper_jdbc">Jasper JDBC</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>            
@@ -83,7 +84,19 @@
               <v-icon name="regular/file-pdf" scale="2.2" />
             </el-col>
             <el-col :span="20">
-              A report that uses Jasper report. In most cases, the output will be a PDF file. <br/>
+              A report that uses Jasper report and Elastic Search. In most cases, the output will be a PDF file. <br/>
+              Download Jasper iReport application from the internet in order to create your report.<br/>
+               <br/> 
+            </el-col>
+            </el-card>
+          </el-row>
+          <el-row v-if="newRec.reportType=='jasper_jdbc'" style="text-align:left">     
+            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
+            <el-col :span="4" style="text-align:right;padding-right:20px">
+              <v-icon name="regular/file-pdf" scale="2.2" />
+            </el-col>
+            <el-col :span="20">
+              A report that uses Jasper report and a JDBC compliant database such as SQL server or PostgreSQL. In most cases, the output will be a PDF file. <br/>
               Download Jasper iReport application from the internet in order to create your report.<br/>
                <br/> 
             </el-col>
@@ -138,6 +151,43 @@
               </el-form-item> -->
             </el-col>
           </el-row>
+          <el-row :span="24">
+            <el-col :span="12">
+              <el-form-item
+                label="JDBC Driver"
+                :label-width="formLabelWidth"                
+              >
+                <el-input size="mini" v-model="newRec.jdbc_driver" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item
+                label="JDBC URL"
+                :label-width="formLabelWidth"                
+              >
+                <el-input size="mini" v-model="newRec.jdbc_url" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :span="24">
+            <el-col :span="12">
+              <el-form-item
+                label="Login"
+                :label-width="formLabelWidth"                
+              >
+                <el-input size="mini" v-model="newRec.jdbc_login" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item
+                label="Password"
+                :label-width="formLabelWidth"                
+              >
+                <el-input type="password" size="mini" v-model="newRec.jdbc_password" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-row>
             <el-col :span="22">
               <el-form-item
@@ -150,7 +200,7 @@
               <el-form-item
                 label="Jasper Path"
                 :label-width="formLabelWidth"
-                v-show="newRec.reportType=='jasper'"
+                v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'"
               >
                 <el-input size="mini" v-model="newRec.jasper" autocomplete="off"></el-input>
               </el-form-item>
