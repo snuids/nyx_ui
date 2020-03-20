@@ -379,16 +379,4 @@ export default {
   margin-top: 12px;
 
 }
-.login-logo1
-{
-  position:absolute;
-  bottom:10px;
-  left:10px;
-  background-color: white;
-  background-image: url("https://upload.wikimedia.org/wikipedia/en/b/b2/Engie_new_logo_2018.png");
-  background-position-x: -60px;
-  background-position-Y: -60px;  
-  width:300px;
-  height:120px;
-}
 </style>
