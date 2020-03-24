@@ -96,7 +96,6 @@ export default {
   name: "Kibana",
   data: () => ({
     url: "",
-    cur_refresh:1,
     finalquery: "",
     computedurl: "",
     ready: false,
@@ -309,7 +308,7 @@ export default {
     {
       console.log("********************************queryBarChanged");
       this.queryField = q;
-      this.cur_refresh+=1;
+      
       this.createUrl();
     }
     ,
@@ -462,8 +461,8 @@ export default {
       replacement = "query:'" + replacement + "'";
 
       var result = fullurl.replace(myregex, replacement);
-      result+="&ref="+this.cur_refresh;
-      console.log(result);
+      
+      //console.log(result);
       return result;
     },
     injectStyleIframe: function() {
