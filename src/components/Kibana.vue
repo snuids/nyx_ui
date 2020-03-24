@@ -4,10 +4,11 @@
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
     </el-row>
     <el-row v-if="config.queryBarChecked || config.downloadChecked">
-      <el-col :span="2" style="text-align:left">
+      <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
+      <!--el-col :span="2" style="text-align:left">
         <span class="input-label">{{$t("generic.query")}}:</span>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="20">        
         <el-input size="mini" :placeholder="this.$t('generic.pleaseinput')" v-model="queryField"></el-input>
       </el-col>
       <el-col :span="2" v-if="config.downloadChecked" style="text-alight:right">
@@ -24,7 +25,7 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-col>
+      </el-col-->
     </el-row>
     <!-- <h1
       class="kibanatitle"
@@ -243,6 +244,9 @@ export default {
       this.queryfilter = query;
       this.createUrl();
     },
+    downloadAsked: function(format) {
+      this.handleCommand(format);
+    },
     handleCommand: function(output) {
       this.$notify({
         title: "Message sent to server", //"Data loaded",
@@ -300,6 +304,13 @@ export default {
         }
       });
     },
+    queryBarChanged:function(q)
+    {
+      console.log("********************************queryBarChanged");
+      this.queryField = q;
+      this.createUrl();
+    }
+    ,
     queryChanged: _.debounce(function() {
       console.log("DEBOUNCED:" + this.queryField);
       this.createUrl();
