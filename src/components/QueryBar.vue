@@ -1,6 +1,6 @@
 <template>
-  <el-row class="query-bar">
-    <div class="input-bar">
+  <el-row class="query-bar">    
+    <div class="input-bar">      
       <el-input
         :placeholder="this.$t('querybar.default')"
         class="query-input"
