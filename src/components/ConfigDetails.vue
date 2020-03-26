@@ -159,7 +159,7 @@
               <el-col :span="8">
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.queryBarChecked" active-text="Query Bar"></el-switch>
+                    <el-switch v-model="curConfig.queryBarChecked" active-text="Query Bar" @change="query_bar_changed"></el-switch>
                   </el-row>
                   <el-row>
                     <el-switch v-model="curConfig.downloadChecked" active-text="Download"></el-switch>
@@ -169,7 +169,7 @@
               <el-col :span="8">
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.queryFilterChecked" active-text="Query Filter"></el-switch>
+                    <el-switch v-model="curConfig.queryFilterChecked" active-text="Query Filter" @change="query_filter_changed"></el-switch>
                   </el-row>
 
                   <el-row>
@@ -894,6 +894,20 @@ export default {
     //   }
     //   this.allPrivileges = data;
     // },
+    query_filter_changed:function()
+    {
+        //alert(this.curConfig.queryFilterChecked);
+        if(this.curConfig.queryFilterChecked)
+          this.curConfig.queryBarChecked=false;
+
+    },
+    query_bar_changed:function()
+    {
+        //alert(this.curConfig.queryFilterChecked);
+        if(this.curConfig.queryBarChecked)
+          this.curConfig.queryFilterChecked=false;
+
+    },
     esTableConfigChanged: function(newModel) {
       console.log("ConfigDetails - esTableConfigChanged");
       console.log(newModel);
