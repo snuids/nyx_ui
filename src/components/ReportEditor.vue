@@ -104,6 +104,7 @@
             </el-card>
           </el-row>
           
+          
 
           
 
@@ -190,7 +191,7 @@
           </el-row>
 
           <el-row>
-            <el-col :span="22">
+            <el-col :span="12">
               <el-form-item
                 label="Exec"
                 :label-width="formLabelWidth"
@@ -213,7 +214,29 @@
                 <el-input size="mini" v-model="newRec.notebook" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="12" v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'">
+            <el-upload
+                class="upload-box"
+                drag
+                :action="uploadurl"
+                :auto-upload="true"                
+                :on-success="successUpload"
+                
+                accept=".jrxml"
+                size="mini"
+                style="height:30px"
+              >              
+                <div class="el-upload__text">
+                  Drop you jrxml file here.<br/>
+                  <em>Click to upload</em>
+                </div>
+                
+              </el-upload> 
+            </el-col>
           </el-row>
+
+
+
         </el-tab-pane>
 
         <el-tab-pane label="Parameters" name="parameters">
@@ -384,6 +407,7 @@ export default {
     inputValue: "",
     allPrivileges: [],
     visible: true,
+    uploadurl:"",
     reportForm: {
       title: ""
     },
@@ -445,6 +469,11 @@ export default {
     }
   },
   mounted: function() {
+    this.uploadurl =
+        this.$store.getters.apiurl +
+        "upload?token=" +
+        this.$store.getters.creds.token +
+        "&queue=JASPER_UPLOAD";
     this.prepareData();
   },
   methods: {
@@ -476,6 +505,17 @@ export default {
         ]
       }
       }
+    },
+    successUpload: function(response, file, fileList) {
+      console.log("emit event on-success");
+      this.newRec.jasper="./reports/jasper/"+file.raw.name;
+      this.$notify({
+        title: "Jasper uploaded.",
+        type: "success",
+        message: "The file has been uploaded",
+        position: "bottom-right",
+        duration: 3000
+      });
     },
     valueChanged: function(item) {
       // eslint-disable-line
@@ -650,5 +690,9 @@ export default {
   width: 90px !important;
   margin-left: 10px;
   vertical-align: bottom;
+}
+
+.el-upload-dragger{
+  height:40px !important;
 }
 </style>
