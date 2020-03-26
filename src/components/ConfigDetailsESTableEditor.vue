@@ -59,6 +59,7 @@
     </el-card>
     <el-card v-if="step==2">
       <h1 style="text-align:left;">Step 2 of 2: Configure settings</h1>
+      <h1 style="text-align:left;">{{currentConfig.config}}</h1>
 
       <el-row style="text-align:left;" v-if="!noTimeField">
         <span>
@@ -164,50 +165,6 @@
           </el-select>
         </el-col>
       </el-row>
-      <el-row></el-row>
-      <!-- <el-row>
-        <el-col :span="16" >
-          <el-card shadow="never" v-if="currentConfig.config.headercolumns.length>0">
-            <el-table
-              :data="currentConfig.config.headercolumns"
-              size="mini"
-              style="width: 100%">
-              <el-table-column
-                prop="field"
-                label="Field"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Label">
-                <template slot-scope="scope">
-                  <el-input 
-                      size="mini"
-                      v-model="scope.row.title"></el-input>
-                    
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="type"
-                label="Type"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Format">
-                <template slot-scope="scope">
-                  <el-input 
-                      v-if="scope.row.type=='date' || scope.row.type=='timestamp'"
-                      size="mini"
-                      placeholder="eg. DD/MM/YYYY HH:mm"
-                      v-model="scope.row.format"></el-input>
-                    
-                </template>
-              </el-table-column>
-              
-            </el-table>
-          </el-card>
-        </el-col>
-       
-      </el-row>-->
 
       <el-row>
         <el-col :span="16">
@@ -335,6 +292,109 @@
       <el-row style="text-align:left;">
         <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"></el-switch>
       </el-row>
+      <el-row style="text-align:left;" v-if="currentConfig.queryFilterChecked">
+        {{currentConfig}}
+      </el-row>
+      <el-row style="text-align:left;" v-if="currentConfig.queryFilterChecked">
+        <el-button @click="setFocus('fieldsToFilter')" type="text">Fields to filter</el-button>
+      </el-row>
+      <el-row v-if="currentConfig.queryFilterChecked">
+        <el-col :span="12" style="text-align:left;">
+          <el-select
+            v-model="fieldsToFilter"
+            multiple
+            filterable
+            @change="selectFieldsToFilterChanged"
+            ref="fieldsToFilter"
+            placeholder="Field to filter"
+            size="mini"
+            style="width:100%;"
+          >
+            <el-option
+              v-for="item in allFields"
+              :key="item.field"
+              :label="item.field"
+              :value="item.field"
+            ></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+
+      <el-row v-if="currentConfig.queryFilterChecked && currentConfig.config.tableFieldsToFilter">
+        <el-col :span="16">
+          <el-card shadow="hover" v-if="currentConfig.config.tableFieldsToFilter.length>0">
+            <table class="table-display">
+              <thead class="thead-display">
+                <tr>
+                  <th>Field</th>
+                  <th>Label</th>
+
+                  <th>Type</th>
+                  <th>Format</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <draggable
+                @change="draggableChanged('display')"
+                v-bind="dragOptions"
+                v-model="currentConfig.config.tableFieldsToFilter"
+                tag="tbody"
+                handle=".handle"
+              >
+                <tr v-for="(item, index) in currentConfig.config.tableFieldsToFilter" :key="index">
+                  <td>{{item.field}}</td>
+                  <td>
+                    <el-input
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="Name"
+                      v-model="item.title"
+                      size="mini"
+                    ></el-input>
+                  </td>
+                  <td>{{item.type}}</td>
+                  <td style="width:200px;">
+                    <el-input
+                      v-if="item.type=='date' || item.type=='timestamp'"
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="eg. DD/MM/YYYY HH:mm"
+                      v-model="item.format"
+                      size="mini"
+                    ></el-input>
+                    <el-input
+                      v-else-if="item.type=='long' || item.type=='double'"
+                      class="display-name-input"
+                      ref="author"
+                      placeholder="Numeral.js format"
+                      v-model="item.format"
+                      size="mini"
+                    ></el-input>
+                    <el-select
+                      v-else-if="item.type=='keyword' || item.type=='text'"
+                      v-model="item.format"
+                      filterable
+                      placeholder="Default"
+                      size="mini"
+                      style="width:100%;"
+                    >
+                      <el-option label="Default" value="default"></el-option>
+                      <el-option label="Icon" value="icon"></el-option>
+                    </el-select>
+                  </td>
+                  <td>
+                    <i class="el-icon-d-caret handle"></i>
+                  </td>
+                </tr>
+              </draggable>
+            </table>
+          </el-card>
+        </el-col>
+      </el-row>
+
+
+
+
       <el-row style="text-align:left;">
         <el-switch
           :disabled="isEmpty(geoFields)"
@@ -412,7 +472,7 @@
             v-model="fieldsToDownload"
             multiple
             filterable
-            @change="selectFieldsToDownloadChanged()"
+            @change="selectFieldsToDownloadChanged"
             ref="fieldsToDownload"
             placeholder="Field to download"
             size="mini"
@@ -434,11 +494,11 @@
           >Copy from fields to display</el-button>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload.length>0">
         <el-col :span="16">
           <el-card
             shadow="hover"
-            v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0"
+            
           >
             <table class="table-display">
               <thead class="thead-display">
@@ -463,7 +523,7 @@
                   <td>
                     <el-input
                       class="display-name-input"
-                      ref="author"
+                      ref="author2"
                       placeholder="Name"
                       v-model="item.title"
                       size="mini"
@@ -543,6 +603,7 @@ export default {
         writePrivileges: [],
         fieldsToDownload: [],
         fieldsToDisplay: [],
+        fieldsToFilter: [],
         helpMessage: "",
         succesIndexPatternDefinition: false,
         noTimeField: true,
@@ -563,6 +624,9 @@ export default {
     indexPattern: function() {
       return this.currentConfig.config.index;
     },
+    tableFieldsToDownload: function() {
+      return this.currentConfig.config.tableFieldsToDownload;
+    },
     dragOptions() {
       return {
         animation: 0,
@@ -577,6 +641,12 @@ export default {
       handler: function() {
         this.indexPatternChanged();
       }
+    },
+    tableFieldsToDownload: {
+      handler: function() {
+        this.tableFieldsToDownloadToExportColumns()
+      },
+      deep: true
     },
     timefieldSelected: {
       handler: function() {
@@ -609,6 +679,17 @@ export default {
     this.prepareData();
   },
   methods: {
+    tableFieldsToDownloadToExportColumns: _.debounce(function() {
+      // this function is here to transform this.currentConfig.config.tableFieldsToDownload to this.currentConfig.exportColumns
+      console.log('WATCHER TABLE FIELDS DL')
+      if(this.currentConfig.config.tableFieldsToDownload == null 
+      || this.currentConfig.config.tableFieldsToDownload.length == 0) {
+        delete this.currentConfig.config.exportColumns
+        return
+      }
+
+      
+    }, 500),
     setIndex(indexPattern) {
       console.log("setindex");
       console.log(indexPattern);
@@ -622,30 +703,32 @@ export default {
       this.selectFieldsToDownloadChanged();
     },
     draggableChanged(type) {
-      var tmp = [];
+      let tmp = [];
+      let field1 = ''
+      let field2 = ''
 
       if (type == "display") {
-        for (
+        field1 = 'headercolumns'
+        field2 = 'fieldsToDisplay'
+      }
+      else if (type == "download") {
+        field1 = 'tableFieldsToDownload'
+        field2 = 'fieldsToDownload'
+      }
+      else if (type == "filter") {
+        field1 = 'tableFieldsToFilter'
+        field2 = 'fieldsToFilter'
+      }
+
+
+      for (
           var i = 0;
-          i < this.currentConfig.config.headercolumns.length;
+          i < this.currentConfig.config[field1].length;
           i++
         ) {
-          tmp.push(this.currentConfig.config.headercolumns[i].field);
+          tmp.push(this.currentConfig.config[field1][i].field);
         }
-
-        this.fieldsToDisplay = tmp;
-      }
-      if (type == "download") {
-        for (
-          var i = 0;
-          i < this.currentConfig.config.tableFieldsToDownload.length;
-          i++
-        ) {
-          tmp.push(this.currentConfig.config.tableFieldsToDownload[i].field);
-        }
-
-        this.fieldsToDownload = tmp;
-      }
+      this[field2] = tmp
     },
     prepareData() {
       console.log("prepareData ConfigDetailsESTableEditor");
@@ -686,6 +769,7 @@ export default {
         }
       }
 
+      // this.$nextTick(() => {this.step = this.forcestep;});
       this.step = this.forcestep;
     },
     isEmpty: function(obj) {
@@ -781,24 +865,85 @@ export default {
       this.$nextTick(() => select.focus());
     },
     selectFieldsToDisplayChanged: function(val) {
+
+      console.log('selectFieldsToDisplayChanged')
+      console.log(val)
+      console.log(this.fieldsToDisplay)
+      console.log(this.currentConfig.config.headercolumns)
+
+      this.currentConfig.config.headercolumns = [];
+      this.currentConfig.config.headercolumns = JSON.parse(JSON.stringify(this.modifyTableAssociateToSelect(this.fieldsToDisplay, this.currentConfig.config.headercolumns)));
+      
+    },
+    selectFieldsToDownloadChanged: function(val) {
+      console.log("selectFieldsToDownloadChanged");
+      console.log(val)
+      console.log(this.fieldsToDownload)
+      console.log(this.currentConfig.config.tableFieldsToDownload)
+
+      this.currentConfig.config.tableFieldsToDownload = [];
+      this.currentConfig.config.tableFieldsToDownload = JSON.parse(JSON.stringify(this.modifyTableAssociateToSelect(this.fieldsToDownload, this.currentConfig.config.tableFieldsToDownload)));
+
+
+      // this.currentConfig.config.tableFieldsToDownload = [];
+      // for (var i in this.fieldsToDownload) {
+      //   this.currentConfig.config.tableFieldsToDownload.push(
+      //     this.allFields[this.fieldsToDownload[i]]
+      //   );
+      // }
+
+      // this.currentConfig.config.exportColumns = "";
+      // for (
+      //   var i = 0;
+      //   i < this.currentConfig.config.tableFieldsToDownload.length;
+      //   i++
+      // ) {
+      //   this.currentConfig.config.exportColumns += this.currentConfig.config.tableFieldsToDownload[
+      //     i
+      //   ].field;
+
+      //   if (this.currentConfig.config.tableFieldsToDownload[i].title)
+      //     this.currentConfig.config.exportColumns +=
+      //       "->" + this.currentConfig.config.tableFieldsToDownload[i].title;
+
+      //   this.currentConfig.config.exportColumns += ",";
+      // }
+
+      // if (this.currentConfig.config.exportColumns.length > 0) {
+      //   this.currentConfig.config.exportColumns = this.currentConfig.config.exportColumns.slice(
+      //     0,
+      //     -1
+      //   );
+      // }
+    },
+    selectFieldsToFilterChanged: function(val) {
+      console.log('selectFieldsToFilterChanged')
+      console.log(val)
+      console.log(this.fieldsToFilter)
+      console.log(this.currentConfig.config.tableFieldsToFilter)
+
+      this.modifyTableAssociateToSelect(this.fieldsToFilter, this.currentConfig.config.tableFieldsToFilter)
+      
+    },
+    modifyTableAssociateToSelect : function(selectModel, tableModel) {
       var tmp = [];
       var flag = false;
-      for (var i = 0; i < this.fieldsToDisplay.length; i++) {
+      for (var i = 0; i < selectModel.length; i++) {
         flag = false;
         for (
           var j = 0;
-          i < this.currentConfig.config.headercolumns.length;
+          i < tableModel.length;
           j++
         ) {
           if (
-            this.currentConfig.config.headercolumns[j].field ==
-            this.fieldsToDisplay[i]
+            tableModel[j].field ==
+            selectModel[i]
           ) {
-            tmp.push(this.currentConfig.config.headercolumns[j]);
+            tmp.push(tableModel[j]);
             console.log(
-              this.currentConfig.config.headercolumns[j].field +
+              tableModel[j].field +
                 " == " +
-                this.fieldsToDisplay[i]
+                selectModel[i]
             );
             flag = true;
             break;
@@ -806,49 +951,14 @@ export default {
         }
 
         if (!flag) {
-          console.log(flag);
-          console.log(this.fieldsToDisplay[i]);
-          console.log(this.allFields[this.fieldsToDisplay[i]]);
 
-          tmp.push(this.allFields[this.fieldsToDisplay[i]]);
+          tmp.push(this.allFields[selectModel[i]]);
         }
       }
 
-      this.currentConfig.config.headercolumns = [];
-      this.currentConfig.config.headercolumns = JSON.parse(JSON.stringify(tmp));
-    },
-    selectFieldsToDownloadChanged: function() {
-      console.log("selectFieldsToDisplayChanged");
-      this.currentConfig.config.tableFieldsToDownload = [];
-      for (var i in this.fieldsToDownload) {
-        this.currentConfig.config.tableFieldsToDownload.push(
-          this.allFields[this.fieldsToDownload[i]]
-        );
-      }
+      console.log(tmp)
 
-      this.currentConfig.config.exportColumns = "";
-      for (
-        var i = 0;
-        i < this.currentConfig.config.tableFieldsToDownload.length;
-        i++
-      ) {
-        this.currentConfig.config.exportColumns += this.currentConfig.config.tableFieldsToDownload[
-          i
-        ].field;
-
-        if (this.currentConfig.config.tableFieldsToDownload[i].title)
-          this.currentConfig.config.exportColumns +=
-            "->" + this.currentConfig.config.tableFieldsToDownload[i].title;
-
-        this.currentConfig.config.exportColumns += ",";
-      }
-
-      if (this.currentConfig.config.exportColumns.length > 0) {
-        this.currentConfig.config.exportColumns = this.currentConfig.config.exportColumns.slice(
-          0,
-          -1
-        );
-      }
+      return tmp
     },
     resetTest: function() {
       this.fieldsToDisplay = [];

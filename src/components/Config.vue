@@ -223,7 +223,7 @@ export default {
           category: "",
           order: 1000,
           privileges: [],
-          config: { headercolumns: [], queryfilters: [] }
+          config: { headercolumns: [], tableFieldsToDownload: [], queryfilters: [] }
         },
 
         _type: "doc"
@@ -239,7 +239,7 @@ export default {
           category: "",
           order: 1000,
           privileges: [],
-          config: { headercolumns: [], queryfilters: [] }
+          config: { headercolumns: [], tableFieldsToDownload: [], queryfilters: [] }
         }
       });
 
