@@ -330,10 +330,10 @@
         </el-col>
       </el-row>
       <el-row style="text-align:left; margin-top:20px;">
-        <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar"></el-switch>
+        <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar"  @change="query_bar_changed"></el-switch>
       </el-row>
       <el-row style="text-align:left;">
-        <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"></el-switch>
+        <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter" @change="query_filter_changed"></el-switch>
       </el-row>
       <el-row style="text-align:left;">
         <el-switch
@@ -609,6 +609,18 @@ export default {
     this.prepareData();
   },
   methods: {
+    query_filter_changed:function()
+    {
+        if(this.currentConfig.queryFilterChecked)
+          this.currentConfig.queryBarChecked=false;
+
+    },
+    query_bar_changed:function()
+    {
+        if(this.currentConfig.queryBarChecked)
+          this.currentConfig.queryFilterChecked=false;
+
+    },
     setIndex(indexPattern) {
       console.log("setindex");
       console.log(indexPattern);
