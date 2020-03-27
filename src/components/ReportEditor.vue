@@ -216,7 +216,7 @@
             </el-col>
             <el-col :span="12" v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'">
             <el-upload
-                class="upload-box"
+                class="jasper-upload upload-box"
                 drag
                 :action="uploadurl"
                 :auto-upload="true"                
@@ -692,7 +692,8 @@ export default {
   vertical-align: bottom;
 }
 
-.el-upload-dragger{
+
+.jasper-upload .el-upload-dragger{
   height:40px !important;
 }
 </style>
