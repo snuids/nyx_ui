@@ -36,7 +36,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     apiVersion: "",
     kibanaurl: "/kibana/",
-    version: "v3.7.0",
+    version: "v3.9.0",
     devMode: false,
     menus: [],
     menuOpen: true,
@@ -526,5 +526,30 @@ export default new Vuex.Store({
         });
     }
     ,
+    sendMessage(state,payload) {
+      console.log("Send Message");
+
+      var url =
+        state.apiurl +
+        "sendmessage?token=" +
+        state.creds.token;
+
+      var message = {
+        destination: "" + payload.data.destination,
+        body: payload.data.message
+      };
+
+      axios
+        .post(url, message)
+        .then(response => {
+          if (response.data.error != "") console.log("Unable to send message");
+          else {
+            
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 })
