@@ -116,9 +116,7 @@ import axios from "axios";
 import Vue from "vue";
 
 import configdetails from "@/components/ConfigDetails";
-import configdetailsdev from "@/components/ConfigDetailsDev";
 Vue.component("ConfigDetails", configdetails);
-Vue.component("ConfigDetailsDev", configdetailsdev);
 
 export default {
   data() {

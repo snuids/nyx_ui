@@ -307,10 +307,10 @@
           <el-card shadow="never">
             <el-row>
               <el-col :span="fieldsToFilterEmpty ? 12 : 6">
-                <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar"></el-switch>
+                <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar" @change="query_bar_changed"></el-switch>
               </el-col>
               <el-col :span="fieldsToFilterEmpty ? 12 : 6">
-                <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"></el-switch>
+                <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"  @change="query_filter_changed"></el-switch>
               </el-col>
             </el-row>
             
@@ -606,7 +606,7 @@ import axios from "axios";
 import _ from "lodash";
 
 export default {
-  field: "ConfigDetailsESTableEditor",
+  field: "ESTableEditor",
   data() {
     return (
       window.__FORM__ || {
@@ -718,14 +718,12 @@ export default {
     this.prepareData();
   },
   methods: {
-    query_filter_changed:function()
-    {
+    query_filter_changed:function() {
         if(this.currentConfig.queryFilterChecked)
           this.currentConfig.queryBarChecked=false;
 
     },
-    query_bar_changed:function()
-    {
+    query_bar_changed:function() {
         if(this.currentConfig.queryBarChecked)
           this.currentConfig.queryFilterChecked=false;
 
@@ -782,7 +780,7 @@ export default {
       this[field2] = tmp;
     },
     prepareData() {
-      console.log("prepareData ConfigDetailsESTableEditor");
+      console.log("prepareData ESTableEditor");
       console.log(this.currentConfig);
 
       this.loadEsMapping();

@@ -119,7 +119,7 @@
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="closeDialog()">Close</el-button>
+      <el-button type="primary" @click="closeDialog()">OK</el-button>
     </span>
   </el-dialog>
 </template>
@@ -259,6 +259,7 @@ export default {
     prepareData: function() {
       this.visible = true;
       console.log("creating curField");
+      console.log(this.currentField);
       this.curField = this.currentField;
       this.changeType();
     },
