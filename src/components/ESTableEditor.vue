@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="config-table-editor">
     <el-card v-if="step==1">
       <h1 style="text-align:left;">Step 1 of 2: Define index pattern</h1>
 
@@ -58,7 +58,21 @@
       </el-row>
     </el-card>
     <el-card v-if="step==2">
-      <h1 style="text-align:left;">Step 2 of 2: Configure settings</h1>
+      <el-row>
+        <el-col :span="18" style="text-align:left;">
+          <h1 style="text-align:left;">Step 2 of 2: Configure settings</h1>
+        </el-col>
+        <el-col :span="6" style="text-align:right;">
+          <el-button
+            :disabled="!succesIndexPatternDefinition || currentConfig.config.index==''"
+            plain
+            :type="succesIndexPatternDefinition && currentConfig.config.index!=''?'primary': ''"
+            icon="el-icon-arrow-left"
+            @click="goToStep(1)"
+            size="mini"
+          >Back</el-button>
+        </el-col>
+      </el-row>
 
       <el-row style="text-align:left;" v-if="!noTimeField">
         <span>
@@ -66,17 +80,21 @@
           <b>{{currentConfig.config.index}}</b> as your index pattern. Now you can specify some settings before we create it.
         </span>
       </el-row>
-      <el-row style="text-align:left;" v-if="!noTimeField">
-        <el-button @click="setFocus('timeField')" type="text">Time Filter field field</el-button>
+      <el-row style="text-align:left;" v-if="noTimeField">
+        <span>The indices which match this index pattern don't contain any time fields.</span>
+      </el-row>
+      <el-row style="text-align:left;">
+        <el-col :span="12" style="text-align:left;" v-if="!noTimeField">
+          <el-button @click="setFocus('timeField')" type="text">Time Filter field field</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align:left;">
+          <el-button @click="setFocus('docType')" type="text">Document type</el-button>
+        </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12" style="text-align:left;">
-          <span
-            v-if="noTimeField"
-          >The indices which match this index pattern don't contain any time fields.</span>
+        <el-col :span="12" v-if="!noTimeField" class="padding-right">
           <!-- v-model="currentConfig.config.timefield"  -->
           <el-select
-            v-else
             v-model="timefieldSelected"
             placeholder="Select"
             size="mini"
@@ -92,43 +110,6 @@
             ></el-option>
           </el-select>
         </el-col>
-        <el-col :offset="6" :span="6" style="text-align:right;">
-          <el-button
-            :disabled="!succesIndexPatternDefinition || currentConfig.config.index==''"
-            plain
-            :type="succesIndexPatternDefinition && currentConfig.config.index!=''?'primary': ''"
-            icon="el-icon-arrow-left"
-            @click="goToStep(1)"
-            size="mini"
-          >Back</el-button>
-        </el-col>
-      </el-row>
-      <el-row v-if="hasSelectedTimeField" style="text-align:left; margin-top:20px;">
-        <el-switch v-model="currentConfig.graphicChecked" active-text="Graphic"></el-switch>
-      </el-row>
-      <el-row v-if="hasSelectedTimeField" style="text-align:left; min-height:28px;" align="middle">
-        <el-col style="width:150px; margin-top:4px;">
-          <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time selector"></el-switch>
-        </el-col>
-        <el-col style="width:200px">
-          <el-select
-            v-if="currentConfig.timeSelectorChecked"
-            style="margin-left:20px;"
-            size="mini"
-            v-model="currentConfig.timeSelectorType"
-            placeholder="Please select a type"
-          >
-            <el-option label="Free" value="classic"></el-option>
-            <el-option label="Month" value="month"></el-option>
-            <el-option label="Week" value="week"></el-option>
-            <el-option label="Year" value="year"></el-option>
-          </el-select>
-        </el-col>
-      </el-row>
-      <el-row style="text-align:left;" v-if="!noTimeField">
-        <el-button @click="setFocus('docType')" type="text">Document type</el-button>
-      </el-row>
-      <el-row>
         <el-col :span="12">
           <el-input
             placeholder="Default doc"
@@ -140,11 +121,41 @@
           ></el-input>
         </el-col>
       </el-row>
+
+      <el-row v-if="!noTimeField && hasSelectedTimeField">
+        <el-col :span="12" class="padding-right">
+          <el-card shadow="never">
+            <el-row>
+              <el-switch v-model="currentConfig.graphicChecked" active-text="Time line"></el-switch>
+            </el-row>
+            <el-row>
+              <el-col style="width:150px; margin-top:4px;">
+                <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time selector"></el-switch>
+              </el-col>
+              <el-col style="width:200px">
+                <el-select
+                  v-if="currentConfig.timeSelectorChecked"
+                  style="margin-left:20px;"
+                  size="mini"
+                  v-model="currentConfig.timeSelectorType"
+                  placeholder="Please select a type"
+                >
+                  <el-option label="Free" value="classic"></el-option>
+                  <el-option label="Month" value="month"></el-option>
+                  <el-option label="Week" value="week"></el-option>
+                  <el-option label="Year" value="year"></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
+
       <el-row style="text-align:left;">
         <el-button @click="setFocus('fieldsToDisplay')" type="text">Fields to display</el-button>
       </el-row>
       <el-row>
-        <el-col :span="12" style="text-align:left;">
+        <el-col :span="24" style="text-align:left;">
           <el-select
             v-model="fieldsToDisplay"
             multiple
@@ -164,54 +175,10 @@
           </el-select>
         </el-col>
       </el-row>
-      <el-row></el-row>
-      <!-- <el-row>
-        <el-col :span="16" >
-          <el-card shadow="never" v-if="currentConfig.config.headercolumns.length>0">
-            <el-table
-              :data="currentConfig.config.headercolumns"
-              size="mini"
-              style="width: 100%">
-              <el-table-column
-                prop="field"
-                label="Field"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Label">
-                <template slot-scope="scope">
-                  <el-input 
-                      size="mini"
-                      v-model="scope.row.title"></el-input>
-                    
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="type"
-                label="Type"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                label="Format">
-                <template slot-scope="scope">
-                  <el-input 
-                      v-if="scope.row.type=='date' || scope.row.type=='timestamp'"
-                      size="mini"
-                      placeholder="eg. DD/MM/YYYY HH:mm"
-                      v-model="scope.row.format"></el-input>
-                    
-                </template>
-              </el-table-column>
-              
-            </el-table>
-          </el-card>
-        </el-col>
-       
-      </el-row>-->
 
-      <el-row>
-        <el-col :span="16">
-          <el-card shadow="hover" v-if="currentConfig.config.headercolumns.length>0">
+      <el-row v-if="currentConfig.config.headercolumns">
+        <el-col :span="24">
+          <el-card shadow="never" v-if="currentConfig.config.headercolumns.length>0">
             <table class="table-display">
               <thead class="thead-display">
                 <tr>
@@ -224,8 +191,8 @@
                 </tr>
               </thead>
               <draggable
-                @change="draggableChanged('display')"
-                v-bind="dragOptions"
+                @change="zoom('display')"
+                v-bind="dragOptionsDisplay"
                 v-model="currentConfig.config.headercolumns"
                 tag="tbody"
                 handle=".handle"
@@ -281,11 +248,16 @@
         </el-col>
       </el-row>
 
-      <el-row style="text-align:left;">
-        <el-button @click="setFocus('order')" type="text">Sort</el-button>
+      <el-row>
+        <el-col :span="12">
+          <el-button @click="setFocus('order')" type="text">Sort</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-button @click="setFocus('hiddenQuery')" type="text">Hidden query</el-button>
+        </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12" style="text-align:left;">
+        <el-col :span="12" class="padding-right">
           <el-select
             v-model="currentConfig.config.orderField"
             filterable
@@ -303,24 +275,9 @@
             ></el-option>
           </el-select>
         </el-col>
-      </el-row>
-      <el-row
-        v-if="currentConfig.config.orderField"
-        style="text-align:left; margin-top:20px; margin-left:15px;"
-      >
-        <el-switch
-          v-model="currentConfig.config.orderDirection"
-          active-text="Descending"
-          inactive-text="Ascending"
-        ></el-switch>
-      </el-row>
-      <el-row style="text-align:left;">
-        <el-button @click="setFocus('hiddenQuery')" type="text">Hidden query</el-button>
-      </el-row>
-      <el-row>
         <el-col :span="12">
           <el-input
-            placeholder="hidden query"
+            placeholder="Records in the table will be filtered by this query"
             ref="hiddenQuery"
             type="text"
             size="mini"
@@ -329,160 +286,287 @@
           ></el-input>
         </el-col>
       </el-row>
-      <el-row style="text-align:left; margin-top:20px;">
-        <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar"  @change="query_bar_changed"></el-switch>
-      </el-row>
-      <el-row style="text-align:left;">
-        <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter" @change="query_filter_changed"></el-switch>
-      </el-row>
-      <el-row style="text-align:left;">
-        <el-switch
-          :disabled="isEmpty(geoFields)"
-          v-model="currentConfig.mapChecked"
-          active-text="Map"
-        ></el-switch>
-      </el-row>
-      <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
-        <el-col :span="4">
-          <el-button @click="setFocus('geoField')" type="text">Geo field</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button @click="setFocus('zoom')" type="text">Zoom</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button @click="setFocus('long')" type="text">Lon.</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button @click="setFocus('lat')" type="text">Lat.</el-button>
-        </el-col>
-      </el-row>
-      <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
-        <el-col :span="4">
-          <el-select
-            v-model="currentConfig.config.mapfield"
-            placeholder="Select"
-            size="mini"
-            ref="geoField"
-            style="width:90%;"
-          >
-            <el-option
-              v-for="item in geoFields"
-              :key="item.field"
-              :label="item.field"
-              :value="item.field"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-input-number
-            :min="1"
-            :max="20"
-            size="mini"
-            ref="zoom"
-            v-model="currentConfig.config.mapzoom"
-            autocomplete="off"
-          ></el-input-number>
-        </el-col>
-        <el-col :span="3">
-          <el-input-number
-            size="mini"
-            ref="long"
-            v-model="currentConfig.config.maplong"
-            autocomplete="off"
-          ></el-input-number>
-        </el-col>
-        <el-col :span="3">
-          <el-input-number
-            size="mini"
-            ref="lat"
-            v-model="currentConfig.config.maplat"
-            autocomplete="off"
-          ></el-input-number>
-        </el-col>
-      </el-row>
-      <el-row style="text-align:left;">
-        <el-switch v-model="currentConfig.downloadChecked" active-text="Download"></el-switch>
-      </el-row>
-      <el-row style="text-align:left;" v-if="currentConfig.downloadChecked">
-        <el-button @click="setFocus('fieldsToDownload')" type="text">Fields to download</el-button>
-      </el-row>
-      <el-row v-if="currentConfig.downloadChecked">
-        <el-col :span="12" style="text-align:left;">
-          <el-select
-            v-model="fieldsToDownload"
-            multiple
-            filterable
-            @change="selectFieldsToDownloadChanged()"
-            ref="fieldsToDownload"
-            placeholder="Field to download"
-            size="mini"
-            style="width:100%;"
-          >
-            <el-option
-              v-for="item in allFields"
-              :key="item.field"
-              :label="item.field"
-              :value="item.field"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="4" style="text-align:right;">
-          <el-button
-            @click="copyFieldsToDisplayToDownload()"
-            type="text"
-            size="mini"
-          >Copy from fields to display</el-button>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="16">
-          <el-card
-            shadow="hover"
-            v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload && currentConfig.config.tableFieldsToDownload.length>0"
-          >
-            <table class="table-display">
-              <thead class="thead-display">
-                <tr>
-                  <th>Field</th>
-                  <th>Label</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <draggable
-                @change="draggableChanged('download')"
-                v-bind="dragOptions"
-                v-model="currentConfig.config.tableFieldsToDownload"
-                tag="tbody"
-                handle=".handle"
-              >
-                <tr
-                  v-for="(item, index) in currentConfig.config.tableFieldsToDownload"
-                  :key="index"
-                >
-                  <td>{{item.field}}</td>
-                  <td>
-                    <el-input
-                      class="display-name-input"
-                      ref="author"
-                      placeholder="Name"
-                      v-model="item.title"
-                      size="mini"
-                    ></el-input>
-                  </td>
-                  <td>
-                    <i class="el-icon-d-caret handle"></i>
-                  </td>
-                </tr>
-              </draggable>
-            </table>
+      <el-row v-if="currentConfig.config.orderField">
+        <el-col :span="12" class="padding-right">
+          <el-card shadow="never">
+            <el-switch
+              v-model="currentConfig.config.orderDirection"
+              active-text="Descending"
+              inactive-text="Ascending"
+            ></el-switch>
           </el-card>
         </el-col>
       </el-row>
-      <el-row style="text-align:left;">
-        <el-button @click="setFocus('specificEditor')" type="text">Specific editor</el-button>
-      </el-row>
       <el-row>
         <el-col :span="12">
+          <el-button @click="setFocus('')" type="text">User queries</el-button>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="fieldsToFilterEmpty ? 12 : 24" class="padding-right">
+          <el-card shadow="never">
+            <el-row>
+              <el-col :span="fieldsToFilterEmpty ? 12 : 6">
+                <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar" @change="query_bar_changed"></el-switch>
+              </el-col>
+              <el-col :span="fieldsToFilterEmpty ? 12 : 6">
+                <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"  @change="query_filter_changed"></el-switch>
+              </el-col>
+            </el-row>
+            
+            <el-row v-if="currentConfig.queryFilterChecked">
+              <el-button @click="setFocus('fieldsToFilter')" type="text">Fields to filter</el-button>
+            </el-row>
+            <el-row v-if="currentConfig.queryFilterChecked">
+              <el-col :span="fieldsToFilterEmpty ? 24 : 12" :class="fieldsToFilterEmpty ? '' : 'padding-right'">
+                <el-select
+                  v-model="fieldsToFilter"
+                  multiple
+                  filterable
+                  @change="selectFieldsToFilterChanged"
+                  ref="fieldsToFilter"
+                  placeholder="Field to filter"
+                  size="mini"
+                  style="width:100%;"
+                >
+                  <el-option
+                    v-for="item in allFields"
+                    :key="item.field"
+                    :label="item.field"
+                    :value="item.field"
+                  ></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+
+
+            <el-row v-if="!fieldsToFilterEmpty">
+              <el-col :span="12" class="padding-right">
+                <el-card shadow="never">
+                  <table class="table-display">
+                    <thead class="thead-display">
+                      <tr>
+                        <th>Field</th>
+                        <th>Label</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <draggable
+                      @change="zoom('filter')"
+                      v-bind="dragOptionsFilters"
+                      v-model="currentConfig.config.queryfilters"
+                      tag="tbody"
+                      handle=".handle"
+                    >
+                      <tr v-for="(item, index) in currentConfig.config.queryfilters" :key="index">
+                        <td>{{item.field}}</td>
+                        <td>
+                          <el-input
+                            class="display-name-input"
+                            ref="author"
+                            placeholder="Name"
+                            v-model="item.title"
+                            size="mini"
+                          ></el-input>
+                        </td>
+                        <td>
+                          <el-button @click="configureQueryFilter(item)" size="mini">Configure</el-button>
+                        </td>
+
+                        <td>
+                          <i class="el-icon-d-caret handle"></i>
+                        </td>
+                      </tr>
+                    </draggable>
+                  </table>
+                </el-card>
+              </el-col>
+              <el-col :span="12" v-if="!fieldsToFilterEmpty">
+                <el-card shadow="never">{{filterFieldToConfigure}}</el-card>
+              </el-col>
+            </el-row>
+
+
+
+
+
+
+          </el-card>
+        </el-col>
+      </el-row>
+
+
+
+      <el-row>
+        <el-col :span="12">
+          <el-button @click="setFocus('download')" type="text">Download records</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-button @click="setFocus('geofields')" type="text">Geo fields</el-button>
+        </el-col>
+      </el-row>
+
+      <el-row style="text-align:left;">
+        <el-col :span="12" class="padding-right">
+          <el-card shadow="never">
+            <el-row>
+                <el-switch v-model="currentConfig.downloadChecked" active-text="Download button"></el-switch>
+            </el-row>
+            <el-row v-if="currentConfig.downloadChecked">
+              
+                <el-button
+                  @click="copyFieldsToDisplayToDownload()"
+                  type="text"
+                  size="mini"
+                  style="color: #606266;"
+                >Copy from fields to display</el-button>
+              
+            </el-row>
+            <el-row v-if="currentConfig.downloadChecked">
+              <el-select
+                v-model="fieldsToDownload"
+                multiple
+                filterable
+                @change="selectFieldsToDownloadChanged"
+                ref="fieldsToDownload"
+                placeholder="Field to download, if empty, all fields are dowloaded"
+                size="mini"
+                style="width:100%;"
+              >
+                <el-option
+                  v-for="item in allFields"
+                  :key="item.field"
+                  :label="item.field"
+                  :value="item.field"
+                ></el-option>
+              </el-select>
+            </el-row>
+            <el-row v-if="currentConfig.downloadChecked && currentConfig.config.tableFieldsToDownload">
+              <el-card shadow="never" v-if="currentConfig.config.tableFieldsToDownload.length>0">
+                <table class="table-display">
+                  <thead class="thead-display">
+                    <tr>
+                      <th>Field</th>
+                      <th>Label</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <draggable
+                    @change="zoom('download')"
+                    v-bind="dragOptionsDownload"
+                    v-model="currentConfig.config.tableFieldsToDownload"
+                    tag="tbody"
+                    handle=".handle"
+                  >
+                    <tr
+                      v-for="(item, index) in currentConfig.config.tableFieldsToDownload"
+                      :key="index"
+                    >
+                      <td>{{item.field}}</td>
+                      <td>
+                        <el-input
+                          class="display-name-input"
+                          ref="author2"
+                          placeholder="Name"
+                          v-model="item.title"
+                          size="mini"
+                        ></el-input>
+                      </td>
+                      <td>
+                        <i class="el-icon-d-caret handle"></i>
+                      </td>
+                    </tr>
+                  </draggable>
+                </table>
+              </el-card>
+            </el-row>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="never">
+            <el-row>
+              <el-switch 
+              :disabled="isEmpty(geoFields)"
+              v-model="currentConfig.mapChecked" active-text="Map"></el-switch>
+            </el-row>
+            <el-row v-if="currentConfig.mapChecked" style="margin-top: 15px;">
+              <el-col :span="12">
+                <el-button @click="setFocus('geoField')" type="text">Geo field</el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button @click="setFocus('zoom')" type="text">Zoom</el-button>
+              </el-col>
+            </el-row>
+            <el-row  v-if="currentConfig.mapChecked">
+              <el-col :span="12">
+                <el-select
+                  v-model="currentConfig.config.mapfield"
+                  placeholder="Select"
+                  size="mini"
+                  ref="geoField"
+                  style="width:90%;"
+                >
+                  <el-option
+                    v-for="item in geoFields"
+                    :key="item.field"
+                    :label="item.field"
+                    :value="item.field"
+                  ></el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="12">
+                <el-input-number
+                  :min="1"
+                  :max="20"
+                  size="mini"
+                  ref="zoom"
+                  v-model="currentConfig.config.mapzoom"
+                  autocomplete="off"
+                ></el-input-number>
+              </el-col>
+            </el-row>
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="12">
+                <el-button @click="setFocus('long')" type="text">Lon.</el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button @click="setFocus('lat')" type="text">Lat.</el-button>
+              </el-col>
+            </el-row>
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="12">
+                <el-input-number
+                  size="mini"
+                  ref="long"
+                  v-model="currentConfig.config.maplong"
+                  autocomplete="off"
+                ></el-input-number>
+              </el-col>
+              <el-col :span="12">
+                <el-input-number
+                  size="mini"
+                  ref="lat"
+                  v-model="currentConfig.config.maplat"
+                  autocomplete="off"
+                ></el-input-number>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
+      
+     
+      <el-row style="text-align:left;">
+        <el-col :span="12">
+          <el-button @click="setFocus('specificEditor')" type="text">Specific editor</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-button @click="setFocus('writePrivileges')" type="text">Write privileges</el-button>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12" class="padding-right">
           <el-input
             placeholder="your specific component url. Eg. specificComponent"
             ref="specificEditor"
@@ -492,11 +576,6 @@
             v-model="currentConfig.config.editorComponent"
           ></el-input>
         </el-col>
-      </el-row>
-      <el-row style="text-align:left;">
-        <el-button @click="setFocus('writePrivileges')" type="text">Write privileges</el-button>
-      </el-row>
-      <el-row>
         <el-col :span="12">
           <el-select
             v-model="writePrivileges"
@@ -527,7 +606,7 @@ import axios from "axios";
 import _ from "lodash";
 
 export default {
-  field: "ConfigDetailsESTableEditor",
+  field: "ESTableEditor",
   data() {
     return (
       window.__FORM__ || {
@@ -543,10 +622,12 @@ export default {
         writePrivileges: [],
         fieldsToDownload: [],
         fieldsToDisplay: [],
+        fieldsToFilter: [],
         helpMessage: "",
         succesIndexPatternDefinition: false,
         noTimeField: true,
-        step: 1
+        step: 1,
+        filterFieldToConfigure: null
       }
     );
   },
@@ -557,16 +638,38 @@ export default {
         this.timefieldSelected != "I don't want to use the Time Filter"
       );
     },
+    fieldsToFilterEmpty: function() {
+      return !(this.currentConfig.queryFilterChecked && this.currentConfig.config.queryfilters && this.currentConfig.config.queryfilters.length > 0)
+    },
     curConfigIn: function() {
       return this.currentConfig;
     },
     indexPattern: function() {
       return this.currentConfig.config.index;
     },
-    dragOptions() {
+    tableFieldsToDownload: function() {
+      return this.currentConfig.config.tableFieldsToDownload;
+    },
+    dragOptionsDisplay() {
       return {
         animation: 0,
-        group: "description",
+        group: "display",
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    },
+    dragOptionsFilters() {
+      return {
+        animation: 0,
+        group: "filters",
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    },
+    dragOptionsDownload() {
+      return {
+        animation: 0,
+        group: "download",
         disabled: false,
         ghostClass: "ghost"
       };
@@ -577,6 +680,12 @@ export default {
       handler: function() {
         this.indexPatternChanged();
       }
+    },
+    tableFieldsToDownload: {
+      handler: function() {
+        this.tableFieldsToDownloadToExportColumns();
+      },
+      deep: true
     },
     timefieldSelected: {
       handler: function() {
@@ -609,18 +718,34 @@ export default {
     this.prepareData();
   },
   methods: {
-    query_filter_changed:function()
-    {
+    query_filter_changed:function() {
         if(this.currentConfig.queryFilterChecked)
           this.currentConfig.queryBarChecked=false;
 
     },
-    query_bar_changed:function()
-    {
+    query_bar_changed:function() {
         if(this.currentConfig.queryBarChecked)
           this.currentConfig.queryFilterChecked=false;
 
     },
+    configureQueryFilter: function(item) {
+      this.filterFieldToConfigure = item;
+    },
+    tableFieldsToDownloadToExportColumns: _.debounce(function() {
+      // this function is here to transform this.currentConfig.config.tableFieldsToDownload to this.currentConfig.exportColumns
+      console.log("WATCHER TABLE FIELDS DL");
+      if (
+        this.currentConfig.config.tableFieldsToDownload == null ||
+        this.currentConfig.config.tableFieldsToDownload.length == 0
+      ) {
+        delete this.currentConfig.config.exportColumns;
+        return;
+      }
+
+      this.currentConfig.config.exportColumns = this.currentConfig.config.tableFieldsToDownload
+        .map(element => element.field + "->" + element.title)
+        .join();
+    }, 500),
     setIndex(indexPattern) {
       console.log("setindex");
       console.log(indexPattern);
@@ -634,33 +759,28 @@ export default {
       this.selectFieldsToDownloadChanged();
     },
     draggableChanged(type) {
-      var tmp = [];
+      let tmp = [];
+      let field1 = "";
+      let field2 = "";
 
       if (type == "display") {
-        for (
-          var i = 0;
-          i < this.currentConfig.config.headercolumns.length;
-          i++
-        ) {
-          tmp.push(this.currentConfig.config.headercolumns[i].field);
-        }
-
-        this.fieldsToDisplay = tmp;
+        field1 = "headercolumns";
+        field2 = "fieldsToDisplay";
+      } else if (type == "download") {
+        field1 = "tableFieldsToDownload";
+        field2 = "fieldsToDownload";
+      } else if (type == "filter") {
+        field1 = "queryfilters";
+        field2 = "fieldsToFilter";
       }
-      if (type == "download") {
-        for (
-          var i = 0;
-          i < this.currentConfig.config.tableFieldsToDownload.length;
-          i++
-        ) {
-          tmp.push(this.currentConfig.config.tableFieldsToDownload[i].field);
-        }
 
-        this.fieldsToDownload = tmp;
+      for (var i = 0; i < this.currentConfig.config[field1].length; i++) {
+        tmp.push(this.currentConfig.config[field1][i].field);
       }
+      this[field2] = tmp;
     },
     prepareData() {
-      console.log("prepareData ConfigDetailsESTableEditor");
+      console.log("prepareData ESTableEditor");
       console.log(this.currentConfig);
 
       this.loadEsMapping();
@@ -682,6 +802,17 @@ export default {
           );
         }
       }
+      if (this.currentConfig.config.queryFilters != null) {
+        for (
+          var i = 0;
+          i < this.currentConfig.config.queryfilters.length;
+          i++
+        ) {
+          this.fieldsToFilter.push(
+            this.currentConfig.config.queryfilters[i].field
+          );
+        }
+      }
       if (this.currentConfig.config.exportColumns != null) {
         this.currentConfig.config.tableFieldsToDownload = [];
         var tmp = this.currentConfig.config.exportColumns.split(",");
@@ -698,6 +829,7 @@ export default {
         }
       }
 
+      // this.$nextTick(() => {this.step = this.forcestep;});
       this.step = this.forcestep;
     },
     isEmpty: function(obj) {
@@ -793,74 +925,65 @@ export default {
       this.$nextTick(() => select.focus());
     },
     selectFieldsToDisplayChanged: function(val) {
+      console.log("selectFieldsToDisplayChanged");
+
+      this.currentConfig.config.headercolumns = [];
+      this.currentConfig.config.headercolumns = JSON.parse(
+        JSON.stringify(
+          this.modifyTableAssociateToSelect(
+            this.fieldsToDisplay,
+            this.currentConfig.config.headercolumns
+          )
+        )
+      );
+    },
+    selectFieldsToDownloadChanged: function(val) {
+      console.log("selectFieldsToDownloadChanged");
+
+      this.currentConfig.config.tableFieldsToDownload = [];
+      this.currentConfig.config.tableFieldsToDownload = JSON.parse(
+        JSON.stringify(
+          this.modifyTableAssociateToSelect(
+            this.fieldsToDownload,
+            this.currentConfig.config.tableFieldsToDownload
+          )
+        )
+      );
+    },
+    selectFieldsToFilterChanged: function(val) {
+      console.log("selectFieldsToFilterChanged");
+      this.currentConfig.config.queryfilters = [];
+      this.currentConfig.config.queryfilters = JSON.parse(
+        JSON.stringify(
+          this.modifyTableAssociateToSelect(
+            this.fieldsToFilter,
+            this.currentConfig.config.queryfilters
+          )
+        )
+      );
+    },
+    modifyTableAssociateToSelect: function(selectModel, tableModel) {
       var tmp = [];
       var flag = false;
-      for (var i = 0; i < this.fieldsToDisplay.length; i++) {
+      for (var i = 0; i < selectModel.length; i++) {
         flag = false;
-        for (
-          var j = 0;
-          i < this.currentConfig.config.headercolumns.length;
-          j++
-        ) {
-          if (
-            this.currentConfig.config.headercolumns[j].field ==
-            this.fieldsToDisplay[i]
-          ) {
-            tmp.push(this.currentConfig.config.headercolumns[j]);
-            console.log(
-              this.currentConfig.config.headercolumns[j].field +
-                " == " +
-                this.fieldsToDisplay[i]
-            );
+        for (var j = 0; i < tableModel.length; j++) {
+          if (tableModel[j].field == selectModel[i]) {
+            tmp.push(tableModel[j]);
+            console.log(tableModel[j].field + " == " + selectModel[i]);
             flag = true;
             break;
           }
         }
 
         if (!flag) {
-          console.log(flag);
-          console.log(this.fieldsToDisplay[i]);
-          console.log(this.allFields[this.fieldsToDisplay[i]]);
-
-          tmp.push(this.allFields[this.fieldsToDisplay[i]]);
+          tmp.push(this.allFields[selectModel[i]]);
         }
       }
 
-      this.currentConfig.config.headercolumns = [];
-      this.currentConfig.config.headercolumns = JSON.parse(JSON.stringify(tmp));
-    },
-    selectFieldsToDownloadChanged: function() {
-      console.log("selectFieldsToDisplayChanged");
-      this.currentConfig.config.tableFieldsToDownload = [];
-      for (var i in this.fieldsToDownload) {
-        this.currentConfig.config.tableFieldsToDownload.push(
-          this.allFields[this.fieldsToDownload[i]]
-        );
-      }
+      console.log(tmp);
 
-      this.currentConfig.config.exportColumns = "";
-      for (
-        var i = 0;
-        i < this.currentConfig.config.tableFieldsToDownload.length;
-        i++
-      ) {
-        this.currentConfig.config.exportColumns += this.currentConfig.config.tableFieldsToDownload[
-          i
-        ].field;
-
-        if (this.currentConfig.config.tableFieldsToDownload[i].title)
-          this.currentConfig.config.exportColumns +=
-            "->" + this.currentConfig.config.tableFieldsToDownload[i].title;
-
-        this.currentConfig.config.exportColumns += ",";
-      }
-
-      if (this.currentConfig.config.exportColumns.length > 0) {
-        this.currentConfig.config.exportColumns = this.currentConfig.config.exportColumns.slice(
-          0,
-          -1
-        );
-      }
+      return tmp;
     },
     resetTest: function() {
       this.fieldsToDisplay = [];
@@ -1038,5 +1161,9 @@ export default {
 .sortable-chosen {
   color: white !important;
   background-color: #1070ff !important;
+}
+
+#config-table-editor .padding-right {
+  padding-right: 10px;
 }
 </style>

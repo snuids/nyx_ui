@@ -10,14 +10,14 @@
               :label-width="formLabelWidth"
               v-if="item.type =='number'"
             >
-              <el-input-number v-model="item.value" autocomplete="off"></el-input-number>
+              <el-input-number :size="formSize"  v-model="item.value" autocomplete="off"></el-input-number>
             </el-form-item>
             <el-form-item
               :label="item.title"
               :label-width="formLabelWidth"
               v-else-if="item.type =='date'"
             >
-              <el-date-picker size="mini" v-model="item.value" type="date" placeholder="Pick a day"></el-date-picker>
+              <el-date-picker :size="formSize" v-model="item.value" type="date" placeholder="Pick a day"></el-date-picker>
             </el-form-item>
             <el-form-item
               :label="item.title"
@@ -37,7 +37,7 @@
               :label-width="formLabelWidth"
               v-else-if="item.type =='selecter'"
             >
-              <el-select v-model="item.value" placeholder="Select">
+              <el-select v-model="item.value" :size="formSize" placeholder="Select">
                 <el-option
                   v-for="item in item.selectOptions"
                   :key="item"
@@ -48,7 +48,7 @@
             </el-form-item>
 
             <el-form-item :label="item.title" :label-width="formLabelWidth" v-else>
-              <el-input v-model="item.value" autocomplete="off"></el-input>
+              <el-input v-model="item.value" :size="formSize" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -82,7 +82,8 @@ export default {
   name: "Form",
   data: () => ({
     formLabelWidth: "120px",
-    commitunderway: false
+    commitunderway: false,
+    formSize: 'mini',
   }),
   props: {
     config: {
@@ -114,9 +115,6 @@ export default {
       })
         .then(coordinates => {
           newRec._source.location = [coordinates["lng"], coordinates["lat"]];
-          //alert(JSON.stringify(this.$store.getters.creds.user));
-
-          //alert(JSON.stringify(newRec));
           this.$store.commit({
             type: "updateRecord",
             data: newRec

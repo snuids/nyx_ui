@@ -191,9 +191,6 @@ export default {
     loadMore($state) {
       console.log('load asked')
       setTimeout(()=>{
-
-
-
         if(this.numberOfItems == 0) {
           $state.complete()
         }
@@ -203,14 +200,13 @@ export default {
         }
         else {
           this.pagination += 1;
-
           this.tableData=this.tableData.concat(this.allData.splice(0, this.scrollSize))
           $state.loaded()
         }
       }, 50)
     },
     downloadBtnClick() {
-      let files = this.multipleSelection.map(a => a.name)//.join(',');
+      let files = this.multipleSelection.map(a => a.name)
       this.downloadFiles(files)
     },
     toggleSelection(rows) {
@@ -258,15 +254,12 @@ export default {
           }
         }
 
-
         console.log("download file");
         console.log(row)
         this.downloadFiles([row.name], false)
       }
     },
     pushFile:function(fileObj) {
-      // console.log('pushFile')
-      // console.log(fileObj)
       
       let tmp_file = fileObj.data
 
@@ -281,7 +274,6 @@ export default {
       url += '&rec_id='+this.config.rec_id
       url += '&path='+this.curPath
       
-
       var query = {
         files: [fileObj]
       };
@@ -338,7 +330,6 @@ export default {
 
       axios
         .get(url, {responseType: 'blob'})
-        // .get(url, {responseType: 'arraybuffer'})
         .then(response => {
           console.log(response);
 

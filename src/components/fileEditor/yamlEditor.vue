@@ -11,12 +11,7 @@
     class="lambda-editor"
     id="yamlEditor"
   >
-
-
-
-
     <span slot="title" class="dialog-header">
-      
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="12" style="text-align:left;">
           <h1 style=" color:white;">{{fileName}}</h1></el-col>
@@ -26,12 +21,6 @@
         </el-col>
       </el-row>
     </span>
-    <!-- <el-card shadow="never" :loading="loading"> -->
-      <!-- <div>
-
-      {{loading}}
-
-      </div> -->
       <editor
         v-loading="loading"
         v-model="localFile"
@@ -43,23 +32,14 @@
         :height="($store.getters.containerSize.height-160)"
         style="border: solid 1px #c0c4cc;"
       ></editor>
-        
-
       <div>
-
       </div>
-      
-    <!-- </el-card> -->
-
   </el-dialog>
 </template>
 
 <script>
 import YAML from "js-yaml";
 import axios from "axios";
-
-
-
 
 export default {
   name: "yamlEditor",
