@@ -116,9 +116,7 @@ import axios from "axios";
 import Vue from "vue";
 
 import configdetails from "@/components/ConfigDetails";
-import configdetailsdev from "@/components/ConfigDetailsDev";
 Vue.component("ConfigDetails", configdetails);
-Vue.component("ConfigDetailsDev", configdetailsdev);
 
 export default {
   data() {
@@ -229,7 +227,7 @@ export default {
           category: "",
           order: 1000,
           privileges: [],
-          config: { headercolumns: [], queryfilters: [] }
+          config: { headercolumns: [], tableFieldsToDownload: [], tableFieldsToFilter: [], queryfilters: [] }
         },
 
         _type: "doc"
@@ -245,7 +243,7 @@ export default {
           category: "",
           order: 1000,
           privileges: [],
-          config: { headercolumns: [], queryfilters: [] }
+          config: { headercolumns: [], tableFieldsToDownload: [], tableFieldsToFilter: [], queryfilters: [] }
         }
       });
 
@@ -260,6 +258,16 @@ export default {
       this.currentRow = val;
     },
     handleEdit(index, row) {
+      
+      if(row._source.config != null && row._source.config.headercolumns == null)
+        row._source.config.headercolumns = []
+      if(row._source.config != null && row._source.config.tableFieldsToDownload == null)
+        row._source.config.tableFieldsToDownload = []
+      if(row._source.config != null && row._source.config.tableFieldsToFilter == null)
+        row._source.config.tableFieldsToFilter = []
+      if(row._source.config != null && row._source.config.queryfilters == null)
+        row._source.config.queryfilters = []
+      
       this.curConfig = JSON.parse(JSON.stringify(row._source));
 
       this.$store.commit({

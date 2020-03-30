@@ -372,7 +372,7 @@
           v-if="(curConfig.type === 'pgsql-generic-table')"
         >
           <el-card>
-            <!-- GENERIC TABLE -->
+            <!-- PG GENERIC TABLE -->
             <div>
               <el-row>
                 <el-col :span="6">
@@ -593,7 +593,6 @@
           <ESTableEditor
             :allPrivileges="allPrivileges"
             :currentConfig="curConfig"
-            @configchanged="esTableConfigChanged"
             :forcestep="isAdd?1:2"
           ></ESTableEditor>
         </el-tab-pane>
@@ -602,81 +601,9 @@
 
         <!-- ******* FORM ******* -->
         <el-tab-pane label="Form" name="form" key="form" v-if="(curConfig.type === 'form')">
-          <el-card>
-            <div>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="Index" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="Form Title" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.formtitle" autocomplete="off"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="4">
-                  <el-button size="mini" @click="handleAddField()">Add Field</el-button>
-                </el-col>
-                <el-col :span="20">
-                  <FormFieldEditor
-                    :currentField="currentHeader"
-                    :title="'Form Field Edition'"
-                    v-if="formFielfEditorVisible"
-                    v-on:dialogclose="formFieldEditorClosed"
-                  ></FormFieldEditor>
-                  <el-table
-                    class="headertable"
-                    :data="curConfig.config.headercolumns"
-                    @current-change="handleCurrentHeaderChange"
-                    border
-                    style="width: 100%"
-                  >
-                    <el-table-column prop="field" label="Field"></el-table-column>
-                    <el-table-column prop="title" label="Title"></el-table-column>
-                    <el-table-column prop="type" label="Type"></el-table-column>
-                    <el-table-column prop="default" label="Default"></el-table-column>
-                    <el-table-column prop="title" label="Action">
-                      <template slot-scope="scope2">
-                        <el-button
-                          size="mini"
-                          circle
-                          @click="handleEditFormField(scope2.$index, scope2.row)"
-                          icon="el-icon-edit"
-                        ></el-button>
-                        <el-button
-                          size="mini"
-                          circle
-                          type="danger"
-                          @click="handleDeleteHeader(scope2.$index, scope2.row)"
-                          icon="el-icon-delete"
-                        ></el-button>
-
-                        <el-button
-                          size="mini"
-                          circle
-                          type="primary"
-                          @click="handleMoveHeader(scope2.$index, scope2.row,false)"
-                          icon="el-icon-arrow-down"
-                          v-if="scope2.$index<curConfig.config.headercolumns.length-1"
-                        ></el-button>
-                        <el-button
-                          size="mini"
-                          circle
-                          type="primary"
-                          @click="handleMoveHeader(scope2.$index, scope2.row,true)"
-                          icon="el-icon-arrow-up"
-                          v-if="scope2.$index>0"
-                        ></el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-col>
-              </el-row>
-            </div>
-          </el-card>
+          <FormEditor
+            :currentConfig="curConfig"
+          ></FormEditor>
         </el-tab-pane>
         <!-- FREE TEXT -->
         <el-tab-pane
@@ -803,9 +730,10 @@
 <script>
 //import axios from "axios";
 import freetextdetails from "@/components/FreeTextDetails";
-import formfieldeditor from "@/components/FormFieldEditor";
+
 import queryfiltereditor from "@/components/QueryFilterEditor";
-import estableeditor from "@/components/ConfigDetailsESTableEditor";
+import estableeditor from "@/components/ESTableEditor";
+import formeditor from "@/components/FormEditor";
 
 
 import Vue from "vue";
@@ -814,9 +742,10 @@ import rison from "rison";
 import YAML from "js-yaml";
 
 Vue.component("FreeTextDetails", freetextdetails);
-Vue.component("FormFieldEditor", formfieldeditor);
+
 Vue.component("QueryFilterEditor", queryfiltereditor);
 Vue.component("ESTableEditor", estableeditor);
+Vue.component("FormEditor", formeditor);
 
 
 function transformObject(obj) {
@@ -882,41 +811,15 @@ export default {
     this.prepareData();
   },
   methods: {
-    // loadPrivileges: function() {
-    //   console.log('load')
-    //   var data = [];
-    //   for (var i in this.$store.getters.privileges) {
-    //     var priv = this.$store.getters.privileges[i];
-    //     data.push({
-    //       value: priv._source.value,
-    //       desc: priv._source.name
-    //     });
-    //   }
-    //   this.allPrivileges = data;
-    // },
-    query_filter_changed:function()
-    {
-        //alert(this.curConfig.queryFilterChecked);
+    query_filter_changed:function() {
         if(this.curConfig.queryFilterChecked)
           this.curConfig.queryBarChecked=false;
 
     },
-    query_bar_changed:function()
-    {
-        //alert(this.curConfig.queryFilterChecked);
+    query_bar_changed:function() {
         if(this.curConfig.queryBarChecked)
           this.curConfig.queryFilterChecked=false;
 
-    },
-    esTableConfigChanged: function(newModel) {
-      console.log("ConfigDetails - esTableConfigChanged");
-      console.log(newModel);
-
-      this.curConfig = Object.assign(
-        {},
-        JSON.parse(JSON.stringify(this.curConfig)),
-        JSON.parse(JSON.stringify(newModel))
-      );
     },
     closeDialog: function() {
       this.$emit("dialogclose");
@@ -1348,10 +1251,6 @@ export default {
       // eslint-disable-line
       this.currentHeader = row;
       this.dialogHeaderVisible = true;
-    },
-    handleEditFormField(index, row) {
-      // eslint-disable-line
-      this.formFielfEditorVisible = true;
     },
     handleEditQueryFilterField(index, row) {
       // eslint-disable-line
