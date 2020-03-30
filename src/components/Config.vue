@@ -168,6 +168,12 @@ export default {
               type: "login",
               data: response.data
             });
+            this.$notify({
+            title: "Message",
+            message: "Config Reloaded",
+            type: "success",
+            position: "bottom-right"
+          });
           }
         })
         .catch(error => {
