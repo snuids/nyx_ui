@@ -1,26 +1,26 @@
 <template slot="items">
   <div>
-    <h2>{{config.config.formtitle}}</h2>
+    <h2 class="form_title">{{computeTranslatedText(config.config.formtitle,$store.getters.creds.user.language)}}</h2>
     <div style="text-align:left;width:100%">
       <el-form>
         <el-row v-for="item in config.config.headercolumns" :key="item.field">
           <el-col :span="23">
             <el-form-item
-              :label="item.title"
+              :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
               :label-width="formLabelWidth"
               v-if="item.type =='number'"
             >
               <el-input-number :size="formSize"  v-model="item.value" autocomplete="off"></el-input-number>
             </el-form-item>
             <el-form-item
-              :label="item.title"
+              :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
               :label-width="formLabelWidth"
               v-else-if="item.type =='date'"
             >
               <el-date-picker :size="formSize" v-model="item.value" type="date" placeholder="Pick a day"></el-date-picker>
             </el-form-item>
             <el-form-item
-              :label="item.title"
+              :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
               :label-width="formLabelWidth"
               v-else-if="item.type =='datetime'"
             >
@@ -33,7 +33,7 @@
             </el-form-item>
 
             <el-form-item
-              :label="item.title"
+              :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
               :label-width="formLabelWidth"
               v-else-if="item.type =='selecter'"
             >
@@ -47,7 +47,7 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item :label="item.title" :label-width="formLabelWidth" v-else>
+            <el-form-item :label="computeTranslatedText(item.title,$store.getters.creds.user.language)" :label-width="formLabelWidth" v-else>
               <el-input v-model="item.value" :size="formSize" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -74,6 +74,7 @@
 <script>
 import moment from "moment";
 import Vue from "vue";
+import {computeTranslatedText} from '../globalfunctions'
 
 import VueGeolocation from "vue-browser-geolocation";
 Vue.use(VueGeolocation);
@@ -91,6 +92,9 @@ export default {
     }
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){      
+      return computeTranslatedText(inText,inLocale);
+    },
     submit: function() {
       this.commitunderway = true;
       var newRec = {
@@ -115,10 +119,37 @@ export default {
       })
         .then(coordinates => {
           newRec._source.location = [coordinates["lng"], coordinates["lat"]];
-          this.$store.commit({
-            type: "updateRecord",
-            data: newRec
-          });
+
+          var mode="table";
+          if (this.config.config.formmode!=undefined)
+            mode=this.config.config.formmode;
+
+
+          if(mode=="table")
+          {
+            this.$store.commit({
+              type: "updateRecord",
+              data: newRec
+            });
+          }
+          else
+          {
+            this.$store.commit({
+              type: "sendMessage",
+              data: {destination:this.config.config.destination
+                  ,message:JSON.stringify( newRec._source)}
+            });
+
+              this.$notify({
+                title: "Message Sent.",
+                type: "success",
+                message: "Message Sent.",
+                position: "bottom-right",
+                duration: 1000
+              });
+          }
+          
+
           this.$alert("Your record has been saved.", "Message", {
             confirmButtonText: "OK"
           });
@@ -134,4 +165,7 @@ export default {
 </script>
 
 <style>
+.form_title {
+  color:black;
+}
 </style>

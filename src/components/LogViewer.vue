@@ -25,14 +25,43 @@
             prop="severity" 
           >
             <template slot-scope="scope">
+              
               <el-tag size="mini" v-if="scope.row.severity.toLowerCase()=='error'" type="danger" effect="dark">{{scope.row.severity}}</el-tag>
               <el-tag size="mini" v-else-if="scope.row.severity.toLowerCase()=='warning'" type="warning" effect="dark">{{scope.row.severity}}</el-tag>
               <el-tag size="mini" v-else-if="scope.row.severity.toLowerCase()=='info'" type="" effect="plain">{{scope.row.severity}}</el-tag>
               <el-tag size="mini" v-else type="info" effect="dark">{{scope.row.severity}}</el-tag>
             </template>
           </el-table-column>
+          
           <el-table-column
+            label="Message"
+            prop="message"
+            >
+            <template slot-scope="scope">              
+              <span style="{ color:black;white-space: pre-wrap !important;}">{{scope.row.message}}</span>
+            </template>   
+                      
+          </el-table-column>
+
+          <el-table-column            
+            label=""
+            prop=""
+            align="right"
             v-if="logObj.search"
+            width="170"
+            >
+            
+             <template slot="header" slot-scope="scope" style="text-align:right">
+              <el-input
+                v-model="search"                
+                size="mini"
+                :placeholder="$t('generic.type_to_search')"/>
+
+            </template>
+          </el-table-column>
+
+            <!-- v-if="logObj.search" -->
+          <!--el-table-column
             label="Message"
             prop="message"
             header-align="right">
@@ -44,12 +73,7 @@
                 :placeholder="$t('generic.type_to_search')"/>
 
             </template>
-          </el-table-column>
-          <el-table-column
-            v-else
-            label="Message"
-            prop="message">
-          </el-table-column>
+          </el-table-column-->
           <!-- <el-table-column v-if="logObj"  align="right">
             <template slot="header" slot-scope="scope">
               <el-input
@@ -129,7 +153,7 @@ export default {
               var obj = {
                 date : moment(log[0], 'DDMMMYYYY HH:mm:ss:SSS').format('HH:mm:ss'),
                 severity : log[1],
-                message : log[2],
+                message : log[2]//.replace(/ /g,"&nbsp;"),
               }
               tmp.push(obj)
             }

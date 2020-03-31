@@ -185,8 +185,7 @@ export default {
     }
   },
   methods: {
-    computeTranslatedText: function(inText,inLocale){
-      
+    computeTranslatedText: function(inText,inLocale){      
       return computeTranslatedText(inText,inLocale);
     },
     openLogs(index, row) {

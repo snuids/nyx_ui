@@ -167,11 +167,11 @@ export default {
               data: response.data
             });
             this.$notify({
-              title: "Success",
-              type: "success",
-              message: "Config reloaded",
-              position: "bottom-right"
-            });
+            title: "Message",
+            message: "Config Reloaded",
+            type: "success",
+            position: "bottom-right"
+          });
           }
         })
         .catch(error => {
