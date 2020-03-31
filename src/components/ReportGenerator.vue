@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="60%" :title="record.title" :visible.sync="visible" :before-close="closeDialog">
+  <el-dialog width="60%" :title="computeTranslatedText(record.title,$store.getters.creds.user.language)" :visible.sync="visible" :before-close="closeDialog">
     <el-form :model="record" v-if="visible">
       <el-row v-for="param in filteredParameters" :key="param.name">
         <el-col :span="24" v-if="param.type == 'text'">
@@ -57,6 +57,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import {computeTranslatedText} from '../globalfunctions'
 
 export default {
   name: "ReportEditor",
@@ -152,6 +153,9 @@ export default {
     this.prepareData();
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){      
+      return computeTranslatedText(inText,inLocale);
+    },
     resolveDate: function(inVal) {
       inVal = inVal.replace(
         /now/g,
