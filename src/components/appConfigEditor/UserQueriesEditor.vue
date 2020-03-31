@@ -304,7 +304,6 @@ export default {
       this.filterFieldToConfigure = item;
     },
     selectFieldsToFilterChanged: function(val) {
-      console.log(val)
       let tmp = JSON.parse(JSON.stringify(this.currentConfig.config.queryfilters));
       this.currentConfig.config.queryfilters = [];
 
@@ -325,39 +324,6 @@ export default {
           this.currentConfig.config.queryfilters.push(this.allFields[val[i]])
         }
       }
-
-
-      
-      // this.currentConfig.config.queryfilters = [];
-      // this.currentConfig.config.queryfilters = JSON.parse(
-      //   JSON.stringify(
-      //     this.modifyTableAssociateToSelect(
-      //       this.fieldsToFilter,
-      //       this.currentConfig.config.queryfilters
-      //     )
-      //   )
-      // );
-    },
-    modifyTableAssociateToSelect: function(selectModel, tableModel) {
-      var tmp = [];
-      var flag = false;
-      for (var i = 0; i < selectModel.length; i++) {
-        flag = false;
-        for (var j = 0; i < tableModel.length; j++) {
-          if (tableModel[j].field == selectModel[i]) {
-            tmp.push(tableModel[j]);
-            console.log(tableModel[j].field + " == " + selectModel[i]);
-            flag = true;
-            break;
-          }
-        }
-
-        if (!flag) {
-          tmp.push(this.allFields[selectModel[i]]);
-        }
-      }
-
-      return tmp;
     },
     draggableChanged(type) {
       let tmp = [];
