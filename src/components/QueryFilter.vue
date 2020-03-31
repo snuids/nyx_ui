@@ -79,12 +79,6 @@ export default {
       type: Object
     }
   },
-  // computed: {
-  //   configin: function() {
-  //     this.queryFilterCopy = JSON.parse(JSON.stringify(this.config.config.queryfilters));
-  //     return this.config;
-  //   },
-  // },
   methods: {
 
 

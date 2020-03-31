@@ -147,7 +147,7 @@
                         trigger="hover">
                         <el-row>Each line represents an <b>Option</b></el-row>
                         <el-row>There are 2 ways to create an <b>Option</b></el-row>
-                        <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>label=value </i></el-row>
+                        <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value=label </i></el-row>
                         <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value </i></el-row>
                         
                         
