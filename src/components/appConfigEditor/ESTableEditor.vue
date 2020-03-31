@@ -822,51 +822,50 @@ export default {
     selectFieldsToDisplayChanged: function(val) {
       console.log("selectFieldsToDisplayChanged");
 
+      let tmp = JSON.parse(JSON.stringify(this.currentConfig.config.headercolumns));
       this.currentConfig.config.headercolumns = [];
-      this.currentConfig.config.headercolumns = JSON.parse(
-        JSON.stringify(
-          this.modifyTableAssociateToSelect(
-            this.fieldsToDisplay,
-            this.currentConfig.config.headercolumns
-          )
-        )
-      );
+
+      if(val.length == 0) 
+        return
+
+      for(var i = 0; i < val.length; i++) {
+        let flag = false;
+        for(var j = 0; j < tmp.length; j++) {
+          if(val[i] == tmp[j].field) {
+            this.currentConfig.config.headercolumns.push(tmp[j])
+            flag = true
+            break
+          }
+        }
+
+        if(!flag) {
+          this.currentConfig.config.headercolumns.push(this.allFields[val[i]])
+        }
+      }
     },
     selectFieldsToDownloadChanged: function(val) {
       console.log("selectFieldsToDownloadChanged");
 
+      let tmp = JSON.parse(JSON.stringify(this.currentConfig.config.tableFieldsToDownload));
       this.currentConfig.config.tableFieldsToDownload = [];
-      this.currentConfig.config.tableFieldsToDownload = JSON.parse(
-        JSON.stringify(
-          this.modifyTableAssociateToSelect(
-            this.fieldsToDownload,
-            this.currentConfig.config.tableFieldsToDownload
-          )
-        )
-      );
-    },
-    modifyTableAssociateToSelect: function(selectModel, tableModel) {
-      var tmp = [];
-      var flag = false;
-      for (var i = 0; i < selectModel.length; i++) {
-        flag = false;
-        for (var j = 0; i < tableModel.length; j++) {
-          if (tableModel[j].field == selectModel[i]) {
-            tmp.push(tableModel[j]);
-            console.log(tableModel[j].field + " == " + selectModel[i]);
-            flag = true;
-            break;
+
+      if(val.length == 0) 
+        return
+
+      for(var i = 0; i < val.length; i++) {
+        let flag = false;
+        for(var j = 0; j < tmp.length; j++) {
+          if(val[i] == tmp[j].field) {
+            this.currentConfig.config.tableFieldsToDownload.push(tmp[j])
+            flag = true
+            break
           }
         }
 
-        if (!flag) {
-          tmp.push(this.allFields[selectModel[i]]);
+        if(!flag) {
+          this.currentConfig.config.tableFieldsToDownload.push(this.allFields[val[i]])
         }
       }
-
-      console.log(tmp);
-
-      return tmp;
     },
     resetTest: function() {
       this.fieldsToDisplay = [];
