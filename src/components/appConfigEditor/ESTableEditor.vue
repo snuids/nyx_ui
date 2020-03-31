@@ -191,7 +191,7 @@
                 </tr>
               </thead>
               <draggable
-                @change="zoom('display')"
+                @change="draggableChanged('display')"
                 v-bind="dragOptionsDisplay"
                 v-model="currentConfig.config.headercolumns"
                 tag="tbody"
@@ -303,101 +303,27 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="fieldsToFilterEmpty ? 12 : 24" class="padding-right">
-          <el-card shadow="never">
-            <el-row>
-              <el-col :span="fieldsToFilterEmpty ? 12 : 6">
-                <el-switch v-model="currentConfig.queryBarChecked" active-text="Query bar" @change="query_bar_changed"></el-switch>
-              </el-col>
-              <el-col :span="fieldsToFilterEmpty ? 12 : 6">
-                <el-switch v-model="currentConfig.queryFilterChecked" active-text="Query filter"  @change="query_filter_changed"></el-switch>
-              </el-col>
-            </el-row>
-            
-            <el-row v-if="currentConfig.queryFilterChecked">
-              <el-button @click="setFocus('fieldsToFilter')" type="text">Fields to filter</el-button>
-            </el-row>
-            <el-row v-if="currentConfig.queryFilterChecked">
-              <el-col :span="fieldsToFilterEmpty ? 24 : 12" :class="fieldsToFilterEmpty ? '' : 'padding-right'">
-                <el-select
-                  v-model="fieldsToFilter"
-                  multiple
-                  filterable
-                  @change="selectFieldsToFilterChanged"
-                  ref="fieldsToFilter"
-                  placeholder="Field to filter"
-                  size="mini"
-                  style="width:100%;"
-                >
-                  <el-option
-                    v-for="item in allFields"
-                    :key="item.field"
-                    :label="item.field"
-                    :value="item.field"
-                  ></el-option>
-                </el-select>
-              </el-col>
-            </el-row>
 
 
-            <el-row v-if="!fieldsToFilterEmpty">
-              <el-col :span="12" class="padding-right">
-                <el-card shadow="never">
-                  <table class="table-display">
-                    <thead class="thead-display">
-                      <tr>
-                        <th>Field</th>
-                        <th>Label</th>
-                        <th></th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <draggable
-                      @change="zoom('filter')"
-                      v-bind="dragOptionsFilters"
-                      v-model="currentConfig.config.queryfilters"
-                      tag="tbody"
-                      handle=".handle"
-                    >
-                      <tr v-for="(item, index) in currentConfig.config.queryfilters" :key="index">
-                        <td>{{item.field}}</td>
-                        <td>
-                          <el-input
-                            class="display-name-input"
-                            ref="author"
-                            placeholder="Name"
-                            v-model="item.title"
-                            size="mini"
-                          ></el-input>
-                        </td>
-                        <td>
-                          <el-button @click="configureQueryFilter(item)" size="mini">Configure</el-button>
-                        </td>
 
-                        <td>
-                          <i class="el-icon-d-caret handle"></i>
-                        </td>
-                      </tr>
-                    </draggable>
-                  </table>
-                </el-card>
-              </el-col>
-              <el-col :span="12" v-if="!fieldsToFilterEmpty">
-                <el-card shadow="never">{{filterFieldToConfigure}}</el-card>
-              </el-col>
-            </el-row>
+
+          <UserQueriesEditor
+            :currentConfig="currentConfig"
+            :allFields="allFieldsFilter"
+          ></UserQueriesEditor>
 
 
 
 
 
 
-          </el-card>
-        </el-col>
+
+
+
+
+
+
       </el-row>
-
-
-
       <el-row>
         <el-col :span="12">
           <el-button @click="setFocus('download')" type="text">Download records</el-button>
@@ -453,7 +379,7 @@
                     </tr>
                   </thead>
                   <draggable
-                    @change="zoom('download')"
+                    @change="draggableChanged('download')"
                     v-bind="dragOptionsDownload"
                     v-model="currentConfig.config.tableFieldsToDownload"
                     tag="tbody"
@@ -605,6 +531,9 @@ import Vue from "vue";
 import axios from "axios";
 import _ from "lodash";
 
+import userquerieseditor from "@/components/appConfigEditor/UserQueriesEditor";
+Vue.component("UserQueriesEditor", userquerieseditor);
+
 export default {
   field: "ESTableEditor",
   data() {
@@ -622,12 +551,10 @@ export default {
         writePrivileges: [],
         fieldsToDownload: [],
         fieldsToDisplay: [],
-        fieldsToFilter: [],
         helpMessage: "",
         succesIndexPatternDefinition: false,
         noTimeField: true,
         step: 1,
-        filterFieldToConfigure: null
       }
     );
   },
@@ -637,9 +564,6 @@ export default {
         this.timefieldSelected &&
         this.timefieldSelected != "I don't want to use the Time Filter"
       );
-    },
-    fieldsToFilterEmpty: function() {
-      return !(this.currentConfig.queryFilterChecked && this.currentConfig.config.queryfilters && this.currentConfig.config.queryfilters.length > 0)
     },
     curConfigIn: function() {
       return this.currentConfig;
@@ -658,14 +582,6 @@ export default {
         ghostClass: "ghost"
       };
     },
-    dragOptionsFilters() {
-      return {
-        animation: 0,
-        group: "filters",
-        disabled: false,
-        ghostClass: "ghost"
-      };
-    },
     dragOptionsDownload() {
       return {
         animation: 0,
@@ -673,7 +589,10 @@ export default {
         disabled: false,
         ghostClass: "ghost"
       };
-    }
+    },
+    allFieldsFilter() {
+      return Object.assign({}, ...Object.keys(this.allFields).map(k => ({[k]: {'field': k}})));
+    },
   },
   watch: {
     indexPattern: {
@@ -718,19 +637,6 @@ export default {
     this.prepareData();
   },
   methods: {
-    query_filter_changed:function() {
-        if(this.currentConfig.queryFilterChecked)
-          this.currentConfig.queryBarChecked=false;
-
-    },
-    query_bar_changed:function() {
-        if(this.currentConfig.queryBarChecked)
-          this.currentConfig.queryFilterChecked=false;
-
-    },
-    configureQueryFilter: function(item) {
-      this.filterFieldToConfigure = item;
-    },
     tableFieldsToDownloadToExportColumns: _.debounce(function() {
       // this function is here to transform this.currentConfig.config.tableFieldsToDownload to this.currentConfig.exportColumns
       console.log("WATCHER TABLE FIELDS DL");
@@ -799,17 +705,6 @@ export default {
         ) {
           this.fieldsToDisplay.push(
             this.currentConfig.config.headercolumns[i].field
-          );
-        }
-      }
-      if (this.currentConfig.config.queryFilters != null) {
-        for (
-          var i = 0;
-          i < this.currentConfig.config.queryfilters.length;
-          i++
-        ) {
-          this.fieldsToFilter.push(
-            this.currentConfig.config.queryfilters[i].field
           );
         }
       }
@@ -946,18 +841,6 @@ export default {
           this.modifyTableAssociateToSelect(
             this.fieldsToDownload,
             this.currentConfig.config.tableFieldsToDownload
-          )
-        )
-      );
-    },
-    selectFieldsToFilterChanged: function(val) {
-      console.log("selectFieldsToFilterChanged");
-      this.currentConfig.config.queryfilters = [];
-      this.currentConfig.config.queryfilters = JSON.parse(
-        JSON.stringify(
-          this.modifyTableAssociateToSelect(
-            this.fieldsToFilter,
-            this.currentConfig.config.queryfilters
           )
         )
       );

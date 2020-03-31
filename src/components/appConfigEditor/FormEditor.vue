@@ -130,7 +130,7 @@ import Vue from "vue";
 import axios from "axios";
 // import _ from "lodash";
 
-import formfieldeditor from "@/components/FormFieldEditor";
+import formfieldeditor from "@/components/appConfigEditor/FormFieldEditor";
 Vue.component("FormFieldEditor", formfieldeditor);
 
 export default {
