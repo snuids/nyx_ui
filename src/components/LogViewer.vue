@@ -39,19 +39,21 @@
             >
             <template slot-scope="scope">              
               <span style="{ color:black;white-space: pre-wrap !important;}">{{scope.row.message}}</span>
-            </template>             
+            </template>   
+                      
           </el-table-column>
 
-          <el-table-column
+          <el-table-column            
             label=""
             prop=""
             align="right"
+            v-if="logObj.search"
+            width="170"
             >
             
              <template slot="header" slot-scope="scope" style="text-align:right">
               <el-input
-                v-model="search"
-                style="width:50%"
+                v-model="search"                
                 size="mini"
                 :placeholder="$t('generic.type_to_search')"/>
 
