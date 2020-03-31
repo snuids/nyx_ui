@@ -99,15 +99,28 @@ export default {
         var cacheKey = this.config.rec_id+'-'+this.queryFilterCopy[queryind].title
         this.$store.getters.searchCache[cacheKey] = this.queryFilterCopy[queryind].selected
 
-        if (this.queryFilterCopy[queryind].selected != "*")
+        var valq=this.queryFilterCopy[queryind].selected;
+
+        if (this.queryFilterCopy[queryind].type=="text")
         {
-          var valq=this.queryFilterCopy[queryind].selected;
+          
+          if(valq=="")
+            valq="*";
+          else if(valq!=undefined && valq.indexOf("*")==-1)
+          {            
+            valq="*"+valq+"*";
+          }
+          
+        }
+
+        if (valq != "*")
+        {
           if(valq.indexOf("*")>=0 || valq.indexOf("[")>=0 || valq.indexOf("{")>=0)
           {
               querya.push(
               this.queryFilterCopy[queryind].field +
                 ':' +
-                this.queryFilterCopy[queryind].selected +
+                valq +
                 ''
             );
           }
@@ -116,7 +129,7 @@ export default {
             querya.push(
               this.queryFilterCopy[queryind].field +
                 ':"' +
-                this.queryFilterCopy[queryind].selected +
+                valq +
                 '"'
             );
           }
