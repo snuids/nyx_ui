@@ -277,7 +277,9 @@ export default {
       }
     },
     selecterOptionsToConfig: _.debounce(function() {
-      this.filterFieldToConfigure.selectOptions = this.selecterOptions.trim().split('\r\n')
+      console.log('save options to config')
+      this.filterFieldToConfigure.selectOptions = this.selecterOptions.trim().replace(/\r/g,'').split('\n')
+      console.log(this.filterFieldToConfigure.selectOptions)
     }, 500),
     setFocus: function(el) {
       this.$nextTick(() => this.$refs[el].focus());
