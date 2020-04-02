@@ -107,8 +107,6 @@ To add a new specific table editor:
 docker build .
 ```
 
-!! Warning : Don't forget to issue a **npm run build** first 
+### Version History
 
-
-
-
+## V3.13.0 02/Apr/2020  Upload component can filter file extensions. Periodic reports translation updated. Lambda details interface updated.
