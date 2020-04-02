@@ -1,18 +1,18 @@
 <template>
-  <el-dialog width="60%" title="Edit Scheduler" :visible.sync="visible" :before-close="closeDialog">
+  <el-dialog width="80%" :title="$t('scheduler.edit_scheduler')" :visible.sync="visible" :before-close="closeDialog">
     <el-tabs v-model="activeName">
-      <el-tab-pane label="Scheduler" name="scheduler">
-        <el-form :model="record" v-if="visible">
+      <el-tab-pane :label="$t('scheduler.scheduler')" name="scheduler">
+        <el-form :model="record._source" v-if="visible" :rules="rules" ref="record">
           <el-row>
             <el-col :span="24">
-              <el-form-item label="Title" :label-width="formLabelWidth">
+              <el-form-item :label="$t('scheduler.title')" :label-width="formLabelWidth" prop="title">
                 <el-input size="mini" v-model="record._source.title" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="Report" :label-width="formLabelWidth">
+              <el-form-item :label="$t('report.report')" :label-width="formLabelWidth" align="left">
                 <el-select
                   size="mini"
                   @change="reportChange"
@@ -23,28 +23,28 @@
                     v-for="report in reports"
                     :key="report._id"
                     :value="report._id"
-                    :label="report._source.title"
+                    :label="computeTranslatedText(report._source.title,$store.getters.creds.user.language)"
                   ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="Type" :label-width="formLabelWidth">
+              <el-form-item :label="$t('scheduler.type')" :label-width="formLabelWidth" align="left">
                 <el-select
                   size="mini"
                   v-model="record._source.trigger.type"
                   placeholder="Select"
                   @change="typeChanged"
                 >
-                  <el-option label="Daily" value="daily"></el-option>
-                  <el-option label="Monthly" value="monthly"></el-option>
+                  <el-option :label="$t('scheduler.daily')" value="daily"></el-option>
+                  <el-option :label="$t('scheduler.monthly')" value="monthly"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="Time" :label-width="formLabelWidth">
+              <el-form-item :label="$t('scheduler.time')" :label-width="formLabelWidth" align="left">
                 <el-time-select
                   size="mini"
                   v-model="record._source.trigger.time"
@@ -70,20 +70,20 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="Path" :label-width="formLabelWidth">
+              <el-form-item :label="$t('scheduler.path')" :label-width="formLabelWidth">
                 <el-input size="mini" placeholder="The path + filename  on the server used to save the report. Empty by default." v-model="record._source.path" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="4">&nbsp;</el-col>
-            <el-col :span="20">
+            <el-col :span="6">&nbsp;</el-col>
+            <el-col :span="18">
               <template v-if="record._source.trigger.type == 'daily'">
                 <el-transfer
                   style="text-align:left;"
-                  :titles="['Days Excluded', 'Days included']"
+                  :titles="[$t('scheduler.excluded_days'), $t('scheduler.included_days')]"
                   filterable
-                  filter-placeholder="Select Days"
+                  :filter-placeholder="$t('scheduler.select_days')"
                   v-model="record._source.trigger.days"
                   :data="days"
                 ></el-transfer>
@@ -91,9 +91,9 @@
               <template v-if="record._source.trigger.type == 'monthly'">
                 <el-transfer
                   style="text-align:left;"
-                  :titles="['Days Excluded', 'Days included']"
+                  :titles="[$t('scheduler.excluded_days'), $t('scheduler.included_days')]"
                   filterable
-                  filter-placeholder="Select Days"
+                  :filter-placeholder="$t('scheduler.select_days')"
                   v-model="record._source.trigger.days"
                   :data="months"
                 ></el-transfer>
@@ -102,29 +102,36 @@
           </el-row>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="Reset Task" name="reset task">
+      <el-tab-pane :label="$t('scheduler.reset_task')" name="reset task">
         <el-form>
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="Number of days" :label-width="formLabelWidth">
+            <el-col :span="6">
+              <el-form-item :label="$t('scheduler.number_of_days')" :label-width="formLabelWidth">
                 <el-input-number :min="1" size="mini" v-model="resetdays" autocomplete="off"></el-input-number>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="Number of days" :label-width="formLabelWidth">
+            <el-col :span="8" align="left">
+              <el-form-item label="" :label-width="formLabelWidth">
                 <el-button size="mini" type="danger" plain @click="resetTask(record)">Reset</el-button>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="Next Run" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="record._source.nextRun" autocomplete="off"></el-input>
+          </el-row>
+          <el-row>            
+            <el-col :span="12">
+              <el-form-item :label="$t('scheduler.next_run')" :label-width="formLabelWidth" align="left">
+                <el-date-picker siez="mini"
+                  v-model="record._source.nextRun"
+                  type="datetime"
+                  placeholder="Select date and time">
+                </el-date-picker>
+                <!-- <el-input size="mini" v-model="record._source.nextRun" autocomplete="off"></el-input> -->
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="Mailing List" name="mailing list">
-        Mailing List
+      <el-tab-pane :label="$t('scheduler.mailing_list')" name="mailing list">
+        
         <div>
           <div style="display: table;margin: 0 auto;">
             <el-transfer
@@ -136,22 +143,22 @@
                   label: '_id'
                 }"
               :data="users"
-              :titles="['Excluded', 'Included']"
+              :titles="[$t('scheduler.excluded'), $t('scheduler.included')]"
             ></el-transfer>
           </div>
         </div>
       </el-tab-pane>
 
-      <el-tab-pane label="Mail Content" name="mailing content">
+      <el-tab-pane :label="$t('scheduler.mail_content')" name="mailing content">
         <el-form>
           <el-row>
-            <el-form-item label="Mail Subject" :label-width="formLabelWidth">
+            <el-form-item :label="$t('scheduler.subject')" :label-width="formLabelWidth">
               <el-input size="mini" v-model="record._source.mailSubject" autocomplete="off"></el-input>
             </el-form-item>
           </el-row>
 
           <el-row>
-            <el-form-item label="Attach. Name" :label-width="formLabelWidth">
+            <el-form-item :label="$t('scheduler.attachment')" :label-width="formLabelWidth">
               <el-input
                 placeholder="MyFile-${DATE:%d%B%Y}"
                 size="mini"
@@ -162,7 +169,7 @@
           </el-row>
 
           <el-row>
-            <el-form-item label="Mail Content" :label-width="formLabelWidth">
+            <el-form-item :label="$t('scheduler.content')" :label-width="formLabelWidth">
               <el-input
                 type="textarea"
                 :rows="10"
@@ -176,8 +183,8 @@
     </el-tabs>
     <span slot="footer" class="dialog-footer">
       <!--<v-icon :name="record.icon" scale="1"/>-->
-      <el-button @click="closeDialog()">Cancel</el-button>
-      <el-button type="primary" @click="updatePeriodicReport()" :disabled="!modified">Update</el-button>
+      <el-button @click="closeDialog()">{{$t('buttons.cancel')}}</el-button>
+      <el-button type="primary" @click="updatePeriodicReport()" :disabled="!modified">{{$t('buttons.update')}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -186,10 +193,17 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import {computeTranslatedText} from '../globalfunctions'
 
 export default {
   name: "ReportPeriodicEditor",
   data: () => ({
+        
+    rules: {
+      title: [
+        { required: true, message: "Please input a Title", trigger: "change" }
+      ]
+    },
     activeName: "scheduler",
     orgRecord: "",
     visible: false,
@@ -305,6 +319,9 @@ export default {
     this.visible = true;
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){      
+      return computeTranslatedText(inText,inLocale);
+    },
     typeChanged: function(inVal) {
       //alert(inVal);
     },
@@ -339,6 +356,16 @@ export default {
     },
 
     prepareMonth: function() {
+      this.days= [
+          { key: 0, label: this.$t('scheduler.monday') },
+          { key: 1, label: this.$t('scheduler.tuesday') },
+          { key: 2, label: this.$t('scheduler.wednesday') },
+          { key: 3, label: this.$t('scheduler.thursday') },
+          { key: 4, label: this.$t('scheduler.friday')},
+          { key: 5, label: this.$t('scheduler.saturday') },
+          { key: 6, label: this.$t('scheduler.sunday') }
+        ]
+
       this.months = [];
       for (var i = 1; i < 32; i++) this.months.push({ key: i, label: "" + i });
     },
@@ -407,8 +434,8 @@ export default {
         .then(response => {
           if (response.data.error != "") console.log("User list error...");
           else {
-            console.log(response.data.records);
-            console.log(this);
+            //console.log(response.data.records);
+           // console.log(this);
             this.users = response.data.records;
           }
         })

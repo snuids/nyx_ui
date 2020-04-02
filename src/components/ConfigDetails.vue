@@ -307,12 +307,24 @@
 
             <!-- Upload -->
             <div v-if="(curConfig.type === 'upload')">
-              <el-form-item label="Queue" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="curConfig.config.queue" autocomplete="off"></el-input>
-              </el-form-item>
+              <el-row>
+                <el-col span="12">
+                <el-form-item label="Queue" :label-width="formLabelWidth">
+                  <el-input size="mini" v-model="curConfig.config.queue" autocomplete="off"></el-input>
+                </el-form-item>
+                </el-col>
+                <el-col span="12">                  
+                <el-form-item label="File Types" :label-width="formLabelWidth">
+                  <el-input size="mini" placeholder=".docx,.doc or nothing for all types" v-model="curConfig.config.filetypes" autocomplete="off"></el-input>
+                </el-form-item>                              
+                </el-col>
+              </el-row>
+
+              <el-row>
               <el-form-item label="Tip" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="curConfig.config.tip" autocomplete="off"></el-input>
-              </el-form-item>
+                  <el-input size="mini" v-model="curConfig.config.tip" autocomplete="off"></el-input>
+                </el-form-item>
+              </el-row>
             </div>
           </el-card>
         </el-tab-pane>

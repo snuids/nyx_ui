@@ -128,8 +128,8 @@ export default {
         .then(response => {
           if (response.data.error != "") console.log("User list error...");
           else {
-            console.log(response.data.records);
-            console.log(this);
+            //console.log(response.data.records);
+            //console.log(this);
             this.tableData = response.data.records;
           }
         })

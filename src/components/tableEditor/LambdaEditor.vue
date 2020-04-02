@@ -7,6 +7,7 @@
     :close-on-click-modal="false"
     class="lambda-editor"
   >
+
     <!-- <h1>{{locEditMode}}</h1> -->
     <el-tabs v-model="activeName">
       <el-tab-pane label="Main" name="main">
@@ -112,6 +113,9 @@
             <el-col :span="5">
               <el-button @click="setFocus()" type="text">Crashed</el-button>
             </el-col>
+            <el-col :span="5">
+              <el-button @click="setFocus()" type="text">Result</el-button>
+            </el-col>
           </el-row>
 
           <el-row style="text-align:left;" type="flex" v-if="locEditMode=='edit'">
@@ -142,7 +146,11 @@
                 v-model="newRec._source.crashed"
               ></el-input>
             </el-col>
-            <el-col :span="9" style="text-align:right;">
+            <el-col :span="5">
+              <v-icon :style='"color:"+newRec._source.result_icon.split(">")[1]' :name="newRec._source.result_icon.split('>')[0]" scale="1.5"/>
+              
+            </el-col>
+            <el-col :span="4" style="text-align:right;">
               <el-button
                 style="min-width: 112px;"
                 icon="el-icon-refresh-left"
@@ -221,22 +229,41 @@
       <el-tab-pane label="Info" name="info">
         <el-form v-model="newRec._source">
           <el-card shadow="hover" :body-style="{ padding: '10px' }">
-            <el-form-item label="File" :label-width="formLabelWidth">
-              <el-input
-                :disabled="true"
-                size="mini"
-                v-model="newRec._source.file"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="Function" :label-width="formLabelWidth">
-              <el-input
-                :disabled="true"
-                size="mini"
-                v-model="newRec._source.function"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="File" :label-width="formLabelWidth">
+                  <el-input
+                    :disabled="true"
+                    size="mini"
+                    v-model="newRec._source.file"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="Function" :label-width="formLabelWidth">
+                  <el-input
+                    :disabled="true"
+                    size="mini"
+                    v-model="newRec._source.orgfunction"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row v-if="newRec._source.type=='message'">
+              <el-col :span="12">
+                <el-form-item label="Topics" :label-width="formLabelWidth">
+                  <el-input
+                    :disabled="true"
+                    size="mini"
+                    v-model="newRec._source.topics"
+                    autocomplete="off"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            
             <el-row>
               <el-col :span="6">
                 <el-form-item
@@ -782,6 +809,7 @@ export default {
           return cb([]);
         });
     }
+    
   }
 };
 </script>

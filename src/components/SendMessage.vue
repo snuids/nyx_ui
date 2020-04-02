@@ -5,7 +5,7 @@
       <div slot="header" class="clearfix">
         <h3>{{$t('sendmessage.send_message')}}</h3>
       </div>
-      <el-form ref="form" :model="form" label-width="120px">
+      <el-form label-width="120px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="Type">

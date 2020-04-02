@@ -7,14 +7,14 @@
   >
     <el-form class="form" :rules="rules" ref="cpform" status-icon label-width="180px">
       <el-form-item :label="$t('changepassword.oldpass')" prop="oldpassword">
-        <el-input type="password" name="password" autocomplete="none" v-model="cpform.oldpassword" />
+        <el-input size="mini" type="password" name="password" autocomplete="none" v-model="cpform.oldpassword" />
       </el-form-item>
       <div>&nbsp;</div>
       <el-form-item class="formitem" :label="$t('changepassword.newpass')" prop="newpassword1">
-        <el-input type="password" autocomplete="none" v-model="cpform.newpassword1" />
+        <el-input size="mini"  type="password" autocomplete="none" v-model="cpform.newpassword1" />
       </el-form-item>
       <el-form-item class="formitem" :label="$t('changepassword.repeatpass')" prop="newpassword2">
-        <el-input type="password" autocomplete="none" v-model="cpform.newpassword2" />
+        <el-input size="mini" type="password" autocomplete="none" v-model="cpform.newpassword2" />
       </el-form-item>
     </el-form>
     {{errorstr}}

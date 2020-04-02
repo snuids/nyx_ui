@@ -1,6 +1,37 @@
 export const messages = {
     fr: {
-  
+      
+      scheduler: {
+        edit_scheduler: 'Editer La Tache Périodique',
+        scheduler: 'Tache Périodique',
+        reset_task:'Ré-init. la tache',
+        mailing_list:'Liste de diffusion',
+        mail_content:'Contenu du mail',
+        title:'Titre',
+        type:'Type',
+        time:'Heure',
+        path:'Chemin',
+        monthly:'Par mois',
+        daily:'Par jour',
+        included_days:'Jours Inclus',
+        excluded_days:'Jours Exclus',
+        select_days:'Sélectionner',
+        monday:'Lundi',        
+        tuesday:'Mardi',        
+        wednesday:'Mercredi',        
+        thursday:'Jeudi',        
+        friday:'Vendredi',        
+        saturday:'Samedi',        
+        sunday:'Dimanche',
+        number_of_days:'Nombre de jours',
+        next_run:'Prochaine Exec.',    
+        excluded:'Exclus',    
+        included:'Inclus',    
+        subject:'Sujet', 
+        attachment:'Pièce jointe', 
+        content:'Contenu',
+
+      },
       logout: {
         logout: 'Déconnexion',
         change_pass: 'Changer le mot de passe',
