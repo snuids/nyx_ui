@@ -124,12 +124,10 @@ export default {
     }
   },
   mounted: function() {
-    console.log('created')
     this.prepareData()
   },
   methods: {
     prepareData: function() {
-      console.log('prepareData')
       this.loading = true
       var indice = this.logObj.indice
       var id     = this.logObj.id
