@@ -333,7 +333,7 @@ export default {
         .then(response => {
           if (response.data.error != "") console.log("Report list error...");
           else {
-            console.log(response.data.records);
+            //console.log(response.data.records);
             console.log(this);
             this.tableData = response.data.records;
           }

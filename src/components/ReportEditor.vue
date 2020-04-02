@@ -1,16 +1,17 @@
 <template>
   <el-dialog width="80%" :title="title" :visible.sync="visible" :before-close="closeDialog">
-    <el-form v-if="visible" v-model="newRec" :rules="rules" ref="reportForm">
+    <el-form v-if="visible" :model="newRec" :rules="rules" ref="newRec">
       <el-tabs v-model="activeName">
         <el-tab-pane label="Main" name="main">
           <el-row>
             <el-col :span="14">
+              
               <el-form-item label="Title" :label-width="formLabelWidth" prop="title">
                 <el-input size="mini" v-model="newRec.title" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="Icon" :label-width="formLabelWidth">
+              <el-form-item label="Icon" :label-width="formLabelWidth"  prop="icon">
                 <el-input size="mini" v-model="newRec.icon" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
@@ -22,7 +23,7 @@
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="Description" :label-width="formLabelWidth">
+              <el-form-item label="Description" :label-width="formLabelWidth"  prop="description">
                 <el-input size="mini" v-model="newRec.description" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
@@ -407,13 +408,17 @@ export default {
     inputValue: "",
     allPrivileges: [],
     visible: true,
-    uploadurl:"",
-    reportForm: {
-      title: ""
-    },
+    uploadurl:"",    
     rules: {
       title: [
-        { required: true, message: "Please input a Title", trigger: "blur" }
+        { required: true, message: "Please input a Title", trigger: "change" }
+      ],
+      description: [        
+        ,{ required: true, message: "Please input a Description", trigger: "change" }
+      ],
+      icon: [
+        { required: true, message: "Please pick an icon ex:bug", trigger: "change" }
+        
       ]
     },
     options: [
@@ -540,6 +545,8 @@ export default {
     },
     prepareData: function() {
       this.newRec = JSON.parse(JSON.stringify(this.record));
+      //this.reportForm.newRec=this.newRec;
+
       this.activeName = "main";
       this.changed = false;
       this.inputVisible = false;
@@ -547,17 +554,39 @@ export default {
       this.loadPrivileges();
     },
     submitForm(formName) {
+
+      this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.saveRecord();
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       // eslint-disable-line
       //this.$refs[formName].validate((valid) => {
       // if (valid) {
-      this.saveRecord();
+      
       /*} else {
           console.log('error submit!!');
           return false;
         }
       });*/
-    },
+    }
+    ,
     createNewReport: function()
+    {
+      this.$refs["newRec"].validate((valid) => {
+          if (valid) {
+            this.createNewReportAfterValid();
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    }
+    ,
+    createNewReportAfterValid: function()
     {
       var obj = {
         _id: this.id,

@@ -375,7 +375,7 @@ export default {
         .then(response => {
           if (response.data.error != "") console.log("Report list error...");
           else {
-            console.log(response.data.records);
+            //console.log(response.data.records);
             for (var i in response.data.records) {
               // console.log(response.data.records[i]._source.report);
               response.data.records[i]._source.report = JSON.parse(

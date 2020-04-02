@@ -8,6 +8,7 @@
         :action="uploadurl"
         :auto-upload="true"
         :file-list="fileList"
+        :accept="accept"
         :on-success="successUpload"
         multiple
       >
@@ -17,18 +18,24 @@
           <em>{{$t("upload.click_to_upload")}}</em>
         </div>
         <div class="el-upload__tip" slot="tip">
-          <h2>{{config.config.tip}}</h2>
+          <h2>{{computeTranslatedText(config.config.tip,$store.getters.creds.user.language)}}</h2>
         </div>
+        <span v-if="accept != undefined & accept != ''">          
+        ({{accept}})
+        </span>
       </el-upload>
     </div>
   </div>
 </template>
   
 <script>
+import {computeTranslatedText} from '../globalfunctions'
+
 export default {
   name: "Upload",
   data: () => ({
     fileList: [],
+    accept:"",
     uploadurl: ""
   }),
   props: {
@@ -37,6 +44,9 @@ export default {
     }
   },
   methods: {
+    computeTranslatedText: function(inText,inLocale){      
+      return computeTranslatedText(inText,inLocale);
+    },
     successUpload: function(response, file, fileList) {
       console.log("emit event on-success");
       this.$emit("on-success", response, file, fileList);
@@ -67,6 +77,7 @@ export default {
       this.$store.getters.creds.token +
       "&queue=" +
       this.config.config.queue;
+    this.accept=this.config.config.filetypes;
   }
 };
 </script>
