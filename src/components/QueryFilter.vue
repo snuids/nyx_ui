@@ -35,7 +35,7 @@
         ></el-input>
       </el-col>
     </div>
-    <div class="refresh-button">
+    <div class="refresh-button" v-if="config.type != 'kibana'">
       <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button>
     </div>
     <div class="download-button" v-if="config && config.downloadChecked">
@@ -87,7 +87,6 @@ export default {
   },
   methods: {
     refresh: _.throttle(function() {
-      console.log("refresh");
       var querya = [];
       for (let queryind in this.queryFilterCopy) {
         // cache the last search
@@ -98,9 +97,6 @@ export default {
         ].selected;
 
         var valq = this.queryFilterCopy[queryind].selected;
-
-        console.log(valq);
-        console.log(this.queryFilterCopy[queryind]);
 
         if (this.queryFilterCopy[queryind].type == "text") {
           if (valq == undefined || valq == "") valq = "*";
@@ -140,7 +136,7 @@ export default {
         }
       }
       this.queryfilter = querya.join(" AND ");
-      console.log("query: " + querya.join(" AND "));
+      console.log("QUERY FILTER - Sending query: " + querya.join(" AND "));
       this.$emit("queryfilterchanged", this.queryfilter);
     }, 1000),
     downloadSelection: function(format) {
@@ -148,8 +144,6 @@ export default {
     },
 
     prepareData: function(e) {
-      console.log("prepare data");
-
       this.queryFilterCopy = JSON.parse(
         JSON.stringify(this.config.config.queryfilters)
       );
@@ -157,8 +151,6 @@ export default {
       if (this.queryFilterCopy != undefined) {
         for (let queryind in this.queryFilterCopy) {
           var queryf = this.queryFilterCopy[queryind];
-
-          console.log(queryf);
 
           if (queryf.default != null) queryf.selected = queryf.default;
 
@@ -187,8 +179,6 @@ export default {
     }
   },
   created: function() {
-    console.log("created event");
-
     this.prepareData();
   },
   mounted: function() {

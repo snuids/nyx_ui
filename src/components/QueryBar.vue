@@ -1,6 +1,6 @@
 <template>
   <el-row class="query-bar">    
-    <div class="input-bar">   
+    <div :class="config.type =='kibana'? 'input-bar-with-kibana' : 'input-bar'">   
       
       <el-input
         :placeholder="this.$t('querybar.default')"
@@ -43,7 +43,7 @@
         </el-popover>
       </el-input>
     </div>
-    <div class="refresh-button" v-show="config.type !='kibana' ">
+    <div class="refresh-button" v-if="config.type !='kibana' ">
       <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">{{this.$t('generic.refresh')}}</el-button>
     </div>
   </el-row>
@@ -142,6 +142,15 @@ export default {
   width: calc(100% - 135px);
   float: left;
 }
+
+
+.query-bar .input-bar-with-kibana {
+  width: -webkit-calc(100% - 5px);
+  width: -moz-calc(100% - 5px);
+  width: calc(100% - 5px);
+  float: left;
+}
+
 .query-bar .refresh-button {
   width: 130px;
   float: right;
