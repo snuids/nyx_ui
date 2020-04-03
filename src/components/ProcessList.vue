@@ -6,14 +6,12 @@
         max-height="400"
         border
         :data="procWindowDetails">
-        <el-table-column key="0"
-                         prop="0"
+        <el-table-column prop="0"
                          label="Field"
                          min-width="150"
                          sortable
                          show-overflow-tooltip/>
-        <el-table-column key="1"
-                         prop="1"
+        <el-table-column prop="1"
                          label="Value"
                          min-width="424"
                          sortable
