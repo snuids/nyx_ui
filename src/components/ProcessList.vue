@@ -115,7 +115,7 @@ export default {
     dialogVisible: false,
     formLabelWidth: "120px",
     filter: "",
-    procWindowDetails: null    
+    procWindowDetails: []  
   }),
   props: {
     config: {
