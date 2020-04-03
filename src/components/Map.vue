@@ -1,6 +1,6 @@
 <template>
   <div style="height: 400px;width:100%;">
-    <l-map :zoom="zoom" :center="center">
+    <l-map :zoom="zoom" :center="center" :options="{scrollWheelZoom:false}">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <!--l-marker :lat-lng="marker"></l-marker-->
       <l-marker
@@ -18,6 +18,8 @@
 <script>
 import Vue from "vue";
 import Vue2Leaflet from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+
 
 import L from "leaflet";
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,14 +31,14 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-Vue.component("l-map", Vue2Leaflet.LMap);
-Vue.component("l-tile-layer", Vue2Leaflet.LTileLayer);
-Vue.component("l-marker", Vue2Leaflet.LMarker);
-Vue.component("l-tooltip", Vue2Leaflet.LTooltip);
-Vue.component("l-popup", Vue2Leaflet.LPopup);
-Vue.component("l-control-zoom", Vue2Leaflet.LControlZoom);
-Vue.component("l-geo-json", Vue2Leaflet.LGeoJson);
-Vue.component("l-feature-group", Vue2Leaflet.LFeatureGroup);
+// Vue.component("l-map", Vue2Leaflet.LMap);
+// Vue.component("l-tile-layer", Vue2Leaflet.LTileLayer);
+// Vue.component("l-marker", Vue2Leaflet.LMarker);
+// Vue.component("l-tooltip", Vue2Leaflet.LTooltip);
+// Vue.component("l-popup", Vue2Leaflet.LPopup);
+// Vue.component("l-control-zoom", Vue2Leaflet.LControlZoom);
+// Vue.component("l-geo-json", Vue2Leaflet.LGeoJson);
+// Vue.component("l-feature-group", Vue2Leaflet.LFeatureGroup);
 
 import "leaflet/dist/leaflet.css";
 
@@ -53,6 +55,11 @@ export default {
     marker: L.latLng(47.41322, -1.219482),
     markers: []
   }),
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker
+  },
   props: {
     config: {
       type: Object
@@ -80,6 +87,7 @@ export default {
     },
     prepareData: function() {
       var newmarkers=[];
+      console.log(this.tableData)
       
       for(var rec in this.tableData)
       {
@@ -90,12 +98,17 @@ export default {
         var res=resorg;
         if ((res!=null)&&(res.lat !=null))
         {
-          res=[res.lon,res.lat];
+          console.log(res)
+          res=[res.lat,res.lon];
         }
 
-        if (res!=null)
+        if (typeof(res)=='string'){
+          var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res.split(',')[0],res.split(',')[1])}
+          newmarkers.push(newm);
+
+        } else if (res!=null)
         {
-          var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[1],res[0])}
+          var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[0],res[1])}
           newmarkers.push(newm);
         }
 
@@ -113,8 +126,8 @@ export default {
 
     this.zoom = this.config.config.mapzoom;
     this.center = L.latLng(
+      this.config.config.maplat,
       this.config.config.maplong,
-      this.config.config.maplat
     );
     //alert(this.zoom)
     // setTimeout(function() { window.dispatchEvent(new Event('resize')) }, 250);

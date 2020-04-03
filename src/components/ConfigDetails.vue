@@ -262,17 +262,17 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
+                <el-form-item label="Latitude" :label-width="formLabelWidth">
+                  <el-input-number size="mini" v-model="curConfig.config.maplat" autocomplete="off"></el-input-number>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="Longitude" :label-width="formLabelWidth">
                   <el-input-number
                     size="mini"
                     v-model="curConfig.config.maplong"
                     autocomplete="off"
                   ></el-input-number>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="Latitude" :label-width="formLabelWidth">
-                  <el-input-number size="mini" v-model="curConfig.config.maplat" autocomplete="off"></el-input-number>
                 </el-form-item>
               </el-col>
             </el-row>
