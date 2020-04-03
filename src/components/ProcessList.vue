@@ -1,7 +1,22 @@
 <template>
   <div style="position:relative;">
-    <el-dialog title="Process Details" :visible.sync="dialogVisible" width="40%">
-      <div style="text-align:left" v-html="processDetailsData"></div>
+    <el-dialog title="Process Details" :visible.sync="dialogVisible" width="45%">
+      <el-table
+        size="small"
+        max-height="400"
+        border
+        :data="procWindowDetails">
+        <el-table-column prop="0"
+                         label="Field"
+                         min-width="150"
+                         sortable
+                         show-overflow-tooltip/>
+        <el-table-column prop="1"
+                         label="Value"
+                         min-width="424"
+                         sortable
+                         show-overflow-tooltip/>
+      </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">Close</el-button>
       </span>
@@ -80,7 +95,6 @@
 import axios from "axios";
 import moment from "moment";
 import _ from "lodash";
-import YAML from "yamljs";
 
 export default {
   name: "ProcessList",
@@ -90,17 +104,18 @@ export default {
     }
   },
   data: () => ({
-    selectedTimeframe: '7d',
+    selectedTimeframe: '5m',
     timeframes: [
       {key:"7d", value: "7 days"},
       {key:"1d", value: "1 day"},
-      {key:"1h", value: "1 hour"}
+      {key:"1h", value: "1 hour"},
+      {key:"5m", value: "5 minutes"}
     ],
     data: [],
     dialogVisible: false,
-    processDetailsData: "",
     formLabelWidth: "120px",
-    filter: ""
+    filter: "",
+    procWindowDetails: []  
   }),
   props: {
     config: {
@@ -114,7 +129,6 @@ export default {
       return this.data.filter(function(x) {
         return x.name.toLowerCase().indexOf(vm.filter.toLowerCase()) >= 0;
       });
-      //+return this.data.filter(function (x) {(x)=>x.name.toLowerCase().indexOf("kizeo")>0});
     }
   },
   methods: {
@@ -132,16 +146,14 @@ export default {
         .then(response => {
           if (response.data.error != "") console.log("Process list error...");
           else {
-            this.processDetailsData = YAML.stringify(
-              response.data.data._source
-            ).replace(/\n/g, "<br/>");
-            /*this.$alert(YAML.stringify(response.data.data._source).replace(/\n/g,"<br/>")
-            , 'Process Details', {
-          confirmButtonText: 'OK',
-          dangerouslyUseHTMLString: true
-        });*/
+            let source = response.data.data._source;
+            let data = [];
+            let keyArray = Object.keys(source);
+            for (let i in keyArray) {
+              data.push([keyArray[i], source[keyArray[i]]]);
+            }
+            this.procWindowDetails = data;
             this.dialogVisible = true;
-            //alert(YAML.stringify(response.data.data._source));
           }
         })
         .catch(error => {
