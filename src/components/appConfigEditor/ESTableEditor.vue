@@ -454,26 +454,26 @@
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="12">
-                <el-button @click="setFocus('long')" type="text">Lon.</el-button>
+                <el-button @click="setFocus('lat')" type="text">Lat.</el-button>
               </el-col>
               <el-col :span="12">
-                <el-button @click="setFocus('lat')" type="text">Lat.</el-button>
+                <el-button @click="setFocus('long')" type="text">Lon.</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="12">
                 <el-input-number
                   size="mini"
-                  ref="long"
-                  v-model="currentConfig.config.maplong"
+                  ref="lat"
+                  v-model="currentConfig.config.maplat"
                   autocomplete="off"
                 ></el-input-number>
               </el-col>
               <el-col :span="12">
                 <el-input-number
                   size="mini"
-                  ref="lat"
-                  v-model="currentConfig.config.maplat"
+                  ref="long"
+                  v-model="currentConfig.config.maplong"
                   autocomplete="off"
                 ></el-input-number>
               </el-col>
