@@ -41,6 +41,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-service": "^3.12.1",
