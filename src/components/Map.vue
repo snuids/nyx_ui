@@ -7,6 +7,7 @@
         v-for="item in markers"
         :key="item.id"
         :lat-lng="item.latlng"
+        :icon="getIcon(item)"
         @click="markerClicked(item)"
       >
         <!--v-popup :content="item.content"></v-popup-->
@@ -19,7 +20,8 @@
 import Vue from "vue";
 import Vue2Leaflet from "vue2-leaflet";
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
-
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 import L from "leaflet";
 delete L.Icon.Default.prototype._getIconUrl;
@@ -31,18 +33,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-// Vue.component("l-map", Vue2Leaflet.LMap);
-// Vue.component("l-tile-layer", Vue2Leaflet.LTileLayer);
-// Vue.component("l-marker", Vue2Leaflet.LMarker);
-// Vue.component("l-tooltip", Vue2Leaflet.LTooltip);
-// Vue.component("l-popup", Vue2Leaflet.LPopup);
-// Vue.component("l-control-zoom", Vue2Leaflet.LControlZoom);
-// Vue.component("l-geo-json", Vue2Leaflet.LGeoJson);
-// Vue.component("l-feature-group", Vue2Leaflet.LFeatureGroup);
-
 import "leaflet/dist/leaflet.css";
-
-//alert(JSON.stringify(LMarker))
 
 export default {
   name: "Map",
@@ -85,9 +76,40 @@ export default {
     markerClicked: function(marker) {
       this.$emit("mapclicked", marker);
     },
+    getIcon: function(item) {
+var greenIcon = new L.Icon({
+  html: 'A</v-icon><i class="fa fa-horse fa-2x"></i>',
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+return greenIcon;
+
+      //return null;
+// var firefoxIcon = L.icon({
+//         iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
+//         iconSize: [38, 95], // size of the icon
+//         });
+//         return firefoxIcon; 
+
+      // var firefoxIcon = L.icon({
+      //   iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
+      //   iconSize: [38, 95], // size of the icon
+      //   });
+      //   return firefoxIcon; 
+
+                const fontAwesomeIcon = L.divIcon({
+            html: '</v-icon><i class="fa fa-horse fa-2x"></i>',
+            iconSize: [40, 40],
+            className: 'myDivIcon'
+        });
+return fontAwesomeIcon; 
+    },
     prepareData: function() {
       var newmarkers=[];
-      console.log(this.tableData)
       
       for(var rec in this.tableData)
       {
@@ -144,4 +166,13 @@ export default {
   }
 };
 </script>
-
+<style>
+.myDivIcon {
+  border:solid 1px red;
+  color: red;
+  text-align: center;
+  /* Horizontally center the text (icon) */
+  line-height: 20px;
+  /* Vertically center the text (icon) */
+}
+</style>
