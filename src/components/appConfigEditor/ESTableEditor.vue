@@ -548,7 +548,7 @@
         </el-col>
         <el-col :span="12">
           <el-select
-            v-model="writePrivileges"
+            v-model="currentConfig.config.writeprivileges"
             multiple
             filterable
             allow-create
@@ -786,8 +786,6 @@ export default {
 
       if (indexToSearch == null || indexToSearch == "") indexToSearch = "*";
 
-      console.log("load es mapping. filter: " + indexToSearch);
-
       var url =
         this.$store.getters.apiurl +
         "esmapping/" +
@@ -798,18 +796,11 @@ export default {
       axios
         .get(url)
         .then(response => {
-          console.log("get mapping success");
-          console.log(response.data);
           if (response.data.data != null && response.data.data.length > 0) {
             this.esMapping = response.data.data;
 
-            console.log(this.currentConfig.config.index);
-            console.log(indexToSearch);
-
             if (indexToSearch == "*") {
-              console.log("ALL ES MAPPING");
               this.allesMapping = response.data.data;
-              console.log(this.allesMapping);
               this.helpMessage =
                 "Your index pattern can match any of your " +
                 this.esMapping.length +
@@ -838,7 +829,6 @@ export default {
         });
     }, 500),
     focusInput: _.debounce(function() {
-      console.log("focus");
       if (this.currentConfig.config.index == "") {
         this.currentConfig.config.index = "*";
         let input = this.$refs.indexPattern;
