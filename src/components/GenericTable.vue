@@ -33,7 +33,7 @@
       ></QueryFilter>
     </el-row>
     <el-row v-if="config.mapChecked">
-      <el-col>
+      <el-col style="padding-right:6px;">
         <Map :config="config" :tableData="tableData" v-on:mapclicked="mapClicked"></Map>
       </el-col>
     </el-row>
