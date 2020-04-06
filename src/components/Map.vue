@@ -6,10 +6,11 @@
       <l-marker
         v-for="item in markers"
         :key="item.id"
+        :icon="item.icon"
         :lat-lng="item.latlng"
-        :icon="getIcon(item)"
         @click="markerClicked(item)"
       >
+        <!-- :icon="getIcon(item)" -->
         <!--v-popup :content="item.content"></v-popup-->
       </l-marker>
     </l-map>
@@ -22,6 +23,10 @@ import Vue2Leaflet from "vue2-leaflet";
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
+
+import 'leaflet-fa-markers/L.Icon.FontAwesome.css'
+import 'leaflet-fa-markers/L.Icon.FontAwesome.js'
+
 
 import L from "leaflet";
 delete L.Icon.Default.prototype._getIconUrl;
@@ -77,16 +82,29 @@ export default {
       this.$emit("mapclicked", marker);
     },
     getIcon: function(item) {
-var greenIcon = new L.Icon({
-  html: 'A</v-icon><i class="fa fa-horse fa-2x"></i>',
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-return greenIcon;
+// var greenIcon = new L.Icon({
+//   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+//   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+//   shadowSize: [41, 41]
+// });
+//return greenIcon;
+var toto=L.icon.fontAwesome({
+    //iconClasses: "fa fa-info-circle myDivIcon", // you _could_ add other icon classes, not tested.
+    //iconClasses: "fa fa-building myDivIcon", // you _could_ add other icon classes, not tested.
+    iconClasses: "fa fa-play-circle myDivIcon", // you _could_ add other icon classes, not tested.
+    // marker/background style
+    markerColor: "#F00000",
+    markerFillOpacity: 0.9,
+    markerStrokeWidth: 1,
+    markerStrokeColor: "black",
+    // icon style
+    iconColor: "#FFF",
+    className: 'myDivIcon'
+  })
+  return toto;
 
       //return null;
 // var firefoxIcon = L.icon({
@@ -109,55 +127,115 @@ return greenIcon;
 return fontAwesomeIcon; 
     },
     prepareData: function() {
+      console.log("START PREPARE DATA....");
       var newmarkers=[];
-      
+      var icons={};
+      var nofmarkers=0;
+            
+      var has_colorfunction=false;
+      if (this.config.config.colorfunction != undefined && this.config.config.colorfunction!="")
+      {
+        has_colorfunction=true;
+        var color_function = new Function("x",this.config.config.colorfunction);        
+      }
+
+      var has_iconfunction=false;
+      if (this.config.config.iconfunction != undefined && this.config.config.iconfunction!="")
+      {
+        has_iconfunction=true;
+        var icon_function = new Function("x",this.config.config.iconfunction);        
+      }
+
       for(var rec in this.tableData)
       {
+        if(nofmarkers>1000)
+          break;
+        nofmarkers+=1;
         var record=this.tableData[rec]._source;
         
         var resorg=_.get(record,this.config.config.mapfield);
         
         var res=resorg;
         if ((res!=null)&&(res.lat !=null))
-        {
-          console.log(res)
+        {          
           res=[res.lat,res.lon];
         }
 
-        if (typeof(res)=='string'){
-          var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res.split(',')[0],res.split(',')[1])}
-          newmarkers.push(newm);
+        var color="green";
+        if (has_colorfunction)
+        {
+          color=color_function(record);
+        }
+        var icon="info-circle";
+        if (has_iconfunction)
+        {
+          icon=icon_function(record);
+        }
+
+        var key=icon+color.replace(/#/g,"");
+        if (icons[key]==undefined)
+        {          
+          var newicon=L.icon.fontAwesome({
+              iconClasses: "fa fa-"+icon+" myDivIcon", // you _could_ add other icon classes, not tested.
+              markerColor: color,
+              markerFillOpacity: 0.5,
+              markerStrokeWidth: 1,
+              markerStrokeColor: "black",
+              // icon style
+              iconColor: "#FFF",
+              className: 'myDivIcon'
+            })
+            icons[key]=newicon;          
+        }
+
+        var icon=icons[key];
+        if(this.tableData.length>50)
+          icon=null;
+
+        if (typeof(res)=='string'){          
+          if (res.indexOf(",")>0)
+          {
+            var newm={"source":this.tableData[rec],"icon":icon,"id":this.tableData[rec]._id,"latlng": L.latLng(res.split(',')[0],res.split(',')[1])}
+            newmarkers.push(newm);
+          }
 
         } else if (res!=null)
         {
-          var newm={"source":this.tableData[rec],"id":this.tableData[rec]._id,"latlng": L.latLng(res[0],res[1])}
+          var newm={"source":this.tableData[rec],"icon":icon,"id":this.tableData[rec]._id,"latlng": L.latLng(res[0],res[1])}
           newmarkers.push(newm);
         }
 
+        
+
         //break;
       }
+      console.log(icons);
       this.markers = newmarkers;
+      console.log("END PREPARE DATA....");
     }
   },
-  created: function() {},
-
-  mounted: function() {
-    console.log("===============  REGISTERING MAP:");
-
-    this.prepareData();
-
+  created: function() {
+    console.log("===============  MAP CREATED:");
     this.zoom = this.config.config.mapzoom;
     this.center = L.latLng(
       this.config.config.maplat,
       this.config.config.maplong,
     );
-    //alert(this.zoom)
-    // setTimeout(function() { window.dispatchEvent(new Event('resize')) }, 250);
+    console.log("===============  MAP END CREATED:");
+  },
 
+  mounted: function() {
+    console.log("===============  REGISTERING MAP:");
+    console.log("===============  MAP MOUNTED:");
+
+    this.prepareData();
+
+    console.log("===============  MAP MOUNTED2:");
+    
     this.$globalbus.$on("timerangechanged", () => {
-      console.log("GLOBALBUS/MAPTIMERANGE/");
-      //this.createUrl();
+      console.log("GLOBALBUS/MAPTIMERANGE/");      
     });
+    console.log("===============  MAP END MOUNTED:");
   },
   beforeDestroy: function() {
     console.log("===============  UNREGISTERING MAP:");
@@ -167,10 +245,10 @@ return fontAwesomeIcon;
 };
 </script>
 <style>
-.myDivIcon {
-  border:solid 1px red;
-  color: red;
+.myDivIcon {  
   text-align: center;
+  margin-top:-10px;
+  margin-left:-2px;
   /* Horizontally center the text (icon) */
   line-height: 20px;
   /* Vertically center the text (icon) */
