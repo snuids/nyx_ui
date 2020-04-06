@@ -196,6 +196,10 @@ export default {
             value: "text",
             label: "Free Text"
           }
+          ,{
+            value: "text_strict",
+            label: "Free Text (Strict)"
+          }
         ],
         selecterOptions: '',
         inputValue: "",
