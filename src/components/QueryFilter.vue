@@ -29,7 +29,7 @@
           @change="refresh()"
           size="mini"
           style="width:170px"
-          v-if="queryfilter.type == 'text'"
+          v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict'"
           placeholder="Please input"
           v-model="queryfilter.selected"
         ></el-input>
@@ -86,6 +86,14 @@ export default {
     }
   },
   methods: {
+    clean_field: function(field)
+    {
+      console.log("===>"+field);
+      if (" ".indexOf(field)>=0)    
+        console.log("2==>"+field);
+        return field.replace(/ /g,"\\ ");
+      return field;
+    },
     refresh: _.throttle(function() {
       var querya = [];
       for (let queryind in this.queryFilterCopy) {
@@ -121,16 +129,16 @@ export default {
           }
         }
 
-        if (valq != "*") {
+        if ((valq!=undefined)&&(valq!='')&&(valq != "*")) {
           if (
             valq.indexOf("*") >= 0 ||
             valq.indexOf("[") >= 0 ||
             valq.indexOf("{") >= 0
           ) {
-            querya.push(this.queryFilterCopy[queryind].field + ":" + valq + "");
+            querya.push(this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq + "");
           } else {
             querya.push(
-              this.queryFilterCopy[queryind].field + ':"' + valq + '"'
+              this.clean_field(this.queryFilterCopy[queryind].field) + ':"' + valq + '"'
             );
           }
         }
