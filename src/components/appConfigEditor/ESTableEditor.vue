@@ -478,6 +478,18 @@
                 ></el-input-number>
               </el-col>
             </el-row>
+
+          <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="24">
+                <el-button @click="setFocus('transparency')" type="text">Transparency</el-button>
+              </el-col>
+            </el-row>
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="24">
+                <el-slider :min="0" :max="90" v-model="currentConfig.config.transparency" ref="transparency"></el-slider>
+              </el-col>
+            </el-row>
+
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
                 <el-button @click="setFocus('colorfunc')" type="text">Color Function</el-button>
@@ -493,6 +505,7 @@
                 ></el-input>
               </el-col>
             </el-row>
+
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">

@@ -38,6 +38,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
+// var defaulticon=L.Icon.extend
+// ({options:{
+//   iconRetinaUrl: require("leaflet/dist/images/marker-icon.png"),
+//   iconUrl: require("leaflet/dist/images/marker-icon.png"),
+//   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+// }});
+
 import "leaflet/dist/leaflet.css";
 
 export default {
@@ -81,57 +88,18 @@ export default {
     markerClicked: function(marker) {
       this.$emit("mapclicked", marker);
     },
-    getIcon: function(item) {
-// var greenIcon = new L.Icon({
-//   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-//   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-//   iconSize: [25, 41],
-//   iconAnchor: [12, 41],
-//   popupAnchor: [1, -34],
-//   shadowSize: [41, 41]
-// });
-//return greenIcon;
-var toto=L.icon.fontAwesome({
-    //iconClasses: "fa fa-info-circle myDivIcon", // you _could_ add other icon classes, not tested.
-    //iconClasses: "fa fa-building myDivIcon", // you _could_ add other icon classes, not tested.
-    iconClasses: "fa fa-play-circle myDivIcon", // you _could_ add other icon classes, not tested.
-    // marker/background style
-    markerColor: "#F00000",
-    markerFillOpacity: 0.9,
-    markerStrokeWidth: 1,
-    markerStrokeColor: "black",
-    // icon style
-    iconColor: "#FFF",
-    className: 'myDivIcon'
-  })
-  return toto;
-
-      //return null;
-// var firefoxIcon = L.icon({
-//         iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
-//         iconSize: [38, 95], // size of the icon
-//         });
-//         return firefoxIcon; 
-
-      // var firefoxIcon = L.icon({
-      //   iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
-      //   iconSize: [38, 95], // size of the icon
-      //   });
-      //   return firefoxIcon; 
-
-                const fontAwesomeIcon = L.divIcon({
-            html: '</v-icon><i class="fa fa-horse fa-2x"></i>',
-            iconSize: [40, 40],
-            className: 'myDivIcon'
-        });
-return fontAwesomeIcon; 
-    },
     prepareData: function() {
       console.log("START PREPARE DATA....");
       var newmarkers=[];
       var icons={};
       var nofmarkers=0;
-            
+      
+      var transparency=0;
+      if (this.config.config.transparency != undefined)
+      {
+        transparency=this.config.config.transparency/100;
+      }
+          
       var has_colorfunction=false;
       if (this.config.config.colorfunction != undefined && this.config.config.colorfunction!="")
       {
@@ -178,11 +146,11 @@ return fontAwesomeIcon;
           var newicon=L.icon.fontAwesome({
               iconClasses: "fa fa-"+icon+" myDivIcon", // you _could_ add other icon classes, not tested.
               markerColor: color,
-              markerFillOpacity: 0.5,
+              markerFillOpacity: 1-transparency,
               markerStrokeWidth: 1,
-              markerStrokeColor: "black",
+              markerStrokeColor: "grey",
               // icon style
-              iconColor: "#FFF",
+              iconColor: ((transparency>0.5)?"#000":"#FFF"),
               className: 'myDivIcon'
             })
             icons[key]=newicon;          
@@ -190,7 +158,10 @@ return fontAwesomeIcon;
 
         var icon=icons[key];
         if(this.tableData.length>50)
+          //icon= defaulticon;
+
           icon=null;
+
 
         if (typeof(res)=='string'){          
           if (res.indexOf(",")>0)
