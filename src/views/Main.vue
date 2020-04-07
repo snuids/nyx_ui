@@ -1,5 +1,4 @@
 <template>
-  <!--div v-bind:style="{ height: 300 + 'px' }" -->
   <div v-if="$store.getters.activeApp">
     <ChangePassword
       v-if="changePasswordVisible"
@@ -416,15 +415,6 @@ export default {
       } else {
         this.maintitle = e.loc_title;
     
-
-        // this.$store.commit({
-        //   type: "changeApps",
-        //   data: e
-        // });
-
-        console.log(this.$route)
-
-        // var path = "/main/" + e.fulltitle
         var path = "/main/" + e.apps[0].rec_id
 
         if(path != this.$route.path)
@@ -552,7 +542,6 @@ export default {
     }
 
     if (this.$store.getters.currentSubCategory == undefined && localStorage.authResponse) {
-        // console.log(localStorage.authResponse)
         var path = this.$route.path
         if(path[path.length-1] == '/')
           path = path.substring(0, path.length-1)
@@ -569,7 +558,7 @@ export default {
         try {
 
           const response = await axios.get(url)
-          
+
           if(response.status == 200 && response.data.error=='') {
             this.$store.commit({
               type: "login",
