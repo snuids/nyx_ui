@@ -492,6 +492,23 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
+                <el-button @click="setFocus('colorfunc')" type="text">Fields Used By Functions</el-button>
+              </el-col>
+            </el-row>
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="24">
+                <el-input
+                  size="mini"
+                  ref:="colorfunc"
+                  placeholder="Fields used by the functions separated by a comma."
+                  v-model="currentConfig.config.functionfields"
+                  autocomplete="off"
+                ></el-input>
+              </el-col>
+            </el-row>
+
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="24">
                 <el-button @click="setFocus('colorfunc')" type="text">Color Function</el-button>
               </el-col>
             </el-row>

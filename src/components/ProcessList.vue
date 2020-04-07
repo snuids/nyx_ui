@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative;">
-    <el-dialog title="Process Details" :visible.sync="dialogVisible" width="45%">
+    <el-dialog title="Process Details" :visible.sync="dialogVisible" width="65%">
       <el-table
         size="small"
         max-height="400"
@@ -150,8 +150,13 @@ export default {
             let data = [];
             let keyArray = Object.keys(source);
             for (let i in keyArray) {
-              data.push([keyArray[i], source[keyArray[i]]]);
+
+              if (typeof source[keyArray[i]] === 'object')
+                data.push([keyArray[i], JSON.stringify(source[keyArray[i]])]);
+              else
+                data.push([keyArray[i], source[keyArray[i]]]);
             }
+            console.log(response.data.data._source);
             this.procWindowDetails = data;
             this.dialogVisible = true;
           }
