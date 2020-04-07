@@ -1,8 +1,10 @@
 <template>
   <div style="height: 400px;width:100%;">
+    
     <l-map :zoom="zoom" :center="center" :options="{scrollWheelZoom:false}">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <!--l-marker :lat-lng="marker"></l-marker-->
+      
+      <v-marker-cluster :options="{showCoverageOnHover:false}">
       <l-marker
         v-for="item in markers"
         :key="item.id"
@@ -10,10 +12,10 @@
         :lat-lng="item.latlng"
         @click="markerClicked(item)"
       >
-        <!-- :icon="getIcon(item)" -->
-        <!--v-popup :content="item.content"></v-popup-->
       </l-marker>
+      </v-marker-cluster>
     </l-map>
+   
   </div>
 </template>
 
@@ -27,10 +29,15 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import 'leaflet-fa-markers/L.Icon.FontAwesome.css'
 import 'leaflet-fa-markers/L.Icon.FontAwesome.js'
 
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+
 
 import L from "leaflet";
 delete L.Icon.Default.prototype._getIconUrl;
 import _ from "lodash";
+
+import Vue2LeafletMarkercluster from 'vue2-leaflet-markercluster'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
@@ -61,7 +68,8 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
+    'v-marker-cluster': Vue2LeafletMarkercluster
   },
   props: {
     config: {
@@ -157,10 +165,8 @@ export default {
         }
 
         var icon=icons[key];
-        if(this.tableData.length>50)
-          //icon= defaulticon;
-
-          icon=null;
+//        if(this.tableData.length>300)
+//          icon=null;
 
 
         if (typeof(res)=='string'){          
@@ -180,7 +186,7 @@ export default {
 
         //break;
       }
-      console.log(icons);
+      //console.log(icons);
       this.markers = newmarkers;
       console.log("END PREPARE DATA....");
     }
