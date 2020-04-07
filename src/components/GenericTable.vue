@@ -34,7 +34,7 @@
     </el-row>
     <el-row v-if="config.mapChecked">
       <el-col style="padding-right:6px;">
-        <Map :config="config" :tableData="tableData" v-on:mapclicked="mapClicked"></Map>
+        <Map :config="config" :tableData="mapTableData" v-on:mapclicked="mapClicked"></Map>
       </el-col>
     </el-row>
     <el-row v-if="config.graphicChecked">
@@ -217,6 +217,7 @@ export default {
     queryfilter: "",
     currentRecord: { original: {} },
     tableData: [],
+    mapTableData: [],
     previousValue: "",
     currentRow: null,
     dialogFormVisible: false,
@@ -433,9 +434,11 @@ export default {
       }, 1000);
     },
     mapClicked: function(row) {
-      this.currentRecord = row.source;
-      this.dialogFormVisible = true;
-      this.editMode = "edit";
+      // this.currentRecord = row.source;
+      // this.dialogFormVisible = true;
+      // this.editMode = "edit";
+      
+      this.handleView(0, row.source);
     },
     queryfilterchanged: function(query) {
       this.queryfilter = query;
@@ -702,6 +705,8 @@ export default {
       ) {
         query.extra = { exportColumns: this.config.config.exportColumns };
       }
+      
+
       axios
         .post(url, query)
         .then(response => {
@@ -841,6 +846,20 @@ export default {
             position: "bottom-right"
           });
         });
+
+      if (this.config.mapChecked)
+      {
+        query2=JSON.parse(JSON.stringify(query));
+        query2.size=1000;
+        query2._source=[this.config.config.mapfield];
+
+        axios
+          .post(url, query2)
+          .then(response => {
+            this.mapTableData = response.data.records;
+          });            
+            
+      }
     },
     graphClicked() {
       var newvalue =
