@@ -8,7 +8,7 @@
         v-for="queryfilter in queryFilterCopy"
         style="text-align:left"
       >
-        {{queryfilter.title}}
+        {{computeTranslatedText(queryfilter.title,$store.getters.creds.user.language)}}        
         <el-select
           v-if="queryfilter.type == 'selecter'"
           filterable
@@ -30,13 +30,29 @@
           size="mini"
           style="width:170px"
           v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict'"
-          placeholder="Please input"
+          :placeholder="$t('generic.pleaseinput')"
           v-model="queryfilter.selected"
         ></el-input>
       </el-col>
     </div>
     <div class="refresh-button" v-if="config.type != 'kibana'">
-      <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button>
+      <!-- <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button> -->
+      <el-tooltip                  
+                  class="item"
+                  effect="light"
+                  content="Refresh"
+                  placement="bottom-start"
+                  :open-delay="1000"
+                >
+      <el-button
+                circle
+                size="mini"
+                @click="refresh()"
+                class="regreshbutton"
+                plain
+                icon="el-icon-refresh"
+              ></el-button>
+      </el-tooltip>
     </div>
     <div class="download-button" v-if="config && config.downloadChecked">
       <el-popover placement="bottom-start" width="150" trigger="hover">
@@ -62,6 +78,9 @@
 </template>
 
 <script>
+
+import { computeTranslatedText } from "../globalfunctions";
+
 export default {
   name: "QueryFilter",
   data: () => ({
@@ -86,6 +105,9 @@ export default {
     }
   },
   methods: {
+    computeTranslatedText: function(inText, inLocale) {
+      return computeTranslatedText(inText, inLocale);
+    },
     clean_field: function(field)
     {
       console.log("===>"+field);
@@ -130,16 +152,30 @@ export default {
         }
 
         if ((valq!=undefined)&&(valq!='')&&(valq != "*")) {
+
+          var inverted=(valq.indexOf("-")==0);
+
+
           if (
             valq.indexOf("*") >= 0 ||
             valq.indexOf("[") >= 0 ||
             valq.indexOf("{") >= 0
           ) {
-            querya.push(this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq + "");
+            if (inverted)
+              querya.push("-"+this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq.substring(1) + "");
+            else
+              querya.push(this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq + "");
+
           } else {
-            querya.push(
-              this.clean_field(this.queryFilterCopy[queryind].field) + ':"' + valq + '"'
-            );
+            if (inverted)
+                querya.push(
+                this.clean_field("-"+this.queryFilterCopy[queryind].field) + ':"' + valq.substring(1) + '"'
+              );
+            else  
+              querya.push(
+                this.clean_field(this.queryFilterCopy[queryind].field) + ':"' + valq + '"'
+              );
+
           }
         }
       }
@@ -172,9 +208,13 @@ export default {
             for (var opt in queryf.selectOptions) {
               var selectopt = queryf.selectOptions[opt];
 
+              let [first, ...second] = selectopt.split("=")
+              second = second.join("=")
+
+
               queryf.options.push({
-                title: selectopt.split("=")[1],
-                value: selectopt.split("=")[0]
+                title: this.computeTranslatedText(second,this.$store.getters.creds.user.language),
+                value: first
               });
             }
           }
@@ -204,11 +244,11 @@ export default {
   font-weight: bold;
 }
 .query-filter .refresh-button {
-  width: 130px;
+  width: 50px;
   float: right;
 }
 .query-filter .download-button {
-  width: 70px;
+  width: 50px;
   float: right;
 }
 </style>
