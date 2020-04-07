@@ -266,8 +266,6 @@ export default {
   },
   methods: {
     prepareData() {
-      console.log('prepare data')
-      console.log(this.currentConfig.config.queryfilters)
       if (this.currentConfig.config.queryfilters != null) {
         for (
           var i = 0;
@@ -281,21 +279,17 @@ export default {
       }
     },
     selecterOptionsToConfig: _.debounce(function() {
-      console.log('save options to config')
       this.filterFieldToConfigure.selectOptions = this.selecterOptions.trim().replace(/\r/g,'').split('\n')
-      console.log(this.filterFieldToConfigure.selectOptions)
     }, 500),
     setFocus: function(el) {
       this.$nextTick(() => this.$refs[el].focus());
     },
     setFocusInput: function() {
       let input = this.$refs.indexPattern;
-      console.log(input);
       this.$nextTick(() => input.focus());
     },
     setFocusSelect: function() {
       let select = this.$refs.timeField;
-      console.log(select);
       this.$nextTick(() => select.focus());
     },
     query_filter_changed: function() {

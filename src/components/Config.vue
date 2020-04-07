@@ -229,7 +229,13 @@ export default {
           privileges: [],
           queryBarChecked: false,
           queryFilterChecked: false,
-          config: { headercolumns: [], tableFieldsToDownload: [], tableFieldsToFilter: [], queryfilters: [] }
+          config: { 
+            headercolumns: [], 
+            tableFieldsToDownload: [], 
+            tableFieldsToFilter: [], 
+            writeprivileges: [], 
+            queryfilters: [] 
+          }
         },
 
         _type: "doc"
@@ -254,18 +260,39 @@ export default {
     },
     handleEdit(index, row) {
       
-      if(row._source.config != null && row._source.config.headercolumns == null)
+      if(row._source.config == null) {
+        row._source.config = {
+          headercolumns: [], 
+          tableFieldsToDownload: [], 
+          tableFieldsToFilter: [], 
+          writeprivileges: [], 
+          queryfilters: [] 
+        }
+      }
+
+      
+      if(row._source.config.headercolumns == null)
         row._source.config.headercolumns = []
-      if(row._source.config != null && row._source.config.tableFieldsToDownload == null)
+      
+      if(row._source.config.tableFieldsToDownload == null)
         row._source.config.tableFieldsToDownload = []
-      if(row._source.config != null && row._source.config.tableFieldsToFilter == null)
+      
+      if(row._source.config.tableFieldsToFilter == null)
         row._source.config.tableFieldsToFilter = []
-      if(row._source.config != null && row._source.config.queryfilters == null)
+      
+      if(row._source.config.queryfilters == null)
         row._source.config.queryfilters = []
-      if(row._source != null && row._source.queryBarChecked == null)
+      
+      if(row._source.queryBarChecked == null)
         row._source.queryBarChecked = false
-      if(row._source != null && row._source.queryFilterChecked == null)
+      
+      if(row._source.queryFilterChecked == null)
         row._source.queryFilterChecked = false
+
+      if(row._source.config.writeprivileges == null)
+        row._source.config.writeprivileges = []
+      else if(typeof(row._source.config.writeprivileges) == 'string')
+        row._source.config.writeprivileges = [row._source.config.writeprivileges]
         
       this.curConfig = JSON.parse(JSON.stringify(row._source));
 
