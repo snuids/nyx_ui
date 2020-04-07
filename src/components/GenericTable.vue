@@ -712,7 +712,7 @@ export default {
         .then(response => {
           this.ready = true;
 
-          console.log(response);
+          //console.log(response);
 
           if (
             response.data.records != null ||
@@ -852,6 +852,16 @@ export default {
         query2=JSON.parse(JSON.stringify(query));
         query2.size=1000;
         query2._source=[this.config.config.mapfield];
+
+        if (this.config.config.functionfields!=null && this.config.config.functionfields!='')
+        {
+          var fields=this.config.config.functionfields.split(',');
+          for (var field in fields)
+          {
+            query2._source.push(fields[field]);
+          }
+        }
+//        console.log(query2._source);
 
         axios
           .post(url, query2)
