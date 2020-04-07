@@ -449,11 +449,29 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="Write Privilege" :label-width="formLabelWidth">
-                    <el-input
+                    <!-- <el-input
                       size="mini"
                       v-model="curConfig.config.writeprivileges"
                       autocomplete="off"
-                    ></el-input>
+                    ></el-input> -->
+
+                    <el-select
+                      v-model="curConfig.config.writeprivileges"
+                      multiple
+                      filterable
+                      allow-create
+                      ref="writePrivileges"
+                      placeholder="write privileges"
+                      size="mini"
+                      style="width:100%;"
+                    >
+                      <el-option
+                        v-for="item in allPrivileges"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -906,8 +924,11 @@ export default {
       this.curConfig.config.freetext = newvalue;
     },
     prepareData() {
+      console.log(this.currentConfig)
       this.dialogFormVisible = true;
       this.curConfig = JSON.parse(JSON.stringify(this.currentConfig));
+      console.log('end of prepare date configDetails')
+      console.log(this.curConfig)
 
       this.dialogHeaderVisible = false;
       this.formFielfEditorVisible = false;
@@ -920,8 +941,6 @@ export default {
       if(this.currentConfig.timeRefreshValue != null)
         this.curConfig.timeRefreshValue = this.curConfig.timeRefreshValue.replace('refreshInterval:(pause:!f,value:', '').replace(')', '')
 
-      console.log(this.currentConfig)
-
 
       this.strNewRec = "";
       this.strOrgRec = "";
@@ -931,6 +950,9 @@ export default {
       this.$nextTick(() => {
         this.refresh2();
       });
+
+
+
     },
     refresh2: function() {
       this.strNewRec = "";
@@ -1209,7 +1231,6 @@ export default {
       this.listLoading = false;
     },
     addDashboards: function(newdashs, space) {
-      console.log("Adding Space:" + space);
       for (var i in newdashs.saved_objects) {
         var dash = newdashs.saved_objects[i];
         dash.space = space;

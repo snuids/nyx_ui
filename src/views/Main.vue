@@ -569,7 +569,7 @@ export default {
         try {
 
           const response = await axios.get(url)
-
+          
           if(response.status == 200 && response.data.error=='') {
             this.$store.commit({
               type: "login",
@@ -580,6 +580,18 @@ export default {
               type: "changeApp",
               data: rec_id
             });
+
+            if(authResponse.data.cred.user.privileges.includes('admin')) {
+
+              this.$store.commit({
+                type: "privileges",
+                data: authResponse.data.all_priv
+              });
+              this.$store.commit({
+                type: "filters",
+                data: authResponse.data.all_filters
+              });
+            }
           }
         }
         catch (e){
