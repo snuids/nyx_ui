@@ -4,6 +4,8 @@ import axios from "axios";
 import moment from 'moment';
 import _ from "lodash";
 
+import { extractURLParts } from "../globalfunctions";
+
 Vue.use(Vuex);
 
 
@@ -121,7 +123,9 @@ export default new Vuex.Store({
           context.getters.wsObject.last_lifesign=moment(new Date());
           //var socket = new WebSocket('ws://localhost:8080/nyx_ui_websocket/');
           //var socket = new WebSocket('wss://test2.nyx-ds.com/nyx_ui_websocket/');
-          var wsurl=context.getters.apiurl.replace("http://","ws://").replace("https://","wss://").replace("/api/v1","/nyx_ui_websocket/");
+          //var wsurl=context.getters.apiurl.replace("http://","ws://").replace("https://","wss://").replace("/api/v1","/nyx_ui_websocket/");
+          var mainurl=extractURLParts(window.location.href);
+          var wsurl=mainurl.protocol+"://"+mainurl.host+"/nyx_ui_websocket/";          
           var socket = new WebSocket(wsurl);
           // Connection opened
           socket.addEventListener('open', function (event) {
