@@ -1,6 +1,7 @@
 
 <template>
   <div  v-if="$store.getters.currentSubCategory" style="border: 0px solid pink;height: 100%;overflow:hidden;"  v-loading="loading">
+    
     <div
       v-if="$store.getters.currentSubCategory.apps.length==1"
       style="border: 20px solid orange;height: 100%;overflow:auto;margin-top:5px;" v-bind:style="singleStyleContainerComputed"
@@ -211,11 +212,30 @@ const myExport = {
         }
       }
     });
+
+    console.log("===============  REGISTERING: messagereceived");
+    this.$globalbus.$on("messagereceived", payLoad => {
+      console.log("GLOBALBUS/GENERICCOMPONENT/MESSAGERECEIVED");
+      console.log(payLoad);
+      if(payLoad.notif_type=="global")
+      {
+        this.$alert(payLoad.notif_message, payLoad.notif_title, {
+          confirmButtonText: 'OK'   ,     
+          type: payLoad.notif_message_type
+        }).then(() => {
+          
+        });
+      }
+      
+    });  
+
     window.dispatchEvent(new Event("resize"));
   },
   destroyed: function() {
     console.log("===============  UN REGISTERING REport Generated:");
     this.$globalbus.$off("reportgenerated");
+    console.log("===============  UN REGISTERING messagereceived:");
+    this.$globalbus.$off("messagereceived");
   },
 };
 
