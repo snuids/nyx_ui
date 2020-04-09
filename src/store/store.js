@@ -126,6 +126,7 @@ export default new Vuex.Store({
           //var wsurl=context.getters.apiurl.replace("http://","ws://").replace("https://","wss://").replace("/api/v1","/nyx_ui_websocket/");
           var mainurl=extractURLParts(window.location.href);
           var wsurl=mainurl.protocol+"//"+mainurl.host+"/nyx_ui_websocket/";          
+          wsurl=wsurl.replace("http","ws");
           var socket = new WebSocket(wsurl);
           // Connection opened
           socket.addEventListener('open', function (event) {
