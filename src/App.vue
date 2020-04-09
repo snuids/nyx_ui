@@ -12,6 +12,7 @@ export default {
   name: "App",
   data: () => ({
     axiosInterceptor: null,
+    wsInterval:null
   }),
   methods: {
     enableInterceptor() {
@@ -83,7 +84,17 @@ export default {
     if(this.axiosInterceptor == null) {
       this.enableInterceptor()
     }
+    if( this.wsInterval==null)
+    {
+      setInterval(() => {
+            this.$store.dispatch('check_websocket')
+        }, 3000)
+    }
   },
+  beforeDestroy () {
+    if( this.wsInterval==null)
+      clearInterval(this.wsInterval)
+  }
 };
 </script>
 

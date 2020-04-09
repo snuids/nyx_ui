@@ -36,7 +36,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     apiVersion: "",
     kibanaurl: "/kibana/",
-    version: "v3.16.0",
+    version: "v3.17.0",
     devMode: false,
     menus: [],
     menuOpen: true,
@@ -63,8 +63,10 @@ export default new Vuex.Store({
     appConfigObj: null,
     redirection: null,
     searchCache: {},
+    wsObject:{"check_alive":false}
   },
   getters: {
+    wsObject: state => state.wsObject,
     apiVersion: state => state.apiVersion,
     apiurl: state => state.apiurl,
     menuOpen: state => state.menuOpen,
@@ -99,46 +101,56 @@ export default new Vuex.Store({
 
   },
   actions: {
-    // privileges({ commit, state }) {
-    //   var url =
-    //     state.apiurl +
-    //     "generic_search/nyx_privilege?token=" +
-    //     state.creds.token;
+    check_websocket : (context,payload) => {
+      //state.name = payload,
+      if(context.getters.wsObject.check_alive)
+      {
+        if(context.getters.wsObject.socket!=null)
+        {          
+          if((context.getters.wsObject.last_lifesign!=null)
+          &&(moment(new Date())-context.getters.wsObject.last_lifesign>10000))
+          {
+            console.log(moment(new Date())-context.getters.wsObject.last_lifesign);
+            console.log("Socket Not Responding...");
+            context.getters.wsObject.socket=null;
+          }
+        }
+        if(context.getters.wsObject.socket==null)
+        {
+          console.log("MUST CREATE SOCKET");
+          context.getters.wsObject.last_lifesign=moment(new Date());
+          //var socket = new WebSocket('ws://localhost:8080/nyx_ui_websocket/');
+          //var socket = new WebSocket('wss://test2.nyx-ds.com/nyx_ui_websocket/');
+          var wsurl=context.getters.apiurl.replace("http://","ws://").replace("https://","wss://").replace("/api/v1","/nyx_ui_websocket/");
+          var socket = new WebSocket(wsurl);
+          // Connection opened
+          socket.addEventListener('open', function (event) {
+            
+            socket.send(JSON.stringify(context.getters.creds));
+          });
 
-    //   axios
-    //     .post(url, {"size":1000})
-    //     .then(response => {
-    //       if (response.data.error != "")
-    //         console.log("Privileges error...");
-    //       else {
-    //         console.log("Privileges success...");
-    //         commit("privileges", response.data.records);
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // },
-    // filters({ commit, state }) {
-    //   var url =
-    //     state.apiurl +
-    //     "generic_search/nyx_filter?token=" +
-    //     state.creds.token;
-
-    //   axios
-    //     .post(url, {})
-    //     .then(response => {
-    //       if (response.data.error != "")
-    //         console.log("Filters error...");
-    //       else {
-    //         console.log("Filters success...");
-    //         commit("filters", response.data.records);
-    //       }
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // }
+          // Connection opened
+          socket.addEventListener('error', function (event) {
+            console.log('SOCKET error');
+          });
+    
+          // Listen for messages
+          socket.addEventListener('message', function (event) {
+            //console.log('Message from server ', event.data);
+            var inmes=JSON.parse(event.data);
+            context.getters.wsObject.last_lifesign=moment(new Date());
+            //console.log(inmes);
+            
+            if(inmes.type=="message")
+              Vue.prototype.$globalbus.$emit("messagereceived",inmes.data);
+          });
+          context.getters.wsObject.socket=socket;          
+        }
+        
+      }
+      
+      
+    }
   },
 
   mutations: {
@@ -227,11 +239,13 @@ export default new Vuex.Store({
       dend.endOf('year');
       state.timeRangeYear = [dstart.toDate(), dend.toDate()];
 
-
-
-      console.log("Login mutation done.");
+// WEB SOCKET
+      //const socket = new WebSocket('wss://test2.nyx-ds.com/nyx_ui_websocket/');
+      state.wsObject.check_alive=true;
+      
     },
     logout(state) {
+      state.wsObject.check_alive=true;
       var url =
         state.apiurl +
         "cred/logout?token=" +
