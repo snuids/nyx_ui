@@ -3,7 +3,8 @@
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
     </el-row>
-    <el-row v-if="config.queryBarChecked || config.downloadChecked">
+    <!-- <el-row v-if="config.queryBarChecked || config.downloadChecked"> -->
+    <el-row v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
       <!--el-col :span="2" style="text-align:left">
         <span class="input-label">{{$t("generic.query")}}:</span>
