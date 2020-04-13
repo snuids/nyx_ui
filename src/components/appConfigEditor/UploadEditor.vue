@@ -4,12 +4,12 @@
       <!-- <h1>{{fieldList}}</h1> -->
       <el-form>
           <el-row>
-                <el-col span="12">
+                <el-col :span="12">
                 <el-form-item label="Queue" :label-width="formLabelWidth">
                   <el-input size="mini" v-model="currentConfig.config.queue" autocomplete="off"></el-input>
                 </el-form-item>
                 </el-col>
-                <el-col span="12">                  
+                <el-col :span="12">                  
                 <el-form-item label="File Types" :label-width="formLabelWidth">
                   <el-input size="mini" placeholder=".docx,.doc or nothing for all types" v-model="currentConfig.config.filetypes" autocomplete="off"></el-input>
                 </el-form-item>                              
@@ -55,7 +55,7 @@ export default {
     currentConfig: { type: Object }
   },
   created: function() {
-    this.prepareData();
+    //this.prepareData();
   },
   methods: {
     
