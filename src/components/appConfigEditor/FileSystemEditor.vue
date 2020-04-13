@@ -4,7 +4,7 @@
       <!-- <h1>{{fieldList}}</h1> -->
       <el-form>
           <el-row>
-                <el-col span="24">
+                <el-col :span="24">
                 <el-form-item label="Reg Ex" :label-width="formLabelWidth">
                   <el-input size="mini" v-model="currentConfig.config.regexNO" autocomplete="off"></el-input>
                 </el-form-item>
@@ -51,7 +51,7 @@ export default {
     currentConfig: { type: Object }
   },
   created: function() {
-    this.prepareData();
+    //this.prepareData();
   },
   methods: {
     
