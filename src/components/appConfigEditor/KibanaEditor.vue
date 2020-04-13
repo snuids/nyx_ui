@@ -118,7 +118,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item>
+            <el-form-item label :label-width="formLabelWidth">
             <el-row>
               <el-switch v-model="currentConfig.hideFilter" active-text="Hide Filter"></el-switch>
             </el-row>

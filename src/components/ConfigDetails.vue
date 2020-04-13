@@ -160,6 +160,20 @@
               </el-card>
             </el-row>
 
+            <el-row v-if="curConfig.type === 'file-system'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="regular/folder-open" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays a file explorer.</b>
+                <br/> 
+                The file system must be shared with the nyx_ui container via Docker.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
             <el-row v-if="curConfig.type === 'internal'" class="transition-box" style="text-align:left;">     
               <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
               <el-col :span="4" style="text-align:right;padding-right:20px">
@@ -268,7 +282,7 @@
 
             <el-row
               :gutter="24"
-              v-if="/*(curConfig.type === 'kibana') || */(curConfig.type === 'pgsql-generic-table') /*|| (curConfig.type === 'generic-table')*/ || (curConfig.type === 'vega')"
+              v-if="/*(curConfig.type === 'kibana') || (curConfig.type === 'pgsql-generic-table') || (curConfig.type === 'generic-table') ||*/ (curConfig.type === 'vega')"
               style="text-align:left"
             >
               <el-col :span="8">
@@ -322,13 +336,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row
-              :gutter="24"
-              v-if="(curConfig.type === 'kibana') || (curConfig.type === 'generic-table')"
-              style="text-align:left"
-            >
-              <el-col :span="4"></el-col>
-            </el-row>
+            
             <!-- <el-row v-if="curConfig.mapChecked && (curConfig.type === 'generic-table')">
               <el-col :span="8">
                 <el-form-item label="Zoom" :label-width="formLabelWidth">
@@ -437,6 +445,61 @@
           <el-card>
             <!-- PG GENERIC TABLE -->
             <div>
+              <el-row
+              :gutter="24"              
+              style="text-align:left"
+            >
+              <el-col :span="8">
+                <el-form-item label :label-width="formLabelWidth">
+                  <el-row>
+                    <el-switch v-model="curConfig.queryBarChecked" active-text="Query Bar" @change="query_bar_changed"></el-switch>
+                  </el-row>
+                  <el-row>
+                    <el-switch v-model="curConfig.downloadChecked" active-text="Download"></el-switch>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label :label-width="formLabelWidth">
+                  <el-row>
+                    <el-switch v-model="curConfig.queryFilterChecked" active-text="Query Filter" @change="query_filter_changed"></el-switch>
+                  </el-row>
+
+                  <el-row>
+                    <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+                  </el-row>
+
+                  <el-row>
+                    <el-select
+                      size="mini"
+                      v-model="curConfig.timeSelectorType"
+                      placeholder="Please select a type"
+                      @change="timeSelectorTypeChange"
+                    >
+                      <el-option label="Free" value="classic"></el-option>
+                      <el-option label="Day" value="day"></el-option>
+                      <el-option label="Month" value="month"></el-option>
+                      <el-option label="Week" value="week"></el-option>
+                      <el-option label="Year" value="year"></el-option>
+                    </el-select>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+              
+              <el-col
+                :span="8"                
+              >
+                <el-form-item label :label-width="formLabelWidth">
+                  <el-row>
+                    <el-switch v-model="curConfig.graphicChecked" active-text="Graphic"></el-switch>
+                  </el-row>
+                  <el-row>
+                    <el-switch v-model="curConfig.mapChecked" active-text="Map"></el-switch>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            
               <el-row>
                 <el-col :span="6">
                   <el-form-item label="Index/Table" :label-width="formLabelWidth">
@@ -699,6 +762,16 @@
             :currentConfig="curConfig"
           ></UploadEditor>
         </el-tab-pane>
+        <el-tab-pane
+          label="File System"
+          name="filesystem"
+          key="filesystem"
+          v-if="(curConfig.type === 'file-system')"
+        >
+          <FileSystemEditor            
+            :currentConfig="curConfig"
+          ></FileSystemEditor>
+        </el-tab-pane>
 
      
 
@@ -839,6 +912,7 @@ import estableeditor from "@/components/appConfigEditor/ESTableEditor";
 import kibanaeditor from "@/components/appConfigEditor/KibanaEditor";
 import formeditor from "@/components/appConfigEditor/FormEditor";
 import uploadeditor from "@/components/appConfigEditor/UploadEditor";
+import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
 
 
 import Vue from "vue";
@@ -853,6 +927,7 @@ Vue.component("ESTableEditor", estableeditor);
 Vue.component("FormEditor", formeditor);
 Vue.component("KibanaEditor", kibanaeditor);
 Vue.component("UploadEditor", uploadeditor);
+Vue.component("FileSystemEditor", filesystemeditor);
 
 
 function transformObject(obj) {
@@ -931,16 +1006,16 @@ export default {
     closeDialog: function() {
       this.$emit("dialogclose");
     },
-    openInKibana() {
-      console.log(this.curConfig);
-      window.open(
-        this.curConfig.config.url
-          .replace("kibananyx", "kibana")
-          .replace("embed=true", "")
-          .replace(",title:Test", "")
-          .replace("title:Test,", "")
-      );
-    },
+    // openInKibana() {
+    //   console.log(this.curConfig);
+    //   window.open(
+    //     this.curConfig.config.url
+    //       .replace("kibananyx", "kibana")
+    //       .replace("embed=true", "")
+    //       .replace(",title:Test", "")
+    //       .replace("title:Test,", "")
+    //   );
+    // },
     categorySuggestion: function(queryString, cb) {
       var cat = [];
       for (var i in this.$store.getters.filteredmenus) {
@@ -1051,7 +1126,7 @@ export default {
       this.strNewRec = "";
       this.strOrgRec = "";
 
-      this.loadKibanaDashboards();
+      //this.loadKibanaDashboards();
 
       this.$nextTick(() => {
         this.refresh2();
@@ -1204,7 +1279,7 @@ export default {
       this.curConfig = null;
       this.curConfig = tmp;
     },
-    loadKibanaDashboards: function() {
+    /*loadKibanaDashboards: function() {
       this.listLoading = true;
       this.dashboards = [];
 
@@ -1342,7 +1417,7 @@ export default {
         dash.space = space;
         this.dashboards.push(dash);
       }
-    },
+    }*/
     handleDeleteHeader(index) {
       this.currentHeader = {};
       this.curConfig.config.headercolumns.splice(index, 1);
