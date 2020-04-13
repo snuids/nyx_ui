@@ -87,23 +87,152 @@
                 <v-icon v-if="curConfig.icon" :name="curConfig.icon" scale="2" />
               </el-col>
             </el-row>
-            <el-row v-if="(curConfig.type === 'kibana') || (curConfig.type === 'generic-table')">
-              <el-col
-                :span="8"
-                v-if="(curConfig.type === 'kibana') || (curConfig.type === 'generic-table')"
-              >
-                <el-form-item label="Hidden Query" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.hiddenQuery" autocomplete="off"></el-input>
-                </el-form-item>
+         
+             <el-row v-if="curConfig.type === 'kibana'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="chart-pie" scale="2.2" />
               </el-col>
-
-              <el-col :span="8" v-if="(curConfig.type === 'kibana')">
-                <el-form-item label="Filter Column" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.config.filtercolumn" autocomplete="off"></el-input>
-                </el-form-item>
+              <el-col :span="20">
+                <b>Displays a kibana dashboard.</b>
+                <br/> 
+                The dashboard must previously be created in Kibana.<br/> 
+                <br/> 
               </el-col>
+              </el-card>
             </el-row>
-            <el-row v-if="(curConfig.type === 'kibana')">
+
+            <el-row v-if="curConfig.type === 'generic-table'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="table" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays a collection stored in elastic search.</b>
+                <br/> 
+                It displays the data as a table that can optionaly include a time line or a map.<br/> 
+                
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'pgsql-generic-table'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:90px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="database" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays a table stored in PostgreSQL.</b>
+                <br/> 
+                It displays the data as a table that can optionaly include a time line or a map.<br/> 
+                It can also display the result of a query.                
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+           
+           <el-row v-if="curConfig.type === 'external'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="external-link-alt" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays an external URL in an iframe.</b>
+                <br/> 
+                It the external url contains <b>token=TOKEN</b>, the <b>TOKEN</b> tag is replaced by the actual user token.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'upload'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="file-upload" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays an upload form.</b>
+                <br/> 
+                The file is sent to an ActiveMQ destination and can be handled by Camel, NodeRed or a Lambda.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'file-system'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="regular/folder-open" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays a file explorer.</b>
+                <br/> 
+                The file system must be shared with the nyx_ui container via Docker.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'internal'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="cogs" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays an internal VUE controller.</b>
+                <br/> 
+                This controller must be added to the external nyx_ui folder and the UI recompiled.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+             <el-row v-if="curConfig.type === 'form'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="regular/keyboard" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays an input form.</b>
+                <br/> 
+                Fields of the form must be filled by the user. The target of the form can be an elastic search collection or a message.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'free-text'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(255, 245, 236);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="align-left" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Experimental</b>
+                <br/>                 
+                Displays html
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'vega'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:110px;background-color:rgb(255, 245, 236);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="align-left" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Experimental</b>
+                <br/>                 
+                Displays a vega visualization. The data must be accessed via a data source defined in NYX.<br/>
+                Ex: <b>https://173.242.183.147/api/v1/datasource/my_ds1?token=@TOKEN@&start=@START@&end=@END@</b>
+                </br>START and END are only used if a time selector is checked.
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+           
+            <!-- <el-row v-if="(curConfig.type === 'kibana')">
               <el-col :span="8" style="text-align: left;">
                 <el-form-item label="Dashboard" :label-width="formLabelWidth">
                   <el-select
@@ -149,11 +278,11 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row> -->
 
             <el-row
               :gutter="24"
-              v-if="(curConfig.type === 'kibana') || (curConfig.type === 'pgsql-generic-table') || (curConfig.type === 'generic-table') || (curConfig.type === 'vega')"
+              v-if="/*(curConfig.type === 'kibana') || (curConfig.type === 'pgsql-generic-table') || (curConfig.type === 'generic-table') ||*/ (curConfig.type === 'vega')"
               style="text-align:left"
             >
               <el-col :span="8">
@@ -192,45 +321,10 @@
                   </el-row>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" v-if="(curConfig.type === 'kibana')">
-                <el-form-item label :label-width="formLabelWidth">
-                  <el-row>
-                    <el-switch v-model="curConfig.hideFilter" active-text="Hide Filter"></el-switch>
-                  </el-row>
-
-                  <el-row>
-                    <el-switch
-                      v-model="curConfig.timeRefresh"
-                      @change="timeRefreshSwitchChange"
-                      active-text="Time Refresh"
-                    ></el-switch>
-                  </el-row>
-                  <el-row>
-                    <el-select
-                      size="mini"
-                      v-model="curConfig.timeRefreshValue"
-                      placeholder="Refresh Interval"
-                      @change="timeRefreshSelectChange"
-                    >
-                      <el-option label="5 seconds" value="5000"></el-option>
-                      <el-option label="10 seconds" value="10000"></el-option>
-                      <el-option label="30 seconds" value="30000"></el-option>
-                      <el-option label="45 seconds" value="45000"></el-option>
-                      <el-option label="1 minute" value="60000"></el-option>
-                      <el-option label="5 minutes" value="300000"></el-option>
-                      <el-option label="15 minutes" value="900000"></el-option>
-                      <el-option label="30 minutes" value="1800000"></el-option>
-                      <el-option label="1 hour" value="3600000"></el-option>
-                      <el-option label="2 hours" value="7200000"></el-option>
-                      <el-option label="12 hours" value="43200000"></el-option>
-                      <el-option label="1 day" value="86400000"></el-option>
-                    </el-select>
-                  </el-row>
-                </el-form-item>
-              </el-col>
+              
               <el-col
                 :span="8"
-                v-if="(curConfig.type === 'generic-table') || (curConfig.type === 'pgsql-generic-table')"
+                v-if="/*(curConfig.type === 'generic-table') || */(curConfig.type === 'pgsql-generic-table')"
               >
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
@@ -242,14 +336,8 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row
-              :gutter="24"
-              v-if="(curConfig.type === 'kibana') || (curConfig.type === 'generic-table')"
-              style="text-align:left"
-            >
-              <el-col :span="4"></el-col>
-            </el-row>
-            <el-row v-if="curConfig.mapChecked && (curConfig.type === 'generic-table')">
+            
+            <!-- <el-row v-if="curConfig.mapChecked && (curConfig.type === 'generic-table')">
               <el-col :span="8">
                 <el-form-item label="Zoom" :label-width="formLabelWidth">
                   <el-input-number
@@ -275,7 +363,7 @@
                   ></el-input-number>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row> -->
            
             <el-form-item
               v-if="(curConfig.type === 'external')"
@@ -306,7 +394,7 @@
             </el-form-item>
 
             <!-- Upload -->
-            <div v-if="(curConfig.type === 'upload')">
+            <!-- <div v-if="(curConfig.type === 'upload')">
               <el-row>
                 <el-col span="12">
                 <el-form-item label="Queue" :label-width="formLabelWidth">
@@ -325,7 +413,7 @@
                   <el-input size="mini" v-model="curConfig.config.tip" autocomplete="off"></el-input>
                 </el-form-item>
               </el-row>
-            </div>
+            </div> -->
           </el-card>
         </el-tab-pane>
         <el-tab-pane label="Privileges" name="privileges" key="privileges">
@@ -357,6 +445,61 @@
           <el-card>
             <!-- PG GENERIC TABLE -->
             <div>
+              <el-row
+              :gutter="24"              
+              style="text-align:left"
+            >
+              <el-col :span="8">
+                <el-form-item label :label-width="formLabelWidth">
+                  <el-row>
+                    <el-switch v-model="curConfig.queryBarChecked" active-text="Query Bar" @change="query_bar_changed"></el-switch>
+                  </el-row>
+                  <el-row>
+                    <el-switch v-model="curConfig.downloadChecked" active-text="Download"></el-switch>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label :label-width="formLabelWidth">
+                  <el-row>
+                    <el-switch v-model="curConfig.queryFilterChecked" active-text="Query Filter" @change="query_filter_changed"></el-switch>
+                  </el-row>
+
+                  <el-row>
+                    <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+                  </el-row>
+
+                  <el-row>
+                    <el-select
+                      size="mini"
+                      v-model="curConfig.timeSelectorType"
+                      placeholder="Please select a type"
+                      @change="timeSelectorTypeChange"
+                    >
+                      <el-option label="Free" value="classic"></el-option>
+                      <el-option label="Day" value="day"></el-option>
+                      <el-option label="Month" value="month"></el-option>
+                      <el-option label="Week" value="week"></el-option>
+                      <el-option label="Year" value="year"></el-option>
+                    </el-select>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+              
+              <el-col
+                :span="8"                
+              >
+                <el-form-item label :label-width="formLabelWidth">
+                  <el-row>
+                    <el-switch v-model="curConfig.graphicChecked" active-text="Graphic"></el-switch>
+                  </el-row>
+                  <el-row>
+                    <el-switch v-model="curConfig.mapChecked" active-text="Map"></el-switch>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            
               <el-row>
                 <el-col :span="6">
                   <el-form-item label="Index/Table" :label-width="formLabelWidth">
@@ -598,6 +741,38 @@
           ></ESTableEditor>
         </el-tab-pane>
 
+        <el-tab-pane
+          label="Kibana"
+          name="kibana"
+          key="kibana"
+          v-if="(curConfig.type === 'kibana')"
+        >
+          <KibanaEditor
+            :allPrivileges="allPrivileges"
+            :currentConfig="curConfig"
+          ></KibanaEditor>
+        </el-tab-pane>
+        <el-tab-pane
+          label="Upload"
+          name="upload"
+          key="upload"
+          v-if="(curConfig.type === 'upload')"
+        >
+          <UploadEditor            
+            :currentConfig="curConfig"
+          ></UploadEditor>
+        </el-tab-pane>
+        <el-tab-pane
+          label="File System"
+          name="filesystem"
+          key="filesystem"
+          v-if="(curConfig.type === 'file-system')"
+        >
+          <FileSystemEditor            
+            :currentConfig="curConfig"
+          ></FileSystemEditor>
+        </el-tab-pane>
+
      
 
         <!-- ******* FORM ******* -->
@@ -734,7 +909,10 @@ import freetextdetails from "@/components/FreeTextDetails";
 
 import queryfiltereditor from "@/components/appConfigEditor/QueryFilterEditor";
 import estableeditor from "@/components/appConfigEditor/ESTableEditor";
+import kibanaeditor from "@/components/appConfigEditor/KibanaEditor";
 import formeditor from "@/components/appConfigEditor/FormEditor";
+import uploadeditor from "@/components/appConfigEditor/UploadEditor";
+import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
 
 
 import Vue from "vue";
@@ -747,6 +925,9 @@ Vue.component("FreeTextDetails", freetextdetails);
 Vue.component("QueryFilterEditor", queryfiltereditor);
 Vue.component("ESTableEditor", estableeditor);
 Vue.component("FormEditor", formeditor);
+Vue.component("KibanaEditor", kibanaeditor);
+Vue.component("UploadEditor", uploadeditor);
+Vue.component("FileSystemEditor", filesystemeditor);
 
 
 function transformObject(obj) {
@@ -825,16 +1006,16 @@ export default {
     closeDialog: function() {
       this.$emit("dialogclose");
     },
-    openInKibana() {
-      console.log(this.curConfig);
-      window.open(
-        this.curConfig.config.url
-          .replace("kibananyx", "kibana")
-          .replace("embed=true", "")
-          .replace(",title:Test", "")
-          .replace("title:Test,", "")
-      );
-    },
+    // openInKibana() {
+    //   console.log(this.curConfig);
+    //   window.open(
+    //     this.curConfig.config.url
+    //       .replace("kibananyx", "kibana")
+    //       .replace("embed=true", "")
+    //       .replace(",title:Test", "")
+    //       .replace("title:Test,", "")
+    //   );
+    // },
     categorySuggestion: function(queryString, cb) {
       var cat = [];
       for (var i in this.$store.getters.filteredmenus) {
@@ -945,7 +1126,7 @@ export default {
       this.strNewRec = "";
       this.strOrgRec = "";
 
-      this.loadKibanaDashboards();
+      //this.loadKibanaDashboards();
 
       this.$nextTick(() => {
         this.refresh2();
@@ -1098,7 +1279,7 @@ export default {
       this.curConfig = null;
       this.curConfig = tmp;
     },
-    loadKibanaDashboards: function() {
+    /*loadKibanaDashboards: function() {
       this.listLoading = true;
       this.dashboards = [];
 
@@ -1236,7 +1417,7 @@ export default {
         dash.space = space;
         this.dashboards.push(dash);
       }
-    },
+    }*/
     handleDeleteHeader(index) {
       this.currentHeader = {};
       this.curConfig.config.headercolumns.splice(index, 1);
