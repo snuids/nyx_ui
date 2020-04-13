@@ -209,6 +209,47 @@ export default {
     this.prepareData();
   },
   methods: {
+    query_filter_changed:function() {
+        if(this.curConfig.queryFilterChecked)
+          this.curConfig.queryBarChecked=false;
+
+    },
+    query_bar_changed:function() {
+        if(this.curConfig.queryBarChecked)
+          this.curConfig.queryFilterChecked=false;
+
+    },
+    timeSelectorTypeChange() {
+      if (this.curConfig.timeSelectorType != null)
+        this.curConfig.timeSelectorChecked = true;
+
+      var tmp = JSON.parse(JSON.stringify(this.curConfig));
+      this.curConfig = null;
+      this.curConfig = tmp;
+    },
+    timeRefreshSelectChange() {
+      if (this.curConfig.timeRefreshValue != null)
+        this.curConfig.timeRefresh = true;
+
+
+      this.computeUrlFromKibana();
+
+
+      var tmp = JSON.parse(JSON.stringify(this.curConfig));
+      this.curConfig = null;
+      this.curConfig = tmp;
+    },
+    
+    timeRefreshSwitchChange() {
+      this.computeUrlFromKibana();
+
+
+      var tmp = JSON.parse(JSON.stringify(this.curConfig));
+      this.curConfig = null;
+      this.curConfig = tmp;
+
+      console.log(this.curConfig.config.url)
+    },
     prepareData() {
       this.loadKibanaDashboards();
     },
