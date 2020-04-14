@@ -1,7 +1,7 @@
 # Version History
 
 ## V3.18.0 09/Apr/2020  
-* Config Details Interface Improved
+* Config Details Interface Improved.
 
 
 ## V3.17.0 09/Apr/2020  
