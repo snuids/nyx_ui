@@ -5,7 +5,7 @@
 
 
 ## V3.17.0 09/Apr/2020  
-* Web Socket Added
+* Web Socket Added.
 
 
 ## V3.16.0 07/Apr/2020  
