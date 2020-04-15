@@ -167,6 +167,43 @@
                 height="200"
               ></editor>
             </el-row>
+
+            <el-row v-if="filterFieldToConfigure.type == 'queryselecter'">
+              <el-col :span="12">
+                <el-row>
+                  <el-button type="text">Index</el-button>                      
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-button type="text">Column</el-button>                      
+                </el-row>
+              </el-col>
+            </el-row>
+
+            <el-row v-if="filterFieldToConfigure.type == 'queryselecter'">
+              <el-col :span="11">                
+                  <el-input
+                    ref="default"
+                    placeholder="Query index"
+                    v-model="filterFieldToConfigure.index"
+                    size="mini"
+                  ></el-input>                
+              </el-col>
+              <el-col :span="1">   
+                &nbsp;
+              </el-col>
+              <el-col :span="12">                
+                  <el-input
+                    ref="default"
+                    placeholder="Query column"
+                    v-model="filterFieldToConfigure.column"
+                    size="mini"
+                  ></el-input>                
+              </el-col>
+              </el-row>
+
+
           </el-card>
         </el-col>
       </el-row>
@@ -191,6 +228,10 @@ export default {
           {
             value: "selecter",
             label: "Selecter"
+          },
+          {
+            value: "queryselecter",
+            label: "Query Selecter"
           },
           {
             value: "text",
