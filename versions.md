@@ -5,17 +5,17 @@
 
 
 ## V3.18.0 09/Apr/2020  
-* Config Details Interface Improved
+* Config Details Interface Improved.
 
 
 ## V3.17.0 09/Apr/2020  
-* Web Socket Added
+* Web Socket Added.
 
 
 ## V3.16.0 07/Apr/2020  
-* Marker Cluster added
-* Better query filter translations
-* Maps can have more than 100 markers
+* Marker Cluster added.
+* Better query filter translations.
+* Maps can have more than 100 markers.
 
 ## V3.15.0 06/Apr/2020  
 * Icon and color functions added to the map component
