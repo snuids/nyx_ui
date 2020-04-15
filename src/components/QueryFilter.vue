@@ -16,11 +16,27 @@
           v-model="queryfilter.selected"
           placeholder="Please select a type"
           @change="refresh()"
-        >
+        >        
           <el-option
             v-for="(qf, index) in queryfilter.options"
             :label="qf.title"
             :value="qf.value"
+            :key="index"
+          ></el-option>
+        </el-select>
+
+        <el-select
+          v-if="queryfilter.type == 'queryselecter'"
+          filterable
+          size="mini"
+          v-model="queryfilter.selected"
+          placeholder="Please select a type"
+          @change="refresh()"
+        >        
+          <el-option
+            v-for="(qf, index) in queryfilter.buckets"
+            :label="qf.key"
+            :value="qf.key"
             :key="index"
           ></el-option>
         </el-select>
@@ -79,11 +95,14 @@
 
 <script>
 
+import axios from "axios";
 import { computeTranslatedText } from "../globalfunctions";
 
 export default {
   name: "QueryFilter",
   data: () => ({
+    mustloadqueryfilters:false,
+    alreadymounted:false,
     queryfilter: "",
     queryFilterCopy: undefined,
     exportFormats: [
@@ -150,6 +169,7 @@ export default {
             }
           }
         }
+        
 
         if ((valq!=undefined)&&(valq!='')&&(valq != "*")) {
 
@@ -187,10 +207,14 @@ export default {
       this.$emit("downloadasked", format);
     },
 
-    prepareData: function(e) {
-      this.queryFilterCopy = JSON.parse(
-        JSON.stringify(this.config.config.queryfilters)
-      );
+    prepareData: function(newqueryf) {
+      //alert(newqueryf);
+      if(newqueryf==undefined)
+        this.queryFilterCopy = JSON.parse(
+          JSON.stringify(this.config.config.queryfilters)
+        );
+      else
+        this.queryFilterCopy=newqueryf;
 
       if (this.queryFilterCopy != undefined) {
         for (let queryind in this.queryFilterCopy) {
@@ -227,10 +251,54 @@ export default {
     }
   },
   created: function() {
-    this.prepareData();
+    this.mustloadqueryfilters=false;
+
+    console.log("========================>")
+    //console.log(this.config)
+    
+    for (let queryind in this.config.config.queryfilters) {
+      var qf=this.config.config.queryfilters[queryind];
+      if(qf.type=="queryselecter")
+      {
+        this.mustloadqueryfilters=true;
+        break;
+      }
+    }
+    if(this.mustloadqueryfilters)
+    {
+      
+    }
+    else    
+      this.prepareData();
   },
   mounted: function() {
-    this.refresh();
+    this.alreadymounted=true;    
+    if(this.mustloadqueryfilters)
+    {
+      //alert('toto');
+      var url =
+        this.$store.getters.apiurl +
+        "queryFilter/"+this.config.rec_id +
+        "?token=" +
+        this.$store.getters.creds.token;
+      
+      axios.post(url, {  }).then(response => {
+        //console.log("LOAD DATA RES...RED =>" + output);
+        //this.config.config.queryfilters=;
+        //alert(JSON.stringify(response));
+        for (let queryind in response.data.queryfilters) {
+          var qf=response.data.queryfilters[queryind];
+          if(qf.type=="queryselecter")
+          {
+            qf.buckets.splice(0,0,{"key":"*"})
+          }
+        }
+        this.prepareData(response.data.queryfilters);        
+        this.refresh();
+      });
+    }
+    else
+      this.refresh();
   }
 };
 </script>

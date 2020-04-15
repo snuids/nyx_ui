@@ -96,6 +96,7 @@
         </el-collapse-item>
         <el-collapse-item :title="this.$t('generic.privileges')" name="2">
           <el-row style="padding-left:30px;">
+            
             <el-transfer
               size="mini"
               style="text-align:left;"
@@ -112,6 +113,7 @@
         </el-collapse-item>
         <el-collapse-item :title="this.$t('generic.filters')" name="3">
           <el-row style="padding-left:30px;">
+            
             <el-transfer
               size="mini"
               style="text-align:left;"

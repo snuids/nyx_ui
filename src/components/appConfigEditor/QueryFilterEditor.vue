@@ -64,6 +64,19 @@
         </el-col>
       </el-row>
 
+      <el-row :gutter="20" v-if="curField.type && curField.type == 'queryselecter'">        
+        <el-col :span="10">
+          <el-form-item label="Index" :label-width="formLabelWidth">
+            <el-input size="mini" v-model="curField.index" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="Column" :label-width="formLabelWidth">
+            <el-input size="mini" v-model="curField.column" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-row :gutter="20" v-if="curField.type && curField.type == 'selecter'">
         <el-col :span="20">
           <el-form-item label="Options" :label-width="formLabelWidth">
@@ -108,7 +121,11 @@ export default {
       {
         value: "selecter",
         label: "Selecter"
+      },{
+        value: "queryselecter",
+        label: "Query Selecter"
       }
+      
       ,{
         value: "text",
         label: "Free Text"

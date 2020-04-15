@@ -193,6 +193,7 @@ export default new Vuex.Store({
     },
     filters(state, payload) {
       state.filters = payload.data;
+      //alert(JSON.stringify(state.filters));
     },
     privileges(state, payload) {
       state.privileges = payload.data;

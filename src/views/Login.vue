@@ -231,6 +231,7 @@ export default {
           type: "privileges",
           data: response.data.all_priv
         });
+        //alert(JSON.stringify(response.data.all_filters))
         this.$store.commit({
           type: "filters",
           data: response.data.all_filters
