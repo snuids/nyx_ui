@@ -26,6 +26,7 @@
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
     </el-row>
 
+
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter
         @queryfilterchanged="queryFilterChanged"
@@ -45,6 +46,19 @@
         <BarChart :autotime="autotime" :config="config" :series="series"></BarChart>
       </el-col>
     </el-row>
+
+    <el-row>
+      <el-pagination v-show="rows>pagesize"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[100, 200, 300, 400, 500]"
+        :page-size="pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="rows">
+      </el-pagination>
+    </el-row>
+
     <el-row>
       <el-col :span="24">
         <el-table
@@ -195,6 +209,9 @@ export default {
     ...dynamicComponents
   },
   data: () => ({
+    rows:0,
+    currentPage:1,
+    pagesize:100,
     ready: false,
     autotime: "1d",
     query: "",
@@ -300,6 +317,15 @@ export default {
     // }
   },
   methods: {
+    handleSizeChange: function(e) {
+      console.log("Size changed.....");
+      this.pagesize=e;
+      this.refreshData();
+    },
+    handleCurrentChange: function(e) {
+      console.log("Current changed....."); 
+      this.refreshData();     
+    },
     handleCommand: function(e) {
       console.log("Command changed.....");
       this.loadData(true, e);
@@ -450,6 +476,8 @@ export default {
       console.log("=>=>=>+>=>=>=>=> Load DATA");
       if (download == undefined) download = false;
       console.log("LOAD DATA...Download=" + download);
+      var start=(this.currentPage-1)*this.pagesize;
+      console.log("Start record:"+start);
 
       var doc_type = "";
       if (
@@ -493,7 +521,8 @@ export default {
         doc_type;
 
       var query = {
-        size: download ? 10000 : 200
+        size: download ? 10000 : this.pagesize,
+        page:this.currentPage
       };
 
       if (
@@ -566,6 +595,7 @@ export default {
             }
             this.tableData = [];
 
+
             this.$notify({
               title: this.$t("notifications.data_loaded"), //"Data loaded",
               message:
@@ -605,6 +635,7 @@ export default {
                 }
               }
             }
+            this.rows=response.data.total;
 
             this.tableData = response.data.records;
             this.tableSchema = response.data.colnames;
@@ -673,7 +704,10 @@ export default {
   },
   created: function() {
     console.log("===============  CREATED:");
-    this.loadData();
+
+    if (!this.config.queryFilterChecked && !this.config.queryBarChecked)
+      this.loadData();
+    //this.loadData();
   },
   mounted: function() {
     if (this.config.graphicChecked) {
