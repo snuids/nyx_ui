@@ -226,6 +226,9 @@ const myExport = {
           
         });
       }
+      else{
+        this.$localbus.$emit("localmessagereceived",payLoad);
+      }
       
     });  
 

@@ -3,20 +3,27 @@
     <el-card>
       <!-- <h1>{{fieldList}}</h1> -->
       <el-form>
-          <el-row>
-                <el-col :span="24">
-                <el-form-item label="Reg Ex" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="currentConfig.config.regexNO" autocomplete="off"></el-input>
-                </el-form-item>
-                </el-col>
-                
-              </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="Folder Name" :label-width="formLabelWidth">
+              <el-input size="mini" v-model="currentConfig.config.foldername" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-              <el-row>
-              <el-form-item label="Root Path" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="currentConfig.config.rootpath" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-row>        
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="Reg Ex" :label-width="formLabelWidth">
+              <el-input size="mini" v-model="currentConfig.config.regexNO" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="Root Path" :label-width="formLabelWidth">
+            <el-input size="mini" v-model="currentConfig.config.rootpath" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-row>
       </el-form>
       <div></div>
     </el-card>
@@ -37,7 +44,6 @@ export default {
       window.__FORM__ || {
         formLabelWidth: "120px",
         formFielfEditorVisible: false
-        
       }
     );
   },
@@ -53,9 +59,7 @@ export default {
   created: function() {
     //this.prepareData();
   },
-  methods: {
-    
-  }
+  methods: {}
 };
 </script>
 <style>
