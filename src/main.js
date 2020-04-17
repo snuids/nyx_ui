@@ -38,6 +38,7 @@ Vue.use(InfiniteLoading, { /* options */ });
 
 Vue.config.productionTip = false
 Vue.prototype.$globalbus = new Vue();
+Vue.prototype.$localbus = new Vue();
 
 Vue.filter('formatDate', function(value) {
   if (value) {

@@ -78,7 +78,20 @@ export default {
       "&queue=" +
       this.config.config.queue;
     this.accept=this.config.config.filetypes;
+  },
+  mounted: function(){
+    console.log("===============  REGISTERING LOCAL MESSSAGE:");
+    this.$localbus.$on("localmessagereceived", payLoad => {
+      console.log("LOCALBUS/GENERICCOMPONENT/LOCALMESSAGERECEIVED");
+      console.log(payLoad);
+      //alert(payLoad)      
+    }); 
+  },
+  destroyed: function() {
+    console.log("===============  UN REGISTERING LOCAL MESSSAGE:");
+    this.$localbus.$off("localmessagereceived");
   }
+
 };
 </script>
 
