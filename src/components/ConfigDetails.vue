@@ -537,6 +537,20 @@
                   </el-form-item>
                 </el-col>
               </el-row>
+
+              <el-row>
+                <el-col :span="6">
+                  <el-form-item label="Sort" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.sort_column" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="Order" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.sort_order" placeholder="ascending/descending" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>                
+              </el-row>
+
               <el-row v-if="(curConfig.type === 'pgsql-generic-table')">
                 <el-col :span="24">
                   <el-form-item label="SQL" :label-width="formLabelWidth">

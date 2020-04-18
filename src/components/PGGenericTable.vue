@@ -21,7 +21,6 @@
         v-on:dialogclose="dialogFormVisible=false"
       ></PGGenericTableDetails>
     </span>
-
     <el-row v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
     </el-row>
@@ -68,13 +67,15 @@
           highlight-current-row
           @current-change="handleCurrentRecordChange"
           v-loading="!ready"
+          @sort-change="sortChanged"
         >
           <el-table-column
             v-for="header in config.config.headercolumns"
             :key="header.field"
-            :label="header.title"
+            :label=computeTranslatedText(header.title,$store.getters.creds.user.language)
             :prop="header.field"
             sortable
+            show-overflow-tooltip
           >
             <template slot-scope="scope">
               <div v-if="header.type=='select'">
@@ -188,6 +189,7 @@ import map from "@/components/Map";
 import barchart from "@/components/BarChart";
 import querybar from "@/components/QueryBar";
 import _ from "lodash";
+import { computeTranslatedText } from "../globalfunctions";
 
 const req = require.context("../components/tableEditor/", true, /\.vue$/);
 
@@ -225,6 +227,7 @@ export default {
     colnames: [],
     dialogFormVisible: false,
     editMode: null,
+    sort:{},
     options: {
       chart: {
         stacked: false,
@@ -317,6 +320,14 @@ export default {
     // }
   },
   methods: {
+    computeTranslatedText: function(inText, inLocale) {
+      return computeTranslatedText(inText, inLocale);
+    },
+    sortChanged:function(e){
+      //alert(JSON.stringify(e.column));
+      this.sort={"column":e.column.property,"order":e.column.order};
+      this.refreshData();
+    },
     handleSizeChange: function(e) {
       console.log("Size changed.....");
       this.pagesize=e;
@@ -522,9 +533,11 @@ export default {
 
       var query = {
         size: download ? 10000 : this.pagesize,
-        page:this.currentPage
+        page:this.currentPage,
+        sort:this.sort
       };
 
+      
       if (
         this.config.config.timefield != null &&
         this.config.config.timefield != ""
@@ -547,6 +560,7 @@ export default {
         query["query"] = this.queryField;
       }
 
+      
       console.log("JSON.stringify(query)");
       console.log(JSON.stringify(query));
 
@@ -705,6 +719,12 @@ export default {
   created: function() {
     console.log("===============  CREATED:");
 
+    if(this.config.config.sort_column!=undefined && this.config.config.sort_column!='')
+    {
+      this.sort={"column":this.config.config.sort_column};   
+      if (this.config.config.sort_order!=undefined && this.config.config.sort_order!="")
+         this.sort["order"]=this.config.config.sort_order;
+    }
     if (!this.config.queryFilterChecked && !this.config.queryBarChecked)
       this.loadData();
     //this.loadData();
@@ -713,6 +733,8 @@ export default {
     if (this.config.graphicChecked) {
       //      this.$refs.generic.chart.addEventListener("click", this.graphClicked);
     }
+
+    
 
     console.log("===============  REGISTERING: timerangechanged");
     this.$globalbus.$on("timerangechanged", payLoad => {

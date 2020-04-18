@@ -63,6 +63,7 @@
             :prop="header.field"
             :width="header.format=='icon'?'100px':''"
             sortable
+            show-overflow-tooltip
           >
             <!-- show-overflow-tooltip -->
             <template slot-scope="scope">
@@ -376,7 +377,7 @@ export default {
     },
     cutRec(aRec) {
       if (aRec == undefined) return "";
-      if (aRec.length > 40) aRec = aRec.substring(0, 50) + "...";
+      //if (aRec.length > 40) aRec = aRec.substring(0, 50) + "...";
       return aRec;
     },
     computeRec: function(row, field) {
