@@ -43,8 +43,6 @@
       </el-col>
     </el-row>
     <el-row>
-    </el-row>
-    <el-row>
       <el-col :span="24">
         <el-table
           size="mini"
