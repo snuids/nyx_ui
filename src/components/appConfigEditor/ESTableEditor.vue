@@ -188,6 +188,7 @@
                   <th>Type</th>
                   <th>Format</th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <draggable
@@ -236,7 +237,11 @@
                     >
                       <el-option label="Default" value="default"></el-option>
                       <el-option label="Icon" value="icon"></el-option>
+                      <el-option label="Link" value="link"></el-option>
                     </el-select>
+                  </td>
+                  <td>
+                    <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="mini">conf</el-button>
                   </td>
                   <td>
                     <i class="el-icon-d-caret handle"></i>
@@ -245,6 +250,10 @@
               </draggable>
             </table>
           </el-card>
+            <LinkEditor
+                v-on:dialogclose="linkUpdated"
+                :item="selectedItem"
+                v-if="linkEditorVisible"></LinkEditor>
         </el-col>
       </el-row>
 
@@ -303,26 +312,10 @@
         </el-col>
       </el-row>
       <el-row>
-
-
-
-
-          <UserQueriesEditor
-            :currentConfig="currentConfig"
-            :allFields="allFieldsFilter"
-          ></UserQueriesEditor>
-
-
-
-
-
-
-
-
-
-
-
-
+        <UserQueriesEditor
+          :currentConfig="currentConfig"
+          :allFields="allFieldsFilter"
+        ></UserQueriesEditor>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -593,7 +586,9 @@ import axios from "axios";
 import _ from "lodash";
 
 import userquerieseditor from "@/components/appConfigEditor/UserQueriesEditor";
+import linkeditor from "@/components/appConfigEditor/LinkEditor";
 Vue.component("UserQueriesEditor", userquerieseditor);
+Vue.component("LinkEditor", linkeditor);
 
 export default {
   field: "ESTableEditor",
@@ -615,6 +610,8 @@ export default {
         helpMessage: "",
         succesIndexPatternDefinition: false,
         noTimeField: true,
+        linkEditorVisible: false,
+        selectedItem: null,
         step: 1,
       }
     );
@@ -698,6 +695,23 @@ export default {
     this.prepareData();
   },
   methods: {
+    linkUpdated: function(item) {
+      console.log('link updated')
+      console.log(item)
+      this.linkEditorVisible=false
+
+      for(var i=0; i<this.currentConfig.config.headercolumns.length; i++){
+        if(this.currentConfig.config.headercolumns[i].field == item.field) {
+          console.log(this.currentConfig.config.headercolumns[i])
+                  this.currentConfig.config.headercolumns[i] = JSON.parse(JSON.stringify(item))
+        }
+      }
+      // this.currentConfig.config.headercolumns.forEach(element => {
+      //   if(element.field == item.field) {
+      //     element = item
+      //   }
+      // });
+    },
     tableFieldsToDownloadToExportColumns: _.debounce(function() {
       // this function is here to transform this.currentConfig.config.tableFieldsToDownload to this.currentConfig.exportColumns
       console.log("WATCHER TABLE FIELDS DL");

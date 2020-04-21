@@ -98,6 +98,18 @@
                   scale="1.5"
                 />
               </span>
+              <span v-else-if="header.format=='link'" class="link-cell">                
+                <el-button 
+                  v-if="scope && computeRec(scope.row,header.field)" 
+                  size="mini"
+                  :icon="header.linkbuttonicon"
+                  :circle="header.linkbuttoncircle" 
+                  :round="header.linkbuttonround" 
+                  :plain="header.linkbuttonplain" 
+                  :type="header.linkbuttontype"
+                  @click="openLink(scope.row,header.field)"
+                >{{header.linktext}}</el-button>
+              </span>
               <span v-else>{{computeRec(scope.row,header.field)}}</span>
             </template>
           </el-table-column>
@@ -377,6 +389,21 @@ export default {
       if (aRec == undefined) return "";
       //if (aRec.length > 40) aRec = aRec.substring(0, 50) + "...";
       return aRec;
+    },
+    openLink: function(row, field) {
+      let rec = row;
+      if (field.indexOf("_source") == 0) {
+        rec = row["_source"];
+        var res = "";
+        if (field.indexOf("@") == -1)
+          res = _.get(rec, field.replace("_source.", ""));
+        else res = rec[field.replace("_source.", "")];
+        if (res == undefined) return "";
+        else window.open(this.cutRec("" + res), "_blank");
+      }
+      if (field.indexOf("@") == -1) return window.open(this.cutRec(_.get(rec, field)), "_blank");
+      else res = rec[field];
+      
     },
     computeRec: function(row, field) {
       var rec = row;
