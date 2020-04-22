@@ -1,5 +1,9 @@
 # Version History
 
+## V3.20.0 22/Apr/2020  
+* Pagination added for alstic search
+
+
 ## V3.19.1 18/Apr/2020  
 * PostGRES table supports pagination.
 * PostGRES table columns can be localized.
