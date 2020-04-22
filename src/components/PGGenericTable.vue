@@ -698,6 +698,7 @@ export default {
     updateTimeRange() {
       const start = new Date();
       start.setTime(this.$refs.generic.chart.series.w.globals.minX);
+      this.currentPage=1;
       this.$globalbus.$emit("charttimerangeupdated", [
         this.$refs.generic.chart.series.w.globals.minX,
         this.$refs.generic.chart.series.w.globals.maxX
@@ -706,10 +707,12 @@ export default {
 
     queryBarChanged: function(q) {
       this.queryField = q;
+      this.currentPage=1;
       this.refreshData();
     },
     queryFilterChanged: function(q) {
       this.queryfilter = q;
+      this.currentPage=1;
       this.refreshData();
     },
     downloadAsked: function(format) {
@@ -741,6 +744,7 @@ export default {
       console.log("GLOBALBUS/GENERICTABLE/TIMERANGECHANGED");
       console.log(this.config.timeSelectorType);
       console.log(payLoad.subtype);
+      this.currentPage=1;
       if (this.config.timeSelectorType == undefined)
         this.config.timeSelectorType = "classic";
       if (payLoad.subtype == this.config.timeSelectorType) this.loadData();
