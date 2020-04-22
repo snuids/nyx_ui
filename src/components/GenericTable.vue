@@ -47,7 +47,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
-        :page-sizes="[10,100, 200, 300, 400, 500]"
+        :page-sizes="[100, 200, 300, 400, 500]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="rows">
@@ -433,10 +433,9 @@ export default {
           res = _.get(rec, field.replace("_source.", ""));
         else res = rec[field.replace("_source.", "")];
         if (res == undefined) return "";
-        else window.open(this.cutRec("" + res), "_blank");
+        else 
+          window.open(this.cutRec("" + res), "_blank");
       }
-      if (field.indexOf("@") == -1) return window.open(this.cutRec(_.get(rec, field)), "_blank");
-      else res = rec[field];
       
     },
     computeRec: function(row, field) {
