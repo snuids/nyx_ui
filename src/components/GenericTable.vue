@@ -42,8 +42,8 @@
         <BarChart :autotime="autotime" :config="config" :series="series"></BarChart>
       </el-col>
     </el-row>
-    <el-row>
-      <el-pagination v-show="rows>pagesize"
+    <el-row  v-if="rows>pagesize">
+      <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
