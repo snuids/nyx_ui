@@ -234,6 +234,7 @@ export default {
   },
   data: () => ({
     rows:0,
+    dontrefreshMap:false,
     currentPage:1,
     pagesize:100,   
     sort:{}, 
@@ -342,16 +343,19 @@ export default {
       
       this.sort={}
       this.sort[e.column.property.replace("_source.","")]={"order":e.column.order.substring(0,4).replace("asce","asc")};
+      this.dontrefreshMap=true;
       this.refreshData();
     },
     handleSizeChange: function(e) {
       console.log("Size changed.....");
       this.pagesize=e;
       this.currentPage=1; 
+      this.dontrefreshMap=true;
       this.refreshData();
     },
     handleCurrentChange: function(e) {
       console.log("Current changed....."); 
+      this.dontrefreshMap=true;
       this.refreshData();     
     },
     computeTranslatedText: function(inText, inLocale) {
@@ -925,7 +929,7 @@ export default {
           });
         });
 
-      if (this.config.mapChecked)
+      if (this.config.mapChecked && !this.dontrefreshMap)
       {
         query2=JSON.parse(JSON.stringify(query));
         query2.size=1000;
@@ -948,6 +952,7 @@ export default {
           });            
             
       }
+      this.dontrefreshMap=false;
     },
     graphClicked() {
       var newvalue =
