@@ -347,6 +347,7 @@ export default {
     handleSizeChange: function(e) {
       console.log("Size changed.....");
       this.pagesize=e;
+      this.currentPage=1; 
       this.refreshData();
     },
     handleCurrentChange: function(e) {
