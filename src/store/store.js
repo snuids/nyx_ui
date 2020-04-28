@@ -210,10 +210,19 @@ export default new Vuex.Store({
       state.menuOpen = true;
       state.creds = payload.data.cred;
       state.creds.hasPrivilege = function (inPrivilege) {
+
         if (_.includes(state.creds.user.privileges, "admin"))
           return true;
+
+        
+        if( Array.isArray(inPrivilege))
+        {
+          for (var i=0;i<inPrivilege.length;i++)
+            if (_.includes(state.creds.user.privileges, inPrivilege[i]))
+              return true;
+        }
         if (_.includes(state.creds.user.privileges, inPrivilege))
-          return true;
+              return true;
         return false;
       }
       state.menus = payload.data.menus;

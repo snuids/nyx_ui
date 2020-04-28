@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- <div v-loading="!ready"> -->
+
     <span v-if="dialogFormVisible">
       <component
         v-if="config.config.editorComponent!=null && config.config.editorComponent!=''"
