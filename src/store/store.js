@@ -341,8 +341,12 @@ export default new Vuex.Store({
 
       state.activeApp = app
 
-      if(app.timeDefault != null && app.timeDefault != '')
+      console.log(app)
+      if(app.timeDefault != null && app.timeDefault != '') {
+        console.log('send forcetime')
         Vue.prototype.$globalbus.$emit("forcetime",app.timeDefault);
+        console.log('send forcetime')
+      }
     },
 
     // eslint-disable-next-line
