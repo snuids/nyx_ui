@@ -196,10 +196,6 @@ export default {
     fieldList: function() {
       return this.currentConfig.config.headercolumns.map(x => x.field);
     }
-    // ,
-    // allFieldsFilter() {
-    //   return Object.assign({}, ...Object.keys(this.allFields).map(k => ({[k]: {'field': k}})));
-    // }
   },
   watch: {},
   props: {
@@ -448,6 +444,7 @@ export default {
       );
 
       var url = this.$store.getters.kibanaurl + "api/spaces/space";
+
       axios
         .get(url)
         .then(response => {
@@ -456,7 +453,10 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.listLoading = false;
+          setTimeout(() => {
+            this.listLoading = false;
+
+          }, 1500)
         });
     },
     loadKibanaDashboards2: async function(spaces) {
@@ -477,9 +477,6 @@ export default {
 
         this.addDashboards(response.data, space.id);
       }
-      var tmp = JSON.parse(JSON.stringify(this.currentConfig));
-      this.currentConfig = null;
-      this.currentConfig = tmp;
 
       this.listLoading = false;
     },
