@@ -43,7 +43,7 @@
         <BarChart :autotime="autotime" :config="config" :series="series"></BarChart>
       </el-col>
     </el-row>
-    <el-row  v-if="rows>pagesize">
+    <el-row  v-if="rows>=100">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
