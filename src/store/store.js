@@ -340,6 +340,9 @@ export default new Vuex.Store({
       state.maintitle = state.currentSubCategory.loc_title;
 
       state.activeApp = app
+
+      if(app.timeDefault != null && app.timeDefault != '')
+        Vue.prototype.$globalbus.$emit("forcetime",app.timeDefault);
     },
 
     // eslint-disable-next-line
