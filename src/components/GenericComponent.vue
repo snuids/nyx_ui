@@ -96,6 +96,7 @@ import freetext from "@/components/FreeText";
 import queryfilter from "@/components/QueryFilter";
 import vega from "@/components/Vega";
 import LandingPage from "@/components/LandingPage";
+import NYXInfo from "@/components/NYXInfo";
 import SendMessage from "@/components/SendMessage";
 import Vue from "vue";
 
@@ -126,6 +127,7 @@ Vue.component("FileSystem", FileSystem);
 Vue.component("QueryFilter", queryfilter);
 Vue.component("Vega", vega);
 Vue.component("LandingPage", LandingPage);
+Vue.component("NYXInfo", NYXInfo);
 Vue.component("SendMessage", SendMessage);
 
 const myExport = {
