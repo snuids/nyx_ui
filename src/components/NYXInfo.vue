@@ -1,11 +1,11 @@
 <template>
   <!--LANDING PAGE -->
-  <div style="text-align:left;">
+  <div style="text-align:left;" id="nyx-info">
     <el-row>
       <el-col :span="8">
-        <el-card class="box-card">
+        <el-card shadow="never">
           <div slot="header" class="clearfix">
-            <span>Versions</span>
+            <b>Versions</b>
           </div>
           <div class="text item">
             UI Version:{{$store.getters.version}}
@@ -22,29 +22,38 @@
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card class="box-card">
+        <el-card shadow="never">
           <div slot="header" class="clearfix">
-            <span>Active MQ</span>
+            <b>Active MQ</b>
+            -
+            Version:<b>{{activeMQ[0]._source.version}}</b>
+            -
+            Connections:<b>{{activeMQ[0]._source.currentconnectionscount}}</b>
           </div>
-          <div class="text item">
-            Version:{{activeMQ[0]._source.version}}
-            <br />
-            Connections:{{activeMQ[0]._source.currentconnectionscount}}
-            <br />
-            Memory:{{activeMQ[0]._source.memorypercentusage}} %
-            <br />
-            Store:{{activeMQ[0]._source.storepercentusage}} %
-            <br />
-            Temp:{{activeMQ[0]._source.temppercentusage}} %
-            <br />
-          </div>
+          <el-row>
+            <el-col :span="8" style="text-align:center">
+              <el-progress type="dashboard" :percentage="activeMQ[0]._source.memorypercentusage"></el-progress>
+              <div><h3><b>Memory</b></h3></div>
+            </el-col>
+            <el-col :span="8" style="text-align:center">
+              <el-progress type="dashboard" :percentage="activeMQ[0]._source.storepercentusage"></el-progress>
+              <div><h3><b>Store</b></h3></div>
+            </el-col>
+            <el-col :span="8" style="text-align:center">
+              <el-progress type="dashboard" :percentage="activeMQ[0]._source.temppercentusage"></el-progress>
+              <div><h3><b>Temp</b></h3></div>
+            </el-col>
+            
+          </el-row>
+          
+
         </el-card>
       </el-col>
 
       <el-col :span="8">
-        <el-card class="box-card">
+        <el-card>
           <div slot="header" class="clearfix">
-            <span>Load</span>
+            <b>Load</b>
           </div>
           <div class="text item">
             Load 1m:{{loads[0]._source.load_1m}}
@@ -62,7 +71,7 @@
 
     <el-row>
       <el-col :span="8">
-        <el-card class="box-card">
+        <el-card>
           <div slot="header" class="clearfix">
             <span>Users</span>
           </div>
@@ -79,7 +88,7 @@
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card class="box-card" >
+        <el-card>
           <div slot="header" class="clearfix">
             <span>Logstash 24H</span>
           </div>
@@ -89,7 +98,7 @@
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card class="box-card" >
+        <el-card>
           <div slot="header" class="clearfix">
             <span>Elast Alert 24H</span>
           </div>
@@ -374,5 +383,8 @@ export default {
 </script>
 
 <style>
+#nyx-info .el-card {
+  margin-right:10px;
+}
 </style>
 

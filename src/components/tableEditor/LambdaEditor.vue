@@ -211,7 +211,7 @@
                 v-model="selectedRun.return"
               ></el-input>
             </el-col>
-            <el-col :span="4" style="text-align:right;">
+            <!-- <el-col :span="4" style="text-align:right;">
               <el-button
                 v-if="selectedRun && selectedRun.inputuuid"
                 style="min-width: 112px;"
@@ -219,7 +219,7 @@
                 @click="openTabInput"
                 size="mini"
               >Input</el-button>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-card>
         <el-row v-if="selectedRun">
@@ -605,6 +605,12 @@ export default {
     },
     createFunction: function() {
       this.createLoading = true;
+
+      this.newRec._source.file = this.newRec._source.file.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "")
+      if (this.newRec._source.file.indexOf(".ipynb") == -1)
+        this.newRec._source.file = this.newRec._source.file.replace(".", "") + ".ipynb";
+
+
       let body = {
         action: "add",
         type: this.newRec._source.type,
@@ -613,8 +619,6 @@ export default {
         function: this.newRec._source.orgfunction
       };
 
-      if (body.notebook.indexOf(".ipynb") == -1)
-        body.notebook = body.notebook.replace(".", "") + ".ipynb";
 
       if (body.type == "cron") body.parameters = ["30s"];
       else if (body.type == "message")
@@ -659,11 +663,11 @@ export default {
         //r2_notebookstelephonyipynb_telephony_to_calls
         let lambda_id = "r" + this.newRec._source.runner + "_notebooks";
         lambda_id +=
-          this.newRec._source.file.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "") +
+          this.newRec._source.file.toLowerCase().replace(/[^a-zA-Z0-9_]+/g, "") +
           "_";
         lambda_id += this.newRec._source.orgfunction
           .toLowerCase()
-          .replace(/[^a-zA-Z0-9]+/g, "");
+          .replace(/[^a-zA-Z0-9_]+/g, "");
 
         console.log(lambda_id);
 
