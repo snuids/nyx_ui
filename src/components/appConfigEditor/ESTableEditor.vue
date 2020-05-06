@@ -87,8 +87,11 @@
         <el-col :span="12" style="text-align:left;" v-if="!noTimeField">
           <el-button @click="setFocus('timeField')" type="text">Time Filter field field</el-button>
         </el-col>
-        <el-col :span="12" style="text-align:left;">
+        <el-col :span="6" style="text-align:left;">
           <el-button @click="setFocus('docType')" type="text">Document type</el-button>
+        </el-col>
+        <el-col :span="6" style="text-align:left;">
+          <el-button @click="setFocus('refreshtime')" type="text">Auto Refresh</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -110,7 +113,7 @@
             ></el-option>
           </el-select>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="6" class="padding-right">
           <el-input
             placeholder="Default doc"
             ref="docType"
@@ -119,6 +122,16 @@
             autocomplete="off"
             v-model="currentConfig.config.doc_type"
           ></el-input>
+        </el-col>
+        <el-col :span="6">
+          <el-select size="mini" style="width:100%" v-model="currentConfig.autoRefreshTime" placeholder="Select">
+            <el-option
+              v-for="item in timeRefreshOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-col>
       </el-row>
 
@@ -613,6 +626,32 @@ export default {
         linkEditorVisible: false,
         selectedItem: null,
         step: 1,
+        timeRefreshOptions: [
+          {
+            label: 'No time refresh',
+            value: null,
+          },
+          {
+            label: '5 seconds',
+            value: 5000,
+          },
+          {
+            label: '10 seconds',
+            value: 10000,
+          },
+          {
+            label: '30 seconds',
+            value: 30000,
+          },
+          {
+            label: '1 minute',
+            value: 60000,
+          },
+          {
+            label: '5 minutes',
+            value: 300000,
+          },
+        ],
       }
     );
   },
