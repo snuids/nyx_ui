@@ -5,16 +5,17 @@
       <el-col
         :span="parseInt(24/queryFilterCopy.length)"
         :key="queryfilter.key"
-        v-for="queryfilter in queryFilterCopy"
+        v-for="(queryfilter,mainindex) in queryFilterCopy"
         style="text-align:left"
       >
-        {{computeTranslatedText(queryfilter.title,$store.getters.creds.user.language)}}        
+        {{computeTranslatedText(queryfilter.title,$store.getters.creds.user.language)}}
         <el-select
           v-if="queryfilter.type == 'selecter'"
           filterable
           size="mini"
           v-model="queryfilter.selected"
           placeholder="Please select a type"
+          :clearable="queryfilter.selected != '*'"
           @change="refresh()"
         >        
           <el-option
@@ -31,7 +32,8 @@
           size="mini"
           v-model="queryfilter.selected"
           placeholder="Please select a type"
-          @change="refresh()"
+          :clearable="queryfilter.selected != '*'"
+          @change="refreshLinkedCombo(mainindex)"
         >        
           <el-option
             v-for="(qf, index) in queryfilter.buckets"
@@ -135,6 +137,19 @@ export default {
         return field.replace(/ /g,"\\ ");
       return field;
     },
+    refreshLinkedCombo: function(filterchangedindex)
+    {
+      for (let queryind in this.queryFilterCopy) {
+        // cache the last search
+        var cacheKey =
+          this.config.rec_id + "-" + this.queryFilterCopy[queryind].title;
+        this.$store.getters.searchCache[cacheKey] = this.queryFilterCopy[
+          queryind
+        ].selected;
+      }
+      this.loadQueryFilter(filterchangedindex);
+      //this.refresh();
+    },
     refresh: _.throttle(function() {
       var querya = [];
       for (let queryind in this.queryFilterCopy) {
@@ -173,13 +188,16 @@ export default {
 
         if ((valq!=undefined)&&(valq!='')&&(valq != "*")) {
 
-          var inverted=(valq.indexOf("-")==0);
+          var inverted=false;
+          if (!Number.isInteger(valq))
+            inverted=(valq.indexOf("-")==0);
 
 
-          if (
+          if ((!Number.isInteger(valq))
+          &&(
             valq.indexOf("*") >= 0 ||
             valq.indexOf("[") >= 0 ||
-            valq.indexOf("{") >= 0
+            valq.indexOf("{") >= 0)
           ) {
             if (inverted)
               querya.push("-"+this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq.substring(1) + "");
@@ -227,6 +245,18 @@ export default {
           if (this.$store.getters.searchCache[cacheKey] != null)
             queryf.selected = this.$store.getters.searchCache[cacheKey];
 
+          if (queryf.type == "queryselecter")
+          {
+            console.log("======>");
+            console.log("SEL="+queryf.selected );
+            console.log(queryf );
+            if(!_.isObject(_.find(queryf.buckets, ["key",queryf.selected])))
+            {
+              queryf.selected=queryf.buckets[0]["key"];
+            }
+          }
+
+
           if (queryf.type == "selecter") {
             queryf.options = [];
             for (var opt in queryf.selectOptions) {
@@ -248,6 +278,48 @@ export default {
       var tmp = JSON.parse(JSON.stringify(this.queryFilterCopy));
       this.queryFilterCopy = null;
       this.queryFilterCopy = tmp;
+    },
+    loadQueryFilter: function(filterchangedindex) {
+      console.log("Load Query Filter:"+filterchangedindex);
+      var url =
+        this.$store.getters.apiurl +
+        "queryFilter/"+this.config.rec_id +
+        "?token=" +
+        this.$store.getters.creds.token;
+      
+      var postbody={}
+
+      if (this.queryFilterCopy !=undefined)
+      {
+        postbody.selected=[];
+        for (var i=0;i<this.queryFilterCopy.length;i++)
+        {
+          if( this.queryFilterCopy[i].selected!=null)
+          {
+            if (filterchangedindex==undefined || i<=filterchangedindex)
+              postbody.selected.push(this.queryFilterCopy[i].selected); 
+            else
+              postbody.selected.push(""); 
+          }
+          else
+            postbody.selected.push(""); 
+        }
+      }
+      
+      console.log(postbody);
+
+
+      axios.post(url, postbody).then(response => {
+        for (let queryind in response.data.queryfilters) {
+          var qf=response.data.queryfilters[queryind];
+          if(qf.type=="queryselecter")
+          {
+            qf.buckets.splice(0,0,{"key":"*"})
+          }
+        }
+        this.prepareData(response.data.queryfilters);        
+        this.refresh();
+      });
     }
   },
   created: function() {
@@ -276,26 +348,7 @@ export default {
     if(this.mustloadqueryfilters)
     {
       //alert('toto');
-      var url =
-        this.$store.getters.apiurl +
-        "queryFilter/"+this.config.rec_id +
-        "?token=" +
-        this.$store.getters.creds.token;
-      
-      axios.post(url, {  }).then(response => {
-        //console.log("LOAD DATA RES...RED =>" + output);
-        //this.config.config.queryfilters=;
-        //alert(JSON.stringify(response));
-        for (let queryind in response.data.queryfilters) {
-          var qf=response.data.queryfilters[queryind];
-          if(qf.type=="queryselecter")
-          {
-            qf.buckets.splice(0,0,{"key":"*"})
-          }
-        }
-        this.prepareData(response.data.queryfilters);        
-        this.refresh();
-      });
+      this.loadQueryFilter();
     }
     else
       this.refresh();
