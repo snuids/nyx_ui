@@ -211,7 +211,7 @@
                 v-model="selectedRun.return"
               ></el-input>
             </el-col>
-            <el-col :span="4" style="text-align:right;">
+            <!-- <el-col :span="4" style="text-align:right;">
               <el-button
                 v-if="selectedRun && selectedRun.inputuuid"
                 style="min-width: 112px;"
@@ -219,7 +219,7 @@
                 @click="openTabInput"
                 size="mini"
               >Input</el-button>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-card>
         <el-row v-if="selectedRun">
