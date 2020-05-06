@@ -43,6 +43,7 @@
 
         <el-input
           @change="refresh()"
+          clearable
           size="mini"
           style="width:170px"
           v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict'"
