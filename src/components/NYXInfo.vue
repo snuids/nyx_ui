@@ -2,78 +2,129 @@
   <!--LANDING PAGE -->
   <div style="text-align:left;" id="nyx-info">
     <el-row>
-      <el-col :span="8">
-        <el-card shadow="never">
-          <div slot="header" class="clearfix">
-            <b>Versions</b>
-          </div>
-          <div class="text item">
-            UI Version:{{$store.getters.version}}
-            <br />
-            API Version:{{$store.getters.apiVersion}}
-            <br />
-            Window size:{{$store.getters.containerSize.width}} * {{$store.getters.containerSize.height}}
-            <br />
-            Browser:{{$browserDetect.meta.name }}
-            <br />
-            Browser Version:{{$browserDetect.meta.version}}
-            <br />
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="never">
-          <div slot="header" class="clearfix">
-            <b>Active MQ</b>
-            -
-            Version:<b>{{activeMQ[0]._source.version}}</b>
-            -
-            Connections:<b>{{activeMQ[0]._source.currentconnectionscount}}</b>
-          </div>
-          <el-row>
-            <el-col :span="8" style="text-align:center">
-              <el-progress type="dashboard" :percentage="activeMQ[0]._source.memorypercentusage"></el-progress>
-              <div><h3><b>Memory</b></h3></div>
-            </el-col>
-            <el-col :span="8" style="text-align:center">
-              <el-progress type="dashboard" :percentage="activeMQ[0]._source.storepercentusage"></el-progress>
-              <div><h3><b>Store</b></h3></div>
-            </el-col>
-            <el-col :span="8" style="text-align:center">
-              <el-progress type="dashboard" :percentage="activeMQ[0]._source.temppercentusage"></el-progress>
-              <div><h3><b>Temp</b></h3></div>
-            </el-col>
+      <el-col :span="12">
+        <el-row>
+          <el-card shadow="never" v-if="activeMQ">
+            <div slot="header" class="clearfix">
+              <b>Active MQ</b>
+              -
+              Version:
+              <b>{{activeMQ[0]._source.version}}</b>
+              -
+              Connections:
+              <b>{{activeMQ[0]._source.currentconnectionscount}}</b>
+            </div>
+            <el-row>
+              <el-col :span="8" style="text-align:center">
+                <el-progress type="dashboard" 
+                :status="compute_status(loads[0]._source.load_1m, 10, 40)"
+                :percentage="activeMQ[0]._source.memorypercentusage"></el-progress>
+                <div>
+                  <h3>
+                    <b>Memory: {{activeMQ[0]._source.memorypercentusage}}%</b>
+                  </h3>
+                </div>
+              </el-col>
+              <el-col :span="8" style="text-align:center">
+                <el-progress type="dashboard" 
+                :status="compute_status(loads[0]._source.load_1m, 10, 40)"
+                :percentage="activeMQ[0]._source.storepercentusage"></el-progress>
+                <div>
+                  <h3>
+                    <b>Store: {{activeMQ[0]._source.storepercentusage}}%</b>
+                  </h3>
+                </div>
+              </el-col>
+              <el-col :span="8" style="text-align:center">
+                <el-progress type="dashboard" 
+                :status="compute_status(loads[0]._source.load_1m, 10, 40)"
+                :percentage="activeMQ[0]._source.temppercentusage"></el-progress>
+                <div>
+                  <h3>
+                    <b>Temp: {{activeMQ[0]._source.temppercentusage}}%</b>
+                  </h3>
+                </div>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-row>
+        <el-row>
+          <el-card shadow="never" v-if="loads">
+            <div slot="header" class="clearfix">
+              <b>Load</b>
+            </div>
+            <el-row>
+              <el-col :span="8" style="text-align:center">
+                <el-progress type="dashboard" 
+                :status="compute_status(loads[0]._source.load_1m, 3, 7)"
+                :percentage="loads[0]._source.load_1m*10"></el-progress>
+                <div>
+                  <h3>
+                    <b>Load 1m: {{loads[0]._source.load_1m}}</b>
+                  </h3>
+                </div>
+              </el-col>
+              <el-col :span="8" style="text-align:center">
+                <el-progress type="dashboard" 
+                :status="compute_status(loads[0]._source.load_5m, 3, 7)"
+                :percentage="loads[0]._source.load_5m*10"></el-progress>
+                <div>
+                  <h3>
+                    <b>Load 5m: {{loads[0]._source.load_5m}}</b>
+                  </h3>
+                </div>
+              </el-col>
+              <el-col :span="8" style="text-align:center">
+                <el-progress type="dashboard" 
+                :status="compute_status(loads[0]._source.load_15m, 3, 7)"
+                :percentage="loads[0]._source.load_15m*10"></el-progress>
+                <div>
+                  <h3>
+                    <b>Load 15m: {{loads[0]._source.load_15m}}</b>
+                  </h3>
+                </div>
+              </el-col>
+            </el-row>
             
-          </el-row>
-          
-
-        </el-card>
+          </el-card>
+        </el-row>
       </el-col>
 
-      <el-col :span="8">
-        <el-card>
+      <el-col :span="12">
+        <el-row>
+          <el-card shadow="never" v-if="logstash">
           <div slot="header" class="clearfix">
-            <b>Load</b>
+            <b>Logstash 24H</b>
           </div>
-          <div class="text item">
-            Load 1m:{{loads[0]._source.load_1m}}
-            <br />
-            Load 5m:{{loads[0]._source.load_5m}}
-            <br />
-            Load 15m:{{loads[0]._source.load_15m}}
-            <br />&nbsp;
-            <br />&nbsp;
-            <br />
+          <div class="background-alert" :style="'background-color:'+(logstash.total==0?'#13CE66':'#FF4949')">
+            <div class="alert-number">
+              <b>{{logstash.total}}</b>
+            </div>
           </div>
         </el-card>
+        </el-row>
+        <el-row>
+          <el-card shadow="never" v-if="elastalert">
+          <div slot="header" class="clearfix">
+            <b>Elast Alert 24H</b>
+          </div>
+          <div class="background-alert" :style="'background-color:'+(elastalert.total==0?'#13CE66':'#FF4949')">
+            <div class="alert-number">
+              <b>{{elastalert.total}}</b>
+            </div>
+          </div>
+        </el-card>
+        </el-row>
+
+
       </el-col>
     </el-row>
 
     <el-row>
-      <el-col :span="8">
-        <el-card>
+      <el-col :span="12">
+        <el-card shadow="never" v-if="WebSocketServer">
           <div slot="header" class="clearfix">
-            <span>Users</span>
+            <b>Users</b>
           </div>
           <div class="text item">
             Connected:{{WebSocketServer[0]._source.clients[0].clients}}
@@ -87,37 +138,24 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8">
-        <el-card>
+      <el-col :span="12">
+        <el-card  shadow="never" v-if="nodes">
           <div slot="header" class="clearfix">
-            <span>Logstash 24H</span>
+            <b>ES NODES</b>
           </div>
-          <div class="text item">
-            {{logstash.total}}
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <div slot="header" class="clearfix">
-            <span>Elast Alert 24H</span>
-          </div>
-          <div class="text item">
-            {{elastalert.total}}
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    
-
-    <h2>ES NODES</h2>
     <el-table :data="nodes" style="width: 100%">
-              <el-table-column prop="node" label="Node"></el-table-column>
-              <el-table-column prop="disk_indices" label="Indices"></el-table-column>
-              <el-table-column prop="disk_percent" label="Percent"></el-table-column>
-              <el-table-column prop="disk_total" label="Total"></el-table-column>
-              <el-table-column prop="shards" label="Shards"></el-table-column>
-            </el-table>
+      <el-table-column prop="node" label="Node"></el-table-column>
+      <el-table-column prop="disk_indices" label="Indices"></el-table-column>
+      <el-table-column prop="disk_percent" label="Percent"></el-table-column>
+      <el-table-column prop="disk_total" label="Total"></el-table-column>
+      <el-table-column prop="shards" label="Shards"></el-table-column>
+    </el-table>
+        </el-card>
+       
+      </el-col>
+     
+    </el-row>
+
   </div>
 </template>
 
@@ -132,10 +170,19 @@ export default {
     WebSocketServer: [],
     loads: [],
     nodes: [],
-    logstash:{}
+    logstash: {}
   }),
   props: {},
   methods: {
+    compute_status: function(value, thresh1, thresh2) {
+      if(value <= thresh1)
+        return 'success'
+      if(value <= thresh2)
+        return 'warning'
+      
+      return 'exception'
+
+    },
     loadData: function() {
       var querymodules = {
         version: true,
@@ -216,71 +263,71 @@ export default {
         }
       };
 
-      var querylogstash={
-        "aggs": {},
-        "size": 0,
-        "docvalue_fields": [
+      var querylogstash = {
+        aggs: {},
+        size: 0,
+        docvalue_fields: [
           {
-            "field": "@timestamp",
-            "format": "date_time"
+            field: "@timestamp",
+            format: "date_time"
           }
         ],
-        "query": {
-          "bool": {
-            "must": [
+        query: {
+          bool: {
+            must: [
               {
-                "match_all": {}
+                match_all: {}
               }
             ],
-            "filter": [
+            filter: [
               {
-                "range": {
+                range: {
                   "@timestamp": {
-                    "format": "strict_date_optional_time",
-                    "gte": "now-1d",
-                    "lte": "now"
+                    format: "strict_date_optional_time",
+                    gte: "now-1d",
+                    lte: "now"
                   }
                 }
               }
             ],
-            "should": [],
-            "must_not": []
+            should: [],
+            must_not: []
           }
         }
-      }
+      };
 
-      var queryelastalert={
-        "aggs": {},
-        "size": 0,
-        "docvalue_fields": [
+      var queryelastalert = {
+        aggs: {},
+        size: 0,
+        docvalue_fields: [
           {
-            "field": "@timestamp",
-            "format": "date_time"
+            field: "@timestamp",
+            format: "date_time"
           }
         ],
-        "query": {
-          "bool": {
-            "must": [
+        query: {
+          bool: {
+            must: [
               {
-                "match_all": {}
+                match_all: {}
               }
             ],
-            "filter": [
+            filter: [
               {
-                "range": {
+                range: {
                   "@timestamp": {
-                    "format": "strict_date_optional_time",
-                    "gte": "now-1d",
-                    "lte": "now"
+                    format: "strict_date_optional_time",
+                    gte: "now-1d",
+                    lte: "now"
                   }
                 }
               }
             ],
-            "should": [],
-            "must_not": []
+            should: [],
+            must_not: []
           }
         }
-      }
+      };
       // MODULES
 
       var url =
@@ -372,7 +419,7 @@ export default {
           this.elastalert = response.data;
         }
       });
-    }    
+    }
   },
   created: function() {
     this.loadData();
@@ -384,7 +431,20 @@ export default {
 
 <style>
 #nyx-info .el-card {
-  margin-right:10px;
+  margin-right: 10px;
+}
+#nyx-info .background-alert {
+  width:100%; 
+  height:158px; 
+  text-align:center; 
+  vertical-align:middle;
+}
+#nyx-info .alert-number {
+  vertical-align: middle;
+  font-size: 64px;
+  padding-top: 40px;
+  color: white; 
+  font-weight:500px;
 }
 </style>
 
