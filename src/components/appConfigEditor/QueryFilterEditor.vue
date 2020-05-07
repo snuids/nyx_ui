@@ -64,7 +64,7 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="20" v-if="curField.type && curField.type == 'queryselecter'">        
+      <!--el-row :gutter="20" v-if="curField.type && curField.type == 'queryselecter'">        
         <el-col :span="10">
           <el-form-item label="Index" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.index" autocomplete="off"></el-input>
@@ -75,7 +75,7 @@
             <el-input size="mini" v-model="curField.column" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
+      </el-row-->
 
       <el-row :gutter="20" v-if="curField.type && curField.type == 'selecter'">
         <el-col :span="20">
