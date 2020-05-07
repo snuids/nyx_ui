@@ -1,5 +1,10 @@
 # Version History
 
+## V3.23.0 07/May/2020  
+* Nyx Info added
+* Dynamic query filters
+
+
 ## V3.20.0 22/Apr/2020  
 * Pagination added for alstic search
 
