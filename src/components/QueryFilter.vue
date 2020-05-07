@@ -17,7 +17,7 @@
           placeholder="Please select a type"
           :clearable="queryfilter.selected != '*'"
           @change="refresh()"
-        >        
+        >
           <el-option
             v-for="(qf, index) in queryfilter.options"
             :label="qf.title"
@@ -34,7 +34,7 @@
           placeholder="Please select a type"
           :clearable="queryfilter.selected != '*'"
           @change="refreshLinkedCombo(mainindex)"
-        >        
+        >
           <el-option
             v-for="(qf, index) in queryfilter.buckets"
             :label="qf.key"
@@ -48,7 +48,7 @@
           clearable
           size="mini"
           style="width:170px"
-          v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict'"
+          v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict' || queryfilter.type == 'globaltext'"
           :placeholder="$t('generic.pleaseinput')"
           v-model="queryfilter.selected"
         ></el-input>
@@ -56,21 +56,21 @@
     </div>
     <div class="refresh-button" v-if="config.type != 'kibana'">
       <!-- <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button> -->
-      <el-tooltip                  
-                  class="item"
-                  effect="light"
-                  content="Refresh"
-                  placement="bottom-start"
-                  :open-delay="1000"
-                >
-      <el-button
-                circle
-                size="mini"
-                @click="refresh()"
-                class="regreshbutton"
-                plain
-                icon="el-icon-refresh"
-              ></el-button>
+      <el-tooltip
+        class="item"
+        effect="light"
+        content="Refresh"
+        placement="bottom-start"
+        :open-delay="1000"
+      >
+        <el-button
+          circle
+          size="mini"
+          @click="refresh()"
+          class="regreshbutton"
+          plain
+          icon="el-icon-refresh"
+        ></el-button>
       </el-tooltip>
     </div>
     <div class="download-button" v-if="config && config.downloadChecked">
@@ -97,16 +97,16 @@
 </template>
 
 <script>
-
 import axios from "axios";
 import { computeTranslatedText } from "../globalfunctions";
 
 export default {
   name: "QueryFilter",
   data: () => ({
-    mustloadqueryfilters:false,
-    alreadymounted:false,
+    mustloadqueryfilters: false,
+    alreadymounted: false,
     queryfilter: "",
+    rangetouse: [],
     queryFilterCopy: undefined,
     exportFormats: [
       {
@@ -130,16 +130,13 @@ export default {
     computeTranslatedText: function(inText, inLocale) {
       return computeTranslatedText(inText, inLocale);
     },
-    clean_field: function(field)
-    {
-      console.log("===>"+field);
-      if (" ".indexOf(field)>=0)    
-        console.log("2==>"+field);
-        return field.replace(/ /g,"\\ ");
+    clean_field: function(field) {
+      console.log("===>" + field);
+      if (" ".indexOf(field) >= 0) console.log("2==>" + field);
+      return field.replace(/ /g, "\\ ");
       return field;
     },
-    refreshLinkedCombo: function(filterchangedindex)
-    {
+    refreshLinkedCombo: function(filterchangedindex) {
       for (let queryind in this.queryFilterCopy) {
         // cache the last search
         var cacheKey =
@@ -163,7 +160,10 @@ export default {
 
         var valq = this.queryFilterCopy[queryind].selected;
 
-        if (this.queryFilterCopy[queryind].type == "text") {
+        if (this.queryFilterCopy[queryind].type == "globaltext") {
+          if (valq == undefined || valq == "") valq = "*";
+          else valq = "###" + valq;
+        } else if (this.queryFilterCopy[queryind].type == "text") {
           if (valq == undefined || valq == "") valq = "*";
           else if (valq.indexOf("*") == -1) {
             valq = "*" + valq + "*";
@@ -185,36 +185,58 @@ export default {
             }
           }
         }
-        
 
-        if ((valq!=undefined)&&(valq!='')&&(valq != "*")) {
+        if (valq != undefined && valq != "" && valq != "*") {
+          var inverted = false;
+          if (!Number.isInteger(valq)) inverted = valq.indexOf("-") == 0;
 
-          var inverted=false;
-          if (!Number.isInteger(valq))
-            inverted=(valq.indexOf("-")==0);
-
-
-          if ((!Number.isInteger(valq))
-          &&(
-            valq.indexOf("*") >= 0 ||
-            valq.indexOf("[") >= 0 ||
-            valq.indexOf("{") >= 0)
+          console.log("valq1");
+          if (
+            !Number.isInteger(valq) &&
+            (valq.indexOf("*") >= 0 ||
+              valq.indexOf("[") >= 0 ||
+              valq.indexOf("{") >= 0)
           ) {
-            if (inverted)
-              querya.push("-"+this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq.substring(1) + "");
-            else
-              querya.push(this.clean_field(this.queryFilterCopy[queryind].field) + ":" + valq + "");
-
-          } else {
-            if (inverted)
+            if (valq.indexOf("###") == 0) {
+              valq = valq.substring(3);
+              querya.push("(*" + valq + "*)");
+            } else {
+              if (inverted)
                 querya.push(
-                this.clean_field("-"+this.queryFilterCopy[queryind].field) + ':"' + valq.substring(1) + '"'
-              );
-            else  
-              querya.push(
-                this.clean_field(this.queryFilterCopy[queryind].field) + ':"' + valq + '"'
-              );
-
+                  "-" +
+                    this.clean_field(this.queryFilterCopy[queryind].field) +
+                    ":" +
+                    valq.substring(1) +
+                    ""
+                );
+              else
+                querya.push(
+                  this.clean_field(this.queryFilterCopy[queryind].field) +
+                    ":" +
+                    valq +
+                    ""
+                );
+            }
+          } else {
+            if (valq.indexOf("###") == 0) {
+              valq = valq.substring(3);
+              querya.push("(*" + valq + "*)");
+            } else {
+              if (inverted)
+                querya.push(
+                  this.clean_field("-" + this.queryFilterCopy[queryind].field) +
+                    ':"' +
+                    valq.substring(1) +
+                    '"'
+                );
+              else
+                querya.push(
+                  this.clean_field(this.queryFilterCopy[queryind].field) +
+                    ':"' +
+                    valq +
+                    '"'
+                );
+            }
           }
         }
       }
@@ -228,12 +250,11 @@ export default {
 
     prepareData: function(newqueryf) {
       //alert(newqueryf);
-      if(newqueryf==undefined)
+      if (newqueryf == undefined)
         this.queryFilterCopy = JSON.parse(
           JSON.stringify(this.config.config.queryfilters)
         );
-      else
-        this.queryFilterCopy=newqueryf;
+      else this.queryFilterCopy = newqueryf;
 
       if (this.queryFilterCopy != undefined) {
         for (let queryind in this.queryFilterCopy) {
@@ -246,29 +267,28 @@ export default {
           if (this.$store.getters.searchCache[cacheKey] != null)
             queryf.selected = this.$store.getters.searchCache[cacheKey];
 
-          if (queryf.type == "queryselecter")
-          {
+          if (queryf.type == "queryselecter") {
             console.log("======>");
-            console.log("SEL="+queryf.selected );
-            console.log(queryf );
-            if(!_.isObject(_.find(queryf.buckets, ["key",queryf.selected])))
-            {
-              queryf.selected=queryf.buckets[0]["key"];
+            console.log("SEL=" + queryf.selected);
+            console.log(queryf);
+            if (!_.isObject(_.find(queryf.buckets, ["key", queryf.selected]))) {
+              queryf.selected = queryf.buckets[0]["key"];
             }
           }
-
 
           if (queryf.type == "selecter") {
             queryf.options = [];
             for (var opt in queryf.selectOptions) {
               var selectopt = queryf.selectOptions[opt];
 
-              let [first, ...second] = selectopt.split("=")
-              second = second.join("=")
-
+              let [first, ...second] = selectopt.split("=");
+              second = second.join("=");
 
               queryf.options.push({
-                title: this.computeTranslatedText(second,this.$store.getters.creds.user.language),
+                title: this.computeTranslatedText(
+                  second,
+                  this.$store.getters.creds.user.language
+                ),
                 value: first
               });
             }
@@ -281,78 +301,91 @@ export default {
       this.queryFilterCopy = tmp;
     },
     loadQueryFilter: function(filterchangedindex) {
-      console.log("Load Query Filter:"+filterchangedindex);
+      console.log("Load Query Filter:" + filterchangedindex);
+
       var url =
         this.$store.getters.apiurl +
-        "queryFilter/"+this.config.rec_id +
+        "queryFilter/" +
+        this.config.rec_id +
         "?token=" +
         this.$store.getters.creds.token;
-      
-      var postbody={}
 
-      if (this.queryFilterCopy !=undefined)
-      {
-        postbody.selected=[];
-        for (var i=0;i<this.queryFilterCopy.length;i++)
-        {
-          if( this.queryFilterCopy[i].selected!=null)
-          {
-            if (filterchangedindex==undefined || i<=filterchangedindex)
-              postbody.selected.push(this.queryFilterCopy[i].selected); 
-            else
-              postbody.selected.push(""); 
-          }
-          else
-            postbody.selected.push(""); 
+      var postbody = {};
+
+      if (
+        this.config.config.timefield != null &&
+        this.config.config.timefield != ""
+      ) {
+        switch (this.config.timeSelectorType) {
+          case "week":
+            this.rangetouse = this.$store.getters.timeRangeWeek;
+
+            break;
+          case "month":
+            this.rangetouse = this.$store.getters.timeRangeMonth;
+            break;
+          case "year":
+            this.rangetouse = this.$store.getters.timeRangeYear;
+            break;
+
+          case "day":
+            this.rangetouse = this.$store.getters.timeRangeDay;
+            break;
+
+          default:
+            this.rangetouse = this.$store.getters.timeRange;
+            break;
+        }
+        postbody["timerange"] = this.rangetouse;
+      }
+
+      if (this.queryFilterCopy != undefined) {
+        postbody.selected = [];
+        for (var i = 0; i < this.queryFilterCopy.length; i++) {
+          if (this.queryFilterCopy[i].selected != null) {
+            if (filterchangedindex == undefined || i <= filterchangedindex)
+              postbody.selected.push(this.queryFilterCopy[i].selected);
+            else postbody.selected.push("");
+          } else postbody.selected.push("");
         }
       }
-      
-      console.log(postbody);
 
+      console.log(postbody);
 
       axios.post(url, postbody).then(response => {
         for (let queryind in response.data.queryfilters) {
-          var qf=response.data.queryfilters[queryind];
-          if(qf.type=="queryselecter")
-          {
-            qf.buckets.splice(0,0,{"key":"*"})
+          var qf = response.data.queryfilters[queryind];
+          if (qf.type == "queryselecter") {
+            qf.buckets.splice(0, 0, { key: "*" });
           }
         }
-        this.prepareData(response.data.queryfilters);        
+        this.prepareData(response.data.queryfilters);
         this.refresh();
       });
     }
   },
   created: function() {
-    this.mustloadqueryfilters=false;
+    this.mustloadqueryfilters = false;
 
-    console.log("========================>")
+    console.log("========================>");
     //console.log(this.config)
-    
+
     for (let queryind in this.config.config.queryfilters) {
-      var qf=this.config.config.queryfilters[queryind];
-      if(qf.type=="queryselecter")
-      {
-        this.mustloadqueryfilters=true;
+      var qf = this.config.config.queryfilters[queryind];
+      if (qf.type == "queryselecter") {
+        this.mustloadqueryfilters = true;
         break;
       }
     }
-    if(this.mustloadqueryfilters)
-    {
-      
-    }
-    else    
-      this.prepareData();
+    if (this.mustloadqueryfilters) {
+    } else this.prepareData();
   },
   mounted: function() {
-    this.alreadymounted=true;    
-    if(this.mustloadqueryfilters)
-    {
+    this.alreadymounted = true;
+    if (this.mustloadqueryfilters) {
       //alert('toto');
       this.loadQueryFilter();
-    }
-    else
-      this.refresh();
+    } else this.refresh();
   }
 };
 </script>

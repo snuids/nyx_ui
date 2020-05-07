@@ -23,7 +23,7 @@
       </el-row>
 
       <el-row v-if="currentConfig.queryFilterChecked">
-        <el-button @click="setFocus('fieldsToFilter')" type="text">Fields to filter</el-button>
+        <el-button @click="setFocus('fieldsToFilter')" type="text">Fields to filter</el-button>        
       </el-row>
       <el-row v-if="currentConfig.queryFilterChecked">
         <el-col
@@ -81,7 +81,11 @@
                 </tr>
               </draggable>
             </table>
+            <div style="width:100%;text-align:center;margin-top:10px;">
+              <el-button @click="addGlobalFilter()" size="mini" v-if="fieldsToFilter.indexOf('Global_Filter')<0">Add Global Filter</el-button>  
+            </div>                        
           </el-card>
+          
         </el-col>
         <el-col :span="12" v-if="filterFieldToConfigure">
           <el-card shadow="never">
@@ -116,7 +120,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="12" v-if="filterFieldToConfigure.type != 'globaltext'">
                 <el-row>
                   <el-button @click="setFocus('type')" type="text">Type</el-button>
                 </el-row>
@@ -168,7 +172,7 @@
               ></editor>
             </el-row>
 
-            <el-row v-if="filterFieldToConfigure.type == 'queryselecter'">
+            <!-- <el-row v-if="filterFieldToConfigure.type == 'queryselecter'">
               <el-col :span="12">
                 <el-row>
                   <el-button type="text">Index</el-button>                      
@@ -201,7 +205,7 @@
                     size="mini"
                   ></el-input>                
               </el-col>
-              </el-row>
+              </el-row> -->
 
 
           </el-card>
@@ -255,6 +259,7 @@ export default {
     curConfigIn: function() {
       return this.currentConfig;
     },
+    
     fieldList: function() {
       return this.currentConfig.config.headercolumns.map(x => x.field);
     },
@@ -318,6 +323,11 @@ export default {
           );
         }
       }
+    },
+    addGlobalFilter: function(){      
+      this.currentConfig.config.queryfilters.push({"field":"Global_Filter","column":"global","title":"Global","type":"globaltext"});
+      this.fieldsToFilter.push("Global_Filter");
+      //this.selectFieldsToFilterChanged();
     },
     selecterOptionsToConfig: _.debounce(function() {
       this.filterFieldToConfigure.selectOptions = this.selecterOptions.trim().replace(/\r/g,'').split('\n')
