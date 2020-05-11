@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 400px;width:100%;">
+  <div style="height: 600px;width:100%;">
     
     <l-map :zoom="zoom" :center="center" :options="{scrollWheelZoom:false}">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>

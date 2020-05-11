@@ -4,7 +4,7 @@
     <el-row>
       <el-col :span="12">
         <el-row>
-          <el-card shadow="never" v-if="activeMQ">
+          <el-card shadow="never" v-if="activeMQ && activeMQ[0] && activeMQ[0]._source" >
             <div slot="header" class="clearfix">
               <b>Active MQ</b>
               -
@@ -17,7 +17,7 @@
             <el-row>
               <el-col :span="8" style="text-align:center">
                 <el-progress type="dashboard" 
-                :status="compute_status(loads[0]._source.load_1m, 10, 40)"
+                :status="compute_status(activeMQ[0]._source.memorypercentusage, 10, 40)"
                 :percentage="activeMQ[0]._source.memorypercentusage"></el-progress>
                 <div>
                   <h3>
@@ -27,7 +27,7 @@
               </el-col>
               <el-col :span="8" style="text-align:center">
                 <el-progress type="dashboard" 
-                :status="compute_status(loads[0]._source.load_1m, 10, 40)"
+                :status="compute_status(activeMQ[0]._source.storepercentusage, 10, 40)"
                 :percentage="activeMQ[0]._source.storepercentusage"></el-progress>
                 <div>
                   <h3>
@@ -37,7 +37,7 @@
               </el-col>
               <el-col :span="8" style="text-align:center">
                 <el-progress type="dashboard" 
-                :status="compute_status(loads[0]._source.load_1m, 10, 40)"
+                :status="compute_status(activeMQ[0]._source.temppercentusage, 10, 40)"
                 :percentage="activeMQ[0]._source.temppercentusage"></el-progress>
                 <div>
                   <h3>
@@ -49,7 +49,7 @@
           </el-card>
         </el-row>
         <el-row>
-          <el-card shadow="never" v-if="loads">
+          <el-card shadow="never" v-if="loads && loads[0] && loads[0]._source" >
             <div slot="header" class="clearfix">
               <b>Load</b>
             </div>
@@ -90,47 +90,73 @@
         </el-row>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="6">
         <el-row>
-          <el-card shadow="never" v-if="logstash">
-          <div slot="header" class="clearfix">
-            <b>Logstash 24H</b>
-          </div>
-          <div class="background-alert" :style="'background-color:'+(logstash.total==0?'#13CE66':'#FF4949')">
-            <div class="alert-number">
-              <b>{{logstash.total}}</b>
-            </div>
-          </div>
-        </el-card>
-        </el-row>
-        <el-row>
-          <el-card shadow="never" v-if="elastalert">
-          <div slot="header" class="clearfix">
+          <el-card shadow="never" v-if="elastalert"  >
+          <div slot="header" class="clearfix" v-on:click="switch_to('elastalert')">
             <b>Elast Alert 24H</b>
           </div>
-          <div class="background-alert" :style="'background-color:'+(elastalert.total==0?'#13CE66':'#FF4949')">
+          <div class="background-alert" :style="'background-color:'+(elastalert.total==0?'#13CE66':'#FF4949')" v-on:click="switch_to('elastalert')">
             <div class="alert-number">
               <b>{{elastalert.total}}</b>
             </div>
           </div>
         </el-card>
         </el-row>
+        <el-row>
+          <el-card shadow="never" v-if="logstash">
+          <div slot="header" class="clearfix" v-on:click="switch_to('logstash')">
+            <b>Logstash 24H</b>
+          </div>
+          <div class="background-alert" :style="'background-color:'+(logstash.total==0?'#13CE66':'#FF4949')"  v-on:click="switch_to('logstash')">
+            <div class="alert-number">
+              <b>{{logstash.total}}</b>
+            </div>
+          </div>
+        </el-card>
+        </el-row>
+      </el-col>
 
-
+      <el-col :span="6">
+        <el-row>
+          
+          <el-card shadow="never" v-if="docker_status && docker_status.records">
+          <div slot="header" class="clearfix" v-on:click="switch_to('containers')">
+            <b>Containers Stopped</b>
+          </div>
+          
+          <div class="background-alert" :style="'background-color:'+((docker_status.records.filter(rec=> rec._source.status!='running').length)==0?'#13CE66':'#FF4949')" v-on:click="switch_to('containers')">
+            <div class="alert-number">
+              
+              <b>{{docker_status.records.filter(rec=> rec._source.status!="running").length}}</b>
+            </div>
+          </div>
+        </el-card>
+        </el-row>
+        <el-row>
+          <el-card shadow="never" v-if="lambdas && lambdas.aggs">
+            
+          <div slot="header" class="clearfix" v-on:click="switch_to('lambdas')">
+            <b>Lambdas 24H</b>
+          </div>
+          <div class="background-alert" :style="'background-color:'+(lambdas.aggs['1'].value==0?'#13CE66':'#FF4949')" v-on:click="switch_to('lambdas')">
+            <div class="alert-number">
+              <b>{{lambdas.aggs["1"].value}}</b>
+            </div>
+          </div>
+        </el-card>
+        </el-row>
       </el-col>
     </el-row>
 
     <el-row>
       <el-col :span="12">
-        <el-card shadow="never" v-if="WebSocketServer">
-          <div slot="header" class="clearfix">
-            <b>Users</b>
+        <el-card shadow="never" v-if="WebSocketServer && WebSocketServer[0] && WebSocketServer[0]._source" >
+          <div slot="header" class="clearfix" v-on:click="switch_to('users config')">
+            <b>Users</b> - Connected: <b>{{WebSocketServer[0]._source.clients[0].clients}}</b>
+            - Uniques: <b>{{Array.from(new Set(WebSocketServer[0]._source.clients[0].logins)).length}}</b>
           </div>
-          <div class="text item">
-            Connected:{{WebSocketServer[0]._source.clients[0].clients}}
-            <br />
-            Uniques:{{Array.from(new Set(WebSocketServer[0]._source.clients[0].logins)).length}}
-            <br />
+          <div class="text item" v-on:click="switch_to('users config')">
             <div
               v-for="(item, index) in Array.from(new Set(WebSocketServer[0]._source.clients[0].logins))"
               :key="index"
@@ -170,10 +196,25 @@ export default {
     WebSocketServer: [],
     loads: [],
     nodes: [],
-    logstash: {}
+    docker_status:[],
+    lambdas:[],
+    logstash: {},
+    elastalert:{}
   }),
   props: {},
   methods: {
+    switch_to:function(newpath)
+    {
+      this.$store.dispatch("switchToApp",newpath).then(response => {
+        if(response !=undefined)
+          this.$router.push("/main/"+response);
+            
+            console.log(response)
+        }, error => {
+            console.error("Got nothing from server. Prompt user to check internet connection and try again")
+        })
+      
+    },
     compute_status: function(value, thresh1, thresh2) {
       if(value <= thresh1)
         return 'success'
@@ -328,6 +369,57 @@ export default {
           }
         }
       };
+
+      var querycontainers = {
+        version: true,
+        size: 500
+      };
+
+      var querylambdas=
+      {
+          "aggs": {
+            "1": {
+              "sum": {
+                "field": "crashed"
+              }
+            }
+          },
+          "size": 0,
+          "_source": {
+            "excludes": []
+          },
+          "stored_fields": [
+            "*"
+          ],
+          "script_fields": {},
+          "docvalue_fields": [
+            {
+              "field": "@timestamp",
+              "format": "date_time"
+            }
+          ],
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "match_all": {}
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      gte: "now-1d",
+                    lte: "now",
+                      "format": "epoch_millis"
+                    }
+                  }
+                }
+              ],
+              "filter": [],
+              "should": [],
+              "must_not": []
+            }
+          }
+        }
       // MODULES
 
       var url =
@@ -417,6 +509,36 @@ export default {
         if (response.data.error != "") console.log("Report list error...");
         else {
           this.elastalert = response.data;
+        }
+      });
+
+      // CONTAINERS
+
+      url =
+        this.$store.getters.apiurl +
+        "generic_search/docker_status?token=" +
+        this.$store.getters.creds.token+"&doc_type=_doc";
+
+      axios.post(url, querycontainers).then(response => {
+        if (response.data.error != "") console.log("Report list error...");
+        else {
+          this.docker_status = response.data;
+        }
+      });
+
+      // LAMBDAS
+
+      // CONTAINERS
+
+      url =
+        this.$store.getters.apiurl +
+        "generic_search/nyx_lambdalog?token=" +
+        this.$store.getters.creds.token;
+
+      axios.post(url, querylambdas).then(response => {
+        if (response.data.error != "") console.log("Report list error...");
+        else {
+          this.lambdas = response.data;
         }
       });
     }
