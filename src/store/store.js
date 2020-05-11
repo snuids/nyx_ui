@@ -54,7 +54,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     apiVersion: "",
     kibanaurl: "/kibana/",
-    version: "v3.23.0",
+    version: "v3.24.0",
     devMode: false,
     menus: [],
     menuOpen: true,
@@ -119,6 +119,25 @@ export default new Vuex.Store({
 
   },
   actions: {
+    switchToApp(context, payload)
+    {
+      console.log("switch to app mutation called.");
+      console.log(payload);
+      for (var i = 0; i < context.getters.filteredmenus.length; i++) {
+        var cat = context.getters.filteredmenus[i]
+
+        for (var j = 0; j < cat.submenus.length; j++) {
+          var subcat = cat.submenus[j]
+          for (var k = 0; k < subcat.apps.length; k++) {
+            console.log(subcat.apps[k].title);
+            if (subcat.apps[k].title.toLowerCase() === payload) {              
+              return Promise.resolve(subcat.apps[k].rec_id);              
+            }
+          }
+        }
+      } 
+    }
+    ,
     check_websocket : (context,payload) => {
       //state.name = payload,
       if(context.getters.wsObject.check_alive)
@@ -312,6 +331,7 @@ export default new Vuex.Store({
       console.log(payload.data);
       state.containerSize = payload.data;
     },
+    
     changeApp(state, payload) {
       console.log("changeApp mutation called.");
       var app = null;
