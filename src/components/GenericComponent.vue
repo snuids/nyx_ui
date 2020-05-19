@@ -33,6 +33,7 @@
     <!-- More than one application -->
     <div v-else style="overflow:hidden;">
       <el-tabs v-model="selectedTab" 
+      
         @tab-click="handleTabClick">
         <el-tab-pane
           v-bind:style="styleContainerComputed"

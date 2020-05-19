@@ -682,7 +682,7 @@ export default {
 
 .el-main {
   padding: 2px !important;
-  margin-left: 10px;
+  padding-left: 10px !important;
 }
 
 body {

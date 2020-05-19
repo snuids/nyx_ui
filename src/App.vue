@@ -77,6 +77,25 @@ export default {
       }
 
     }, 200),
+    async loadConfig() {
+      const response = await axios.get(
+        this.$store.getters.apiurl + "config",
+        {}
+      );
+
+      if (response.data.error == "") {
+        this.initialized = true;
+        this.config = response.data;
+
+        if(response.data.elastic_version != null) {
+          this.$store.commit({
+            type: "elasticVersion",
+            data: response.data.elastic_version
+          });
+        }
+
+      }
+    },
 
   },
   mounted: function() {
@@ -90,6 +109,8 @@ export default {
             this.$store.dispatch('check_websocket')
         }, 3000)
     }
+
+    this.loadConfig();
   },
   beforeDestroy () {
     if( this.wsInterval==null)
