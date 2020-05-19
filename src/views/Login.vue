@@ -21,7 +21,7 @@
     </div>
 
     <div class="title-disclaimer">
-      <b>Nyx</b> Platform <b>{{this.$store.getters.version}}</b>
+      <b>Nyx</b> Platform <b>{{this.$store.getters.version}}</b> ({{$store.getters.elasticVersion}})
     </div>
 
     <el-card class="login-card" :body-style="{ padding: '30px 20px'  }" shadow="hover">
@@ -116,6 +116,14 @@ export default {
       if (response.data.error == "") {
         this.initialized = true;
         this.config = response.data;
+
+        if(response.data.elastic_version != null) {
+          this.$store.commit({
+            type: "elasticVersion",
+            data: response.data.elastic_version
+          });
+        }
+
       }
     },
 

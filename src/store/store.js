@@ -54,7 +54,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     apiVersion: "",
     kibanaurl: "/kibana/",
-    version: "v3.24.0",
+    version: "v3.25.0",
     devMode: false,
     menus: [],
     menuOpen: true,
@@ -68,6 +68,7 @@ export default new Vuex.Store({
     timeRangeYear: null,
     timeRangeDay: null,
     initialized: false,
+    elasticVersion: 0,
     filteredmenus: [],
     autoTime: "10m",
     autoTimeDay: "5m",
@@ -101,6 +102,7 @@ export default new Vuex.Store({
     timeRangeMonth: state => state.timeRangeMonth,
     timeRangeYear: state => state.timeRangeYear,
     initialized: state => state.initialized,
+    elasticVersion: state => state.elasticVersion,
     filteredmenus: state => state.filteredmenus,
     autoTime: state => state.autoTime,
     autoTimeDay: state => state.autoTimeDay,
@@ -119,8 +121,7 @@ export default new Vuex.Store({
 
   },
   actions: {
-    switchToApp(context, payload)
-    {
+    switchToApp(context, payload) {
       console.log("switch to app mutation called.");
       console.log(payload);
       for (var i = 0; i < context.getters.filteredmenus.length; i++) {
@@ -204,6 +205,9 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    elasticVersion(state, payload) {
+      state.elasticVersion = payload.data;
+    },
     setAppConfigObj(state, payload) {
       state.appConfigObj = JSON.parse(JSON.stringify(payload));
     },
