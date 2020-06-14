@@ -3,6 +3,7 @@
 ![badge](https://img.shields.io/badge/made%20with-vuejs-blue.svg?style=flat-square)
 ![badge](https://img.shields.io/github/languages/code-size/snuids/nyx_ui)
 ![badge](https://img.shields.io/github/last-commit/snuids/nyx_ui)
+![Azure Static Web Apps CI/CD](https://github.com/snuids/nyx_ui/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg)
 
 
 ## Introduction
