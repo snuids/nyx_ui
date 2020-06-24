@@ -427,6 +427,12 @@ export default {
         this.config.config.hiddenQuery != undefined &&
         this.config.config.hiddenQuery != ""
       ) {
+        if(this.config.config.hiddenQuery.includes("{{id}}")){
+          this.config.config.hiddenQuery = this.config.config.hiddenQuery.replace("{{id}}", this.$store.getters.creds.user.id)
+        }
+        if(this.config.config.hiddenQuery.includes("{{login}}")){
+          this.config.config.hiddenQuery = this.config.config.hiddenQuery.replace("{{login}}", this.$store.getters.creds.user.login)
+        }
         if (curquery == "") curquery = this.config.config.hiddenQuery;
         else
           curquery =
