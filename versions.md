@@ -1,5 +1,8 @@
 # Version History
 
+## V3.26.2 15/Jul/2020  
+* FIX: User that have "admin" or "user" privilege can access filters and privileges
+
 ## V3.24.0 11/May/2020  
 * Nyx Info enhanced
 * Docker ediutor template added
