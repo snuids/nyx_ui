@@ -344,10 +344,8 @@ export default new Vuex.Store({
               length: [10, 40],
               forceUpper: false,
               minUpper: 0,
-              forceLower: false,
-              minLower: 0,
-              forceNumbers: false,
-              minNumbers: 0,
+              forceNumber: false,
+              minNumber: 0,
               forceSpecial: false,
               minSpecial: 0
             };
