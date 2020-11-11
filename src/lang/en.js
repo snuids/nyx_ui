@@ -92,7 +92,7 @@ export const messages = {
         repeatpass:'Repeat password',
         generate_strong_password:'Generate Strong Password',
         save_password:'Save Password',
-        notify_by_mail:'Notify by mail'
+        notify_by_mail:'Notify user by mail'
       }
       ,generictable:{
         modifyrecord:'Modify Record',

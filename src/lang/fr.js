@@ -94,7 +94,7 @@ export const messages = {
         repeatpass:'Répéter le nouveau',
         generate_strong_password:'Générer un mot de passe',
         save_password:'Enregistrer',
-        notify_by_mail:'Notifier par courriel'
+        notify_by_mail:'Notifier l\'utilisateur par courriel'
       }
       ,generictable:{
         modifyrecord:'Modifier l\'entrée',
