@@ -571,7 +571,6 @@ export default {
             });
 
             if(authResponse.data.cred.user.privileges.includes('admin')) {
-
               this.$store.commit({
                 type: "privileges",
                 data: authResponse.data.all_priv
