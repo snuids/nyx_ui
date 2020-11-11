@@ -81,6 +81,7 @@ export default new Vuex.Store({
     containerSize: { "width": 1200, "height": 800 },
     appConfigObj: null,
     redirection: null,
+    passwordRules: null,
     searchCache: {},
     wsObject:{"check_alive":false}
   },
@@ -118,6 +119,7 @@ export default new Vuex.Store({
     appConfigObj: state => state.appConfigObj,
     redirection: state => state.redirection,
     searchCache: state => state.searchCache,
+    passwordRules: state => state.passwordRules,
 
   },
   actions: {
@@ -202,8 +204,8 @@ export default new Vuex.Store({
       
       
     }
+    ,
   },
-
   mutations: {
     elasticVersion(state, payload) {
       state.elasticVersion = payload.data;
@@ -225,6 +227,24 @@ export default new Vuex.Store({
     version(state, payload) {
       console.log("Version mutation called.");
       state.apiVersion = payload.data;
+    },
+    setPasswordRules(state, payload) {
+      let index =  'nyx_config'
+      let id    =  'password_rules'
+
+      var url =
+        state.apiurl +
+        "generic/"+index+"/"+id+"?token=" +
+        state.creds.token;
+
+      axios
+        .post(url, payload.data)
+        .then(response => {
+          state.passwordRules = payload.data
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
     ,
     login(state, payload) {
@@ -303,9 +323,41 @@ export default new Vuex.Store({
       dend.endOf('year');
       state.timeRangeYear = [dstart.toDate(), dend.toDate()];
 
-// WEB SOCKET
+      // WEB SOCKET
       //const socket = new WebSocket('wss://test2.nyx-ds.com/nyx_ui_websocket/');
       state.wsObject.check_alive=true;
+
+      // PASSWORD RULES
+      let index =  'nyx_config'
+      let id    =  'password_rules'
+
+      var url =
+        state.apiurl +
+        "generic/"+index+"/"+id+"?token=" +
+        state.creds.token;
+
+      axios
+        .get(url)
+        .then(response => {
+          if (response.data.error != "")
+            state.passwordRules = {
+              length: [10, 40],
+              forceUpper: false,
+              minUpper: 0,
+              forceLower: false,
+              minLower: 0,
+              forceNumbers: false,
+              minNumbers: 0,
+              forceSpecial: false,
+              minSpecial: 0
+            };
+          else {
+            state.passwordRules = response.data.data._source
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
       
     },    
     logout(state) {
@@ -335,7 +387,6 @@ export default new Vuex.Store({
       console.log(payload.data);
       state.containerSize = payload.data;
     },
-    
     changeApp(state, payload) {
       console.log("changeApp mutation called.");
       var app = null;
@@ -372,7 +423,6 @@ export default new Vuex.Store({
         console.log('send forcetime')
       }
     },
-
     // eslint-disable-next-line
     refreshTimeRange(state, payload) {
       console.log("VUEX:RefreshTimeRange:");
@@ -424,61 +474,37 @@ export default new Vuex.Store({
 
       switch (payload.data.subtype) {
         case "day":
-          //alert('Week Change');
           state.timeRangeDay = payload.data.range;
           startTime = moment(state.timeRangeDay[0]);
           endTime = moment(state.timeRangeDay[1]);
-
-          //state.autoTime = "1h";
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-
-          //state.autoTime = computeAutoTime(minutes);
-
           startTimeAsUtc = moment(state.timeRangeDay[0]).utc();
           endTimeAsUtc = moment(state.timeRangeDay[1]).utc();
 
           break;
         case "week":
-          //alert('Week Change');
           state.timeRangeWeek = payload.data.range;
           startTime = moment(state.timeRangeWeek[0]);
           endTime = moment(state.timeRangeWeek[1]);
-
-          //state.autoTime = "1h";
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-
-          //state.autoTime = computeAutoTime(minutes);
-
           startTimeAsUtc = moment(state.timeRangeWeek[0]).utc();
           endTimeAsUtc = moment(state.timeRangeWeek[1]).utc();
 
           break;
         case "month":
-          //alert('Month Change');
           state.timeRangeMonth = payload.data.range;
           startTime = moment(state.timeRangeMonth[0]);
           endTime = moment(state.timeRangeMonth[1]);
-
-          //state.autoTime = "1d";
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-
-          //state.autoTime = computeAutoTime(minutes);
-
           startTimeAsUtc = moment(state.timeRangeMonth[0]).utc();
           endTimeAsUtc = moment(state.timeRangeMonth[1]).utc();
 
           break;
         case "year":
-          //alert('Year Change');
           state.timeRangeYear = payload.data.range;
           startTime = moment(state.timeRangeYear[0]);
           endTime = moment(state.timeRangeYear[1]);
-
-          //state.autoTime = "1w";
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-
-          //state.autoTime = computeAutoTime(minutes);
-
           startTimeAsUtc = moment(state.timeRangeYear[0]).utc();
           endTimeAsUtc = moment(state.timeRangeYear[1]).utc();
           break;
@@ -488,18 +514,13 @@ export default new Vuex.Store({
             state.timeRange = payload.data.range;
             startTime = moment(state.timeRange[0]);
             endTime = moment(state.timeRange[1]);
-
             state.autoTime = "1h";
             minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-
             state.autoTime = computeAutoTime(minutes);
-
             startTimeAsUtc = moment(state.timeRange[0]).utc();
             endTimeAsUtc = moment(state.timeRange[1]).utc();
           }
           else {
-            //alert('coucou VUEX');
-            //alert(JSON.stringify(payload.data));
             var minutesmulti = 1;
             switch (payload.data.relativeType) {
               case 'h':
@@ -594,8 +615,6 @@ export default new Vuex.Store({
           });
     },
     deletePGRecord(state, payload) {
-      console.log(payload)
-      console.log("====================================================")
       var url =
         state.apiurl +
         "pg_generic/" + payload.data.config.config.index + "/" + payload.data.config.config.pkey + "/" + payload.data.row._id + "?token=" +

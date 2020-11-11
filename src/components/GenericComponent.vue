@@ -76,60 +76,67 @@
 
 <script>
 
-import generictable from "@/components/GenericTable";
-import pggenerictable from "@/components/PGGenericTable";
-import kibana from "@/components/Kibana";
-import external from "@/components/External";
-import upload from "@/components/Upload";
- // eslint-disable-next-line
-import user from "@/components/User";
- // eslint-disable-next-line
-import config from "@/components/Config";
-import map from "@/components/Map";
-import ReportList from "@/components/ReportList";
-import ProcessList from "@/components/ProcessList";
-import FileSystem from "@/components/FileSystem";
-import reporttask from "@/components/ReportTask";
-import reportperiodic from "@/components/ReportPeriodic";
-import form from "@/components/Form";
-import freetext from "@/components/FreeText";
-// import loading from "@/components/Loading";
-import queryfilter from "@/components/QueryFilter";
-import vega from "@/components/Vega";
-import LandingPage from "@/components/LandingPage";
-import NYXInfo from "@/components/NYXInfo";
-import SendMessage from "@/components/SendMessage";
+// import generictable from "@/components/GenericTable";
+// import pggenerictable from "@/components/PGGenericTable";
+// import kibana from "@/components/Kibana";
+// import external from "@/components/External";
+// import upload from "@/components/Upload";
+//  // eslint-disable-next-line
+// import user from "@/components/User";
+//  // eslint-disable-next-line
+// import config from "@/components/Config";
+// import map from "@/components/Map";
+// import ReportList from "@/components/ReportList";
+// import ProcessList from "@/components/ProcessList";
+// import FileSystem from "@/components/FileSystem";
+// import reporttask from "@/components/ReportTask";
+// import reportperiodic from "@/components/ReportPeriodic";
+// import form from "@/components/Form";
+// import freetext from "@/components/FreeText";
+// // import loading from "@/components/Loading";
+// import queryfilter from "@/components/QueryFilter";
+// import vega from "@/components/Vega";
+// import LandingPage from "@/components/LandingPage";
+// import NYXInfo from "@/components/NYXInfo";
+// import SendMessage from "@/components/SendMessage";
 import Vue from "vue";
 
-const req = require.context('../components/external/', true, /\.vue$/)
+const req = require.context('../components/', true, /\.vue$/)
 
 const dynamicComponents = {}
+// req.keys().forEach(filename => {
+//   const name = `${filename.split('.')[1].split('/')[1]}`
+//   const component = req(filename).default
+//   dynamicComponents[name] = component
+// })
+
 req.keys().forEach(filename => {
-  const name = `${filename.split('.')[1].split('/')[1]}`
+  const name = `${filename.split('.')[1].split('/')[filename.split('.')[1].split('/').length - 1]}`
   const component = req(filename).default
+  // console.log(name)
   dynamicComponents[name] = component
 })
 
-Vue.component("GenericTable", generictable);
-Vue.component("PGGenericTable", pggenerictable);
-Vue.component("Kibana", kibana);
-Vue.component("External", external);
-Vue.component("Upload", upload);
-Vue.component("User", user);
-Vue.component("Config", config);
-Vue.component("Map", map);
-Vue.component("Form", form);
-Vue.component("FreeText", freetext);
-Vue.component("ReportList", ReportList);
-Vue.component("ReportTask", reporttask);
-Vue.component("ReportPeriodic", reportperiodic);
-Vue.component("ProcessList", ProcessList);
-Vue.component("FileSystem", FileSystem);
-Vue.component("QueryFilter", queryfilter);
-Vue.component("Vega", vega);
-Vue.component("LandingPage", LandingPage);
-Vue.component("NYXInfo", NYXInfo);
-Vue.component("SendMessage", SendMessage);
+// Vue.component("GenericTable", generictable);
+// Vue.component("PGGenericTable", pggenerictable);
+// Vue.component("Kibana", kibana);
+// Vue.component("External", external);
+// Vue.component("Upload", upload);
+// Vue.component("User", user);
+// Vue.component("Config", config);
+// Vue.component("Map", map);
+// Vue.component("Form", form);
+// Vue.component("FreeText", freetext);
+// Vue.component("ReportList", ReportList);
+// Vue.component("ReportTask", reporttask);
+// Vue.component("ReportPeriodic", reportperiodic);
+// Vue.component("ProcessList", ProcessList);
+// Vue.component("FileSystem", FileSystem);
+// Vue.component("QueryFilter", queryfilter);
+// Vue.component("Vega", vega);
+// Vue.component("LandingPage", LandingPage);
+// Vue.component("NYXInfo", NYXInfo);
+// Vue.component("SendMessage", SendMessage);
 
 const myExport = {
 //export default {
