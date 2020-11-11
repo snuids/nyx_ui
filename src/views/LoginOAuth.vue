@@ -11,7 +11,7 @@
         scale="3"
         spin
         v-if="!initialized || loginunderway"
-      />
+      />      
       <v-icon
         style="color:white"
         :name="config.icon"
@@ -26,6 +26,7 @@
 
     <el-card class="login-card" :body-style="{ padding: '30px 20px'  }" shadow="hover">
       <el-form class="login-form" label-width="0px">
+        OAUTH
         <el-col :span="24">
           <el-form-item label>
             <el-input
@@ -55,8 +56,7 @@
             size="default"
             color="#048"
             
-            :disabled="loginDisabled"
-            :loading="loginunderway"
+            
           >Login</el-button>
           <div class="login_error" v-if="form.error">{{form.error}}</div>
         </el-col>
@@ -75,7 +75,25 @@
 
 import Vue from "vue";
 import axios from "axios";
+import VueAxios from 'vue-axios'
+import VueAuthenticate from 'vue-authenticate'
 import { loadLanguageAsync } from "../i18n-setup";
+
+Vue.use(VueAxios, axios)
+Vue.use(VueAuthenticate, {
+  baseUrl: 'http://localhost:5000/api/v1/cred/oauth', // Your API domain
+  
+  providers: {
+    github: {
+      clientId: '9db8649da69826dcbc40',
+      redirectUri: 'http://localhost:8080/auth/callback' // Your client app URL
+    }
+    ,linkedin:{
+      clientId: '77h6s4f03qw9pv',
+      redirectUri: 'http://localhost:8080/auth/callback' // Your client app URL
+    }
+  }
+})
 
 function getUrlVars() {
   var vars = {};
@@ -127,61 +145,21 @@ export default {
       }
     },
 
-    async validateUser() {
-      try {
-        this.loginunderway = true;
-        const response = await axios.post(
-          this.$store.getters.apiurl + "cred/login",
-          { login: this.form.login, password: this.form.password }
-        );
-
-        if (response.data.error == "") {
-          this.authenticate(response);
-        } else {
-          this.loginunderway = false;
-
-          if (response.data.error == "DoublePhase") {
-            this.$prompt("Please input your code", "Second Phase", {
-              confirmButtonText: "OK",
-              cancelButtonText: "Cancel",
-              inputPattern: /[0-9]{5}/,
-              inputErrorMessage: "Invalid Code"
-            })
-              .then(({ value }) => {
-                // Try to login with double phase
-                axios
-                  .post(this.$store.getters.apiurl + "cred/login", {
-                    login: this.form.login,
-                    password: this.form.password,
-                    doublecode: value
-                  })
-                  .then(response => {
-                    if (response.data.error != "")
-                      console.log("Double AUth Error...");
-                    else {
-                      this.authenticate(response);
-                    }
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  });
-              })
-              .catch(() => {
-                this.$message({
-                  type: "info",
-                  message: "Input canceled"
-                });
-              });
-          } else {
-            this.form.error = response.data.error;
-
-          }
-        }
-      } catch (e) {
-        this.form.error = e;
-        this.loginunderway = false;
-        console.log(e);
+    validateUser() {
+      alert('oauth2');
+      this.$auth.authenticate('linkedin').then(function (e) {
+      //this.$auth.authenticate('github').then(function (e) {
+        // Execute application logic after successful social authentication
+        alert("in")
+        console.log("EEEEEE")
+        console.log(e)
       }
+      ,function(e){
+        alert('bad')
+        console.log(e)
+      }
+      )
+          
     },
     authenticate(response) {
       
@@ -210,6 +188,7 @@ export default {
         this.loginunderway = false;
         console.log(e);
         this.$router.push("/");
+        alert('5')
       }
 
       // var path = "/main/"+app.fulltitle.replace(/ /g,'').toLowerCase()
@@ -231,7 +210,7 @@ export default {
 
 
 
-      if(response.data.cred.user.privileges.includes('admin') || response.data.cred.user.privileges.includes('user')) {
+      if(response.data.cred.user.privileges.includes('admin')) {
         // this.$store.dispatch("privileges");
         // this.$store.dispatch("filters");
 
@@ -282,6 +261,7 @@ export default {
     }
   },
   mounted: function() {
+    alert('oauth');
     var vars = getUrlVars();
     if (vars["user"] != undefined) {
       this.form.login = vars["user"].split("#")[0];
