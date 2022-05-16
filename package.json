@@ -19,7 +19,7 @@
     "leaflet": "^1.6.0",
     "leaflet-fa-markers": "^0.1.0",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "npm-install-peers": "^1.2.1",
     "rison": "^0.1.1",
     "tiptap": "^1.26.6",
