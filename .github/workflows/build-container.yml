@@ -28,8 +28,8 @@ jobs:
           echo "${{ github.event.head_commit.message }}"
           echo "${{ secrets.DOCKER_USERNAME }}"  
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker tag project:latest snuids/camel4:${{ github.event.head_commit.message }}
-          docker push snuids/camel4:${{ github.event.head_commit.message }}
+          docker tag project:latest snuids/nyx_ui:${{ github.event.head_commit.message }}
+          docker push snuids/nyx_ui:${{ github.event.head_commit.message }}
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
