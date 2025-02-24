@@ -3,7 +3,7 @@ name: Build Docker Container
 on:
   push:
     branches:
-      - main
+      - master
     # This regex checks for version numbers in the commit message
     paths-ignore:
       - '**.md'
