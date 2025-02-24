@@ -1,0 +1,36 @@
+name: Build Docker Container
+
+on:
+  push:
+    branches:
+      - main
+    # This regex checks for version numbers in the commit message
+    paths-ignore:
+      - '**.md'
+    # Example versioning pattern: v1.0.0
+    # Adjust the regex as needed for your versioning scheme
+    if: contains(github.event.head_commit.message, 'v')
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t project:latest -f Dockerfile .
+
+      - name: Optionally push to Docker Hub
+        run: |        
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ secrets.DOCKER_USERNAME }}"  
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag project:latest snuids/camel4:${{ github.event.head_commit.message }}
+          docker push snuids/camel4:${{ github.event.head_commit.message }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
