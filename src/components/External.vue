@@ -19,6 +19,17 @@ import axios from "axios";
 import moment from "moment";
 import Vue from "vue";
 
+function extractHostname(url) {
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.hostname;
+  } catch (error) {
+    console.error('Invalid URL:', error);
+    return null;
+  }
+}
+
+
 export default {
   name: "External",
   data: () => ({
@@ -31,9 +42,14 @@ export default {
   },
   computed: {
     computedUrl: function() {
+      
       return this.config.config.url.replace(
         /token=TOKEN/g,
         "token=" + this.$store.getters.creds.token
+      ).replace(/API/g,
+        this.$store.getters.apiurl
+      ).replace(/HOST/g,
+        extractHostname(window.location.href)
       );
     },
     containerHeight: function() {

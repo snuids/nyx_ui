@@ -62,6 +62,7 @@
                     <el-option label="Internal" value="internal"></el-option>
                     <el-option label="Form" value="form"></el-option>
                     <el-option label="Free Text" value="free-text"></el-option>
+                    <el-option label="File System" value="file-system"></el-option>
                     <el-option label="Vega" value="vega"></el-option>
                   </el-select>
                 </el-form-item>
@@ -141,6 +142,7 @@
                 <b>Displays an external URL in an iframe.</b>
                 <br/> 
                 It the external url contains <b>token=TOKEN</b>, the <b>TOKEN</b> tag is replaced by the actual user token.<br/> 
+                 <b>HOST</b> by the <b>the host name</b>. and <b>API</b> by the <b>API URL</b>.<br/>
                 <br/> 
               </el-col>
               </el-card>
@@ -688,6 +690,7 @@
           key="filesystem"
           v-if="(curConfig.type === 'file-system')"
         >
+        
           <FileSystemEditor            
             :currentConfig="curConfig"
           ></FileSystemEditor>

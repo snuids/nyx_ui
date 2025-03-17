@@ -14,7 +14,7 @@
 </template>
   
 <script>
-import vegaEmbed from "vega-embed";
+//import vegaEmbed from "vega-embed";
 import moment from "moment";
 
 export default {
@@ -83,23 +83,23 @@ export default {
 
       //alert(startTimeAsUtc);
 
-      vegaEmbed("#" + this.id, this.vegaSpec);
+      //vegaEmbed("#" + this.id, this.vegaSpec);
     }
   },
   created: function() {
     this.id = "chart" + this._uid;
   },
   mounted: function() {
-    console.log("===============  REGISTERING VEGA:");
-    this.$globalbus.$on("timerangechanged", payLoad => {
-      console.log("GLOBALBUS/VEGATIMERANGE/");
-      this.prepareVega();
-    });
-    this.prepareVega();
+    // console.log("===============  REGISTERING VEGA:");
+    // this.$globalbus.$on("timerangechanged", payLoad => {
+    //   console.log("GLOBALBUS/VEGATIMERANGE/");
+    //   this.prepareVega();
+    // });
+    // this.prepareVega();
   },
   beforeDestroy: function() {
-    console.log("===============  UNREGISTERING VEGA:");
-    this.$globalbus.$off("timerangechanged");
+    // console.log("===============  UNREGISTERING VEGA:");
+    // this.$globalbus.$off("timerangechanged");
   }
 };
 </script>
