@@ -19,6 +19,9 @@ import axios from "axios";
 import moment from "moment";
 import Vue from "vue";
 
+//alert(computedUrl())
+
+
 function extractHostname(url) {
   try {
     const parsedUrl = new URL(url);
@@ -106,6 +109,8 @@ export default {
   mounted: function() {},
   beforeDestroy: function() {}
 };
+
+
 </script>
 
 <style>
