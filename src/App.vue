@@ -36,6 +36,7 @@ export default {
               }
             }
             else if (response.data != null && response.data.error != null && response.data.error != ''){
+              
               this.$notify({
                 title: "Error",
                 message: response.data.error,

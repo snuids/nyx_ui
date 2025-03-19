@@ -156,10 +156,11 @@ export default new Vuex.Store({
             context.getters.wsObject.socket=null;
           }
         }
-        if(context.getters.wsObject.socket==null)
+        if(context.getters.wsObject.socket===null)
         {
           console.log("MUST CREATE SOCKET");
-          context.getters.wsObject.last_lifesign=moment(new Date());
+          try {
+            context.getters.wsObject.last_lifesign=moment(new Date());
           //var socket = new WebSocket('ws://localhost:8080/nyx_ui_websocket/');
           //var socket = new WebSocket('wss://test2.nyx-ds.com/nyx_ui_websocket/');
           //var wsurl=context.getters.apiurl.replace("http://","ws://").replace("https://","wss://").replace("/api/v1","/nyx_ui_websocket/");
@@ -197,7 +198,12 @@ export default new Vuex.Store({
             if(inmes.type=="message")
               Vue.prototype.$globalbus.$emit("messagereceived",inmes.data);
           });
-          context.getters.wsObject.socket=socket;          
+          context.getters.wsObject.socket=socket; 
+          } catch (error) {
+            console.error('Web Socket Error:', error);
+            
+          }
+                   
         }
         
       }
@@ -336,26 +342,36 @@ export default new Vuex.Store({
         "generic/"+index+"/"+id+"?token=" +
         state.creds.token;
 
-      axios
-        .get(url)
-        .then(response => {
-          if (response.data.error != "")
-            state.passwordRules = {
-              length: [10, 40],
-              forceUpper: false,
-              minUpper: 0,
-              forceNumber: false,
-              minNumber: 0,
-              forceSpecial: false,
-              minSpecial: 0
-            };
-          else {
-            state.passwordRules = response.data.data._source
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      state.passwordRules = {
+        length: [10, 40],
+        forceUpper: false,
+        minUpper: 0,
+        forceNumber: false,
+        minNumber: 0,
+        forceSpecial: false,
+        minSpecial: 0
+      };
+      // axios
+      //   .get(url)
+      //   .then(response => {
+          
+      //     if (response.data.error != "")
+      //       state.passwordRules = {
+      //         length: [10, 40],
+      //         forceUpper: false,
+      //         minUpper: 0,
+      //         forceNumber: false,
+      //         minNumber: 0,
+      //         forceSpecial: false,
+      //         minSpecial: 0
+      //       };
+      //     else {
+      //       state.passwordRules = response.data.data._source
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
       
     },    
     logout(state) {
