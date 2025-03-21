@@ -528,8 +528,11 @@ export default {
     },
     openTabCode: function() {
       
+      // window.open(
+      //   "./ipython/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
+      // );
       window.open(
-        "./ipython/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
+        "./ipython/edit/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
       );
     },
     loadPrivileges: function() {
