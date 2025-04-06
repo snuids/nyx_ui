@@ -1,7 +1,8 @@
 FROM node:12.13.1-slim as base
+#FROM 18.20.8-bullseye as base
 
 FROM base as builder
-RUN npm i express
+RUN npm i express@4.21.2
 COPY . /etc/build
 WORKDIR /etc/build
 RUN npm i
