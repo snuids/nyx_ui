@@ -7,6 +7,7 @@ WORKDIR /etc/build
 RUN npm i
 RUN npm run build
 
+
 FROM builder
 RUN mv ./dist /etc/opt/nyx_ui
 COPY ./start.sh /etc/opt/start.sh
