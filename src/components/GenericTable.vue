@@ -211,22 +211,28 @@ import generictabledetails from "@/components/GenericTableDetails";
 import map from "@/components/Map";
 import barchart from "@/components/BarChart";
 import querybar from "@/components/QueryBar";
+import queryfilter from "@/components/QueryFilter";
 import _ from "lodash";
 import { computeTranslatedText } from "../globalfunctions";
 
 const req = require.context("../components/tableEditor/", true, /\.vue$/);
 
+//console.log("A=========================> DYNAMIC COMPONENTS");
 const dynamicComponents = {};
 req.keys().forEach(filename => {
   const name = `${filename.split(".")[1].split("/")[1]}`;
   const component = req(filename).default;
   dynamicComponents[name] = component;
+  //console.log(component);
 });
+//console.log("B=========================> DYNAMIC COMPONENTS");
 
 Vue.component("Map", map);
 Vue.component("BarChart", barchart);
 Vue.component("QueryBar", querybar);
 Vue.component("GenericTableDetails", generictabledetails);
+Vue.component("QueryFilter", queryfilter);
+
 
 export default {
   name: "GenericTable",
@@ -336,7 +342,6 @@ export default {
   watch: {
     configin: {
       handler: function() {
-        console.log("Config changed.....");
       },
       deep: true
     }
@@ -344,7 +349,6 @@ export default {
   methods: {
     sortChanged:function(e){
       //alert(JSON.stringify(e.column));
-      console.log(e)
       
       this.sort={}
       if(e.column.order != null)
@@ -353,14 +357,14 @@ export default {
       this.refreshData();
     },
     handleSizeChange: function(e) {
-      console.log("Size changed.....");
+      //console.log("Size changed.....");
       this.pagesize=e;
       this.currentPage=1; 
       this.dontrefreshMap=true;
       this.refreshData();
     },
     handleCurrentChange: function(e) {
-      console.log("Current changed....."); 
+      //console.log("Current changed....."); 
       this.dontrefreshMap=true;
       this.refreshData();     
     },
@@ -368,15 +372,15 @@ export default {
       return computeTranslatedText(inText, inLocale);
     },
     handleCommand: function(e) {
-      console.log("Command changed.....");
+      //console.log("Command changed.....");
       this.loadData(true, e);
     },
     handleCurrentRecordChange(val) {
       this.currentRow = val;
     },
     duplicateRecord: function() {
-      console.log("duplicating record");
-      console.log(this.currentRecord);
+      //console.log("duplicating record");
+      //console.log(this.currentRecord);
       this.currentRecord = JSON.parse(JSON.stringify(this.currentRow));
       this.currentRecord.original._id =
         "id_" + Math.floor((1 + Math.random()) * 0x1000000);
@@ -425,8 +429,8 @@ export default {
       this.partialUpdateRecord(newRec, header);
     },
     switchChanged: function(newRec, header) {
-      console.log(newRec);
-      console.log(header);
+      //console.log(newRec);
+      //console.log(header);
       this.partialUpdateRecord(newRec, header);
     },
     cutRec(aRec) {
@@ -514,7 +518,7 @@ export default {
       this.loadData();
     },
     queryChanged: _.debounce(function() {
-      console.log("DEBOUNCED:" + this.queryField);
+      //console.log("DEBOUNCED:" + this.queryField);
       this.ready = false;
       this.loadData();
     }, 1500),
