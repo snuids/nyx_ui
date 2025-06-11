@@ -409,16 +409,23 @@
             </el-row>
             
               <el-row>
+
+                <el-col :span="6">
+                  <el-form-item label="Database" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.database" placeholder="Database Name" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>        
+                
                 <el-col :span="6">
                   <el-form-item label="Index/Table" :label-width="formLabelWidth">
                     <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                  <el-form-item label="Time Field" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
-                  </el-form-item>
-                </el-col>
+                
+
+
+
+
                 <el-col :span="6">
                   <el-form-item
                     label="Doc Type"
@@ -456,7 +463,13 @@
                   <el-form-item label="Order" :label-width="formLabelWidth">
                     <el-input size="mini" v-model="curConfig.config.sort_order" placeholder="ascending/descending" autocomplete="off"></el-input>
                   </el-form-item>
-                </el-col>                
+                </el-col> 
+                <el-col :span="6">
+                  <el-form-item label="Time Field" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                       
               </el-row>
 
               <el-row v-if="(curConfig.type === 'pgsql-generic-table')">
