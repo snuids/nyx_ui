@@ -1,5 +1,5 @@
 <template>
-  <div style="position:relative;">
+  <div style="position:relative;overflow: hidden;">
     <el-dialog title="Process Details" :visible.sync="dialogVisible" width="65%">
       <el-table
         size="small"
@@ -59,12 +59,12 @@
             <!-- <h1 style="color:#f44;">{{dat.name}}</h1> -->
             {{dat.name}}
           </div>
-          <div style="text-align:left;padding:2px;">
-            <div style="position:absolute;width:65px;padding:2px;height:65px;">
+          <div style="text-align:left;padding:2px;">            
+            <div style="position:absolute;width:65px;padding:2px;height:65px;">              
               <v-icon
                 :name="Array.isArray(dat.icon) ? dat.icon[0] : dat.icon"
                 scale="3"
-                style="height:60px;color:#555"
+                :style="'height:60px;color:'+((dat.color!=null)?dat.color:'#080')"
               />
             </div>
             <div style="position:absolute;left:60px;">
@@ -178,6 +178,25 @@ export default {
               lifesigntime: { max: { field: "@timestamp" } },
               starttime: { max: { field: "starttimets" } },
               messages: { max: { field: "messages" } },
+        "color": {
+          "top_hits": {
+            "docvalue_fields": [
+              {
+                "field": "color.keyword",
+                "format": "use_field_mapping"
+              }
+            ],
+            "_source": "color.keyword",
+            "size": 1,
+            "sort": [
+              {
+                "@timestamp": {
+                  "order": "desc"
+                }
+              }
+            ]
+          }
+        },
               icon: {
                 top_hits: {
                   docvalue_fields: [
@@ -265,6 +284,10 @@ export default {
               if (record.icon["hits"]["hits"][0]["fields"] != undefined) {
                 entry.icon =
                   record.icon["hits"]["hits"][0]["fields"]["icon.keyword"];
+              }
+              if (record.color["hits"]["hits"][0]["fields"] != undefined) {
+                entry.color =
+                  record.color["hits"]["hits"][0]["fields"]["color.keyword"];
               }
 
               entry.css_class = "ok";
