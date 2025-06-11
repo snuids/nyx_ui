@@ -64,7 +64,7 @@
               <v-icon
                 :name="Array.isArray(dat.icon) ? dat.icon[0] : dat.icon"
                 scale="3"
-                :style="'height:60px;color:'+((dat.color!=null)?dat.color:'#080')"
+                :style="'height:60px;color:'+((dat.color!=null)?dat.color:'rgb(102, 177, 255);')"
               />
             </div>
             <div style="position:absolute;left:60px;">
