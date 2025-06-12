@@ -1,22 +1,63 @@
 <template>
   <div style="position:relative;overflow: hidden;">
-    <el-dialog title="Process Details" :visible.sync="dialogVisible" width="65%">
-      <el-table
-        size="small"
-        max-height="400"
-        border
-        :data="procWindowDetails">
-        <el-table-column prop="0"
-                         label="Field"
-                         min-width="150"
-                         sortable
-                         show-overflow-tooltip/>
-        <el-table-column prop="1"
-                         label="Value"
-                         min-width="424"
-                         sortable
-                         show-overflow-tooltip/>
-      </el-table>
+    <el-dialog :title="'Process '+detailsName+' ('+detailsVersion+')'" :visible.sync="dialogVisible" width="65%">
+      <el-tabs v-model="tabName" @tab-click="handleClick">
+        <el-tab-pane label="General" name="first">
+          <el-table
+            size="small"
+            max-height="400"
+            border
+            :data="procWindowDetails">
+            <el-table-column prop="0"
+                            label="Field"
+                            min-width="150"
+                            sortable
+                            show-overflow-tooltip/>
+            <el-table-column prop="1"
+                            label="Value"
+                            min-width="424"
+                            sortable
+                            show-overflow-tooltip/>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="Messages In" name="second" v-if="inMessages.length > 0">
+          <el-table
+            size="small"
+            max-height="400"
+            border
+            :data="inMessages">
+            <el-table-column prop="0"
+                            label="Topic"
+                            min-width="150"
+                            sortable
+                            show-overflow-tooltip/>
+            <el-table-column prop="1"
+                            label="Number of Messages"
+                            min-width="424"
+                            sortable
+                            show-overflow-tooltip/>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="Messages Out" name="third">
+          <el-table
+            size="small"
+            max-height="400"
+            border
+            :data="outMessages">
+            <el-table-column prop="0"
+                            label="Topic"
+                            min-width="150"
+                            sortable
+                            show-overflow-tooltip/>
+            <el-table-column prop="1"
+                            label="Number of Messages"
+                            min-width="424"
+                            sortable
+                            show-overflow-tooltip/>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+      
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">Close</el-button>
       </span>
@@ -66,7 +107,7 @@
                 scale="3"
                 :style="'height:60px;color:'+((dat.color!=null)?dat.color:'rgb(102, 177, 255);')"
               />
-            </div>
+            </div>              
             <div style="position:absolute;left:60px;">
               <b>Version</b>
               :{{dat.version}}
@@ -105,6 +146,7 @@ export default {
   },
   data: () => ({
     selectedTimeframe: '5m',
+    tabName: "first",
     timeframes: [
       {key:"7d", value: "7 days"},
       {key:"1d", value: "1 day"},
@@ -115,8 +157,13 @@ export default {
     dialogVisible: false,
     formLabelWidth: "120px",
     filter: "",
-    procWindowDetails: []  
-  }),
+    procWindowDetails: [],  
+    inMessages :[],
+    outMessages :[],
+    detailsName: "",
+    detailsVersion: ""
+  }
+),
   props: {
     config: {
       type: Object
@@ -146,18 +193,41 @@ export default {
         .then(response => {
           if (response.data.error != "") console.log("Process list error...");
           else {
+            this.tabName = "first";
             let source = response.data.data._source;
             let data = [];
             let keyArray = Object.keys(source);
             for (let i in keyArray) {
+              if (keyArray[i] !== "received" && keyArray[i] !== "sent" && keyArray[i] !== "version" && keyArray[i] !== "module")
+                if (typeof source[keyArray[i]] === 'object')
+                  data.push([keyArray[i], JSON.stringify(source[keyArray[i]])]);
+                else
+                  data.push([keyArray[i], source[keyArray[i]]]);
+              if (keyArray[i] === "received") {
+                if (typeof source[keyArray[i]] === 'object') {
+                  this.inMessages = Object.entries(source[keyArray[i]]);
+                } else {
+                  this.inMessages = [];
+                }
+              }
+              if (keyArray[i] === "module") {
+                this.detailsName = source[keyArray[i]];
+              }
+              if (keyArray[i] === "version") {
+                this.detailsVersion = source[keyArray[i]];
+              }
 
-              if (typeof source[keyArray[i]] === 'object')
-                data.push([keyArray[i], JSON.stringify(source[keyArray[i]])]);
-              else
-                data.push([keyArray[i], source[keyArray[i]]]);
+              if (keyArray[i] === "sent") {
+                if (typeof source[keyArray[i]] === 'object') {
+                  this.outMessages = Object.entries(source[keyArray[i]]);
+                } else {
+                  this.outMessages = [];
+                }
+              }
             }
             console.log(response.data.data._source);
             this.procWindowDetails = data;
+            
             this.dialogVisible = true;
           }
         })
