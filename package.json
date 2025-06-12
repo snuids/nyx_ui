@@ -24,8 +24,6 @@
     "rison": "^0.1.1",
     "tiptap": "^1.26.6",
     "tiptap-extensions": "^1.28.6",    
-    "vega-embed": "^6.29.0",
-    "vega-lite": "^4.8.0",
     "vue-awesome": "^3.5.4",
     "vue-browser-detect-plugin": "^0.1.8",
     "vue-browser-geolocation": "^1.8.0",
