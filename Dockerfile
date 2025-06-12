@@ -5,8 +5,9 @@ FROM base as builder
 RUN npm i express@4.21.2
 COPY . /etc/build
 WORKDIR /etc/build
-RUN npm i
-RUN npm run build
+RUN npm install -g yarn
+RUN yarn install
+RUN yarn run build
 
 
 FROM builder
