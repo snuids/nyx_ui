@@ -26,8 +26,6 @@
     "tiptap-extensions": "^1.28.6",    
     "vega-embed": "^6.29.0",
     "vega-lite": "^4.8.0",
-    "vega":"^4.4.0",
-    "vue": "^2.6.11",
     "vue-awesome": "^3.5.4",
     "vue-browser-detect-plugin": "^0.1.8",
     "vue-browser-geolocation": "^1.8.0",
