@@ -55,7 +55,7 @@
                     style="width:100%"
                   >
                     <el-option label="ES Table" value="generic-table"></el-option>
-                    <el-option label="PGSQL Table" value="pgsql-generic-table"></el-option>
+                    <el-option label="SQL Table" value="pgsql-generic-table"></el-option>
                     <el-option label="Kibana" value="kibana"></el-option>
                     <el-option label="External" value="external"></el-option>
                     <el-option label="Upload" value="upload"></el-option>
@@ -124,7 +124,7 @@
                 <v-icon name="database" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays a table stored in PostgreSQL.</b>
+                <b>Displays a table stored in SQL.</b>
                 <br/> 
                 It displays the data as a table that can optionaly include a time line or a map.<br/> 
                 It can also display the result of a query.                
@@ -228,7 +228,7 @@
                 <br/>                 
                 Displays a vega visualization. The data must be accessed via a data source defined in NYX.<br/>
                 Ex: <b>https://173.242.183.147/api/v1/datasource/my_ds1?token=@TOKEN@&start=@START@&end=@END@</b>
-                </br>START and END are only used if a time selector is checked.
+                <br/>START and END are only used if a time selector is checked.
                 <br/> 
               </el-col>
               </el-card>
@@ -407,12 +407,28 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            
+              <el-row>
+                
+                  <el-col :span="6">
+                    <el-form-item label="Database Type" :label-width="formLabelWidth">
+                      <el-select
+                        size="mini"
+                        v-model="curConfig.config.databaseType"
+                        placeholder="Select DB Type"
+                        style="width: 100%;"
+                      >
+                        <el-option label="PostgreSQL" value="postgres"></el-option>
+                        <el-option label="SQL Server" value="sqlserver"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                
+              </el-row>
               <el-row>
 
                 <el-col :span="6">
                   <el-form-item label="Database" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.database" placeholder="Database Name" autocomplete="off"></el-input>
+                    <el-input   size="mini" v-model="curConfig.config.database" placeholder="Database Name" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>        
                 
@@ -851,7 +867,6 @@ import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
 
 
 import Vue from "vue";
-import axios from "axios";
 import rison from "rison";
 import YAML from "js-yaml";
 
@@ -955,7 +970,7 @@ export default {
 
       cb(results);
     },
-    handleSelect(item) {},
+    handleSelect() {},
     subcategorySuggestion: function(queryString, cb) {
       if (this.curConfig.category == "") return cb([]);
 
@@ -1040,6 +1055,9 @@ export default {
       this.formFielfEditorVisible = false;
       this.currentHeader = {};
       if (this.curConfig.config == undefined) this.curConfig.config = {};
+      // if (this.curConfig.config.databaseType == undefined
+      //   && this.curConfig.config.controller == "PGGenericTable") 
+      //   this.curConfig.config.databaseType = "postgres";
       if (this.curConfig.config.queryfilters == undefined)
         this.curConfig.config.queryfilters = [];
 
