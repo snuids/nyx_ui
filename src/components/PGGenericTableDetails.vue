@@ -1,24 +1,31 @@
 <template>
   <el-dialog
-    width="80%"
+    width="90%"
     :title="$t('generictable.modifyrecord')"
     :visible.sync="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
   >
     <el-tabs v-model="activeName" @tab-click="refresh">
-      <el-tab-pane :label="$t('generictable.fields')" name="first">
+      <el-tab-pane :label="$t('generictable.fields')" name="first">        
         <el-form>
           <el-row v-if="editMode!='add' && editMode!='duplicate'">
-            <el-col :span="12">
-              <el-form-item label="ID" :label-width="formLabelWidth">
+            <el-col :span="12">              
+              <el-form-item label="ID" :label-width="formLabelWidth"  >
                 <el-input :disabled="true" size="mini" v-model="record._id" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
+          
           <el-row v-for="(line,index) in fields" :key="index">
             <el-col :span="24/modulo" v-for="(field,index2) in line" :key="index2">
-              <el-form-item :label="field.key" :label-width="formLabelWidth">
+              <el-form-item :label="field.key" :label-width="formLabelWidth" :style="{
+        'white-space': 'nowrap',
+        'overflow': 'hidden',
+        'text-overflow': 'ellipsis',
+        'max-width': '400px',
+        'display': 'block'
+      }">
                 <el-tooltip
                   class="item"
                   effect="dark"
@@ -76,7 +83,7 @@ export default {
     dialogFormVisible: false,
     loadedrecord: {},
     activeName: "first",
-    formLabelWidth: "120px",
+    formLabelWidth: "130px",
     fields: [],
     changed: false,
     modulo: 3,
@@ -152,7 +159,8 @@ export default {
         "/" +
         this.record._id +
         "?token=" +
-        this.$store.getters.creds.token;
+        this.$store.getters.creds.token+
+        "&app="+this.config.rec_id;
 
       console.log("URL=" + url);
       console.log("MODE=" + this.editMode);
@@ -188,7 +196,7 @@ export default {
         this.record._id = "NEW";
         this.prepareFields();
         return;
-      }
+      }      
       axios.get(url).then(response => {
         console.log("GET DONE");
 

@@ -38,7 +38,7 @@
                             show-overflow-tooltip/>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="Messages Out" name="third">
+        <el-tab-pane label="Messages Out" name="third" v-if="outMessages.length > 0">
           <el-table
             size="small"
             max-height="400"
