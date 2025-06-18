@@ -57,6 +57,7 @@
                     <el-option label="ES Table" value="generic-table"></el-option>
                     <el-option label="SQL Table" value="pgsql-generic-table"></el-option>
                     <el-option label="Kibana" value="kibana"></el-option>
+                    <el-option label="Grafana" value="grafana"></el-option>
                     <el-option label="External" value="external"></el-option>
                     <el-option label="Upload" value="upload"></el-option>
                     <el-option label="Internal" value="internal"></el-option>
@@ -98,6 +99,20 @@
                 <b>Displays a kibana dashboard.</b>
                 <br/> 
                 The dashboard must previously be created in Kibana.<br/> 
+                <br/> 
+              </el-col>
+              </el-card>
+            </el-row>
+
+            <el-row v-if="curConfig.type === 'grafana'" class="transition-box" style="text-align:left;">     
+              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-col :span="4" style="text-align:right;padding-right:20px">
+                <v-icon name="chart-pie" scale="2.2" />
+              </el-col>
+              <el-col :span="20">
+                <b>Displays a grafana dashboard.</b>
+                <br/> 
+                The dashboard must previously be created in Grafana.<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -703,6 +718,19 @@
             :currentConfig="curConfig"
           ></KibanaEditor>
         </el-tab-pane>
+
+        <el-tab-pane
+          label="Grafana"
+          name="grafana"
+          key="grafana"
+          v-if="(curConfig.type === 'grafana')"
+        >
+          <GrafanaEditor
+            :allPrivileges="allPrivileges"
+            :currentConfig="curConfig"
+          ></GrafanaEditor>
+        </el-tab-pane>
+
         <el-tab-pane
           label="Upload"
           name="upload"
@@ -861,6 +889,7 @@ import freetextdetails from "@/components/FreeTextDetails";
 import queryfiltereditor from "@/components/appConfigEditor/QueryFilterEditor";
 import estableeditor from "@/components/appConfigEditor/ESTableEditor";
 import kibanaeditor from "@/components/appConfigEditor/KibanaEditor";
+import grafanaeditor from "@/components/appConfigEditor/GrafanaEditor";
 import formeditor from "@/components/appConfigEditor/FormEditor";
 import uploadeditor from "@/components/appConfigEditor/UploadEditor";
 import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
@@ -876,6 +905,7 @@ Vue.component("QueryFilterEditor", queryfiltereditor);
 Vue.component("ESTableEditor", estableeditor);
 Vue.component("FormEditor", formeditor);
 Vue.component("KibanaEditor", kibanaeditor);
+Vue.component("GrafanaEditor", grafanaeditor);
 Vue.component("UploadEditor", uploadeditor);
 Vue.component("FileSystemEditor", filesystemeditor);
 
