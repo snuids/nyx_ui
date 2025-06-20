@@ -58,6 +58,9 @@
             <div class="kibana" v-else-if="app.type=='kibana'">
               <Kibana :config="app" :key="app.rec_id"></Kibana>
             </div>
+            <div class="grafana" v-else-if="app.type=='grafana'">
+              <Grafana :config="app" :key="app.rec_id"></Grafana>
+            </div>
             <div v-else-if="app.type=='form'">
               <Form :config="app" :key="app.rec_id"></Form>
             </div>
