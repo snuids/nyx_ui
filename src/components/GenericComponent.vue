@@ -16,6 +16,9 @@
         <div class="kibana" v-else-if="$store.getters.currentSubCategory.apps[0].type=='kibana'">
           <Kibana :config="$store.getters.currentSubCategory.apps[0]" :directLoad="true"></Kibana>
         </div>
+        <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='grafana'">
+          <Grafana :config="$store.getters.currentSubCategory.apps[0]"></Grafana>
+        </div>
         <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='form'">
           <Form :config="$store.getters.currentSubCategory.apps[0]"></Form>
         </div>
