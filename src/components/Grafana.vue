@@ -203,8 +203,8 @@ export default {
         url=url.replace("grafana/","grafananyx/");
         console.log("GRAFANA URL: ", url);
         
-        if (this.config.timeRefresh && this.config.timeRefreshValue>0) {
-          url = url + "&refresh=" + parseInt(this.config.timeRefreshValue/1000) + "s";
+        if (this.config.timeRefresh && this.config.timeRefreshValue) {
+          url = url + "&refresh=" + this.config.timeRefreshValue;
         }
 
         if (this.config.timeSelectorChecked && timestring != null)
