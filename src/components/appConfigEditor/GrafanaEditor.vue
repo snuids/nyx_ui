@@ -5,7 +5,7 @@
       <el-form>
          <!-- <h1>{{dashboards}}</h1> -->
         <el-row>
-          <el-col :span="8" style="text-align: left;">
+          <el-col :span="16" style="text-align: left;">
             <el-form-item label="Dashboard" :label-width="formLabelWidth">
               <el-select
                 size="mini"
@@ -25,10 +25,10 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8" style="text-align: left;">
+          <el-col :span="8" style="text-align: left;">            
             <el-form-item :label-width="formLabelWidth">
               <el-button
-                :disabled="currentConfig.config.grafanaId==null||dashboards.length==0"
+                :disabled="currentConfig.config.url==null||dashboards.length==0"
                 size="mini"
                 type="danger"
                 @click="openInGrafana()"
@@ -39,6 +39,36 @@
 
 
         </el-row>
+        <el-row>
+          <el-col :span="8" style="text-align: left;">
+            <el-form-item label="Extra parameters" :label-width="formLabelWidth">
+              <el-input size="mini" v-model="currentConfig.config.extraParameters" autocomplete="off"></el-input>
+            </el-form-item>
+            
+          </el-col>
+          
+        </el-row>
+        <el-row>
+          <el-col :span="8" style="text-align: left;">
+            <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+          </el-col>
+          <el-col :span="8" style="text-align: left;">
+                <el-select
+                  size="mini"
+                  v-model="currentConfig.timeSelectorType"
+                  placeholder="Please select a type"
+                  @change="timeSelectorTypeChange"
+                  :disabled="!currentConfig.timeSelectorChecked"
+                >
+                  <el-option label="Free" value="classic"></el-option>
+                  <el-option label="Day" value="day"></el-option>
+                  <el-option label="Month" value="month"></el-option>
+                  <el-option label="Week" value="week"></el-option>
+                  <el-option label="Year" value="year"></el-option>
+                </el-select>
+              </el-col>
+              
+              </el-row>
         </el-form>
         <el-form>
         <el-row>&nbsp;</el-row>
@@ -95,10 +125,8 @@ export default {
       //console.log(this.currentConfig);
       window.open(
         this.currentConfig.config.url
-          .replace("kibananyx", "kibana")
-          .replace("embed=true", "")
-          .replace(",title:Test", "")
-          .replace("title:Test,", "")
+          .replace("grafananyx", "grafana")
+          .replace("kiosk=true", "")          
       );
     },
     grafanaDashboardSelected: function(value) {
