@@ -1,6 +1,8 @@
 <template slot="items">
   <!--div v-bind:style="styleContainerComputed" -->
+  
   <div>
+    <!-- <h1>Grafana {{ computedUrl }}</h1> -->
     <iframe    
       :src="computedUrl"
       frameborder="0"
@@ -10,6 +12,7 @@
       v-bind:style="iFrameContainerComputed"
     ></iframe>
   </div>
+  
 </template>
 
 <script>
@@ -46,17 +49,8 @@ export default {
   computed: {
     computedUrl: function() {
       //var url="https://marmar.snuids.be"+this.config.config.url+"?kiosk"
-      var url="."+this.config.config.url+"?kiosk"
-      //url="http://www.wikipedia.org"
+      return this.createUrl();
       
-      console.log("GRAFANA URL: ", url);
-      
-      if(this.config.config.extraParameters != null)
-      {
-        url=url+"&"+this.config.config.extraParameters        
-      }
-      
-      return url
     },
     containerHeight: function() {
       var headerheight = 0;
@@ -83,7 +77,7 @@ export default {
       //return "1400px";
     },
     iFrameContainerComputed: function() {
-      var headerheight = 0;
+      var headerheight = 0;//66;
       if (this.$store.getters.currentSubCategory.apps.length > 1) {
         headerheight += 50;
       }
@@ -108,9 +102,149 @@ export default {
       };
     }
   },
-  methods: {},
-  mounted: function() {},
-  beforeDestroy: function() {}
+  methods: {
+    createUrl: function() {
+        var cururl = this.config.config.url;
+        var startTimeAsUtc = moment(this.$store.getters.timeRange[0]).utc();
+        var endTimeAsUtc = moment(this.$store.getters.timeRange[1]).utc();
+
+        var timestring =
+          "time:(from:'" +
+          startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+          "Z',mode:absolute,to:'" +
+          endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+          "Z')";
+
+        switch (this.config.timeSelectorType) {
+          case "day":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeDay[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeDay[1]
+            ).utc();
+
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
+            break;
+          case "week":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeWeek[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeWeek[1]
+            ).utc();
+
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
+            break;
+          case "month":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeMonth[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeMonth[1]
+            ).utc();
+
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
+            break;
+          case "year":
+            var startTimeAsUtc = moment(
+              this.$store.getters.timeRangeYear[0]
+            ).utc();
+            var endTimeAsUtc = moment(
+              this.$store.getters.timeRangeYear[1]
+            ).utc();
+
+            timestring =
+              "time:(from:'" +
+              startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z',mode:absolute,to:'" +
+              endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss.SSS") +
+              "Z')";
+            break;
+        }
+        this.timerange = timestring;
+
+        this.specificTime = undefined;
+
+        if (
+          this.config.config.specificTimeField != undefined &&
+          this.config.config.specificTimeField != ""
+        ) {
+          var t = moment(this.$store.getters.timeRangeMonth[0]).format(
+            this.config.config.specificTimeFormat
+          );
+          this.specificTime =
+            this.config.config.specificTimeField + ":" + '"' + t + '"';
+          console.log(t);
+          console.log(timestring);
+        }
+
+        //alert("====>"+timestring);
+        timestring=timestring.replace(",mode:absolute,","").replace("'to:'","&to=").replace("from:'","&from=").replace("(","").replace(")","")
+        .replace(/'/g,"").replace("time:", "");
+
+        
+        var url="."+this.config.config.url+"?kiosk"
+        url=url.replace("grafana/","grafananyx/");
+        console.log("GRAFANA URL: ", url);
+        
+        if (this.config.timeRefresh && this.config.timeRefreshValue>0) {
+          url = url + "&refresh=" + parseInt(this.config.timeRefreshValue/1000) + "s";
+        }
+
+        if (this.config.timeSelectorChecked && timestring != null)
+          url = url + timestring;
+        else if(this.config.config.extraParameters != null)
+        {
+          url=url+"&"+this.config.config.extraParameters        
+        }
+        
+        
+        return url
+    }
+  },
+  mounted: function() {
+    console.log("===============  REGISTERING KIBANA:");
+    this.$globalbus.$on("timerangechanged", payLoad => {
+      console.log("GLOBALBUS/KIBANATIMERANGE/");
+      this.createUrl();
+    });
+    // this.$globalbus.$on("kibanaactivated", payLoad => {
+    //   console.log("GLOBALBUS/KIBANAACTIVATED/");
+    //   if (payLoad.title == this.config.title && !this.ready) {
+    //     this.ready = true;
+    //   }
+
+    //   setTimeout(
+    //     function() {
+    //       this.injectStyleIframe();
+    //     }.bind(this),
+    //     1500
+    //   );
+
+    //   this.createUrl();
+    // });
+  },
+  beforeDestroy: function() {
+    console.log("===============  UNREGISTERING KIBANA:");
+    this.$globalbus.$off("timerangechanged");
+    this.$globalbus.$off("kibanaactivated");
+  }
 };
 
 
