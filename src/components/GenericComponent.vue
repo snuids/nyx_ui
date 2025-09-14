@@ -17,6 +17,7 @@
           <Kibana :config="$store.getters.currentSubCategory.apps[0]" :directLoad="true"></Kibana>
         </div>
         <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='grafana'">
+          <!-- <h1>{{JSON.stringify($store.getters.currentSubCategory.apps[0])}}</h1> -->
           <Grafana :config="$store.getters.currentSubCategory.apps[0]"></Grafana>
         </div>
         <div v-else-if="$store.getters.currentSubCategory.apps[0].type=='form'">

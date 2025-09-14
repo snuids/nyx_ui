@@ -48,7 +48,14 @@ export default {
       //var url="https://marmar.snuids.be"+this.config.config.url+"?kiosk"
       var url="."+this.config.config.url+"?kiosk"
       //url="http://www.wikipedia.org"
+      
       console.log("GRAFANA URL: ", url);
+      
+      if(this.config.config.extraParameters != null)
+      {
+        url=url+"&"+this.config.config.extraParameters        
+      }
+      
       return url
     },
     containerHeight: function() {
