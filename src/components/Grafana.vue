@@ -214,7 +214,6 @@ export default {
           url=url+"&"+this.config.config.extraParameters        
         }
         
-        
         return url
     }
   },

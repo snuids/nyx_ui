@@ -157,7 +157,7 @@
             </div>
             <!-- </el-col>
             <el-col :span="3" style="text-align:right;">-->
-            <Apps v-on:appclicked="appClicked"></Apps>&nbsp;&nbsp;
+            <Apps v-on:appclicked="appClicked"></Apps>&nbsp;&nbsp;            
             <Logout v-on:changepassword="changePassword"></Logout>
           </el-col>
         </el-row>
