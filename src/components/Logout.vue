@@ -11,7 +11,7 @@
           <v-icon class="menuicon" name="info-circle" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.info") }}
         </el-dropdown-item>
-        <el-dropdown-item command="password">
+        <el-dropdown-item v-if="!$store.getters.creds.user.conexion_source || $store.getters.creds.user.conexion_source !== 'ad'" command="password">
           <v-icon class="menuicon" name="key" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.change_pass") }}
         </el-dropdown-item>
