@@ -5,6 +5,12 @@
       <el-form>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="Use Short Url" :label-width="formLabelWidth">
+              <el-switch size="mini" v-model="currentConfig.config.useShortUrl" autocomplete="off"></el-switch>
+            </el-form-item>
+          </el-col>
+          
+          <el-col :span="8">
             <el-form-item label="Hidden Query" :label-width="formLabelWidth">
               <el-input size="mini" v-model="currentConfig.config.hiddenQuery" autocomplete="off"></el-input>
             </el-form-item>
