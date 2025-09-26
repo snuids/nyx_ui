@@ -3,6 +3,7 @@
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
     </el-row>
+    <!-- <h1>USE:{{ JSON.stringify(config.config.useShortUrl) }}>>>> {{ computedurl }}</h1> -->
 
     <el-row v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
@@ -163,6 +164,7 @@ export default {
       ) {
         headerheight += 50;
       }
+      //headerheight += 66; // TEMP
       return (
         this.$store.getters.containerSize.height - 64 - headerheight + "px"
       );
@@ -321,6 +323,10 @@ export default {
       if (this.ready) {
         console.log("UPDATE QUERY...");
         var cururl = this.config.config.url;
+        if (this.config.config.useShortUrl) {
+          cururl = this.config.config.shorturl;
+          
+        }
         var startTimeAsUtc = moment(this.$store.getters.timeRange[0]).utc();
         var endTimeAsUtc = moment(this.$store.getters.timeRange[1]).utc();
 
@@ -411,10 +417,15 @@ export default {
         }
 
         //alert("====>"+timestring);
-
+        
         if (this.config.timeSelectorChecked && timestring != null)
           cururl = cururl.replace(/time:\([^\)]*\)/g, timestring);
-        this.computedurl = this.updateQuery(cururl);
+        //alert("CURURL2:" + cururl);
+        if (this.config.config.useShortUrl)
+          this.computedurl = cururl;
+        else
+          this.computedurl = this.updateQuery(cururl);
+        //alert("CURURL3:" + this.computedurl);
       }
     },
     updateQuery(url) {
