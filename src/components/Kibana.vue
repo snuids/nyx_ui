@@ -7,32 +7,7 @@
 
     <el-row v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
-      <!--el-col :span="2" style="text-align:left">
-        <span class="input-label">{{$t("generic.query")}}:</span>
-      </el-col>
-      <el-col :span="20">        
-        <el-input size="mini" :placeholder="this.$t('generic.pleaseinput')" v-model="queryField"></el-input>
-      </el-col>
-      <el-col :span="2" v-if="config.downloadChecked" style="text-alight:right">
-        <el-dropdown @command="handleCommand">
-          <el-button circle size="mini" type="primary" icon="el-icon-download"></el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="csv">
-              <v-icon class="menuicon" name="file-csv" scale="1" />
-              &nbsp;&nbsp;{{ $t("generic.downloadascsv") }}
-            </el-dropdown-item>
-            <el-dropdown-item command="xlsx">
-              <v-icon class="menuicon" name="file-excel" scale="1" />
-              &nbsp;&nbsp;{{ $t("generic.downloadasxls") }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-col-->
     </el-row>
-    <!-- <h1
-      class="kibanatitle"
-      v-show="config.config.kibanaTitle !=undefined && config.config.kibanaTitle!=''"
-    >{{config.config.kibanaTitle}}</h1> -->
    
     <div v-if="urlTooLong()">
 
