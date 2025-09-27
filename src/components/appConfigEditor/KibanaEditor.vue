@@ -12,13 +12,13 @@
           
           <el-col :span="8">
             <el-form-item label="Hidden Query" :label-width="formLabelWidth">
-              <el-input size="mini" v-model="currentConfig.config.hiddenQuery" autocomplete="off"></el-input>
+              <el-input :disabled="currentConfig.config.useShortUrl" size="mini" v-model="currentConfig.config.hiddenQuery" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="Filter Column" :label-width="formLabelWidth">
-              <el-input size="mini" v-model="currentConfig.config.filtercolumn" autocomplete="off"></el-input>
+              <el-input :disabled="currentConfig.config.useShortUrl" size="mini" v-model="currentConfig.config.filtercolumn" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -74,18 +74,18 @@
         <el-form>
         <el-row>&nbsp;</el-row>
 
-        <el-row :gutter="24" style="text-align:left">
+        <el-row :gutter="24" style="text-align:left" >
           <el-col :span="8">
-            <el-form-item label :label-width="formLabelWidth">
+            <el-form-item label :label-width="formLabelWidth" >
               <el-row>
-                <el-switch
+                <el-switch :disabled="currentConfig.config.useShortUrl"
                   v-model="currentConfig.queryBarChecked"
                   active-text="Query Bar"
                   @change="query_bar_changed"
                 ></el-switch>
               </el-row>
               <el-row>
-                <el-switch v-model="currentConfig.downloadChecked" active-text="Download"></el-switch>
+                <el-switch :disabled="currentConfig.config.useShortUrl" v-model="currentConfig.downloadChecked" active-text="Download"></el-switch>
               </el-row>
               <el-row>
                 
@@ -96,6 +96,7 @@
             <el-form-item label :label-width="formLabelWidth">
               <el-row>
                 <el-switch
+                  :disabled="currentConfig.config.useShortUrl"
                   v-model="currentConfig.queryFilterChecked"
                   active-text="Query Filter"
                   @change="query_filter_changed"
@@ -126,7 +127,7 @@
           <el-col :span="8">
             <el-form-item label :label-width="formLabelWidth">
             <el-row>
-              <el-switch v-model="currentConfig.hideFilter" active-text="Hide Filter"></el-switch>
+              <el-switch :disabled="currentConfig.config.useShortUrl" v-model="currentConfig.hideFilter" active-text="Hide Filter"></el-switch>
             </el-row>
             <el-row>
               <el-switch

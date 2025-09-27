@@ -789,7 +789,7 @@
           label="Query-Filter"
           key="queryfilter"
           name="queryfilter"
-          v-if="((curConfig.type === 'kibana')||(curConfig.type === 'generic-table')) && (curConfig.queryFilterChecked)"
+          v-if="((curConfig.type === 'kibana')||(curConfig.type === 'generic-table')) && (curConfig.queryFilterChecked) && (!curConfig.config.useShortUrl)"
         >
           <el-card>
             <div>
