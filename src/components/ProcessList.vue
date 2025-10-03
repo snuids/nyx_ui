@@ -252,8 +252,7 @@ export default {
           "top_hits": {
             "docvalue_fields": [
               {
-                "field": "color.keyword",
-                "format": "use_field_mapping"
+                "field": "color.keyword"
               }
             ],
             "_source": "color.keyword",
@@ -271,8 +270,7 @@ export default {
                 top_hits: {
                   docvalue_fields: [
                     {
-                      field: "icon.keyword",
-                      format: "use_field_mapping"
+                      field: "icon.keyword"
                     }
                   ],
                   _source: "icon.keyword",
@@ -290,8 +288,7 @@ export default {
                 top_hits: {
                   docvalue_fields: [
                     {
-                      field: "version",
-                      format: "use_field_mapping"
+                      field: "version"
                     }
                   ],
                   _source: "version",
