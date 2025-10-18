@@ -16,6 +16,7 @@
               &nbsp;{{$store.getters.maintitle}}
             </span>
           </el-col>
+          
           <el-col :span="18" style="text-align: right;" class="time-selector-row">           
             <div
               v-if="$store.getters.activeApp.timeSelectorChecked && ($store.getters.activeApp.timeSelectorType==undefined || $store.getters.activeApp.timeSelectorType=='classic')"

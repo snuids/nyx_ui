@@ -18,22 +18,7 @@
 <script>
 /* eslint-disable */
 import _ from "lodash";
-import axios from "axios";
 import moment from "moment";
-import Vue from "vue";
-
-//alert(computedUrl())
-
-
-function extractHostname(url) {
-  try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.hostname;
-  } catch (error) {
-    console.error('Invalid URL:', error);
-    return null;
-  }
-}
 
 
 export default {
@@ -48,7 +33,6 @@ export default {
   },
   computed: {
     computedUrl: function() {
-      //var url="https://marmar.snuids.be"+this.config.config.url+"?kiosk"
       return this.createUrl();
       
     },
@@ -218,29 +202,14 @@ export default {
     }
   },
   mounted: function() {
-    console.log("===============  REGISTERING KIBANA:");
+    console.log("===============  REGISTERING GRAFANA:");
     this.$globalbus.$on("timerangechanged", payLoad => {
       console.log("GLOBALBUS/KIBANATIMERANGE/");
       this.createUrl();
     });
-    // this.$globalbus.$on("kibanaactivated", payLoad => {
-    //   console.log("GLOBALBUS/KIBANAACTIVATED/");
-    //   if (payLoad.title == this.config.title && !this.ready) {
-    //     this.ready = true;
-    //   }
-
-    //   setTimeout(
-    //     function() {
-    //       this.injectStyleIframe();
-    //     }.bind(this),
-    //     1500
-    //   );
-
-    //   this.createUrl();
-    // });
   },
   beforeDestroy: function() {
-    console.log("===============  UNREGISTERING KIBANA:");
+    console.log("===============  UNREGISTERING GRAFANA:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");
   }

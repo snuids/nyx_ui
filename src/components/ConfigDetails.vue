@@ -149,16 +149,18 @@
             </el-row>
            
            <el-row v-if="curConfig.type === 'external'" class="transition-box" style="text-align:left;">     
-              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
+              <el-card shadow="never" style="height:120px;background-color:rgb(236, 245, 255);">     
               <el-col :span="4" style="text-align:right;padding-right:20px">
                 <v-icon name="external-link-alt" scale="2.2" />
               </el-col>
               <el-col :span="20">
                 <b>Displays an external URL in an iframe.</b>
                 <br/> 
-                It the external url contains <b>token=TOKEN</b>, the <b>TOKEN</b> tag is replaced by the actual user token.<br/> 
-                 <b>HOST</b> by the <b>the host name</b>. and <b>API</b> by the <b>API URL</b>.<br/>
+                AIt the external url contains <b>token=TOKEN</b>, the <b>TOKEN</b> tag is replaced by the actual user token.<br/> 
+                 <b>HOST</b> by the <b>the host name</b>. and <b>API</b> by the <b>API URL</b>.<br/>                 
                 <br/> 
+                It replaces the TODATE and FROMDATE tags if a time selector is enabled. (Using Unix Timestamp)
+                
               </el-col>
               </el-card>
             </el-row>
@@ -315,6 +317,24 @@
               :label-width="formLabelWidth"
             >
               <el-input size="mini" v-model="curConfig.config.url" autocomplete="off"></el-input>
+              <el-row>
+                <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+              </el-row>
+
+              <el-row>
+                <el-select
+                  size="mini"
+                  v-model="curConfig.timeSelectorType"
+                  placeholder="Please select a type"
+                  @change="timeSelectorTypeChange"
+                >
+                  <el-option label="Free" value="classic"></el-option>
+                  <el-option label="Day" value="day"></el-option>
+                  <el-option label="Month" value="month"></el-option>
+                  <el-option label="Week" value="week"></el-option>
+                  <el-option label="Year" value="year"></el-option>
+                </el-select>
+              </el-row>
             </el-form-item>
 
             <!-- Controller -->
