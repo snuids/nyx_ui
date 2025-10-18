@@ -1,7 +1,6 @@
 <template slot="items">
   <!--div v-bind:style="styleContainerComputed" -->
   <div>
-    <h1>{{ computedUrl}}</h1>
     <iframe
       :src="computedUrl"
       frameborder="0"
