@@ -3,6 +3,7 @@
 ## V3.27.0 18/Oct/2025
 * Added FROMDATE and TODATE in external url.  
 
+
 ## V3.26.2 15/Jul/2020  
 * FIX: User that have "admin" or "user" privilege can access filters and privileges
 
