@@ -1,6 +1,7 @@
 <template slot="items">
   <!--div v-bind:style="styleContainerComputed" -->
   <div>
+    <h1>{{ computedUrl}}</h1>
     <iframe
       :src="computedUrl"
       frameborder="0"
@@ -15,11 +16,7 @@
 <script>
 /* eslint-disable */
 import _ from "lodash";
-import axios from "axios";
 import moment from "moment";
-import Vue from "vue";
-
-//alert(computedUrl())
 
 
 function extractHostname(url) {
@@ -45,15 +42,8 @@ export default {
   },
   computed: {
     computedUrl: function() {
-      
-      return this.config.config.url.replace(
-        /token=TOKEN/g,
-        "token=" + this.$store.getters.creds.token
-      ).replace(/API/g,
-        this.$store.getters.apiurl
-      ).replace(/HOST/g,
-        extractHostname(window.location.href)
-      );
+      var cururl = this.createUrl();
+      return cururl;
     },
     containerHeight: function() {
       var headerheight = 0;
@@ -105,9 +95,46 @@ export default {
       };
     }
   },
-  methods: {},
-  mounted: function() {},
-  beforeDestroy: function() {}
+  methods: {
+    createUrl: function() {
+      
+        var url=this.config.config.url.replace(
+        /token=TOKEN/g,
+        "token=" + this.$store.getters.creds.token
+      ).replace(/API/g,
+        this.$store.getters.apiurl
+      ).replace(/HOST/g,
+        extractHostname(window.location.href)
+      );
+        if (this.config.timeSelectorChecked)
+        {
+          var startTimeAsUtc = moment(this.$store.getters.timeRange[0]).utc();
+          var endTimeAsUtc = moment(this.$store.getters.timeRange[1]).utc();
+
+          url=url.replace(
+            /FROMDATE/g,
+            startTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss") + "Z"
+          ).replace(
+            /TODATE/g,
+            endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss") + "Z"
+          );
+        }
+        
+        return url
+    }
+  },
+  mounted: function() {
+    console.log("===============  REGISTERING EXTERNAL:");
+    this.$globalbus.$on("timerangechanged", payLoad => {
+      console.log("GLOBALBUS/KIBANATIMERANGE/");      
+      this.createUrl();
+    });
+  },
+  beforeDestroy: function() {
+    console.log("===============  UNREGISTERING EXTERNAL:");
+    this.$globalbus.$off("timerangechanged");
+    this.$globalbus.$off("kibanaactivated");
+  }
 };
 
 
