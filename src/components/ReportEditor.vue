@@ -315,6 +315,86 @@
                   placeholder="now-1d:now"
                   autocomplete="off"
                 ></el-input>
+                <el-row  v-if="param.type=='escombo'">
+                  <el-col :span="16">
+                <el-input
+                  
+                  v-if="param.type=='escombo'"
+                  type="text"
+                  size="mini"
+                  v-model="param.escomboindex"
+                  placeholder="Index of the selected value"
+                  autocomplete="off"
+                ></el-input>
+                </el-col>
+                <el-col :span="8">
+                <el-button round @click="applyIndex(param.escomboindex)" type="primary" size="mini">Apply
+                
+
+                </el-button>
+                </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                <el-select
+                  v-if="param.type=='escombo'"
+                  v-model="param.escombokey"
+                  placeholder="Select"
+                  size="mini"
+                >
+                  <el-option
+                    v-for="item in fieldOptions"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+                </el-col>
+                </el-row>
+                <el-row v-if="param.type=='escombo'">
+                  <el-col>
+                    <el-form-item label="Use Timestamp field ?" :label-width="formLabelWidth2">
+                      <el-switch size="mini" v-model="param.usetimestamp"></el-switch>
+                    </el-form-item>
+                  </el-col>
+                  <el-col>
+                <el-select
+                  v-if="param.usetimestamp"
+                  v-model="param.timestampfield"
+                  placeholder="Select"
+                  size="mini"
+                >
+                  <el-option
+                    v-for="item in fieldOptionsDate"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+                </el-col>
+                </el-row>
+                <el-row v-if="param.type=='escombo'">
+                  <el-col>
+                    <el-form-item label="Use Boolean field ?" :label-width="formLabelWidth2">
+                      <el-switch size="mini" v-model="param.useboolean"></el-switch>
+                    </el-form-item>
+                  </el-col>
+                  <el-col>
+                <el-select
+                  v-if="param.useboolean"
+                  v-model="param.booleanfield"
+                  placeholder="Select"
+                  size="mini"
+                >
+                  <el-option
+                    v-for="item in fieldOptionsBool"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  ></el-option>
+                </el-select>
+                </el-col>
+                </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="4">
@@ -408,7 +488,10 @@ export default {
     inputValue: "",
     allPrivileges: [],
     visible: true,
-    uploadurl:"",    
+    uploadurl:"",  
+    escomboindex: "",
+    escombokey: {},
+    esMapping: {},  
     rules: {
       title: [
         { required: true, message: "Please input a Title", trigger: "change" }
@@ -441,6 +524,10 @@ export default {
       {
         value: "number",
         label: "Number"
+      },
+      {
+        value: "escombo",
+        label: "ES Combo Box"
       }
     ]
   }),
@@ -456,7 +543,153 @@ export default {
     },
     recchanged: function() {
       return JSON.stringify(this.recordin) != JSON.stringify(this.newRec);
-    }
+    },
+    fieldOptions() {
+    const allowed = new Set(["text", "keyword", "long", "float"]);
+
+    const collect = (node, prefix = "") => {
+      const out = [];
+
+      // node est une map: { key: def }
+      for (const [key, def] of Object.entries(node || {})) {
+        const path = prefix ? `${prefix}.${key}` : key;
+        if (!def) continue;
+
+        // 1) Champ "simple" avec un type direct
+        if (def.type && allowed.has(def.type)) {
+          out.push(path);
+        }
+
+        // 2) Sous-champs (Elasticsearch: multi-fields)
+        if (def.fields && typeof def.fields === "object") {
+          for (const [subKey, subDef] of Object.entries(def.fields)) {
+            if (subDef && allowed.has(subDef.type)) {
+              out.push(`${path}.${subKey}`);
+            }
+          }
+        }
+
+        // 3) Objets/nested avec "properties" (structure hiérarchique)
+        if (def.properties && typeof def.properties === "object") {
+          out.push(...collect(def.properties, path));
+        }
+
+        // 4) Si parfois des sous-structures sont “inline” (non ES pur), on gère un objet brut
+        // Exemple: { stock: { C531: { type: "long" } } }
+        // On descend si pas de type mais que c'est un objet
+        if (!def.type && typeof def === "object" && !def.fields && !def.properties) {
+          out.push(...collect(def, path));
+        }
+      }
+
+      return out;
+    };
+    // Lance la collecte sur la racine de ton mapping
+    const flat = collect(this.esMapping);
+
+    // Dédup + tri naturel FR
+    return Array.from(new Set(flat)).sort((a, b) =>
+      a.localeCompare(b, "fr", { numeric: true })
+    );
+  },
+    fieldOptionsBool() {
+    const allowed = new Set(["boolean"]);
+
+    const collect = (node, prefix = "") => {
+      const out = [];
+
+      // node est une map: { key: def }
+      for (const [key, def] of Object.entries(node || {})) {
+        const path = prefix ? `${prefix}.${key}` : key;
+        if (!def) continue;
+
+        // 1) Champ "simple" avec un type direct
+        if (def.type && allowed.has(def.type)) {
+          out.push(path);
+        }
+
+        // 2) Sous-champs (Elasticsearch: multi-fields)
+        if (def.fields && typeof def.fields === "object") {
+          for (const [subKey, subDef] of Object.entries(def.fields)) {
+            if (subDef && allowed.has(subDef.type)) {
+              out.push(`${path}.${subKey}`);
+            }
+          }
+        }
+
+        // 3) Objets/nested avec "properties" (structure hiérarchique)
+        if (def.properties && typeof def.properties === "object") {
+          out.push(...collect(def.properties, path));
+        }
+
+        // 4) Si parfois des sous-structures sont “inline” (non ES pur), on gère un objet brut
+        // Exemple: { stock: { C531: { type: "long" } } }
+        // On descend si pas de type mais que c'est un objet
+        if (!def.type && typeof def === "object" && !def.fields && !def.properties) {
+          out.push(...collect(def, path));
+        }
+      }
+
+      return out;
+    };
+
+    // Lance la collecte sur la racine de ton mapping
+    const flat = collect(this.esMapping);
+
+    // Dédup + tri naturel FR
+    return Array.from(new Set(flat)).sort((a, b) =>
+      a.localeCompare(b, "fr", { numeric: true })
+    );
+  },
+    fieldOptionsDate() {
+    const allowed = new Set(["date"]);
+
+    const collect = (node, prefix = "") => {
+      const out = [];
+
+      // node est une map: { key: def }
+      for (const [key, def] of Object.entries(node || {})) {
+        const path = prefix ? `${prefix}.${key}` : key;
+        if (!def) continue;
+
+        // 1) Champ "simple" avec un type direct
+        if (def.type && allowed.has(def.type)) {
+          out.push(path);
+        }
+
+        // 2) Sous-champs (Elasticsearch: multi-fields)
+        if (def.fields && typeof def.fields === "object") {
+          for (const [subKey, subDef] of Object.entries(def.fields)) {
+            if (subDef && allowed.has(subDef.type)) {
+              out.push(`${path}.${subKey}`);
+            }
+          }
+        }
+
+        // 3) Objets/nested avec "properties" (structure hiérarchique)
+        if (def.properties && typeof def.properties === "object") {
+          out.push(...collect(def.properties, path));
+        }
+
+        // 4) Si parfois des sous-structures sont “inline” (non ES pur), on gère un objet brut
+        // Exemple: { stock: { C531: { type: "long" } } }
+        // On descend si pas de type mais que c'est un objet
+        if (!def.type && typeof def === "object" && !def.fields && !def.properties) {
+          out.push(...collect(def, path));
+        }
+      }
+
+      return out;
+    };
+
+    // Lance la collecte sur la racine de ton mapping
+    const flat = collect(this.esMapping);
+
+    // Dédup + tri naturel FR
+    return Array.from(new Set(flat)).sort((a, b) =>
+      a.localeCompare(b, "fr", { numeric: true })
+    );
+  }
   },
   props: {
     record: { type: Object },
@@ -482,6 +715,31 @@ export default {
     this.prepareData();
   },
   methods: {
+    applyIndex (index){
+
+      var indexToSearch = index;
+      var url =
+        this.$store.getters.apiurl +
+        "esmapping/" +
+        indexToSearch +
+        "?token=" +
+        this.$store.getters.creds.token;
+      // await axios
+      axios
+        .get(url)
+        .then(response => {
+          if (response.data.data != null && response.data.data.length > 0) {
+            this.esMapping = response.data.data[0].obj.mappings.properties;
+            }
+        })
+        .catch(error => {
+          console.log(error);
+          //this.succesIndexPatternDefinition = false;
+        });
+
+
+
+    },
     reportTypeChanged(){
       if (this.isAdd)
       {
