@@ -24,6 +24,18 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12" v-if="param.type == 'escombo'">
+          <el-form-item :label="param.title" :label-width="formLabelWidth">
+            <el-select size="mini" v-model="param.value" placeholder="Please select a type">
+              <el-option
+                v-for="item in param.valuelist"
+                :key="item"
+                :label="item"
+                :value="item"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <el-col :span="12" v-if="param.type == 'date'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
             <el-date-picker size="mini" v-model="param.value" type="date" placeholder="Pick a day"></el-date-picker>
@@ -63,6 +75,7 @@ export default {
   name: "ReportEditor",
   data: () => ({
     visible: true,
+    firstTime: true,
     formLabelWidth: "200px",
     rangePickerOptions: {
       shortcuts: [
@@ -166,8 +179,16 @@ export default {
       inVal = inVal.replace(/d/g, "*(3600*24)");
       return new Date(eval(inVal) * 1000);
     },
+    dateChange: function() {
+      console.log("Date Change")
+      this.prepareData();
+    },
     prepareData: function() {
       console.log(this.recordin)
+      let interval = false
+      let fixdate = false
+      var intervalValue = {"start": "", "end": ""}
+      var fixdateValue = ""
 
       this.visible = true;
       for (var i in this.recordin.parameters) {
@@ -182,20 +203,169 @@ export default {
           par.value != "" &&
           !(par.value instanceof Array)
         ) {
+          interval = true
+          if(this.firstTime){
           par.value = [
             this.resolveDate(par.value.split(":")[0]),
             this.resolveDate(par.value.split(":")[1])
           ];
+          this.firstTime = false
+          }
+          intervalValue.start = par.value[0]
+          intervalValue.end = par.value[1]
         } else if (
           par.type == "date" &&
           par.value != undefined &&
           par.value != "" &&
           !(par.value instanceof Array)
         ) {
-          par.value = this.resolveDate(par.value.split(":")[0]);
+          fixdate = true
+          console.log("Fix Date")
+          console.log(par.value)
+          
+          if(this.firstTime){
+          par.value = this.resolveDate(par.value);
+          this.firstTime = false
+          }
+          console.log(par.value)
+          fixdateValue = par.value;
+        }
+        else if(par.type == "escombo" &&
+          par.escomboindex != undefined &&
+          par.escomboindex != ""&&
+          par.escombokey != undefined &&
+          par.escombokey != ""  ) {
+          console.log("getList")
+          this.getESValues(par, interval, fixdate, intervalValue, fixdateValue)
+          console.log("LIST OK")
+          console.log(par)
+
+        }
+        
+      }
+      console.log(this.recordin.parameters)
+    },
+
+    getESValues(par, interval, fixdate, intervalValue, fixdateValue){
+      var index = par.escomboindex
+      var key = par.escombokey
+      var query = {
+        "size": 0,
+        "aggs": {
+          "values_uniques": {
+            "terms": {
+              "field": key,
+              "size": 10000
+            }
+          }
         }
       }
+
+      if(par.usetimestamp && interval){
+        var timestampfield = par.timestampfield
+        var start = intervalValue.start.toISOString()
+        var end = intervalValue.end.setHours(23,59,59,999).toISOString()
+        query["query"]= {
+                "bool": {
+                  "must": [
+                    {
+                      "range": {
+                        timestampfield: {   
+                          "gte": start,   
+                          "lte": end      
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            
+      }
+
+      if(par.usetimestamp && fixdate){
+        var timestampfield = par.timestampfield
+        var start = fixdateValue.toISOString()
+        var enddt = new Date(fixdateValue.setHours(23,59,59,999))
+        var end = enddt.toISOString()
+        query["query"]= {
+                "bool": {
+                  "must": [
+                    {
+                      "range": {
+                        [timestampfield]: {   
+                          "gte": start,   
+                          "lte": end      
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            
+      }
+
+      if(par.useboolean)
+      {
+        var booleanfield = par.booleanfield
+        if(par.usetimestamp){
+          query["query"]["bool"]["must"][1] = {"term": {[booleanfield]: true }}
+        }
+        else{
+          console.log(query)
+         query["query"]= {
+              "bool":{
+                "must":[
+                  {"term": {[booleanfield]: true}}
+                ]
+                
+              }
+            }
+        }
+        }
+      
+
+
+      console.log(query)
+
+      let url =
+        this.$store.getters.apiurl +
+        "generic_search/"+index+"?token=" +
+        this.$store.getters.creds.token;
+
+      console.log(url)
+
+      var valuelist = []
+
+      axios
+        .post(url, query)
+        .then(response => {
+          if (response.data.error != "") {
+            console.log("Unable to search...");
+            this.$notify({
+              title: "Failed",
+              type: "danger",
+              message: "Unable to send message.",
+              position: "bottom-right"
+            });
+          } else {
+              for(var i in response.data.aggs.values_uniques.buckets)
+              {
+                var rec = response.data.aggs.values_uniques.buckets[i]
+                //console.log(rec.key)
+                valuelist[i] = rec.key
+              }
+              console.log(valuelist)
+              this.$forceUpdate();
+             par.valuelist = valuelist.sort();
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+
     },
+
     closeDialog: function() {
       this.$emit("dialogclose");
     },
