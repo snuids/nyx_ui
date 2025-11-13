@@ -3,6 +3,7 @@ export const messages = {
       
       scheduler: {
         edit_scheduler: 'Editer La Tache Périodique',
+        parameters: 'Paramètres',
         scheduler: 'Tache Périodique',
         reset_task:'Ré-init. la tache',
         mailing_list:'Liste de diffusion',

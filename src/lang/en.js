@@ -8,6 +8,7 @@ export const messages = {
       scheduler: {
         edit_scheduler: 'Edit Scheduler',
         scheduler: 'Scheduler',
+        parameters: 'Parameters',
         reset_task:'Reset Task',
         mailing_list:'Mailing List',
         mail_content:'Mail Content',        

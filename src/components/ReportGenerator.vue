@@ -77,6 +77,7 @@ export default {
     visible: true,
     firstTime: true,
     formLabelWidth: "200px",
+    formLabelWidth2: "100px",
     rangePickerOptions: {
       shortcuts: [
         {
