@@ -563,6 +563,10 @@ export default {
       var intervalValue = {"start": "", "end": ""}
       var fixdateValue = ""
       this.visible = true;
+      if('parameters' in this.record._source)
+      {
+        this.report.parameters = this.record._source.parameters;
+      }
       for (var i in this.report.parameters) {
         var par = this.report.parameters[i];
 
