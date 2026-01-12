@@ -1091,7 +1091,7 @@ export default {
       }
     },
 
-    freeTextChanged(newvalue) {
+    freeTextChanged(newvalue) {      
       this.curConfig.config.freetext = newvalue;
     },
     prepareData() {
