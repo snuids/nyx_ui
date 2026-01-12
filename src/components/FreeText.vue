@@ -1,7 +1,6 @@
 <template>
   <!--MAIN DIALOG -->
   <div style="text-align:left">
-    <h1>Free text 3</h1>
     <span v-html="config.config.freetext"></span>
   </div>
 </template>
