@@ -18,7 +18,7 @@
     "json2yaml": "^1.1.0",
     "leaflet": "^1.6.0",
     "leaflet-fa-markers": "^0.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.23",
     "moment": "^2.29.2",
     "npm-install-peers": "^1.2.1",
     "rison": "^0.1.1",
