@@ -541,8 +541,8 @@ export default {
         "mailingList": this.maillingListTo,
         "mailingListCc": this.maillingListCc,
         "mailingListCci": this.maillingListCci,
-        "mailSubject": this.mailSubject,
-        "mailTemplate": this.mailTemplate
+        "mailSubject": this.emailSubject,
+        "mailTemplate": this.emailBody
       }
 
       var message = {
