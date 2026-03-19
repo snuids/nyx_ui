@@ -8,6 +8,7 @@
 
 ## Introduction
 
+
 The NYX platform is an easy to use application builder that integrates various technologies such as:
 
 * Elastic Search / Kibana
