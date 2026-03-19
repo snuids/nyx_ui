@@ -57,6 +57,111 @@
       </el-row>
     </el-form>
 
+    <el-divider></el-divider>
+
+    <el-checkbox v-model="sendByEmail" style="margin-bottom: 15px;">Send report by email</el-checkbox>
+
+    <el-form v-if="sendByEmail">
+      <el-row style="text-align:left;">
+        <el-button @click="setFocus('maillingListTo')" type="text">To : </el-button>
+      </el-row>
+      <el-row>
+        <el-col :span="24" style="text-align:left;">
+          <el-select
+            v-model="maillingListTo"
+            multiple
+            filterable
+            ref="maillingListTo"
+            placeholder="Choose Users"
+            size="mini"
+            style="width:100%;"
+          >
+            <el-option
+              v-for="item in users"
+              :key="'to-'+item._id"
+              :label="item._id"
+              :value="item._id"
+            ></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row style="text-align:left;">
+        <el-button @click="setFocus('maillingListCc')" type="text">Cc : </el-button>
+      </el-row>
+      <el-row>
+        <el-col :span="24" style="text-align:left;">
+          <el-select
+            v-model="maillingListCc"
+            multiple
+            filterable
+            ref="maillingListCc"
+            placeholder="Choose Users"
+            size="mini"
+            style="width:100%;"
+          >
+            <el-option
+              v-for="item in users"
+              :key="'cc-'+item._id"
+              :label="item._id"
+              :value="item._id"
+            ></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row style="text-align:left;">
+        <el-button @click="setFocus('maillingListCci')" type="text">Cci : </el-button>
+      </el-row>
+      <el-row>
+        <el-col :span="24" style="text-align:left;">
+          <el-select
+            v-model="maillingListCci"
+            multiple
+            filterable
+            ref="maillingListCci"
+            placeholder="Choose Users"
+            size="mini"
+            style="width:100%;"
+          >
+            <el-option
+              v-for="item in users"
+              :key="'cci-'+item._id"
+              :label="item._id"
+              :value="item._id"
+            ></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="16">
+          <el-form-item label="Add Mail : " :label-width="formLabelWidth">
+            <el-input size="mini" v-model="mailToAdd" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6" style="text-align:right;">
+          <el-button
+            :disabled="!mailToAdd.includes('@')"
+            plain
+            @click="addMail()"
+            size="mini"
+          >Add</el-button>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="Subject" :label-width="formLabelWidth">
+            <el-input size="mini" v-model="emailSubject"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="Body" :label-width="formLabelWidth">
+            <el-input size="mini" type="textarea" :rows="4" v-model="emailBody"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+
     <span slot="footer" class="dialog-footer">
       <!--<v-icon :name="record.icon" scale="1"/>-->
       <el-button @click="closeDialog()">Cancel</el-button>
@@ -76,6 +181,14 @@ export default {
   data: () => ({
     visible: true,
     firstTime: true,
+    sendByEmail: false,
+    users: [],
+    maillingListTo: [],
+    maillingListCc: [],
+    maillingListCci: [],
+    mailToAdd: "",
+    emailSubject: "",
+    emailBody: "",
     formLabelWidth: "200px",
     formLabelWidth2: "100px",
     rangePickerOptions: {
@@ -164,6 +277,7 @@ export default {
     }
   },
   mounted: function() {
+    this.loadUsers();
     this.prepareData();
   },
   methods: {
@@ -367,6 +481,44 @@ export default {
 
     },
 
+    loadUsers: function() {
+      var url =
+        this.$store.getters.apiurl +
+        "generic_search/nyx_user*?token=" +
+        this.$store.getters.creds.token;
+
+      axios
+        .post(url, { size: 1000 })
+        .then(response => {
+          if (response.data.error != "") console.log("User list error...");
+          else {
+            this.users = response.data.records;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    checkUser: function(mail) {
+      var notInlist = true;
+      for (var userid in this.users) {
+        if (this.users[userid]._id == mail) {
+          notInlist = false;
+        }
+      }
+      if (notInlist) {
+        var newUser = { "_id": mail };
+        this.users.push(newUser);
+      }
+    },
+    addMail: function() {
+      let newUser = { "_id": this.mailToAdd };
+      this.users.push(newUser);
+      this.mailToAdd = '';
+    },
+    setFocus: function(refName) {
+      this.$refs[refName].focus();
+    },
     closeDialog: function() {
       this.$emit("dialogclose");
     },
@@ -385,13 +537,22 @@ export default {
         "_" +
         Math.floor((1 + Math.random()) * 0x1000000);
 
+      var task = {
+        "mailingList": this.maillingListTo,
+        "mailingListCc": this.maillingListCc,
+        "mailingListCci": this.maillingListCci,
+        "mailSubject": this.mailSubject,
+        "mailTemplate": this.mailTemplate
+      }
+
       var message = {
         destination: "/queue/NYX_REPORT_STEP1",
         body: JSON.stringify({
           id: "id_" + randomID,
           creds: this.$store.getters.creds,
           report: this.record,
-          privileges: this.$store.getters.creds.user.privileges
+          privileges: this.$store.getters.creds.user.privileges,
+          task: task
         })
       };
 
