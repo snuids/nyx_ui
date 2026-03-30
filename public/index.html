@@ -5,7 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" type="text/css" href="api/v1/ui_css">
+    <!-- Backend CSS loaded dynamically to avoid blocking app startup -->
+    <script>
+      // Try to load backend CSS, but don't block if unavailable
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'api/v1/ui_css';
+      link.onerror = function() { console.warn('Backend CSS not available'); };
+      document.head.appendChild(link);
+    </script>
     <title>Welcome to Nyx</title>
   </head>
   <body>
