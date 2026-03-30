@@ -48,7 +48,6 @@ export default {
       return computeTranslatedText(inText,inLocale);
     },
     successUpload: function(response, file, fileList) {
-      console.log("emit event on-success");
       this.$emit("on-success", response, file, fileList);
     }
   },
@@ -80,15 +79,10 @@ export default {
     this.accept=this.config.config.filetypes;
   },
   mounted: function(){
-    console.log("===============  REGISTERING LOCAL MESSSAGE:");
-    this.$localbus.$on("localmessagereceived", payLoad => {
-      console.log("LOCALBUS/GENERICCOMPONENT/LOCALMESSAGERECEIVED");
-      console.log(payLoad);
-      //alert(payLoad)      
+    this.$localbus.$on("localmessagereceived", () => {
     }); 
   },
   destroyed: function() {
-    console.log("===============  UN REGISTERING LOCAL MESSSAGE:");
     this.$localbus.$off("localmessagereceived");
   }
 

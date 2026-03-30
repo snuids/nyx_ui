@@ -305,8 +305,6 @@ export default {
       }
     },
     relativeTimeClosed: _.debounce(function() {
-      
-      console.log("RELATIVE TIME RANGE CHANGED");
       this.$store.commit({
         type: "setTimeRange",
         data: {
@@ -321,7 +319,6 @@ export default {
       });
     }, 500),    
     dayChanged(e) {
-      console.log("DAY CHANGED");
       var dstart = moment(e);
       var dend = moment(e);
       dend.endOf("day");
@@ -339,7 +336,6 @@ export default {
       });
     },
     weekChanged(e) {
-      console.log("WEEK CHANGED");
       var dstart = moment(e);
       var dend = moment(e);
       dend.endOf("week");
@@ -357,7 +353,6 @@ export default {
       });
     },
     monthChanged(e) {
-      console.log("MONTH CHANGED");
       var dstart = moment(e);
       var dend = moment(e);
       dend.endOf("month");
@@ -375,7 +370,6 @@ export default {
       });
     },
     yearChanged(e) {
-      console.log("YEAR CHANGED");
       var dstart = moment(e);
       var dend = moment(e);
       dend.endOf("year");
@@ -393,7 +387,6 @@ export default {
       });
     },
     timeRangeChanged(e) {
-      console.log("TIME RANGE CHANGED");
       this.timerange = e;
       this.$store.commit({
         type: "setTimeRange",
@@ -409,8 +402,6 @@ export default {
       this.changePasswordVisible = true;
     },
     appClicked(e) {
-      console.log("app clicked");
-      console.log(e);
       if (e.type == "external") {
         window.open(e.config.url);
       } else {
@@ -430,7 +421,6 @@ export default {
     }, 500)
   },
   created: async function() {
-    console.log("Main vue created");
 
     this.rangePickerOptions= {
       shortcuts: [
@@ -583,21 +573,18 @@ export default {
             }
           }
         }
-        catch (e){
-          console.log(e);
+        catch (e){ // eslint-disable-line no-unused-vars
         }
     }
 
 
     if (this.$store.getters.currentSubCategory == undefined) {
-      console.log('NOT LOGGED YET')
-      var path = this.$route.path
+      path = this.$route.path
       if(path[path.length-1] == '/')
-	      path = path.substring(0, path.length-1)
+              path = path.substring(0, path.length-1)
 
 
       this.$store.state.redirection = path
-      console.log(this.$route)
       
       
       this.$router.push("/");
@@ -611,9 +598,7 @@ export default {
     this.timeRangeChanged([start, end]);
   },
   mounted: function() {
-    console.log("===============  REGISTERING FORCETIME:");
     this.$globalbus.$on("forcetime", payLoad => {
-      console.log('force time for this app')
 
       let val = payLoad.substring(0, payLoad.length-1)
       let unit = payLoad.substring(payLoad.length-1, payLoad.length)
@@ -638,9 +623,7 @@ export default {
       
       
     });
-    console.log("===============  REGISTERING CTRU:");
     this.$globalbus.$on("charttimerangeupdated", payLoad => {
-      console.log("GLOBALBUS/CHARTTIMERANGEUPDATED/");
       const end = new Date();
       const start = new Date();
       start.setTime(payLoad[0]);
@@ -650,7 +633,6 @@ export default {
       this.timeRangeChanged([start, end]);
     });
 
-    console.log("Mounting Main Component");
     this.$store.commit({
       type: "changeContainerSize",
       data: { height: window.innerHeight, width: window.innerWidth }
@@ -658,13 +640,11 @@ export default {
 
     this.$nextTick(() => {
       this.resizeListener = window.addEventListener("resize", () => {
-        console.log("MAIN RESIZE");
         this.changeContainerSize(window);
       });
     });
   },
   beforeDestroy: function() {
-    console.log("===============  UNREGISTERING CTRU:");
     this.$globalbus.$off("charttimerangeupdated");
     this.$globalbus.$off("forcetime");
     window.removeEventListener("resize", this.resizeListener);

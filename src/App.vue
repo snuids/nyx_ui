@@ -48,7 +48,7 @@ export default {
             return response
         }, function(error) {
             console.warn('response interceptor error')
-            console.log(response)
+            console.log(error)
             return Promise.reject(error)
         })
     },
@@ -79,22 +79,27 @@ export default {
 
     }, 200),
     async loadConfig() {
-      const response = await axios.get(
-        this.$store.getters.apiurl + "config",
-        {}
-      );
+      try {
+        const response = await axios.get(
+          this.$store.getters.apiurl + "config",
+          {}
+        );
 
-      if (response.data.error == "") {
-        this.initialized = true;
-        this.config = response.data;
+        if (response.data.error == "") {
+          this.initialized = true;
+          this.config = response.data;
 
-        if(response.data.elastic_version != null) {
-          this.$store.commit({
-            type: "elasticVersion",
-            data: response.data.elastic_version
-          });
+          if(response.data.elastic_version != null) {
+            this.$store.commit({
+              type: "elasticVersion",
+              data: response.data.elastic_version
+            });
+          }
+
         }
-
+      } catch (error) {
+        console.warn('Backend API not available:', error.message);
+        // App can still run without backend config
       }
     },
 
@@ -106,7 +111,7 @@ export default {
     }
     if( this.wsInterval==null)
     {
-      setInterval(() => {
+      this.wsInterval = setInterval(() => {
             this.$store.dispatch('check_websocket')
         }, 3000)
     }
@@ -114,7 +119,7 @@ export default {
     this.loadConfig();
   },
   beforeDestroy () {
-    if( this.wsInterval==null)
+    if( this.wsInterval!=null)
       clearInterval(this.wsInterval)
   }
 };

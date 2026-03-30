@@ -149,26 +149,20 @@ export default {
   name: "UserDetails",
   data() {
     var checkID = (rule, value, callback) => {
-      console.log(value);
       var url = this.$store.getters.apiurl + "generic/nyx_user/";
       url += this.newRec._id + "?token=";
       url += this.$store.getters.creds.token;
       axios
         .get(url)
         .then(response => {
-          console.log(response);
           if (response.data.error != "") callback();
           else {
-            console.log(response.data.data);
             if (response.data.data != null) {
-              console.log("Succes");
               return callback(new Error("This email is already in use"));
             } else callback();
           }
         })
-        .catch(error => {
-          console.log(error);
-          console.log("Error catch");
+        .catch(() => {
           callback();
         });
     };
@@ -259,10 +253,8 @@ export default {
   },
   methods: {
     handleChange: function() {
-      console.log(this.activeNames);
     },
     MFAChanged: function() {
-      console.log(this.newRec._source.doublePhase);
       this.rules._source.phone[0].required = this.newRec._source.doublePhase;
       this.$refs.newRec.validateField("_source.phone");
     },
@@ -303,7 +295,6 @@ export default {
         if (valid) {
           this.saveRecord();
         } else {
-          console.log("error submit!!");
           this.activeNames.push["1"];
           return false;
         }
