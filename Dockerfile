@@ -4,7 +4,7 @@ FROM node:18.20.8-bullseye as base
 FROM base as builder
 COPY . /etc/build
 WORKDIR /etc/build
-RUN npm install -g yarn
+RUN corepack enable
 RUN yarn install
 RUN yarn run build
 
