@@ -452,8 +452,6 @@ export default {
   created: function() {
     this.orgRecord = JSON.stringify(this.record);
 
-    console.log(this.record);
-
     if (this.record._source.nextRun == undefined) {
       this.record._source.nextRun = moment();
     }
@@ -475,27 +473,21 @@ export default {
 
     },
     usersMailListToChanged: function(val) {
-      console.log("usersMailListToChanged");
-      console.log(val)
       this.record._source.mailingList = val
       
     },
     usersMailListCcChanged: function(val) {
-      console.log("usersMailListCcChanged");
-      console.log(val)
       this.record._source.mailingListCc = val
       
     },
     usersMailListCciChanged: function(val) {
-      console.log("usersMailListCciChanged");
-      console.log(val)
       this.record._source.mailingListCci = val
       
     },
     computeTranslatedText: function(inText,inLocale){      
       return computeTranslatedText(inText,inLocale);
     },
-    typeChanged: function(inVal) {
+    typeChanged: function() {
       //alert(inVal);
     },
     resolveDate: function(inVal) {
@@ -521,23 +513,20 @@ export default {
       axios
         .post(url, { size: 1000 })
         .then(response => {
-          if (response.data.error != "") console.log("Report list error...");
+          if (response.data.error != "") {/* ignore */}
           else {
             this.reports = response.data.records;
             
             for (var i in this.reports) {
-              console.log(this.reports[i]._id);
               if (this.reports[i]._id == this.record._source.report) {
                 this.report = this.reports[i]._source;
                 this.prepareData();
                 break;
               }
             }
-            console.log(this.reports);
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
         });
     },
 
@@ -556,8 +545,6 @@ export default {
       for (var i = 1; i < 32; i++) this.months.push({ key: i, label: "" + i });
     },
     prepareData: function() {
-      console.log("PREPARE DATA")
-      console.log(this.report.parameters)
       let interval = false
       let fixdate = false
       var intervalValue = {"start": "", "end": ""}
@@ -586,10 +573,7 @@ export default {
           par.escomboindex != ""&&
           par.escombokey != undefined &&
           par.escombokey != ""  ) {
-          console.log("getList")
           this.getESValues(par, interval, fixdate, intervalValue, fixdateValue)
-          console.log("LIST OK")
-          console.log(par)
           
 
         }
@@ -611,15 +595,15 @@ export default {
       }
 
       if(par.usetimestamp && interval){
-        var timestampfield = par.timestampfield
-        var start = intervalValue.start.toISOString()
-        var end = intervalValue.end.setHours(23,59,59,999).toISOString()
+        let timestampfield = par.timestampfield
+        let start = intervalValue.start.toISOString()
+        let end = intervalValue.end.setHours(23,59,59,999).toISOString()
         query["query"]= {
                 "bool": {
                   "must": [
                     {
                       "range": {
-                        timestampfield: {   
+                        [timestampfield]: {   
                           "gte": start,   
                           "lte": end      
                         }
@@ -632,10 +616,10 @@ export default {
       }
 
       if(par.usetimestamp && fixdate){
-        var timestampfield = par.timestampfield
-        var start = fixdateValue.toISOString()
-        var enddt = new Date(fixdateValue.setHours(23,59,59,999))
-        var end = enddt.toISOString()
+        let timestampfield = par.timestampfield
+        let start = fixdateValue.toISOString()
+        let enddt = new Date(fixdateValue.setHours(23,59,59,999))
+        let end = enddt.toISOString()
         query["query"]= {
                 "bool": {
                   "must": [
@@ -660,7 +644,6 @@ export default {
           query["query"]["bool"]["must"][1] = {"term": {[booleanfield]: true }}
         }
         else{
-          console.log(query)
          query["query"]= {
               "bool":{
                 "must":[
@@ -674,14 +657,10 @@ export default {
       
 
 
-      console.log(query)
-
       let url =
         this.$store.getters.apiurl +
         "generic_search/"+index+"?token=" +
         this.$store.getters.creds.token;
-
-      console.log(url)
 
       var valuelist = []
 
@@ -689,7 +668,6 @@ export default {
         .post(url, query)
         .then(response => {
           if (response.data.error != "") {
-            console.log("Unable to search...");
             this.$notify({
               title: "Failed",
               type: "danger",
@@ -703,22 +681,17 @@ export default {
                 //console.log(rec.key)
                 valuelist[i] = rec.key
               }
-              console.log(valuelist)
               this.$forceUpdate();
              par.valuelist = valuelist.sort();
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
         });
 
 
     },
     reportChange: function() {
-      console.log(this.record._source.report);
-
       for (var i in this.reports) {
-        console.log(this.reports[i]._id);
         if (this.reports[i]._id == this.record._source.report) {
           this.record._source.icon = this.reports[i]._source.icon;
           this.report = this.reports[i]._source;
@@ -760,7 +733,7 @@ export default {
       axios
         .post(url, { size: 1000 })
         .then(response => {
-          if (response.data.error != "") console.log("User list error...");
+          if (response.data.error != "") {/* ignore */}
           else {
             //console.log(response.data.records);
            // console.log(this);
@@ -773,31 +746,28 @@ export default {
               this.checkUser(this.record._source.mailingList[mail])
               
             }
-            for(var mail in  this.record._source.mailingListCc)
+            for(mail in  this.record._source.mailingListCc)
             {
               this.checkUser(this.record._source.mailingListCc[mail])
               
             }
-            for(var mail in  this.record._source.mailingListCci)
+            for(mail in  this.record._source.mailingListCci)
             {
               this.checkUser(this.record._source.mailingListCci[mail])
               
             }
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
         });
 
       
     },
 
     checkUser: function(mail){
-      console.log("Check User: "+ mail)
       var notInlist = true;
         for(var userid in this.users)
         {
-          console.log(userid)
           if(this.users[userid]._id == mail)
           {
             

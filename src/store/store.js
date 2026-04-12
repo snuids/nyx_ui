@@ -36,13 +36,12 @@ function stopSocket(wsObject)
 {
   if(wsObject.socket!=undefined)
   {
-    console.log("Closing socket....");
     try{
       wsObject.socket.close();
     }
-    catch(err)
+    catch(err) // eslint-disable-line no-unused-vars
     {
-      console.log("ERROR"+err);
+      // close errors are non-critical
     }
     
   }
@@ -54,7 +53,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     apiVersion: "",
     kibanaurl: "/kibana/",
-    version: "v3.27.8",
+    version: "v3.28.0",
     devMode: false,
     menus: [],
     menuOpen: true,
@@ -83,7 +82,7 @@ export default new Vuex.Store({
     redirection: null,
     passwordRules: null,
     searchCache: {},
-    wsObject:{"check_alive":false}
+    wsObject:{"check_alive":false, "socket":null}
   },
   getters: {
     wsObject: state => state.wsObject,
@@ -124,15 +123,12 @@ export default new Vuex.Store({
   },
   actions: {
     switchToApp(context, payload) {
-      console.log("switch to app mutation called.");
-      console.log(payload);
       for (var i = 0; i < context.getters.filteredmenus.length; i++) {
         var cat = context.getters.filteredmenus[i]
 
         for (var j = 0; j < cat.submenus.length; j++) {
           var subcat = cat.submenus[j]
           for (var k = 0; k < subcat.apps.length; k++) {
-            console.log(subcat.apps[k].title);
             if (subcat.apps[k].title.toLowerCase() === payload) {              
               return Promise.resolve(subcat.apps[k].rec_id);              
             }
@@ -141,7 +137,7 @@ export default new Vuex.Store({
       } 
     }
     ,
-    check_websocket : (context,payload) => {
+    check_websocket : (context) => {
       //state.name = payload,
       if(context.getters.wsObject.check_alive)
       {
@@ -150,15 +146,14 @@ export default new Vuex.Store({
           if((context.getters.wsObject.last_lifesign!=null)
           &&(moment(new Date())-context.getters.wsObject.last_lifesign>10000))
           {
-            console.log(moment(new Date())-context.getters.wsObject.last_lifesign);
-            console.log("Socket Not Responding...");
             stopSocket(context.getters.wsObject);
             context.getters.wsObject.socket=null;
           }
         }
+        
         if(context.getters.wsObject.socket===null)
         {
-          console.log("MUST CREATE SOCKET");
+         
           try {
             context.getters.wsObject.last_lifesign=moment(new Date());
           //var socket = new WebSocket('ws://localhost:8080/nyx_ui_websocket/');
@@ -173,17 +168,15 @@ export default new Vuex.Store({
             wsurl=context.getters.apiurl.replace("http://","ws://").replace("https://","wss://").replace("/api/v1","/nyx_ui_websocket/");
           }
           //wsurl='ws://localhost:8080/nyx_ui_websocket/';
-
           var socket = new WebSocket(wsurl);
           // Connection opened
-          socket.addEventListener('open', function (event) {
+          socket.addEventListener('open', function () {
             
             socket.send(JSON.stringify(context.getters.creds));
           });
 
           // Connection opened
-          socket.addEventListener('error', function (event) {
-            console.log('SOCKET error');
+          socket.addEventListener('error', function () {
             stopSocket(context.getters.wsObject);
             context.getters.wsObject.socket=null;
           });
@@ -199,9 +192,7 @@ export default new Vuex.Store({
               Vue.prototype.$globalbus.$emit("messagereceived",inmes.data);
           });
           context.getters.wsObject.socket=socket; 
-          } catch (error) {
-            console.error('Web Socket Error:', error);
-            
+          } catch (error) { // eslint-disable-line no-unused-vars
           }
                    
         }
@@ -231,7 +222,6 @@ export default new Vuex.Store({
     }
     ,
     version(state, payload) {
-      console.log("Version mutation called.");
       state.apiVersion = payload.data;
     },
     setPasswordRules(state, payload) {
@@ -245,16 +235,13 @@ export default new Vuex.Store({
 
       axios
         .post(url, payload.data)
-        .then(response => {
+        .then(() => {
           state.passwordRules = payload.data
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => { /* intentional no-op */ });
     }
     ,
     login(state, payload) {
-      console.log("Login mutation called.");
       state.initialized = false;
       state.menuOpen = true;
       state.creds = payload.data.cred;
@@ -334,14 +321,6 @@ export default new Vuex.Store({
       state.wsObject.check_alive=true;
 
       // PASSWORD RULES
-      let index =  'nyx_config'
-      let id    =  'password_rules'
-
-      var url =
-        state.apiurl +
-        "generic/"+index+"/"+id+"?token=" +
-        state.creds.token;
-
       state.passwordRules = {
         length: [10, 40],
         forceUpper: false,
@@ -385,24 +364,12 @@ export default new Vuex.Store({
 
       axios
         .get(url)
-        .then(response => {
-          if (response.data.error != "")
-            console.log("Logout error...");
-          else {
-            console.log("Logout success...");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => { /* intentional no-op */ });
     },
     changeContainerSize(state, payload) {
-      console.log("VUEX:Change container size:");
-      console.log(payload.data);
       state.containerSize = payload.data;
     },
     changeApp(state, payload) {
-      console.log("changeApp mutation called.");
       var app = null;
 
       for (var i = 0; i < state.filteredmenus.length; i++) {
@@ -430,16 +397,12 @@ export default new Vuex.Store({
 
       state.activeApp = app
 
-      console.log(app)
       if(app.timeDefault != null && app.timeDefault != '') {
-        console.log('send forcetime')
         Vue.prototype.$globalbus.$emit("forcetime",app.timeDefault);
-        console.log('send forcetime')
       }
     },
     // eslint-disable-next-line
-    refreshTimeRange(state, payload) {
-      console.log("VUEX:RefreshTimeRange:");
+    refreshTimeRange(state) {
       if (state.lastTimeRangeEvent.type == "relative") {// UGLY COPY OF CODE in setTimeRanbge
         var minutesmulti = 1;
         switch (state.lastTimeRangeEvent.relativeType) {
@@ -461,7 +424,6 @@ export default new Vuex.Store({
 
     },
     setTab(state, payload) {
-      console.log("VUEX:Set Tab:");
 
       if (state.currentSubCategory.apps.length > 1)
         state.mainsubtitle = " / " + payload.data.loc_title;
@@ -470,10 +432,7 @@ export default new Vuex.Store({
       state.activeApp = payload.data;
     },
     setTimeRange(state, payload) {
-      console.log("VUEX:Set Time Range:");
-      console.log(payload);
 
-      console.log("VUEX:Sub Type " + payload.data.subtype);
       state.lastTimeRangeEvent = payload.data;
 
       if (payload.data.subtype == null) {
@@ -564,21 +523,10 @@ export default new Vuex.Store({
 
       axios
         .post(url, payload.data._source)
-        .then(response => {
-          if (response.data.error != "")
-            console.log("Save object error...");
-          else {
-            console.log("Save object success...");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => { /* intentional no-op */ });
     }
     ,
     deleteRecord(state, payload) {
-      console.log('deleteRecord')
-      console.log(payload)
       let url =
         state.apiurl +
         "generic/" + payload.data._index + "/" + payload.data._id + "?token=" +
@@ -589,16 +537,7 @@ export default new Vuex.Store({
 
       axios
         .delete(url)
-        .then(response => {
-          if (response.data.error != "")
-            console.log("Save object error...");
-          else {
-            console.log("Save object success...");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => { /* intentional no-op */ });
     }
     ,
     updatePGRecord(state, payload) {
@@ -613,20 +552,9 @@ export default new Vuex.Store({
         "?token=" +
         state.creds.token;
 
-        console.log("updatePGRecord URL: " + url)
-
         axios
           .post(url, { record: payload.data.record, mode: payload.data.mode })
-          .then(response => {
-            if (response.data.error != "")
-              console.log("Save PG object error...");
-            else {
-              console.log("Save PG object success...");
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+          .catch(() => { /* intentional no-op */ });
     },
     deletePGRecord(state, payload) {
       var url =
@@ -636,20 +564,10 @@ export default new Vuex.Store({
 
       axios
         .delete(url)
-        .then(response => {
-          if (response.data.error != "")
-            console.log("Save object error...");
-          else {
-            console.log("Save object success...");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => { /* intentional no-op */ });
     }
     ,
     sendMessage(state,payload) {
-      console.log("Send Message");
 
       var url =
         state.apiurl +
@@ -663,15 +581,7 @@ export default new Vuex.Store({
 
       axios
         .post(url, message)
-        .then(response => {
-          if (response.data.error != "") console.log("Unable to send message");
-          else {
-            console.log('message sent')
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => { /* intentional no-op */ });
     }
   }
 })

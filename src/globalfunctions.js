@@ -18,7 +18,7 @@ export function computeTranslatedText(inText, inLocale) {
   }
 
   export function extractURLParts(href) {
-    var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+    var match = href.match(/^(https?:)\/\/(([^:/?#]*)(?::([0-9]+))?)([/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
     return match && {
         href: href,
         protocol: match[1],
