@@ -258,15 +258,11 @@ export default {
   methods: {
     prepareData: function() {
       this.visible = true;
-      console.log("creating curField");
-      console.log(this.currentField);
       this.curField = this.currentField;
       this.changeType();
     },
     changeType: function() {
       this.curField.subType = null;
-
-      console.log("changeType -> " + this.curField.type);
 
       for (var i in this.types) {
         //console.log(this.types[i].value)
@@ -280,7 +276,6 @@ export default {
             this.curField.type == "selecter" &&
             this.curField.selectOptions == undefined
           ) {
-            console.log("reset Selected options !!!!");
             this.curField.selectOptions = [];
           }
 
@@ -295,8 +290,6 @@ export default {
       this.$emit("dialogclose", this.curField);
     },
     handleClose: function(tag) {
-      console.log("close tag -> " + tag);
-      console.log(this.curField.selectOptions.indexOf(tag));
       this.curField.selectOptions.splice(
         this.curField.selectOptions.indexOf(tag),
         1
@@ -307,7 +300,7 @@ export default {
     },
     showInput: function() {
       this.inputVisible = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         // eslint-disable-line
         this.$refs.saveTagInput.$refs.input.focus();
       });

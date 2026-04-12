@@ -112,12 +112,8 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
 import axios from "axios";
 // import _ from "lodash";
-
-import grafanaeditor from "@/components/appConfigEditor/GrafanaEditor";
-Vue.component("GrafanaEditor", grafanaeditor);
 
 export default {
   field: "GrafanaEditor",
@@ -181,8 +177,7 @@ export default {
       this.dashboards = response.data.data || [];
       
     })
-    .catch(error => {
-      console.error("Failed to load Grafana dashboards:", error);
+    .catch(() => {
       this.dashboards = [];
     })
     .finally(() => {

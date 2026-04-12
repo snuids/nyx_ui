@@ -21,9 +21,7 @@ import InfiniteLoading from 'vue-infinite-loading';
 import '../theme/index.css'
 
 
-console.log("===============");
-console.log("Starting");
-console.log("===============");
+
 
 Vue.component('v-icon', Icon)
 Vue.component("draggable", draggable);
@@ -112,7 +110,7 @@ if (vars["api"]!=undefined)
 
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 
-var app=new Vue({
+new Vue({
   i18n,
   router,
   store:store,

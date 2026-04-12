@@ -30,12 +30,8 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
 import axios from "axios";
 // import _ from "lodash";
-
-import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
-Vue.component("FileSystemEditor", filesystemeditor);
 
 export default {
   field: "FileSystemEditor",
