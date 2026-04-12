@@ -96,8 +96,6 @@ export default {
       this.visible = true;
     },
     passwordMatchRules(pwd, rules) {
-      console.log(rules)
-
       let numUpper = (pwd.match(/[A-Z]/g) || []).length;
       let numNumber = (pwd.match(/[0-9]/g) || []).length;
       let numSpecial = (
@@ -207,12 +205,6 @@ export default {
 
       either = randomLength - uppers - numbers - specials;
 
-      console.log('randomLength:',randomLength)
-      console.log('uppers:',uppers)
-      console.log('numbers:',numbers)
-      console.log('specials:',specials)
-      console.log('either:',either)
-
       this.passwordForm.newPassword = [uppers, numbers, specials, either]
         .map(function(len, i) {
           return Array(len)
@@ -230,17 +222,14 @@ export default {
         })
         .join("");
 
-      this.$refs['passwordForm'].validate(valid => {
-
+      this.$refs['passwordForm'].validate(() => {
       })
     },
     submitForm(formName) {
-      console.log("submit form");
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.savePassword();
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -273,8 +262,7 @@ export default {
             });
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
           this.$notify({
             title: "Error",
             message: "Query Failed",

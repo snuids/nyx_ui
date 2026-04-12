@@ -19,34 +19,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version from commit message
-        id: extract_version
+      - name: Build Docker image
         run: |
-          VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
-          if [ -z "$VERSION" ]; then
-            echo "No valid version found in commit message"
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
+          docker build -t project:latest -f Dockerfile .
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push multi-platform Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: snuids/nyx_ui:${{ steps.extract_version.outputs.version }}
+      - name: Optionally push to Docker Hub
+        run: |        
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ secrets.DOCKER_USERNAME }}"  
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag project:latest snuids/nyx_ui:${{ github.event.head_commit.message }}
+          docker push snuids/nyx_ui:${{ github.event.head_commit.message }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
