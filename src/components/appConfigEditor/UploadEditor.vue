@@ -27,12 +27,8 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
 import axios from "axios";
 // import _ from "lodash";
-
-import uploadeditor from "@/components/appConfigEditor/UploadEditor";
-Vue.component("UploadEditor", uploadeditor);
 
 export default {
   field: "UploadEditor",

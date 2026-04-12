@@ -119,6 +119,8 @@ const dynamicComponents = {}
 
 req.keys().forEach(filename => {
   const name = `${filename.split('.')[1].split('/')[filename.split('.')[1].split('/').length - 1]}`
+  // Skip loading GenericComponent to avoid circular dependency
+  if (name === 'GenericComponent') return
   const component = req(filename).default
   // console.log(name)
   dynamicComponents[name] = component

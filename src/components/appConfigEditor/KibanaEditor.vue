@@ -174,12 +174,8 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
 import axios from "axios";
 // import _ from "lodash";
-
-import kibanaeditor from "@/components/appConfigEditor/KibanaEditor";
-Vue.component("KibanaEditor", kibanaeditor);
 
 export default {
   field: "KibanaEditor",
@@ -250,14 +246,11 @@ export default {
       var tmp = JSON.parse(JSON.stringify(this.curConfig));
       this.curConfig = null;
       this.curConfig = tmp;
-
-      console.log(this.curConfig.config.url)
     },
     prepareData() {
       this.loadKibanaDashboards();
     },
     openInKibana() {
-      console.log(this.currentConfig);
       window.open(
         this.currentConfig.config.url
           .replace("kibananyx", "kibana")
@@ -267,11 +260,9 @@ export default {
       );
     },
     kibanaTimeChange() {
-      console.log("kibana time changed");
       this.computeUrlFromKibana();
     },
     computeUrlFromKibana() {
-      console.log("computeUrlFromKibana");
       if (this.selectedDash != null) {
         var space = "";
         if (this.selectedDash.space != "default") {
@@ -288,9 +279,7 @@ export default {
     kibanaDashboardSelected() {
       for (var i in this.dashboards) {
         if (this.dashboards[i].id == this.currentConfig.config.kibanaId) {
-          console.log("FOUND");
           this.selectedDash = this.dashboards[i];
-          console.log(this.dashboards[i]);
         }
       }
 
@@ -455,11 +444,9 @@ export default {
       axios
         .get(url)
         .then(response => {
-          console.log("Space success...");
           this.loadKibanaDashboards2(response.data);
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
           setTimeout(() => {
             this.listLoading = false;
 
@@ -467,7 +454,6 @@ export default {
         });
     },
     loadKibanaDashboards2: async function(spaces) {
-      console.log(spaces);
       this.dashboards = [];
       for (var i in spaces) {
         var space = spaces[i];
