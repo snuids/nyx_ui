@@ -30,6 +30,7 @@
     "rison": "^0.1.1",
     "tiptap": "^0.15.0",
     "tiptap-extensions": "^0.17.0",
+    "vega-embed": "^7.1.0",
     "vue": "^2.7.16",
     "vue-awesome": "^3.5.4",
     "vue-browser-detect-plugin": "^0.1.8",
