@@ -403,7 +403,13 @@ export default {
     },
     appClicked(e) {
       if (e.type == "external") {
-        window.open(e.config.url);
+        let url = e.config.url;
+        if (url.startsWith('.')) {
+          // Build full URL from relative path
+          const origin = window.location.origin;
+          url = origin + '/' + url.replace(/^\.\//, '');
+        }        
+        window.open(url);
       } else {
         this.maintitle = e.loc_title;
     
