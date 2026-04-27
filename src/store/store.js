@@ -47,7 +47,6 @@ function stopSocket(wsObject)
   }
 }
 
-
 export default new Vuex.Store({
   state: {
     apiurl: "api/v1/",
