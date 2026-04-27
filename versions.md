@@ -6,7 +6,6 @@
 ## V3.28.4 27/Apr/2026
 * Vega fixed
 
-
 ## V3.27.0 18/Oct/2025
 * Added FROMDATE and TODATE in external url.  
 
