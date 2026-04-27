@@ -1,7 +1,8 @@
 # Version History
 
-## V3.28.5 27/Apr/2026
+## V3.28.6 27/Apr/2026
 * Jupylab path updated
+* better external address handling
 
 ## V3.28.4 27/Apr/2026
 * Vega fixed
