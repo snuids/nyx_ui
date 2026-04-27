@@ -480,7 +480,7 @@ export default {
     },
     openTabCode: function() {
       window.open(
-        "./ipython/notebooks/lambdas/runner_" +
+        "./jupylab/lab/workspaces/auto-f/tree/notebooks/lambdas/runner_" +
           this.runner +
           "/" +
           this.notebook
@@ -488,7 +488,7 @@ export default {
     },
     openTabInput: function() {
       window.open(
-        "./ipython/notebooks/lambdas/runner_" +
+        "./jupylab/lab/workspaces/auto-f/tree/notebooks/lambdas/runner_" +
           this.runner +
           "/inputs/" +
           this.selectedUuid +
