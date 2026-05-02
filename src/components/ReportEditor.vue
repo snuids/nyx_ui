@@ -790,7 +790,7 @@ export default {
       //   "./ipython/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
       // );
       window.open(
-        "./jupylab/lab/workspaces/auto-f/tree/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
+        "./jupylab/lab/workspaces/auto-f/tree/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
       );
     },
     loadPrivileges: function() {
