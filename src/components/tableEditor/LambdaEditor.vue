@@ -6,6 +6,7 @@
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="lambda-editor"
+    append-to-body
   >
 
     <!-- <h1>{{locEditMode}}</h1> -->
