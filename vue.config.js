@@ -2,5 +2,8 @@
 
 module.exports = {
     lintOnSave: false,
-    transpileDependencies: []
+    transpileDependencies: [],
+    chainWebpack: config => {
+        config.plugins.delete('eslint');
+    }
 };

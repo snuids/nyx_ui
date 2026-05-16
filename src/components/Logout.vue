@@ -57,7 +57,9 @@ export default {
           confirmButtonText: "OK",
           dangerouslyUseHTMLString: true
         }
-      );
+      ).catch(() => {
+        // User closed the dialog - no action needed
+      });
     },
     logout() {
       console.log("BEFCOMMIT");

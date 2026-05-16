@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from "axios";
 import moment from 'moment';
 import _ from "lodash";
+import packageJson from '../../package.json';
 
 import { extractURLParts } from "../globalfunctions";
 
@@ -52,7 +53,7 @@ export default new Vuex.Store({
     apiurl: "api/v1/",
     apiVersion: "",
     kibanaurl: "/kibana/",
-    version: "v3.28.7",
+    version: `v${packageJson.version}`,
     devMode: false,
     menus: [],
     menuOpen: true,

@@ -1,5 +1,15 @@
 # Version History
 
+## V3.29.1 16/May/2026
+* Fixed uncaught error when closing version info dialog
+* Store now dynamically reads version from package.json
+
+## V3.29.0 16/May/2026
+* SQLEditor: Fixed dialog rendering with append-to-body
+* SQLEditor: Added record ID to dialog title
+* SQLEditor: Fixed ace editor initialization and data loading
+* LambdaEditor: Added append-to-body for proper dialog display
+
 ## V3.28.6 27/Apr/2026
 * Jupylab path updated
 * better external address handling
