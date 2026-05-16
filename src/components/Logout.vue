@@ -49,6 +49,7 @@ export default {
           ")"
           +"<br/><strong>Browser:</strong> "+this.$browserDetect.meta.name 
           +"<br/><strong>Browser Version:</strong> "+this.$browserDetect.meta.version
+          +"<br/><strong>Token:</strong> "+this.$store.getters.creds.token
           
           ,
         "Nyx Version",
