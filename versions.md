@@ -5,6 +5,10 @@
 * Added IconPicker component with visual icon selection (957 Font Awesome icons)
 * ConfigDetails: Replaced text input with IconPicker for better icon selection
 * ReportEditor: Integrated IconPicker for consistent icon selection experience
+* ReportEditor: Added datasource selection combobox for Jasper reports
+* ReportEditor: Datasources loaded via generic_search API with description labels
+* SQLEditor: Added editable description field for SQL queries
+* SQLEditor: Added informational card with editor usage tips and keyboard shortcuts
 
 ## V3.29.1 16/May/2026
 * Fixed uncaught error when closing version info dialog

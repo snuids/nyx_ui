@@ -186,6 +186,29 @@
             </el-col>
           </el-row>
 
+          <el-row v-show="newRec.reportType=='jasper'">
+            <el-col :span="12">
+              <el-form-item
+                label="Datasource"
+                :label-width="formLabelWidth"
+              >
+                <el-select
+                  size="mini"
+                  v-model="newRec.datasource"
+                  placeholder="Select a datasource"
+                  filterable
+                >
+                  <el-option
+                    v-for="item in datasources"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-row>
             <el-col :span="12">
               <el-form-item
@@ -490,7 +513,8 @@ export default {
     uploadurl:"",  
     escomboindex: "",
     escombokey: {},
-    esMapping: {},  
+    esMapping: {},
+    datasources: [],  
     rules: {
       title: [
         { required: true, message: "Please input a Title", trigger: "change" }
@@ -711,9 +735,32 @@ export default {
         "upload?token=" +
         this.$store.getters.creds.token +
         "&queue=JASPER_UPLOAD";
+    this.loadDatasources();
     this.prepareData();
   },
   methods: {
+    loadDatasources: function() {
+      var url =
+        this.$store.getters.apiurl +
+        "generic_search/nyx_datasource?token=" +
+        this.$store.getters.creds.token;
+      
+      var searchBody = {"sort":[{"description":{"order":"asc"}}],"size":500};
+      
+      axios
+        .post(url, searchBody)
+        .then(response => {
+          if (response.data.records != null && response.data.records.length > 0) {
+            this.datasources = response.data.records.map(item => ({
+              value: item._id,
+              label: item._source.description || item._id
+            }));
+          }
+        })
+        .catch(error => {
+          console.log("Error loading datasources:", error);
+        });
+    },
     applyIndex (index){
 
       var indexToSearch = index;
