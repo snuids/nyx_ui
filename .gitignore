@@ -4,3 +4,4 @@ dist/*
 .vscode/settings.json
 yarn.lock
 package-lock.json
+available-icons.txt
