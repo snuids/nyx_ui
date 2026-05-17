@@ -79,14 +79,10 @@
                   ></el-input-number>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="8">
                 <el-form-item label="Icon" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.icon" autocomplete="off"></el-input>
+                  <IconPicker v-model="curConfig.icon" size="mini" :icon-preview="true" :preview-scale="2" />
                 </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                &nbsp;&nbsp;
-                <v-icon v-if="curConfig.icon" :name="curConfig.icon" scale="2" />
               </el-col>
             </el-row>
          
@@ -905,6 +901,7 @@
 </template>
 <script>
 import freetextdetails from "@/components/FreeTextDetails";
+import iconpicker from "@/components/IconPicker";
 
 import queryfiltereditor from "@/components/appConfigEditor/QueryFilterEditor";
 import estableeditor from "@/components/appConfigEditor/ESTableEditor";
@@ -920,6 +917,7 @@ import rison from "rison";
 import YAML from "js-yaml";
 
 Vue.component("FreeTextDetails", freetextdetails);
+Vue.component("IconPicker", iconpicker);
 
 Vue.component("QueryFilterEditor", queryfiltereditor);
 Vue.component("ESTableEditor", estableeditor);
@@ -1393,7 +1391,5 @@ export default {
 }
 .searchfield {
   width: 150px !important;
-}
-.addbutton {
 }
 </style>

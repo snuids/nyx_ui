@@ -10,14 +10,9 @@
                 <el-input size="mini" v-model="newRec.title" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="10">
               <el-form-item label="Icon" :label-width="formLabelWidth"  prop="icon">
-                <el-input size="mini" v-model="newRec.icon" autocomplete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="2">
-              <el-form-item>
-                <v-icon :name="newRec.icon" scale="2.2" />
+                <IconPicker v-model="newRec.icon" size="mini" :icon-preview="true" :preview-scale="2.2" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -475,9 +470,13 @@
 
 <script>
 import axios from "axios";
+import IconPicker from "@/components/IconPicker";
 
 export default {
   name: "ReportEditor",
+  components: {
+    IconPicker
+  },
   data: () => ({
     orgRec: null,
     newRec: { title: "NA" },
@@ -771,7 +770,8 @@ export default {
     },
     successUpload: function(response, file, fileList) {
       console.log("emit event on-success");
-      this.newRec.jasper="./reports/jasper/"+file.raw.name;
+      const login = this.$store.getters.creds.user.login;
+      this.newRec.jasper="./jasperdef/"+login+"/"+file.raw.name;
       this.$notify({
         title: "Jasper uploaded.",
         type: "success",

@@ -1,5 +1,11 @@
 # Version History
 
+## V3.29.2 17/May/2026
+* ReportEditor: Jasper uploads now use user-specific path (./jasperdef/{login}/{filename})
+* Added IconPicker component with visual icon selection (957 Font Awesome icons)
+* ConfigDetails: Replaced text input with IconPicker for better icon selection
+* ReportEditor: Integrated IconPicker for consistent icon selection experience
+
 ## V3.29.1 16/May/2026
 * Fixed uncaught error when closing version info dialog
 * Store now dynamically reads version from package.json
