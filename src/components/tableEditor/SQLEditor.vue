@@ -12,6 +12,18 @@
       <el-form>
         <el-row>
           <el-col :span="24">
+            <el-form-item label="Description" :label-width="formLabelWidth">
+              <el-input
+                size="mini"
+                v-model="description"
+                placeholder="Enter a description for this SQL query"
+                autocomplete="off"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="SQL Query" :label-width="formLabelWidth">
               <editor
                 v-if="sqlQuery"
@@ -51,6 +63,8 @@ export default {
     formLabelWidth: "120px",
     sqlQuery: "",
     originalQuery: "",
+    description: "",
+    originalDescription: "",
     queryFieldPath: null, // Store the path to the query field
     _keyListener: null,
     aceEditor: null, // Store ace editor instance
@@ -61,7 +75,7 @@ export default {
   },
   computed: {
     hasChanged: function() {
-      return this.sqlQuery !== this.originalQuery;
+      return this.sqlQuery !== this.originalQuery || this.description !== this.originalDescription;
     },
     title: function() {
       if (this.record && this.record._id) {
@@ -210,6 +224,17 @@ export default {
       this.sqlQuery = query || "";
       this.originalQuery = query || "";
       
+      // Load description field
+      let desc = "";
+      if (this.record._source && this.record._source.description !== undefined) {
+        desc = this.record._source.description;
+      } else if (this.record.description !== undefined) {
+        desc = this.record.description;
+      }
+      
+      this.description = desc || "";
+      this.originalDescription = desc || "";
+      
       // Force editor re-render with new data
       this.editorKey++;
       
@@ -262,6 +287,13 @@ export default {
           updatedRecord.query = this.sqlQuery;
         }
       }
+      
+      // Save description field
+      if (updatedRecord._source) {
+        updatedRecord._source.description = this.description;
+      } else {
+        updatedRecord.description = this.description;
+      }
 
       this.$store.commit({
         type: "updateRecord",
@@ -276,6 +308,7 @@ export default {
       });
 
       this.originalQuery = this.sqlQuery;
+      this.originalDescription = this.description;
       this.dialogFormVisible = false;
       this.$emit("dialogcloseupdated");
     }
