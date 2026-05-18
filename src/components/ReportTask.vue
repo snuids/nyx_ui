@@ -23,6 +23,26 @@
       <LogViewer :logObj="logObj"></LogViewer>
     </el-dialog>
 
+    <el-dialog
+      title="PDF Viewer"
+      :visible.sync="pdfDialogVisible"
+      :before-close="closePdfDialog"
+      width="90%"
+      top="5vh"
+    >
+      <div style="height: 80vh;">
+        <iframe
+          v-if="pdfUrl"
+          :src="pdfUrl"
+          style="width: 100%; height: 100%; border: none;"
+        ></iframe>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closePdfDialog">{{ $t('buttons.cancel') || 'Close' }}</el-button>
+        <el-button type="primary" @click="openPdfInNewTab">{{ $t('generic.open_in_new_tab') || 'Open in New Tab' }}</el-button>
+      </span>
+    </el-dialog>
+
     <el-table
       size="mini"
       :data="tableData.filter(data => !search || data._source.creds.user.id.toLowerCase().includes(search.toLowerCase()) ||   data._source.report.title.toLowerCase().includes(search.toLowerCase() ))"
@@ -172,6 +192,8 @@ export default {
     search: "",
     dialogFormVisible: false,
     LogViewerVisible: false,
+    pdfDialogVisible: false,
+    pdfUrl: "",
     loadingData: false,
     formLabelWidth: "120px",
     curReport: {},
@@ -314,9 +336,24 @@ export default {
       return "info";
     },
     downloadFile(item) {
-      //alert(item.url);
-      // var win =
-      window.open(item.url, "_blank");
+      // Check if it's a PDF file
+      if (item.extension && item.extension.toLowerCase() === 'pdf') {
+        // Open PDF in dialog
+        this.pdfUrl = item.url;
+        this.pdfDialogVisible = true;
+      } else {
+        // Open other files in new tab as before
+        window.open(item.url, "_blank");
+      }
+    },
+    closePdfDialog() {
+      this.pdfDialogVisible = false;
+      this.pdfUrl = "";
+    },
+    openPdfInNewTab() {
+      if (this.pdfUrl) {
+        window.open(this.pdfUrl, "_blank");
+      }
     },
     loadData: _.throttle(function() {
       if (this.loadingData) return;

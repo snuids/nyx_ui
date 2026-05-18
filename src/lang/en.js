@@ -73,7 +73,8 @@ export const messages = {
         type_to_search:'Type to search',
         parameters:'Parameters',
         refresh:'Refresh',
-        logs:'Logs'
+        logs:'Logs',
+        open_in_new_tab:'Open in New Tab'
       }
       ,
       buttons:{      
