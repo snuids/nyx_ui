@@ -1,6 +1,6 @@
 {
   "name": "nyx_ui2",
-  "version": "3.29.2",
+  "version": "3.29.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

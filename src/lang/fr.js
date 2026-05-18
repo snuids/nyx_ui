@@ -77,7 +77,8 @@ export const messages = {
         type_to_search:'Chercher',
         parameters:'Paramètres',
         refresh:'Rafraichir',
-        logs:'Journaux'  
+        logs:'Journaux',
+        open_in_new_tab:'Ouvrir dans un nouvel onglet'
       }
       ,
       buttons:{      
