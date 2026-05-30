@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.4 30/May/2026
+* Powered by Grafana icon hidden
+
 ## V3.29.2 17/May/2026
 * ReportEditor: Jasper uploads now use user-specific path (./jasperdef/{login}/{filename})
 * Added IconPicker component with visual icon selection (957 Font Awesome icons)
