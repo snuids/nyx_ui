@@ -183,7 +183,7 @@ export default {
         .replace(/'/g,"").replace("time:", "");
 
         
-        var url="."+this.config.config.url+"?kiosk"
+        var url="."+this.config.config.url+"?kiosk=true&hideLogo=true"
         url=url.replace("grafana/","grafananyx/");
         console.log("GRAFANA URL: ", url);
         
