@@ -78,7 +78,8 @@ export const messages = {
         parameters:'Paramètres',
         refresh:'Rafraichir',
         logs:'Journaux',
-        open_in_new_tab:'Ouvrir dans un nouvel onglet'
+        open_in_new_tab:'Ouvrir dans un nouvel onglet',
+        download:'Télécharger'
       }
       ,
       buttons:{      

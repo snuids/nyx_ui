@@ -74,7 +74,8 @@ export const messages = {
         parameters:'Parameters',
         refresh:'Refresh',
         logs:'Logs',
-        open_in_new_tab:'Open in New Tab'
+        open_in_new_tab:'Open in New Tab',
+        download:'Download'
       }
       ,
       buttons:{      
