@@ -235,18 +235,34 @@ const myExport = {
     console.log("===============  REGISTERING: messagereceived");
     this.$globalbus.$on("messagereceived", payLoad => {
       console.log("GLOBALBUS/GENERICCOMPONENT/MESSAGERECEIVED");
-      console.log(payLoad);
-      if(payLoad.notif_type=="global")
+      console.log("payLoad:", JSON.stringify(payLoad));
+      
+      // Handle nested data structure from websocket
+      const data = payLoad.data || payLoad;
+      
+      if(data.notif_type=="global")
       {
-        this.$alert(payLoad.notif_message, payLoad.notif_title, {
-          confirmButtonText: 'OK'   ,     
-          type: payLoad.notif_message_type
-        }).then(() => {
-          
+        console.log("Showing notification with:", {
+          title: data.notif_title,
+          message: data.notif_message,
+          type: data.notif_message_type
         });
+        
+        try {
+          this.$notify({
+            title: data.notif_title || 'Notification',
+            message: data.notif_message || '',
+            type: data.notif_message_type || 'info',
+            position: 'bottom-right',
+            duration: 4500
+          });
+          console.log("Notification called successfully");
+        } catch (err) {
+          console.error("Error showing notification:", err);
+        }
       }
       else{
-        this.$localbus.$emit("localmessagereceived",payLoad);
+        this.$localbus.$emit("localmessagereceived", data);
       }
       
     });  

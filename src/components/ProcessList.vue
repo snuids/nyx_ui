@@ -1,56 +1,56 @@
 <template>
   <div style="position:relative;overflow: hidden;">
-    <el-dialog :title="'Process '+detailsName+' ('+detailsVersion+')'" :visible.sync="dialogVisible" width="65%">
+    <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" :visible.sync="dialogVisible" width="65%">
       <el-tabs v-model="tabName" @tab-click="handleClick">
-        <el-tab-pane label="General" name="first">
+        <el-tab-pane :label="$t('processlist.tab_general')" name="first">
           <el-table
             size="small"
             max-height="400"
             border
             :data="procWindowDetails">
             <el-table-column prop="0"
-                            label="Field"
+                            :label="$t('processlist.col_field')"
                             min-width="150"
                             sortable
                             show-overflow-tooltip/>
             <el-table-column prop="1"
-                            label="Value"
+                            :label="$t('processlist.col_value')"
                             min-width="424"
                             sortable
                             show-overflow-tooltip/>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="Messages In" name="second" v-if="inMessages.length > 0">
+        <el-tab-pane :label="$t('processlist.tab_messages_in')" name="second" v-if="inMessages.length > 0">
           <el-table
             size="small"
             max-height="400"
             border
             :data="inMessages">
             <el-table-column prop="0"
-                            label="Topic"
+                            :label="$t('processlist.col_topic')"
                             min-width="150"
                             sortable
                             show-overflow-tooltip/>
             <el-table-column prop="1"
-                            label="Number of Messages"
+                            :label="$t('processlist.col_number_messages')"
                             min-width="424"
                             sortable
                             show-overflow-tooltip/>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="Messages Out" name="third" v-if="outMessages.length > 0">
+        <el-tab-pane :label="$t('processlist.tab_messages_out')" name="third" v-if="outMessages.length > 0">
           <el-table
             size="small"
             max-height="400"
             border
             :data="outMessages">
             <el-table-column prop="0"
-                            label="Topic"
+                            :label="$t('processlist.col_topic')"
                             min-width="150"
                             sortable
                             show-overflow-tooltip/>
             <el-table-column prop="1"
-                            label="Number of Messages"
+                            :label="$t('processlist.col_number_messages')"
                             min-width="424"
                             sortable
                             show-overflow-tooltip/>
@@ -59,7 +59,7 @@
       </el-tabs>
       
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">Close</el-button>
+        <el-button type="primary" @click="dialogVisible = false">{{ $t('processlist.close') }}</el-button>
       </span>
     </el-dialog>
 
@@ -67,12 +67,12 @@
       <el-form>
         <el-row :gutter="10">
           <el-col :span="6"> 
-            <el-form-item label="Filter" :label-width="formLabelWidth">
+            <el-form-item :label="$t('processlist.filter')" :label-width="formLabelWidth">
               <el-input size="mini" v-model="filter" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="Lifesign Timeframe">
+            <el-form-item :label="$t('processlist.lifesign_timeframe')">
               <el-select
               v-model="selectedTimeframe"
               size="small">
@@ -109,19 +109,19 @@
               />
             </div>              
             <div style="position:absolute;left:60px;">
-              <b>Version</b>
+              <b>{{ $t('processlist.version') }}</b>
               :{{dat.version}}
               <br />
-              <b>LifeSigns</b>
+              <b>{{ $t('processlist.lifesigns') }}</b>
               :{{dat.count}}
               <br />
-              <b>Messages</b>
+              <b>{{ $t('processlist.messages') }}</b>
               :{{dat.messages}}
               <br />
-              <b>Last Life Sign</b>
+              <b>{{ $t('processlist.last_lifesign') }}</b>
               :{{dat.lifesigntime}}
               <br />
-              <b>Start Time</b>
+              <b>{{ $t('processlist.start_time') }}</b>
               :{{dat.starttime}}
               <br />
             </div>
@@ -147,12 +147,7 @@ export default {
   data: () => ({
     selectedTimeframe: '5m',
     tabName: "first",
-    timeframes: [
-      {key:"7d", value: "7 days"},
-      {key:"1d", value: "1 day"},
-      {key:"1h", value: "1 hour"},
-      {key:"5m", value: "5 minutes"}
-    ],
+    timeframes: [],
     data: [],
     dialogVisible: false,
     formLabelWidth: "120px",
@@ -399,6 +394,12 @@ export default {
     }
   },
   created: function() {
+    this.timeframes = [
+      {key:"7d", value: this.$t('processlist.timeframe_7d')},
+      {key:"1d", value: this.$t('processlist.timeframe_1d')},
+      {key:"1h", value: this.$t('processlist.timeframe_1h')},
+      {key:"5m", value: this.$t('processlist.timeframe_5m')}
+    ];
     this.loadData();
     this.timer = setInterval(this.loadData, 5000);
   },

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     width="80%"
-    :title="isAdd?'Create Application':'Modify Application'"
+    :title="isAdd?$t('configdetails.create_application'):$t('configdetails.modify_application')"
     :visible.sync="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
@@ -9,16 +9,16 @@
   >
     <el-form :model="curConfig">
       <el-tabs v-model="activeName" @tab-click="refresh2" >
-        <el-tab-pane label="Main" name="main" key="main">
+        <el-tab-pane :label="$t('configdetails.tab_main')" name="main" key="main">
           <el-card>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="Category" :label-width="formLabelWidth">
+                <el-form-item :label="$t('configdetails.category')" :label-width="formLabelWidth">
                   <el-autocomplete
                     class="inline-input"
                     v-model="curConfig.category"
                     :fetch-suggestions="categorySuggestion"
-                    placeholder="Enter Category"
+                    :placeholder="$t('configdetails.enter_category')"
                     @select="handleSelect"
                     size="mini"
                     style="width:100%"
@@ -26,12 +26,12 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="Sub/Category" :label-width="formLabelWidth">
+                <el-form-item :label="$t('configdetails.subcategory')" :label-width="formLabelWidth">
                   <el-autocomplete
                     class="inline-input"
                     v-model="curConfig.subcategory"
                     :fetch-suggestions="subcategorySuggestion"
-                    placeholder="Enter Sub/Category"
+                    :placeholder="$t('configdetails.enter_subcategory')"
                     @select="handleSelect"
                     size="mini"
                     style="width:100%"
@@ -39,37 +39,37 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="Title" :label-width="formLabelWidth">
+                <el-form-item :label="$t('configdetails.title')" :label-width="formLabelWidth">
                   <el-input size="mini" v-model="curConfig.title" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="Type" :label-width="formLabelWidth" style="text-align: left;">
+                <el-form-item :label="$t('configdetails.type')" :label-width="formLabelWidth" style="text-align: left;">
                   <el-select
                     size="mini"
                     @change="typeChanged"
                     v-model="curConfig.type"
-                    placeholder="Please select a type"
+                    :placeholder="$t('configdetails.select_type')"
                     style="width:100%"
                   >
-                    <el-option label="ES Table" value="generic-table"></el-option>
-                    <el-option label="SQL Table" value="pgsql-generic-table"></el-option>
-                    <el-option label="Kibana" value="kibana"></el-option>
-                    <el-option label="Grafana" value="grafana"></el-option>
-                    <el-option label="External" value="external"></el-option>
-                    <el-option label="Upload" value="upload"></el-option>
-                    <el-option label="Internal" value="internal"></el-option>
-                    <el-option label="Form" value="form"></el-option>
-                    <el-option label="Free Text" value="free-text"></el-option>
-                    <el-option label="File System" value="file-system"></el-option>
-                    <el-option label="Vega" value="vega"></el-option>
+                    <el-option :label="$t('configdetails.type_es_table')" value="generic-table"></el-option>
+                    <el-option :label="$t('configdetails.type_sql_table')" value="pgsql-generic-table"></el-option>
+                    <el-option :label="$t('configdetails.type_kibana')" value="kibana"></el-option>
+                    <el-option :label="$t('configdetails.type_grafana')" value="grafana"></el-option>
+                    <el-option :label="$t('configdetails.type_external')" value="external"></el-option>
+                    <el-option :label="$t('configdetails.type_upload')" value="upload"></el-option>
+                    <el-option :label="$t('configdetails.type_internal')" value="internal"></el-option>
+                    <el-option :label="$t('configdetails.type_form')" value="form"></el-option>
+                    <el-option :label="$t('configdetails.type_free_text')" value="free-text"></el-option>
+                    <el-option :label="$t('configdetails.type_file_system')" value="file-system"></el-option>
+                    <el-option :label="$t('configdetails.type_vega')" value="vega"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="Order" :label-width="formLabelWidth" style="text-align: left;">
+                <el-form-item :label="$t('configdetails.order')" :label-width="formLabelWidth" style="text-align: left;">
                   <el-input-number
                     style="width:100%"
                     :min="1"
@@ -80,7 +80,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="Icon" :label-width="formLabelWidth">
+                <el-form-item :label="$t('configdetails.icon')" :label-width="formLabelWidth">
                   <IconPicker v-model="curConfig.icon" size="mini" :icon-preview="true" :preview-scale="2" />
                 </el-form-item>
               </el-col>
@@ -92,9 +92,9 @@
                 <v-icon name="chart-pie" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays a kibana dashboard.</b>
+                <b>{{ $t('configdetails.desc_kibana') }}</b>
                 <br/> 
-                The dashboard must previously be created in Kibana.<br/> 
+                {{ $t('configdetails.desc_kibana_detail') }}<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -106,9 +106,9 @@
                 <v-icon name="chart-pie" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays a grafana dashboard.</b>
+                <b>{{ $t('configdetails.desc_grafana') }}</b>
                 <br/> 
-                The dashboard must previously be created in Grafana.<br/> 
+                {{ $t('configdetails.desc_grafana_detail') }}<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -120,9 +120,9 @@
                 <v-icon name="table" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays a collection stored in elastic search.</b>
+                <b>{{ $t('configdetails.desc_es_table') }}</b>
                 <br/> 
-                It displays the data as a table that can optionaly include a time line or a map.<br/> 
+                {{ $t('configdetails.desc_es_table_detail') }}<br/> 
                 
                 <br/> 
               </el-col>
@@ -150,12 +150,12 @@
                 <v-icon name="external-link-alt" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays an external URL in an iframe.</b>
+                <b>{{ $t('configdetails.desc_external') }}</b>
                 <br/> 
-                AIt the external url contains <b>token=TOKEN</b>, the <b>TOKEN</b> tag is replaced by the actual user token.<br/> 
-                 <b>HOST</b> by the <b>the host name</b>. and <b>API</b> by the <b>API URL</b>.<br/>                 
+                {{ $t('configdetails.desc_external_detail_1') }}<br/> 
+                <b>{{ $t('configdetails.desc_external_detail_2') }}</b><br/>                 
                 <br/> 
-                It replaces the TODATE and FROMDATE tags if a time selector is enabled. (Using Unix Timestamp)
+                {{ $t('configdetails.desc_external_detail_3') }}
                 
               </el-col>
               </el-card>
@@ -167,9 +167,9 @@
                 <v-icon name="file-upload" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays an upload form.</b>
+                <b>{{ $t('configdetails.desc_upload') }}</b>
                 <br/> 
-                The file is sent to an ActiveMQ destination and can be handled by Camel, NodeRed or a Lambda.<br/> 
+                {{ $t('configdetails.desc_upload_detail') }}<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -181,9 +181,9 @@
                 <v-icon name="regular/folder-open" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays a file explorer.</b>
+                <b>{{ $t('configdetails.desc_file_system') }}</b>
                 <br/> 
-                The file system must be shared with the nyx_ui container via Docker.<br/> 
+                {{ $t('configdetails.desc_file_system_detail') }}<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -195,9 +195,9 @@
                 <v-icon name="cogs" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays an internal VUE controller.</b>
+                <b>{{ $t('configdetails.desc_internal') }}</b>
                 <br/> 
-                This controller must be added to the external nyx_ui folder and the UI recompiled.<br/> 
+                {{ $t('configdetails.desc_internal_detail') }}<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -209,9 +209,9 @@
                 <v-icon name="regular/keyboard" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays an input form.</b>
+                <b>{{ $t('configdetails.desc_form') }}</b>
                 <br/> 
-                Fields of the form must be filled by the user. The target of the form can be an elastic search collection or a message.<br/> 
+                {{ $t('configdetails.desc_form_detail') }}<br/> 
                 <br/> 
               </el-col>
               </el-card>
@@ -223,9 +223,9 @@
                 <v-icon name="align-left" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Experimental</b>
+                <b>{{ $t('configdetails.desc_free_text') }}</b>
                 <br/>                 
-                Displays html
+                {{ $t('configdetails.desc_free_text_detail') }}
                 <br/> 
               </el-col>
               </el-card>
@@ -237,11 +237,11 @@
                 <v-icon name="align-left" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Experimental</b>
+                <b>{{ $t('configdetails.desc_vega') }}</b>
                 <br/>                 
-                Displays a vega visualization. The data must be accessed via a data source defined in NYX.<br/>
-                Ex: <b>https://173.242.183.147/api/v1/datasource/my_ds1?token=@TOKEN@&start=@START@&end=@END@</b>
-                <br/>START and END are only used if a time selector is checked.
+                {{ $t('configdetails.desc_vega_detail_1') }}<br/>
+                {{ $t('configdetails.desc_vega_detail_2') }}
+                <br/>{{ $t('configdetails.desc_vega_detail_3') }}
                 <br/> 
               </el-col>
               </el-card>
@@ -256,35 +256,35 @@
               <el-col :span="8">
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.queryBarChecked" active-text="Query Bar" @change="query_bar_changed"></el-switch>
+                    <el-switch v-model="curConfig.queryBarChecked" :active-text="$t('configdetails.query_bar')" @change="query_bar_changed"></el-switch>
                   </el-row>
                   <el-row>
-                    <el-switch v-model="curConfig.downloadChecked" active-text="Download"></el-switch>
+                    <el-switch v-model="curConfig.downloadChecked" :active-text="$t('configdetails.download')"></el-switch>
                   </el-row>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.queryFilterChecked" active-text="Query Filter" @change="query_filter_changed"></el-switch>
+                    <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
                   <el-row>
-                    <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+                    <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
                   </el-row>
 
                   <el-row>
                     <el-select
                       size="mini"
                       v-model="curConfig.timeSelectorType"
-                      placeholder="Please select a type"
+                      :placeholder="$t('configdetails.select_type')"
                       @change="timeSelectorTypeChange"
                     >
-                      <el-option label="Free" value="classic"></el-option>
-                      <el-option label="Day" value="day"></el-option>
-                      <el-option label="Month" value="month"></el-option>
-                      <el-option label="Week" value="week"></el-option>
-                      <el-option label="Year" value="year"></el-option>
+                      <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                      <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                      <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                      <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                      <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
                     </el-select>
                   </el-row>
                 </el-form-item>
@@ -296,10 +296,10 @@
               >
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.graphicChecked" active-text="Graphic"></el-switch>
+                    <el-switch v-model="curConfig.graphicChecked" :active-text="$t('configdetails.graphic')"></el-switch>
                   </el-row>
                   <el-row>
-                    <el-switch v-model="curConfig.mapChecked" active-text="Map"></el-switch>
+                    <el-switch v-model="curConfig.mapChecked" :active-text="$t('configdetails.map')"></el-switch>
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -309,26 +309,26 @@
            
             <el-form-item
               v-if="(curConfig.type === 'external')"
-              label="Url"
+              :label="$t('configdetails.url')"
               :label-width="formLabelWidth"
             >
               <el-input size="mini" v-model="curConfig.config.url" autocomplete="off"></el-input>
               <el-row>
-                <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+                <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
               </el-row>
 
               <el-row>
                 <el-select
                   size="mini"
                   v-model="curConfig.timeSelectorType"
-                  placeholder="Please select a type"
+                  :placeholder="$t('configdetails.select_type')"
                   @change="timeSelectorTypeChange"
                 >
-                  <el-option label="Free" value="classic"></el-option>
-                  <el-option label="Day" value="day"></el-option>
-                  <el-option label="Month" value="month"></el-option>
-                  <el-option label="Week" value="week"></el-option>
-                  <el-option label="Year" value="year"></el-option>
+                  <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                  <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                  <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                  <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                  <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
                 </el-select>
               </el-row>
             </el-form-item>
@@ -336,14 +336,14 @@
             <!-- Controller -->
             <el-form-item
               v-if="(curConfig.type === 'internal')"
-              label="Controller"
+              :label="$t('configdetails.controller')"
               :label-width="formLabelWidth"
             >
               <el-input size="mini" v-model="curConfig.config.controller" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item
               v-if="(curConfig.type === 'internal')"
-              label="Parameters"
+              :label="$t('configdetails.parameters')"
               :label-width="formLabelWidth"
             >
               <el-input
@@ -355,7 +355,7 @@
 
           </el-card>
         </el-tab-pane>
-        <el-tab-pane label="Privileges" name="privileges" key="privileges">
+        <el-tab-pane :label="$t('configdetails.tab_privileges')" name="privileges" key="privileges">
           <el-card>
             <div>
               <div style="display: table;margin: 0 auto;">
@@ -368,7 +368,7 @@
                   label: 'desc'
                 }"
                   :data="allPrivileges"
-                  :titles="['Available', 'Assigned']"
+                  :titles="[$t('configdetails.available'), $t('configdetails.assigned')]"
                 ></el-transfer>
               </div>
             </div>
@@ -376,7 +376,7 @@
           </el-card>
         </el-tab-pane>
         <el-tab-pane
-          label="Table"
+          :label="$t('configdetails.tab_table')"
           name="pgtable"
           key="pgtable"
           v-if="(curConfig.type === 'pgsql-generic-table')"
@@ -391,35 +391,35 @@
               <el-col :span="8">
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.queryBarChecked" active-text="Query Bar" @change="query_bar_changed"></el-switch>
+                    <el-switch v-model="curConfig.queryBarChecked" :active-text="$t('configdetails.query_bar')" @change="query_bar_changed"></el-switch>
                   </el-row>
                   <el-row>
-                    <el-switch v-model="curConfig.downloadChecked" active-text="Download"></el-switch>
+                    <el-switch v-model="curConfig.downloadChecked" :active-text="$t('configdetails.download')"></el-switch>
                   </el-row>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.queryFilterChecked" active-text="Query Filter" @change="query_filter_changed"></el-switch>
+                    <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
                   <el-row>
-                    <el-switch v-model="curConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+                    <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
                   </el-row>
 
                   <el-row>
                     <el-select
                       size="mini"
                       v-model="curConfig.timeSelectorType"
-                      placeholder="Please select a type"
+                      :placeholder="$t('configdetails.select_type')"
                       @change="timeSelectorTypeChange"
                     >
-                      <el-option label="Free" value="classic"></el-option>
-                      <el-option label="Day" value="day"></el-option>
-                      <el-option label="Month" value="month"></el-option>
-                      <el-option label="Week" value="week"></el-option>
-                      <el-option label="Year" value="year"></el-option>
+                      <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                      <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                      <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                      <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                      <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
                     </el-select>
                   </el-row>
                 </el-form-item>
@@ -430,10 +430,10 @@
               >
                 <el-form-item label :label-width="formLabelWidth">
                   <el-row>
-                    <el-switch v-model="curConfig.graphicChecked" active-text="Graphic"></el-switch>
+                    <el-switch v-model="curConfig.graphicChecked" :active-text="$t('configdetails.graphic')"></el-switch>
                   </el-row>
                   <el-row>
-                    <el-switch v-model="curConfig.mapChecked" active-text="Map"></el-switch>
+                    <el-switch v-model="curConfig.mapChecked" :active-text="$t('configdetails.map')"></el-switch>
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -441,15 +441,15 @@
               <el-row>
                 
                   <el-col :span="6">
-                    <el-form-item label="Database Type" :label-width="formLabelWidth">
+                    <el-form-item :label="$t('configdetails.database_type')" :label-width="formLabelWidth">
                       <el-select
                         size="mini"
                         v-model="curConfig.config.databaseType"
-                        placeholder="Select DB Type"
+                        :placeholder="$t('configdetails.select_db_type')"
                         style="width: 100%;"
                       >
-                        <el-option label="PostgreSQL" value="postgres"></el-option>
-                        <el-option label="SQL Server" value="sqlserver"></el-option>
+                        <el-option :label="$t('configdetails.db_type_postgresql')" value="postgres"></el-option>
+                        <el-option :label="$t('configdetails.db_type_sqlserver')" value="sqlserver"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -458,13 +458,13 @@
               <el-row>
 
                 <el-col :span="6">
-                  <el-form-item label="Database" :label-width="formLabelWidth">
-                    <el-input   size="mini" v-model="curConfig.config.database" placeholder="Database Name" autocomplete="off"></el-input>
+                  <el-form-item :label="$t('configdetails.database')" :label-width="formLabelWidth">
+                    <el-input   size="mini" v-model="curConfig.config.database" :placeholder="$t('configdetails.database_name_placeholder')" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>        
                 
                 <el-col :span="6">
-                  <el-form-item label="Index/Table" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.index_table')" :label-width="formLabelWidth">
                     <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
@@ -475,14 +475,14 @@
 
                 <el-col :span="6">
                   <el-form-item
-                    label="Doc Type"
+                    :label="$t('configdetails.doc_type')"
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
                     <el-input size="mini" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
                   </el-form-item>
                   <el-form-item
-                    label="PKey"
+                    :label="$t('configdetails.pkey')"
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'pgsql-generic-table')"
                   >
@@ -491,7 +491,7 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item
-                    label="Map Field"
+                    :label="$t('configdetails.map_field')"
                     :label-width="formLabelWidth"
                     v-if="curConfig.mapChecked"
                   >
@@ -502,17 +502,17 @@
 
               <el-row>
                 <el-col :span="6">
-                  <el-form-item label="Sort" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.sort')" :label-width="formLabelWidth">
                     <el-input size="mini" v-model="curConfig.config.sort_column" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="Order" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.sort_order" placeholder="ascending/descending" autocomplete="off"></el-input>
+                  <el-form-item :label="$t('configdetails.order')" :label-width="formLabelWidth">
+                    <el-input size="mini" v-model="curConfig.config.sort_order" :placeholder="$t('configdetails.order_placeholder')" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col> 
                 <el-col :span="6">
-                  <el-form-item label="Time Field" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.time_field')" :label-width="formLabelWidth">
                     <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
@@ -521,9 +521,9 @@
 
               <el-row v-if="(curConfig.type === 'pgsql-generic-table')">
                 <el-col :span="24">
-                  <el-form-item label="SQL" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.sql')" :label-width="formLabelWidth">
                     <el-input
-                      placeholder="SQL: select * from my_table"
+                      :placeholder="$t('configdetails.sql_placeholder')"
                       size="mini"
                       v-model="curConfig.config.sql"
                       autocomplete="off"
@@ -533,9 +533,9 @@
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="Editor" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.editor')" :label-width="formLabelWidth">
                     <el-input
-                      placeholder="Your specific component url. Eg. specificComponent"
+                      :placeholder="$t('configdetails.editor_placeholder')"
                       size="mini"
                       v-model="curConfig.config.editorComponent"
                       autocomplete="off"
@@ -544,7 +544,7 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item
-                    label="Default Order"
+                    :label="$t('configdetails.default_order')"
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
@@ -557,15 +557,15 @@
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
-                    <el-checkbox v-model="curConfig.config.orderDirection">Descending</el-checkbox>
+                    <el-checkbox v-model="curConfig.config.orderDirection">{{ $t('configdetails.descending') }}</el-checkbox>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="Export" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.export')" :label-width="formLabelWidth">
                     <el-input
-                      placeholder="Columns to export"
+                      :placeholder="$t('configdetails.export_placeholder')"
                       size="mini"
                       v-model="curConfig.config.exportColumns"
                       autocomplete="off"
@@ -573,7 +573,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="Write Privilege" :label-width="formLabelWidth">
+                  <el-form-item :label="$t('configdetails.write_privilege')" :label-width="formLabelWidth">
                     <!-- <el-input
                       size="mini"
                       v-model="curConfig.config.writeprivileges"
@@ -586,7 +586,7 @@
                       filterable
                       allow-create
                       ref="writePrivileges"
-                      placeholder="write privileges"
+                      :placeholder="$t('configdetails.write_privilege_placeholder')"
                       size="mini"
                       style="width:100%;"
                     >
@@ -607,7 +607,7 @@
                 <el-col :span="20">
                   <!-- Header dialog -->
                   <el-dialog
-                    title="Columns"
+                    :title="$t('configdetails.columns')"
                     :visible.sync="dialogHeaderVisible"
                     width="30%"
                     append-to-body
@@ -615,30 +615,30 @@
                     <el-form v-if="currentHeader" :model="currentHeader">
                       <el-row :gutter="20">
                         <el-col :span="20">
-                          <el-form-item label="Field" :label-width="formLabelWidth">
+                          <el-form-item :label="$t('configdetails.field')" :label-width="formLabelWidth">
                             <el-input size="mini" v-model="currentHeader.field" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row :gutter="20">
                         <el-col :span="20">
-                          <el-form-item label="Title" :label-width="formLabelWidth">
+                          <el-form-item :label="$t('configdetails.title')" :label-width="formLabelWidth">
                             <el-input size="mini" v-model="currentHeader.title" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row :gutter="20">
                         <el-col :span="20">
-                          <el-form-item label="Type" :label-width="formLabelWidth">
+                          <el-form-item :label="$t('configdetails.type')" :label-width="formLabelWidth">
                             <el-select
                               size="mini"
                               v-model="currentHeader.type"
-                              placeholder="Please select a type"
+                              :placeholder="$t('configdetails.select_type')"
                             >
-                              <el-option label="Generic" value="generic"></el-option>
-                              <el-option label="Date" value="date"></el-option>
-                              <el-option label="Timestamp" value="timestamp"></el-option>
-                              <el-option label="Boolean" value="boolean"></el-option>
+                              <el-option :label="$t('configdetails.col_type_generic')" value="generic"></el-option>
+                              <el-option :label="$t('configdetails.col_type_date')" value="date"></el-option>
+                              <el-option :label="$t('configdetails.col_type_timestamp')" value="timestamp"></el-option>
+                              <el-option :label="$t('configdetails.col_type_boolean')" value="boolean"></el-option>
                             </el-select>
                           </el-form-item>
                         </el-col>
@@ -648,14 +648,14 @@
                         v-if="currentHeader.type=='date' || currentHeader.type=='timestamp'"
                       >
                         <el-col :span="20">
-                          <el-form-item label="Format" :label-width="formLabelWidth">
+                          <el-form-item :label="$t('configdetails.format')" :label-width="formLabelWidth">
                             <el-input size="mini" v-model="currentHeader.format" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
-                      <el-button type="primary" @click="dialogHeaderVisible = false">Close</el-button>
+                      <el-button type="primary" @click="dialogHeaderVisible = false">{{ $t('configdetails.close') }}</el-button>
                     </span>
                   </el-dialog>
 
@@ -666,11 +666,11 @@
                     border
                     style="width: 100%"
                   >
-                    <el-table-column prop="field" label="Field"></el-table-column>
-                    <el-table-column prop="title" label="Title"></el-table-column>
-                    <el-table-column prop="type" label="Type"></el-table-column>
-                    <el-table-column prop="format" label="Format"></el-table-column>
-                    <el-table-column prop="title" label="Action">
+                    <el-table-column prop="field" :label="$t('configdetails.field')"></el-table-column>
+                    <el-table-column prop="title" :label="$t('configdetails.title')"></el-table-column>
+                    <el-table-column prop="type" :label="$t('configdetails.type')"></el-table-column>
+                    <el-table-column prop="format" :label="$t('configdetails.format')"></el-table-column>
+                    <el-table-column prop="title" :label="$t('configdetails.action')">
                       <template slot-scope="scope2">
                         <el-button
                           size="mini"
@@ -711,7 +711,7 @@
           </el-card>
         </el-tab-pane>
         <el-tab-pane
-          label="Table"
+          :label="$t('configdetails.tab_table')"
           name="table"
           key="table"
           v-if="(curConfig.type === 'generic-table')"
@@ -724,7 +724,7 @@
         </el-tab-pane>
 
         <el-tab-pane
-          label="Kibana"
+          :label="$t('configdetails.tab_kibana')"
           name="kibana"
           key="kibana"
           v-if="(curConfig.type === 'kibana')"
@@ -736,7 +736,7 @@
         </el-tab-pane>
 
         <el-tab-pane
-          label="Grafana"
+          :label="$t('configdetails.tab_grafana')"
           name="grafana"
           key="grafana"
           v-if="(curConfig.type === 'grafana')"
@@ -748,7 +748,7 @@
         </el-tab-pane>
 
         <el-tab-pane
-          label="Upload"
+          :label="$t('configdetails.tab_upload')"
           name="upload"
           key="upload"
           v-if="(curConfig.type === 'upload')"
@@ -758,7 +758,7 @@
           ></UploadEditor>
         </el-tab-pane>
         <el-tab-pane
-          label="File System"
+          :label="$t('configdetails.tab_file_system')"
           name="filesystem"
           key="filesystem"
           v-if="(curConfig.type === 'file-system')"
@@ -772,14 +772,14 @@
      
 
         <!-- ******* FORM ******* -->
-        <el-tab-pane label="Form" name="form" key="form" v-if="(curConfig.type === 'form')">
+        <el-tab-pane :label="$t('configdetails.tab_form')" name="form" key="form" v-if="(curConfig.type === 'form')">
           <FormEditor
             :currentConfig="curConfig"
           ></FormEditor>
         </el-tab-pane>
         <!-- FREE TEXT -->
         <el-tab-pane
-          label="Free Text"
+          :label="$t('configdetails.tab_free_text')"
           name="freetext"
           key="freetext"
           v-if="(curConfig.type === 'free-text')"
@@ -789,12 +789,12 @@
           </el-card>
         </el-tab-pane>
         <!-- Vega -->
-        <el-tab-pane label="Vega" name="vega" key="vega" v-if="(curConfig.type === 'vega')">
+        <el-tab-pane :label="$t('configdetails.tab_vega')" name="vega" key="vega" v-if="(curConfig.type === 'vega')">
           <el-card>
             <el-input
               type="textarea"
               :rows="10"
-              placeholder="Vega Specification"
+              :placeholder="$t('configdetails.vega_spec_placeholder')"
               v-model="curConfig.config.vegaSpec"
             ></el-input>
           </el-card>
@@ -890,12 +890,12 @@
       </el-tabs>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="$emit('dialogclose');">Cancel</el-button>
+      <el-button @click="$emit('dialogclose');">{{ $t('configdetails.cancel') }}</el-button>
       <el-button
         :disabled="(JSON.stringify(curConfig)==JSON.stringify(orgConfig._source)) && (strNewRec==strOrgRec)"
         type="primary"
         @click="saveRecord()"
-      >Confirm</el-button>
+      >{{ $t('configdetails.confirm') }}</el-button>
     </span>
   </el-dialog>
 </template>

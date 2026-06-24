@@ -93,7 +93,7 @@
 
     <text :x="marginleft-10" :y="margintop+8" text-anchor="end">{{max}}</text>
     <text :x="marginleft-10" :y="height-marginbottom" text-anchor="end">0</text>
-    <text :x="marginleft/2" :y="height/2" writing-mode="tb" text-anchor="middle">Documents</text>
+    <text :x="marginleft/2" :y="height/2" writing-mode="tb" text-anchor="middle">{{ $t('barchart.documents') }}</text>
   </svg>
 </template>
 
@@ -538,7 +538,7 @@ export default {
       }
       this.max = max;
       this.description =
-        " Total Documents:" + total + " Aggregation:" + this.autotime;
+        " " + this.$t('barchart.total_documents') + ":" + total + " " + this.$t('barchart.aggregation') + ":" + this.autotime;
     }
   },
   created: function() {},
