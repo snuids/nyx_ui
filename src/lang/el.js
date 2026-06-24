@@ -17,7 +17,8 @@ export const messages = {
       query:'Ερώτημα',
       downloadascsv:'Κατέβασμα ως CSV',
       downloadasxls:'Κατέβασμα ως XLS',
-      open_in_new_tab:'Άνοιγμα σε νέα καρτέλα'
+      open_in_new_tab:'Άνοιγμα σε νέα καρτέλα',
+      download:'Κατέβασμα'
     },
     buttons:{      
       submit:'Υποβολή',

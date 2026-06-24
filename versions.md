@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.5 24/Jun/2026
+* Excel preview added
+
 ## V3.29.4 30/May/2026
 * Powered by Grafana icon hidden
 

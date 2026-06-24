@@ -43,6 +43,57 @@
       </span>
     </el-dialog>
 
+    <el-dialog
+      title="Excel Viewer"
+      :visible.sync="xlsxDialogVisible"
+      :before-close="closeXlsxDialog"
+      width="90%"
+      top="5vh"
+    >
+      <div style="height: 80vh; overflow: auto;">
+        <el-tabs v-if="excelSheets.length > 0" v-model="activeSheet">
+          <el-tab-pane 
+            v-for="sheet in excelSheets" 
+            :key="sheet.name" 
+            :label="sheet.name" 
+            :name="sheet.name"
+          >
+            <el-alert
+              v-if="sheet.totalRows > sheet.displayedRows"
+              :title="`Showing ${sheet.displayedRows} of ${sheet.totalRows} rows (limited for performance)`"
+              type="info"
+              :closable="false"
+              style="margin-bottom: 10px;"
+            />
+            <el-table
+              :data="sheet.data"
+              border
+              style="width: 100%"
+              size="small"
+              max-height="65vh"
+            >
+              <el-table-column
+                v-for="(col, index) in sheet.columns"
+                :key="index"
+                :prop="col"
+                :label="col"
+                width="150"
+              >
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+        <div v-else style="text-align: center; padding: 50px;">
+          <v-icon name="spinner" spin scale="2" />
+          <p>Loading Excel file...</p>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeXlsxDialog">{{ $t('buttons.cancel') || 'Close' }}</el-button>
+        <el-button type="primary" @click="openXlsxInNewTab">{{ $t('generic.download') || 'Download' }}</el-button>
+      </span>
+    </el-dialog>
+
     <el-table
       size="mini"
       :data="tableData.filter(data => !search || data._source.creds.user.id.toLowerCase().includes(search.toLowerCase()) ||   data._source.report.title.toLowerCase().includes(search.toLowerCase() ))"
@@ -182,6 +233,7 @@ import Vue from "vue";
 import moment from "moment";
 import logviewer from "@/components/LogViewer";
 import {computeTranslatedText} from '../globalfunctions'
+import * as XLSX from 'xlsx';
 
 Vue.component("LogViewer", logviewer);
 
@@ -194,6 +246,10 @@ export default {
     LogViewerVisible: false,
     pdfDialogVisible: false,
     pdfUrl: "",
+    xlsxDialogVisible: false,
+    xlsxUrl: "",
+    excelSheets: [],
+    activeSheet: "",
     loadingData: false,
     formLabelWidth: "120px",
     curReport: {},
@@ -341,6 +397,11 @@ export default {
         // Open PDF in dialog
         this.pdfUrl = item.url;
         this.pdfDialogVisible = true;
+      } else if (item.extension && (item.extension.toLowerCase() === 'xlsx' || item.extension.toLowerCase() === 'xls')) {
+        // Open Excel file in dialog
+        this.xlsxUrl = item.url;
+        this.xlsxDialogVisible = true;
+        this.loadExcelFile(item.url);
       } else {
         // Open other files in new tab as before
         window.open(item.url, "_blank");
@@ -353,6 +414,114 @@ export default {
     openPdfInNewTab() {
       if (this.pdfUrl) {
         window.open(this.pdfUrl, "_blank");
+      }
+    },
+    loadExcelFile(url) {
+      // Reset excel data
+      this.excelSheets = [];
+      this.activeSheet = "";
+
+      const MAX_ROWS = 100;
+
+      // Fetch the Excel file
+      axios({
+        url: url,
+        method: 'GET',
+        responseType: 'arraybuffer'
+      })
+      .then(response => {
+        // Parse the Excel file
+        const data = new Uint8Array(response.data);
+        const workbook = XLSX.read(data, { type: 'array' });
+        
+        let hasLimitedRows = false;
+        
+        // Process each sheet
+        workbook.SheetNames.forEach((sheetName, index) => {
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          
+          if (jsonData.length > 0) {
+            // Extract headers from first row
+            const headers = jsonData[0];
+            
+            // Get total rows count (excluding header)
+            const totalRows = jsonData.length - 1;
+            
+            // Limit rows to MAX_ROWS for performance
+            const dataRows = jsonData.slice(1, MAX_ROWS + 1);
+            
+            if (totalRows > MAX_ROWS) {
+              hasLimitedRows = true;
+            }
+            
+            // Convert remaining rows to objects
+            const rows = dataRows.map(row => {
+              const obj = {};
+              headers.forEach((header, idx) => {
+                obj[header] = row[idx] !== undefined ? row[idx] : '';
+              });
+              return obj;
+            });
+            
+            this.excelSheets.push({
+              name: sheetName,
+              columns: headers,
+              data: rows,
+              totalRows: totalRows,
+              displayedRows: rows.length
+            });
+          }
+        });
+        
+        // Set active sheet to first sheet
+        if (this.excelSheets.length > 0) {
+          this.activeSheet = this.excelSheets[0].name;
+        }
+        
+        // Notify user if rows were limited
+        if (hasLimitedRows) {
+          this.$notify({
+            title: 'Excel Preview',
+            type: 'info',
+            message: `Showing first ${MAX_ROWS} rows for performance. Download to view all data.`,
+            position: 'bottom-right',
+            duration: 4000
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error loading Excel file:', error);
+        this.$notify({
+          title: 'Error',
+          type: 'error',
+          message: 'Failed to load Excel file',
+          position: 'bottom-right'
+        });
+      });
+    },
+    closeXlsxDialog() {
+      this.xlsxDialogVisible = false;
+      this.xlsxUrl = "";
+      this.excelSheets = [];
+      this.activeSheet = "";
+    },
+    openXlsxInNewTab() {
+      if (this.xlsxUrl) {
+        // Create a temporary anchor element to force download
+        const link = document.createElement('a');
+        link.href = this.xlsxUrl;
+        link.target = '_blank';
+        
+        // Extract filename from URL or use a default name
+        const urlParts = this.xlsxUrl.split('/');
+        const filename = urlParts[urlParts.length - 1].split('?')[0] || 'report.xlsx';
+        link.download = filename;
+        
+        // Trigger the download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
     },
     loadData: _.throttle(function() {
