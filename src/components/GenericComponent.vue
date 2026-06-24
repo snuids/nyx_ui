@@ -235,36 +235,15 @@ const myExport = {
     console.log("===============  REGISTERING: messagereceived");
     this.$globalbus.$on("messagereceived", payLoad => {
       console.log("GLOBALBUS/GENERICCOMPONENT/MESSAGERECEIVED");
-      console.log("payLoad:", JSON.stringify(payLoad));
       
       // Handle nested data structure from websocket
       const data = payLoad.data || payLoad;
       
-      if(data.notif_type=="global")
-      {
-        console.log("Showing notification with:", {
-          title: data.notif_title,
-          message: data.notif_message,
-          type: data.notif_message_type
-        });
-        
-        try {
-          this.$notify({
-            title: data.notif_title || 'Notification',
-            message: data.notif_message || '',
-            type: data.notif_message_type || 'info',
-            position: 'bottom-right',
-            duration: 4500
-          });
-          console.log("Notification called successfully");
-        } catch (err) {
-          console.error("Error showing notification:", err);
-        }
-      }
-      else{
+      // Global notifications are handled by App.vue
+      // Only emit local messages here
+      if(data.notif_type != "global") {
         this.$localbus.$emit("localmessagereceived", data);
       }
-      
     });  
 
     window.dispatchEvent(new Event("resize"));
