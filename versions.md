@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.6 24/Jun/2026
+* Websocket can receive messages
+
+
 ## V3.29.5 24/Jun/2026
 * Excel preview added
 

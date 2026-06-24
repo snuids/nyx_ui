@@ -5,7 +5,7 @@
         <el-input 
           :size="size" 
           v-model="selectedIcon" 
-          :placeholder="placeholder"
+          :placeholder="placeholder || $t('iconpicker.select_placeholder')"
           @input="handleInput"
           autocomplete="off"
         >
@@ -25,7 +25,7 @@
 
     <!-- Icon Picker Dialog -->
     <el-dialog
-      title="Icon Picker"
+      :title="$t('iconpicker.title')"
       :visible.sync="dialogVisible"
       width="70%"
       append-to-body
@@ -35,7 +35,7 @@
         <!-- Search Bar -->
         <el-input
           v-model="searchQuery"
-          placeholder="Search icons..."
+          :placeholder="$t('iconpicker.search_placeholder')"
           prefix-icon="el-icon-search"
           size="small"
           clearable
@@ -44,10 +44,10 @@
 
         <!-- Category Filter -->
         <el-radio-group v-model="categoryFilter" size="small" style="margin-bottom: 20px;">
-          <el-radio-button label="all">All ({{ filteredIcons.length }})</el-radio-button>
-          <el-radio-button label="regular">Regular</el-radio-button>
-          <el-radio-button label="brands">Brands</el-radio-button>
-          <el-radio-button label="solid">Solid</el-radio-button>
+          <el-radio-button label="all">{{ $t('iconpicker.all') }} ({{ filteredIcons.length }})</el-radio-button>
+          <el-radio-button label="regular">{{ $t('iconpicker.regular') }}</el-radio-button>
+          <el-radio-button label="brands">{{ $t('iconpicker.brands') }}</el-radio-button>
+          <el-radio-button label="solid">{{ $t('iconpicker.solid') }}</el-radio-button>
         </el-radio-group>
 
         <!-- Icons Grid -->
@@ -68,7 +68,7 @@
         <!-- Empty State -->
         <el-empty 
           v-if="filteredIcons.length === 0" 
-          description="No icons found"
+          :description="$t('iconpicker.no_icons_found')"
           :image-size="100"
         ></el-empty>
 
@@ -85,8 +85,8 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false" size="small">Cancel</el-button>
-        <el-button type="primary" @click="confirmSelection" size="small">Confirm</el-button>
+        <el-button @click="dialogVisible = false" size="small">{{ $t('iconpicker.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmSelection" size="small">{{ $t('iconpicker.confirm') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -102,7 +102,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Select an icon"
+      default: ""
     },
     size: {
       type: String,

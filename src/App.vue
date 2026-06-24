@@ -117,10 +117,44 @@ export default {
     }
 
     this.loadConfig();
+
+    // Listen for websocket messages globally
+    this.$globalbus.$on("messagereceived", payLoad => {
+      console.log("GLOBALBUS/APP/MESSAGERECEIVED", payLoad);
+      console.log("payLoad stringified:", JSON.stringify(payLoad));
+      
+      // Handle nested data structure from websocket
+      const data = payLoad.data || payLoad;
+      
+      if(data.notif_type == "global") {
+        console.log("APP: Showing notification with:", {
+          title: data.notif_title,
+          message: data.notif_message,
+          type: data.notif_message_type
+        });
+        
+        try {
+          // Show notification toast
+          this.$notify({
+            title: data.notif_title || 'Notification',
+            message: data.notif_message || '',
+            type: data.notif_message_type || 'info',
+            position: 'bottom-right',
+            duration: 4500
+          });
+          console.log("APP: Notification called successfully");
+        } catch (err) {
+          console.error("APP: Error showing notification:", err);
+        }
+      }
+    });
   },
   beforeDestroy () {
     if( this.wsInterval!=null)
       clearInterval(this.wsInterval)
+    
+    // Clean up listener
+    this.$globalbus.$off("messagereceived");
   }
 };
 </script>

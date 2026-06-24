@@ -18,18 +18,18 @@
       @current-change="handleCurrentChange"
       height="1000"
     >
-      <el-table-column sortable prop="_source.category" label="Category"></el-table-column>
-      <el-table-column sortable prop="_source.subcategory" label="Subcategory"></el-table-column>
-      <el-table-column sortable prop="_source.title" label="Title"></el-table-column>
-      <el-table-column sortable prop="_source.type" label="Type"></el-table-column>
-      <el-table-column sortable prop="_source.order" label="Order" width="80"></el-table-column>
+      <el-table-column sortable prop="_source.category" :label="$t('config.category')"></el-table-column>
+      <el-table-column sortable prop="_source.subcategory" :label="$t('config.subcategory')"></el-table-column>
+      <el-table-column sortable prop="_source.title" :label="$t('config.title')"></el-table-column>
+      <el-table-column sortable prop="_source.type" :label="$t('config.type')"></el-table-column>
+      <el-table-column sortable prop="_source.order" :label="$t('config.order')" width="80"></el-table-column>
 
       <el-table-column width="60">
         <template slot-scope="scope">
           <el-popover
             v-if="scope.row._source.privileges?true:false"
             placement="left-start"
-            title="Privileges"
+            :title="$t('config.privileges')"
             width="200"
             trigger="hover"
             size="mini"
@@ -50,7 +50,7 @@
               v-if="currentRow"
               class="item"
               effect="light"
-              content="Duplicate"
+              :content="$t('config.duplicate')"
               placement="bottom-end"
             >
               <el-button
@@ -62,7 +62,7 @@
                 icon="el-icon-copy-document"
               ></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="light" content="Add" placement="bottom">
+            <el-tooltip class="item" effect="light" :content="$t('config.add')" placement="bottom">
               <el-button
                 circle
                 size="mini"
@@ -72,7 +72,7 @@
                 icon="el-icon-plus"
               ></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="light" content="Reload" placement="bottom-start">
+            <el-tooltip class="item" effect="light" :content="$t('config.reload')" placement="bottom-start">
               <el-button
                 circle
                 size="mini"
@@ -83,7 +83,7 @@
               ></el-button>
             </el-tooltip>
           </div>
-          <el-input v-model="search" size="mini" placeholder="Type to search" class="searchfield" />
+          <el-input v-model="search" size="mini" :placeholder="$t('config.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">
           <v-icon
@@ -167,8 +167,8 @@ export default {
               data: response.data
             });
             this.$notify({
-            title: "Message",
-            message: "Config Reloaded",
+            title: this.$t('config.message'),
+            message: this.$t('config.config_reloaded'),
             type: "success",
             position: "bottom-right"
           });
@@ -309,11 +309,11 @@ export default {
     },
     handleDelete(index, row) {
       this.$confirm(
-        "This will permanently delete the application. Continue?",
-        "Warning",
+        this.$t('config.delete_confirm'),
+        this.$t('config.warning'),
         {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
+          confirmButtonText: this.$t('config.ok'),
+          cancelButtonText: this.$t('config.cancel'),
           type: "warning"
         }
       )
@@ -327,17 +327,17 @@ export default {
             this.loadData();
           }, 1000);
           this.$notify({
-            title: "Success",
+            title: this.$t('config.success'),
             type: "success",
-            message: "Delete completed",
+            message: this.$t('config.delete_completed'),
             position: "bottom-right"
           });
         })
         .catch(() => {
           this.$notify({
-            title: "Cancelled",
+            title: this.$t('config.cancelled'),
             type: "info",
-            message: "Delete canceled",
+            message: this.$t('config.delete_canceled'),
             position: "bottom-right"
           });
         });

@@ -14,7 +14,7 @@
         </el-col>
         <el-col :span="12" v-if="param.type == 'combo'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-select size="mini" v-model="param.value" placeholder="Please select a type">
+            <el-select size="mini" v-model="param.value" :placeholder="$t('reportgenerator.select_type')">
               <el-option
                 v-for="item in param.combos.split(',')"
                 :key="item"
@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="12" v-if="param.type == 'escombo'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-select size="mini" v-model="param.value" placeholder="Please select a type">
+            <el-select size="mini" v-model="param.value" :placeholder="$t('reportgenerator.select_type')">
               <el-option
                 v-for="item in param.valuelist"
                 :key="item"
@@ -38,7 +38,7 @@
         </el-col>
         <el-col :span="12" v-if="param.type == 'date'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-date-picker size="mini" v-model="param.value" type="date" placeholder="Pick a day"></el-date-picker>
+            <el-date-picker size="mini" v-model="param.value" type="date" :placeholder="$t('reportgenerator.pick_day')"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="param.type == 'interval'">
@@ -48,8 +48,8 @@
               :picker-options="rangePickerOptions"
               v-model="param.value"
               type="daterange"
-              start-placeholder="Start date"
-              end-placeholder="End date"
+              :start-placeholder="$t('reportgenerator.start_date')"
+              :end-placeholder="$t('reportgenerator.end_date')"
               :default-time="['00:00:00', '23:59:59']"
             ></el-date-picker>
           </el-form-item>
@@ -59,11 +59,11 @@
 
     <el-divider></el-divider>
 
-    <el-checkbox v-model="sendByEmail" style="margin-bottom: 15px;">Send report by email</el-checkbox>
+    <el-checkbox v-model="sendByEmail" style="margin-bottom: 15px;">{{ $t('reportgenerator.send_report_email') }}</el-checkbox>
 
     <el-form v-if="sendByEmail">
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('maillingListTo')" type="text">To : </el-button>
+        <el-button @click="setFocus('maillingListTo')" type="text">{{ $t('reportgenerator.to') }} </el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -72,7 +72,7 @@
             multiple
             filterable
             ref="maillingListTo"
-            placeholder="Choose Users"
+            :placeholder="$t('reportgenerator.choose_users')"
             size="mini"
             style="width:100%;"
           >
@@ -86,7 +86,7 @@
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('maillingListCc')" type="text">Cc : </el-button>
+        <el-button @click="setFocus('maillingListCc')" type="text">{{ $t('reportgenerator.cc') }} </el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -95,7 +95,7 @@
             multiple
             filterable
             ref="maillingListCc"
-            placeholder="Choose Users"
+            :placeholder="$t('reportgenerator.choose_users')"
             size="mini"
             style="width:100%;"
           >
@@ -109,7 +109,7 @@
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('maillingListCci')" type="text">Cci : </el-button>
+        <el-button @click="setFocus('maillingListCci')" type="text">{{ $t('reportgenerator.cci') }} </el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -118,7 +118,7 @@
             multiple
             filterable
             ref="maillingListCci"
-            placeholder="Choose Users"
+            :placeholder="$t('reportgenerator.choose_users')"
             size="mini"
             style="width:100%;"
           >
@@ -133,7 +133,7 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <el-form-item label="Add Mail : " :label-width="formLabelWidth">
+          <el-form-item :label="$t('reportgenerator.add_mail')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="mailToAdd" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
@@ -143,19 +143,19 @@
             plain
             @click="addMail()"
             size="mini"
-          >Add</el-button>
+          >{{ $t('reportgenerator.add') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="Subject" :label-width="formLabelWidth">
+          <el-form-item :label="$t('reportgenerator.subject')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="emailSubject"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="Body" :label-width="formLabelWidth">
+          <el-form-item :label="$t('reportgenerator.body')" :label-width="formLabelWidth">
             <el-input size="mini" type="textarea" :rows="4" v-model="emailBody"></el-input>
           </el-form-item>
         </el-col>
@@ -164,8 +164,8 @@
 
     <span slot="footer" class="dialog-footer">
       <!--<v-icon :name="record.icon" scale="1"/>-->
-      <el-button @click="closeDialog()">Cancel</el-button>
-      <el-button type="primary" @click="generateReport()">Generate</el-button>
+      <el-button @click="closeDialog()">{{ $t('reportgenerator.cancel') }}</el-button>
+      <el-button type="primary" @click="generateReport()">{{ $t('reportgenerator.generate') }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -190,64 +190,66 @@ export default {
     emailSubject: "",
     emailBody: "",
     formLabelWidth: "200px",
-    formLabelWidth2: "100px",
-    rangePickerOptions: {
-      shortcuts: [
-        {
-          text: "Last day",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Last week",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Last month",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Last 3 months",
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit("pick", [start, end]);
-          }
-        },
-        {
-          text: "Today",
-          onClick(picker) {
-            const end = moment()
-              .startOf("day")
-              .add(1, "d")
-              .toDate();
-            const start = moment()
-              .startOf("day")
-              .toDate();
-
-            start.setTime(start.getTime());
-            picker.$emit("pick", [start, end]);
-          }
-        }
-      ]
-    }
+    formLabelWidth2: "100px"
   }),
   computed: {
+    rangePickerOptions() {
+      return {
+        shortcuts: [
+          {
+            text: this.$t('reportgenerator.last_day'),
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: this.$t('reportgenerator.last_week'),
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: this.$t('reportgenerator.last_month'),
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: this.$t('reportgenerator.last_3_months'),
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: this.$t('reportgenerator.today'),
+            onClick(picker) {
+              const end = moment()
+                .startOf("day")
+                .add(1, "d")
+                .toDate();
+              const start = moment()
+                .startOf("day")
+                .toDate();
+
+              start.setTime(start.getTime());
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      };
+    },
     recordin: function() {
       return this.record;
     },
