@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.14 02/Oct/2026
+* Widened the application editor dialog and auto-sized its labels so translations no longer wrap
+
+
 ## V3.29.13 02/Oct/2026
 * External apps: added a LANG placeholder replaced by the user language in the URL
 * Documented the LANG placeholder in the external app help text (en/fr/el)

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    width="80%"
+    width="90%"
     :title="isAdd?$t('configdetails.create_application'):$t('configdetails.modify_application')"
     :visible.sync="dialogFormVisible"
     :before-close="closeDialog"
@@ -945,7 +945,7 @@ export default {
         queryFilterEditorVisible: false,
         currentHeader: {},
         currentQueryFilter: {},
-        formLabelWidth: "120px",
+        formLabelWidth: "auto",
         privileges: [],
         dashboards: [],
         selectedDash: null,
