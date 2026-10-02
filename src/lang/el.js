@@ -132,7 +132,7 @@ export const messages = {
       desc_es_table_detail:"Εμφανίζει τα δεδομένα ως πίνακα που μπορεί να περιλαμβάνει χρονολόγιο ή χάρτη.",
       desc_external:"Εμφανίζει εξωτερικό URL σε iframe.",
       desc_external_detail_1:"Εάν το εξωτερικό url περιέχει token=TOKEN, η ετικέτα TOKEN αντικαθίσταται από το πραγματικό token χρήστη.",
-      desc_external_detail_2:"HOST από το όνομα κεντρικού υπολογιστή, και API από το URL API.",
+      desc_external_detail_2:"HOST από το όνομα κεντρικού υπολογιστή, API από το URL API, και LANG από τη γλώσσα του χρήστη.",
       desc_external_detail_3:"Αντικαθιστά τις ετικέτες TODATE και FROMDATE εάν είναι ενεργοποιημένος επιλογέας χρόνου. (Χρησιμοποιώντας Unix Timestamp)",
       desc_upload:"Εμφανίζει φόρμα μεταφόρτωσης.",
       desc_upload_detail:"Το αρχείο αποστέλλεται σε προορισμό ActiveMQ και μπορεί να διαχειριστεί από Camel, NodeRed ή Lambda.",

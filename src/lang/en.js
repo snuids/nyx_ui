@@ -217,7 +217,7 @@ export const messages = {
         desc_es_table_detail:"It displays the data as a table that can optionally include a time line or a map.",
         desc_external:"Displays an external URL in an iframe.",
         desc_external_detail_1:"If the external url contains token=TOKEN, the TOKEN tag is replaced by the actual user token.",
-        desc_external_detail_2:"HOST by the host name, and API by the API URL.",
+        desc_external_detail_2:"HOST by the host name, API by the API URL, and LANG by the user language.",
         desc_external_detail_3:"It replaces the TODATE and FROMDATE tags if a time selector is enabled. (Using Unix Timestamp)",
         desc_upload:"Displays an upload form.",
         desc_upload_detail:"The file is sent to an ActiveMQ destination and can be handled by Camel, NodeRed or a Lambda.",

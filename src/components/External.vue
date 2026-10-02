@@ -97,6 +97,13 @@ export default {
   methods: {
     createUrl: function() {
       
+        var userLang =
+          (this.$store.getters.creds &&
+            this.$store.getters.creds.user &&
+            this.$store.getters.creds.user.language) ||
+          this.$i18n.locale ||
+          "";
+
         var url=this.config.config.url.replace(
         /token=TOKEN/g,
         "token=" + this.$store.getters.creds.token
@@ -104,6 +111,8 @@ export default {
         this.$store.getters.apiurl
       ).replace(/HOST/g,
         extractHostname(window.location.href)
+      ).replace(/LANG/g,
+        userLang
       );
         if (this.config.timeSelectorChecked)
         {

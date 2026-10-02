@@ -1,5 +1,10 @@
 # Version History
 
+## V3.29.13 02/Oct/2026
+* External apps: added a LANG placeholder replaced by the user language in the URL
+* Documented the LANG placeholder in the external app help text (en/fr/el)
+
+
 ## V3.29.12 02/Oct/2026
 * Completed the Greek (el) translations and added the missing French Save label
 * Removed 14 unused translation keys

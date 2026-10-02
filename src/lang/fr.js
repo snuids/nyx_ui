@@ -221,7 +221,7 @@ export const messages = {
         desc_es_table_detail:"Affiche les données sous forme de table pouvant inclure une chronologie ou une carte.",
         desc_external:"Affiche une URL externe dans un iframe.",
         desc_external_detail_1:"Si l'url externe contient token=TOKEN, la balise TOKEN est remplacée par le jeton utilisateur réel.",
-        desc_external_detail_2:"HOST par le nom d'hôte, et API par l'URL de l'API.",
+        desc_external_detail_2:"HOST par le nom d'hôte, API par l'URL de l'API, et LANG par la langue de l'utilisateur.",
         desc_external_detail_3:"Remplace les balises TODATE et FROMDATE si un sélecteur de temps est activé. (Utilisant le timestamp Unix)",
         desc_upload:"Affiche un formulaire de téléversement.",
         desc_upload_detail:"Le fichier est envoyé vers une destination ActiveMQ et peut être traité par Camel, NodeRed ou un Lambda.",
