@@ -1,5 +1,11 @@
 # Version History
 
+## V3.29.10 02/Oct/2026
+* Updated axios, js-yaml and moment to patched versions
+* Upgraded vega and vega-lite to v6, vega-embed to 7.3
+* Replaced the deprecated xlsx npm package with the maintained SheetJS 0.20.3 build
+
+
 ## V3.29.9 02/Oct/2026
 * Fixed crash when generating ES values for reports with a timestamp and interval parameter
 * Fixed report range filter to use the configured timestamp field
