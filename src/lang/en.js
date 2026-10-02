@@ -62,9 +62,6 @@ export const messages = {
         creation:'Creation',
         create:'Create', 
         pleaseinput:'Please input',   
-        query:'Query',
-        downloadascsv:'Download as CSV',
-        downloadasxls:'Download as XLS',
         privileges:'Privileges',
         filters:'Filters',
         available:'Available',
@@ -82,8 +79,6 @@ export const messages = {
         submit:'Submit',
         cancel:'Cancel',
         confirm:'Confirm',
-        revoke:'Revoke',
-        refresh:'Refresh',
         update:'Update',
         quit:'Quit',
         save:'Save',
@@ -104,11 +99,7 @@ export const messages = {
         new:'New'
       }
       ,sendmessage:{
-        send_message:'Send Message',
-        queue:'Queue',
-        topic:'Topic',
-        destination:'Destination',
-        message:'Message'        
+        send_message:'Send Message'
       }
       ,time:{
           absolute:"Absolute",
@@ -182,7 +173,6 @@ export const messages = {
         url:"Url",
         controller:"Controller",
         parameters:"Parameters",
-        table:"Table",
         database_type:"Database Type",
         database:"Database",
         index_table:"Index/Table",
@@ -213,13 +203,11 @@ export const messages = {
         time_selector:"Time Selector",
         graphic:"Graphic",
         map:"Map",
-        timeline:"Timeline",
         time_type_free:"Free",
         time_type_day:"Day",
         time_type_month:"Month",
         time_type_week:"Week",
         time_type_year:"Year",
-        db_type_postgres:"PostgreSQL",
         db_type_sqlserver:"SQL Server",
         desc_kibana:"Displays a kibana dashboard.",
         desc_kibana_detail:"The dashboard must previously be created in Kibana.",
@@ -227,8 +215,6 @@ export const messages = {
         desc_grafana_detail:"The dashboard must previously be created in Grafana.",
         desc_es_table:"Displays a collection stored in elastic search.",
         desc_es_table_detail:"It displays the data as a table that can optionally include a time line or a map.",
-        desc_sql_table:"Displays a table stored in SQL.",
-        desc_sql_table_detail:"It displays the data as a table that can optionally include a time line or a map. It can also display the result of a query.",
         desc_external:"Displays an external URL in an iframe.",
         desc_external_detail_1:"If the external url contains token=TOKEN, the TOKEN tag is replaced by the actual user token.",
         desc_external_detail_2:"HOST by the host name, and API by the API URL.",

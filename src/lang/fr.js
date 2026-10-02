@@ -66,9 +66,6 @@ export const messages = {
         creation:'Création', 
         create:'Créer', 
         pleaseinput:'Entrer une requête',
-        query:'Requete',
-        downloadascsv:'Télécharger comme CSV',
-        downloadasxls:'Télécharger comme XLS',
         privileges:'Privilèges',
         filters:'Filtres',        
         available:'Disponibles',
@@ -86,10 +83,9 @@ export const messages = {
         submit:'Soumettre',
         cancel:'Annuler',
         confirm:'Confirmer',
-        revoke:'Revoquer',
-        refresh:'Rafraichir',
         update:'MAJ',
         quit:'Quitter',
+        save:'Enregistrer',
       }
       ,changepassword:{
         oldpass:'Ancien mot de passe',
@@ -106,11 +102,7 @@ export const messages = {
         new:'Nouveau'
       }
       ,sendmessage:{
-        send_message:'Envoyer un message',
-        queue:'Queue',
-        topic:'Topic',
-        destination:'Destination',
-        message:'Message'        
+        send_message:'Envoyer un message'
       }
       ,time:{
         absolute:"Absolu",
@@ -185,7 +177,6 @@ export const messages = {
         url:"Url",
         controller:"Contrôleur",
         parameters:"Paramètres",
-        table:"Table",
         database_type:"Type de Base de Données",
         database:"Base de Données",
         index_table:"Index/Table",
@@ -216,13 +207,11 @@ export const messages = {
         time_selector:"Sélecteur de Temps",
         graphic:"Graphique",
         map:"Carte",
-        timeline:"Chronologie",
         time_type_free:"Libre",
         time_type_day:"Jour",
         time_type_month:"Mois",
         time_type_week:"Semaine",
         time_type_year:"Année",
-        db_type_postgres:"PostgreSQL",
         db_type_sqlserver:"SQL Server",
         desc_kibana:"Affiche un tableau de bord Kibana.",
         desc_kibana_detail:"Le tableau de bord doit être créé au préalable dans Kibana.",
@@ -230,8 +219,6 @@ export const messages = {
         desc_grafana_detail:"Le tableau de bord doit être créé au préalable dans Grafana.",
         desc_es_table:"Affiche une collection stockée dans Elasticsearch.",
         desc_es_table_detail:"Affiche les données sous forme de table pouvant inclure une chronologie ou une carte.",
-        desc_sql_table:"Affiche une table stockée en SQL.",
-        desc_sql_table_detail:"Affiche les données sous forme de table pouvant inclure une chronologie ou une carte. Peut également afficher le résultat d'une requête.",
         desc_external:"Affiche une URL externe dans un iframe.",
         desc_external_detail_1:"Si l'url externe contient token=TOKEN, la balise TOKEN est remplacée par le jeton utilisateur réel.",
         desc_external_detail_2:"HOST par le nom d'hôte, et API par l'URL de l'API.",

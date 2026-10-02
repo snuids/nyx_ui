@@ -14,23 +14,50 @@ export const messages = {
     },
     generic:{      
       pleaseinput:'Παρακαλώ εισάγετε',
-      query:'Ερώτημα',
-      downloadascsv:'Κατέβασμα ως CSV',
-      downloadasxls:'Κατέβασμα ως XLS',
       open_in_new_tab:'Άνοιγμα σε νέα καρτέλα',
-      download:'Κατέβασμα'
+      download:'Κατέβασμα',
+      date:'Ημερομηνία',
+      severity:'Σοβαρότητα',
+      edit_code:'Επεξεργασία κώδικα',
+      ok:'OK',
+      cancel:'Ακύρωση',
+      warning:'Προειδοποίηση',
+      delete_record:'Η εγγραφή θα διαγραφεί οριστικά. Συνέχεια;',
+      duplicate:'Αντιγραφή',
+      add:'Προσθήκη',
+      generate:'Δημιουργία',
+      edit:'Επεξεργασία',
+      delete:'Διαγραφή',
+      user:'Χρήστης',
+      status:'Κατάσταση',
+      creation:'Δημιουργία',
+      create:'Δημιουργία',
+      privileges:'Προνόμια',
+      filters:'Φίλτρα',
+      available:'Διαθέσιμα',
+      assigned:'Ανατεθειμένα',
+      basics:'Βασικά',
+      type_to_search:'Πληκτρολογήστε για αναζήτηση',
+      parameters:'Παράμετροι',
+      refresh:'Ανανέωση',
+      logs:'Αρχεία καταγραφής'
     },
     buttons:{      
       submit:'Υποβολή',
       cancel:'Ακύρωση',
       confirm:'Επιβεβαίωση',
-      refresh:'Refresh',
-      update:'Update'
+      update:'Update',
+      revoke:'Ανάκληση',
+      quit:'Έξοδος',
+      save:'Αποθήκευση'
     },
     changepassword:{
       oldpass:'Παλιός κωδικός πρόσβασης',
       newpass:'Νέος κωδικός πρόσβασης',
-      repeatpass:'Επανάληψη κωδικού'
+      repeatpass:'Επανάληψη κωδικού',
+      generate_strong_password:'Δημιουργία ισχυρού κωδικού',
+      save_password:'Αποθήκευση κωδικού',
+      notify_by_mail:'Ειδοποίηση χρήστη μέσω email'
     },
     generictable:{
       modifyrecord:'Τροποποίηση εγγραφής',
@@ -61,7 +88,6 @@ export const messages = {
       url:"Url",
       controller:"Ελεγκτής",
       parameters:"Παράμετροι",
-      table:"Πίνακας",
       database_type:"Τύπος Βάσης Δεδομένων",
       database:"Βάση Δεδομένων",
       index_table:"Ευρετήριο/Πίνακας",
@@ -92,13 +118,11 @@ export const messages = {
       time_selector:"Επιλογέας Χρόνου",
       graphic:"Γραφικό",
       map:"Χάρτης",
-      timeline:"Χρονολόγιο",
       time_type_free:"Ελεύθερο",
       time_type_day:"Ημέρα",
       time_type_month:"Μήνας",
       time_type_week:"Εβδομάδα",
       time_type_year:"Έτος",
-      db_type_postgres:"PostgreSQL",
       db_type_sqlserver:"SQL Server",
       desc_kibana:"Εμφανίζει πίνακα Kibana.",
       desc_kibana_detail:"Ο πίνακας πρέπει να δημιουργηθεί προηγουμένως στο Kibana.",
@@ -106,8 +130,6 @@ export const messages = {
       desc_grafana_detail:"Ο πίνακας πρέπει να δημιουργηθεί προηγουμένως στο Grafana.",
       desc_es_table:"Εμφανίζει συλλογή αποθηκευμένη στο Elasticsearch.",
       desc_es_table_detail:"Εμφανίζει τα δεδομένα ως πίνακα που μπορεί να περιλαμβάνει χρονολόγιο ή χάρτη.",
-      desc_sql_table:"Εμφανίζει πίνακα αποθηκευμένο σε SQL.",
-      desc_sql_table_detail:"Εμφανίζει τα δεδομένα ως πίνακα που μπορεί να περιλαμβάνει χρονολόγιο ή χάρτη. Μπορεί επίσης να εμφανίσει το αποτέλεσμα ενός ερωτήματος.",
       desc_external:"Εμφανίζει εξωτερικό URL σε iframe.",
       desc_external_detail_1:"Εάν το εξωτερικό url περιέχει token=TOKEN, η ετικέτα TOKEN αντικαθίσταται από το πραγματικό token χρήστη.",
       desc_external_detail_2:"HOST από το όνομα κεντρικού υπολογιστή, και API από το URL API.",
@@ -252,7 +274,82 @@ export const messages = {
       showing_first_rows:"Εμφάνιση των πρώτων {max} γραμμών για απόδοση. Κατεβάστε για να δείτε όλα τα δεδομένα.",
       error:"Σφάλμα",
       failed_load_excel:"Αποτυχία φόρτωσης του αρχείου Excel"
+    },
+    scheduler:{
+      edit_scheduler:"Επεξεργασία χρονοπρογραμματιστή",
+      scheduler:"Χρονοπρογραμματιστής",
+      parameters:"Παράμετροι",
+      reset_task:"Επαναφορά εργασίας",
+      mailing_list:"Λίστα αποστολής",
+      mail_content:"Περιεχόμενο email",
+      title:"Τίτλος",
+      type:"Τύπος",
+      time:"Ώρα",
+      path:"Διαδρομή",
+      monthly:"Μηνιαίο",
+      daily:"Ημερήσιο",
+      included_days:"Ημέρες που περιλαμβάνονται",
+      excluded_days:"Ημέρες που εξαιρούνται",
+      select_days:"Ημέρες που περιλαμβάνονται",
+      monday:"Δευτέρα",
+      tuesday:"Τρίτη",
+      wednesday:"Τετάρτη",
+      thursday:"Πέμπτη",
+      friday:"Παρασκευή",
+      saturday:"Σάββατο",
+      sunday:"Κυριακή",
+      number_of_days:"Αριθμός ημερών",
+      next_run:"Επόμενη εκτέλεση",
+      excluded:"Εξαιρούνται",
+      included:"Περιλαμβάνονται",
+      subject:"Θέμα",
+      attachment:"Συνημμένο",
+      content:"Περιεχόμενο"
+    },
+    user:{
+      user_form:"Φόρμα χρήστη",
+      id_email:"ID/Email",
+      login:"Σύνδεση",
+      firstname:"Όνομα",
+      lastname:"Επώνυμο",
+      phone:"Τηλέφωνο",
+      mfa:"MFA",
+      language:"Γλώσσα",
+      reset_password:"Επαναφορά κωδικού"
+    },
+    report:{
+      report:"Αναφορά",
+      type:"Τύπος",
+      time:"Ώρα",
+      days:"Ημέρες",
+      output:"Έξοδος",
+      next_run:"Επόμενη εκτέλεση",
+      regenerate:"Επαναδημιουργία",
+      details_on_run:"Λεπτομέρειες εκτέλεσης",
+      logs_viewer:"Προβολή αρχείων καταγραφής"
+    },
+    querybar:{
+      default:"Αναζήτηση... (π.χ. status:200 AND platform:NYX)",
+      download:"Λήψη της επιλογής"
+    },
+    datepicker:{
+      last_24_hours:"Τελευταίες 24 ώρες",
+      last_7_days:"Τελευταίες 7 ημέρες",
+      previous_month:"Προηγούμενος μήνας",
+      current_month:"Τρέχων μήνας",
+      next_month:"Επόμενος μήνας",
+      last_3_months:"Τελευταίοι 3 μήνες",
+      last_year:"Προηγούμενο έτος",
+      today:"Σήμερα",
+      current_week:"Τρέχουσα εβδομάδα",
+      current_year:"Τρέχον έτος"
+    },
+    upload:{
+      drop_file_here:"Αποθέστε το αρχείο εδώ ή",
+      click_to_upload:"κάντε κλικ για μεταφόρτωση"
+    },
+    sendmessage:{
+      send_message:"Αποστολή μηνύματος"
     }
-    
   }
 }

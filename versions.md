@@ -1,5 +1,10 @@
 # Version History
 
+## V3.29.12 02/Oct/2026
+* Completed the Greek (el) translations and added the missing French Save label
+* Removed 14 unused translation keys
+
+
 ## V3.29.11 02/Oct/2026
 * Localized the Excel viewer (dialog title, row-limit notice, loading and notification messages) in English, French and Greek
 
