@@ -502,7 +502,7 @@ export default {
     },
     paramsChanged: function(){
       this.record._source.parameters = this.report.parameters;
-      this.paramValueChanged == true;
+      this.paramValueChanged = true;
     },
     loadReports: function() {
       var url =
@@ -597,7 +597,7 @@ export default {
       if(par.usetimestamp && interval){
         let timestampfield = par.timestampfield
         let start = intervalValue.start.toISOString()
-        let end = intervalValue.end.setHours(23,59,59,999).toISOString()
+        let end = new Date(intervalValue.end.setHours(23,59,59,999)).toISOString()
         query["query"]= {
                 "bool": {
                   "must": [

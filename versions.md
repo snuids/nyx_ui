@@ -1,5 +1,12 @@
 # Version History
 
+## V3.29.9 02/Oct/2026
+* Fixed crash when generating ES values for reports with a timestamp and interval parameter
+* Fixed report range filter to use the configured timestamp field
+* Enabled the periodic report Update button when parameters change
+* Restored privileges and filters for non-admin users on session restore
+
+
 ## V3.29.8 02/Oct/2026
 * Fixed missing lodash imports in QueryBar, QueryFilter and ReportTask
 * Removed duplicated password maximum-length validation

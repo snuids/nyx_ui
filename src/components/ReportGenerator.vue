@@ -381,13 +381,13 @@ export default {
       if(par.usetimestamp && interval){
         var timestampfield = par.timestampfield
         var start = intervalValue.start.toISOString()
-        var end = intervalValue.end.setHours(23,59,59,999).toISOString()
+        var end = new Date(intervalValue.end.setHours(23,59,59,999)).toISOString()
         query["query"]= {
                 "bool": {
                   "must": [
                     {
                       "range": {
-                        timestampfield: {   
+                        [timestampfield]: {   
                           "gte": start,   
                           "lte": end      
                         }
