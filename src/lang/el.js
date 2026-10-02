@@ -243,6 +243,15 @@ export const messages = {
       last_month:"Τελευταίος μήνας",
       last_3_months:"Τελευταίοι 3 μήνες",
       today:"Σήμερα"
+    },
+    reporttask:{
+      excel_viewer:"Προβολή Excel",
+      showing_rows:"Εμφάνιση {displayed} από {total} γραμμές (περιορισμός για απόδοση)",
+      loading_excel:"Φόρτωση αρχείου Excel...",
+      excel_preview:"Προεπισκόπηση Excel",
+      showing_first_rows:"Εμφάνιση των πρώτων {max} γραμμών για απόδοση. Κατεβάστε για να δείτε όλα τα δεδομένα.",
+      error:"Σφάλμα",
+      failed_load_excel:"Αποτυχία φόρτωσης του αρχείου Excel"
     }
     
   }

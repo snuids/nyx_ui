@@ -367,6 +367,15 @@ export const messages = {
         last_month:"Dernier mois",
         last_3_months:"3 derniers mois",
         today:"Aujourd'hui"
+      },
+      reporttask:{
+        excel_viewer:"Visionneuse Excel",
+        showing_rows:"Affichage de {displayed} sur {total} lignes (limité pour la performance)",
+        loading_excel:"Chargement du fichier Excel...",
+        excel_preview:"Aperçu Excel",
+        showing_first_rows:"Affichage des {max} premières lignes pour la performance. Téléchargez pour voir toutes les données.",
+        error:"Erreur",
+        failed_load_excel:"Échec du chargement du fichier Excel"
       }
     }
   }

@@ -44,7 +44,7 @@
     </el-dialog>
 
     <el-dialog
-      title="Excel Viewer"
+      :title="$t('reporttask.excel_viewer')"
       :visible.sync="xlsxDialogVisible"
       :before-close="closeXlsxDialog"
       width="90%"
@@ -60,7 +60,7 @@
           >
             <el-alert
               v-if="sheet.totalRows > sheet.displayedRows"
-              :title="`Showing ${sheet.displayedRows} of ${sheet.totalRows} rows (limited for performance)`"
+              :title="$t('reporttask.showing_rows', { displayed: sheet.displayedRows, total: sheet.totalRows })"
               type="info"
               :closable="false"
               style="margin-bottom: 10px;"
@@ -85,7 +85,7 @@
         </el-tabs>
         <div v-else style="text-align: center; padding: 50px;">
           <v-icon name="spinner" spin scale="2" />
-          <p>Loading Excel file...</p>
+          <p>{{ $t('reporttask.loading_excel') }}</p>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -483,9 +483,9 @@ export default {
         // Notify user if rows were limited
         if (hasLimitedRows) {
           this.$notify({
-            title: 'Excel Preview',
+            title: this.$t('reporttask.excel_preview'),
             type: 'info',
-            message: `Showing first ${MAX_ROWS} rows for performance. Download to view all data.`,
+            message: this.$t('reporttask.showing_first_rows', { max: MAX_ROWS }),
             position: 'bottom-right',
             duration: 4000
           });
@@ -494,9 +494,9 @@ export default {
       .catch(error => {
         console.error('Error loading Excel file:', error);
         this.$notify({
-          title: 'Error',
+          title: this.$t('reporttask.error'),
           type: 'error',
-          message: 'Failed to load Excel file',
+          message: this.$t('reporttask.failed_load_excel'),
           position: 'bottom-right'
         });
       });

@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.11 02/Oct/2026
+* Localized the Excel viewer (dialog title, row-limit notice, loading and notification messages) in English, French and Greek
+
+
 ## V3.29.10 02/Oct/2026
 * Updated axios, js-yaml and moment to patched versions
 * Upgraded vega and vega-lite to v6, vega-embed to 7.3

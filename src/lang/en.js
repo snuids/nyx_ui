@@ -364,6 +364,15 @@ export const messages = {
         last_month:"Last month",
         last_3_months:"Last 3 months",
         today:"Today"
+      },
+      reporttask:{
+        excel_viewer:"Excel Viewer",
+        showing_rows:"Showing {displayed} of {total} rows (limited for performance)",
+        loading_excel:"Loading Excel file...",
+        excel_preview:"Excel Preview",
+        showing_first_rows:"Showing first {max} rows for performance. Download to view all data.",
+        error:"Error",
+        failed_load_excel:"Failed to load Excel file"
       }
     }
   }
