@@ -98,6 +98,7 @@
 
 <script>
 import axios from "axios";
+import _ from "lodash";
 import { computeTranslatedText } from "../globalfunctions";
 
 export default {

@@ -254,7 +254,6 @@ export default {
         jasper: "./reports/jasper/myjasper.jrxml",
         notebook:"mynotebook",
         icon: "regular/clipboard",
-        parameters: [],
         privileges: [],
         
         output : [

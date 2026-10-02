@@ -231,6 +231,7 @@
 import axios from "axios";
 import Vue from "vue";
 import moment from "moment";
+import _ from "lodash";
 import logviewer from "@/components/LogViewer";
 import {computeTranslatedText} from '../globalfunctions'
 import * as XLSX from 'xlsx';

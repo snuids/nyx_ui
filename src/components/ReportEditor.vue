@@ -520,7 +520,7 @@ export default {
         { required: true, message: "Please input a Title", trigger: "change" }
       ],
       description: [        
-        ,{ required: true, message: "Please input a Description", trigger: "change" }
+        { required: true, message: "Please input a Description", trigger: "change" }
       ],
       icon: [
         { required: true, message: "Please pick an icon ex:bug", trigger: "change" }

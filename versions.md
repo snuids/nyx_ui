@@ -1,7 +1,10 @@
 # Version History
 
-## V3.29.7 24/Jun/2026
-* Websocket can receive messages
+## V3.29.8 02/Oct/2026
+* Fixed missing lodash imports in QueryBar, QueryFilter and ReportTask
+* Removed duplicated password maximum-length validation
+* Fixed ReportEditor validation rules array
+* Removed duplicate parameters entry from new report template
 
 
 ## V3.29.5 24/Jun/2026

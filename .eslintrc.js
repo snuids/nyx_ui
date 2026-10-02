@@ -13,6 +13,9 @@ module.exports = {
   },
   parserOptions: {
     parser: '@babel/eslint-parser',
-    requireConfigFile: false
+    requireConfigFile: false,
+    babelOptions: {
+      configFile: false
+    }
   }
 }

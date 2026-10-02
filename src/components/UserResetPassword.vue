@@ -122,13 +122,6 @@ export default {
               pwd.length
         retObject.match = false
       }
-      else if (pwd.length > rules.length[1]){
-        retObject.message = "No more than " +
-              rules.length[1] +
-              " characters. This one contains " +
-              pwd.length
-        retObject.match = false
-      }
       else if (
         rules.forceUpper &&
         rules.minUpper > numUpper
