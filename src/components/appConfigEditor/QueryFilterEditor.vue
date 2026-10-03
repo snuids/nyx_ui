@@ -9,32 +9,32 @@
     <el-form v-if="curField" :model="curField">
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Field" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.field')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.field" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Title" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.title')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.title" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Default" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.default')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.default" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item label="Type" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.type')" :label-width="formLabelWidth">
             <el-select
               size="mini"
               v-model="curField.type"
-              placeholder="Please select a type"
+              :placeholder="$t('cfg.select_type')"
               @change="changeType"
             >
               <el-option
@@ -50,7 +50,7 @@
 
       <el-row :gutter="20" v-if="curField.type=='string' || curField.type=='number'">
         <el-col :span="20">
-          <el-form-item label="Default" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.default')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.default" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
@@ -58,7 +58,7 @@
 
       <el-row :gutter="20" v-if="selectedType && selectedType.clearable">
         <el-col :span="9">
-          <el-form-item label="Clearable" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.clearable')" :label-width="formLabelWidth">
             <el-switch v-model="curField.clearable"></el-switch>
           </el-form-item>
         </el-col>
@@ -79,7 +79,7 @@
 
       <el-row :gutter="20" v-if="curField.type && curField.type == 'selecter'">
         <el-col :span="20">
-          <el-form-item label="Options" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.options')" :label-width="formLabelWidth">
             <el-tag
               :key="tag"
               v-for="tag in curField.selectOptions"
@@ -102,7 +102,7 @@
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="closeDialog()">Close</el-button>
+      <el-button type="primary" @click="closeDialog()">{{ $t('cfg.close') }}</el-button>
     </span>
   </el-dialog>
 </template>

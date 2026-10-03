@@ -6,7 +6,7 @@
         <el-row style="text-align:left;">
           <el-col :span="7">
             <el-row>
-              <el-button @click="setFocus('formtitle')" type="text">Form title</el-button>
+              <el-button @click="setFocus('formtitle')" type="text">{{ $t('cfg.form_title') }}</el-button>
             </el-row>
             <el-row>
               <el-input
@@ -19,18 +19,18 @@
           </el-col>
           <el-col :offset="3" :span="6">
             <el-row>
-              <el-button type="text">Mode</el-button>
+              <el-button type="text">{{ $t('cfg.mode') }}</el-button>
             </el-row>
             <el-row>
               <el-radio-group v-model="currentConfig.config.formmode" size="mini" ref="mode">
-                <el-radio-button label="table">Table</el-radio-button>
-                <el-radio-button label="message">Message</el-radio-button>
+                <el-radio-button label="table">{{ $t('cfg.table') }}</el-radio-button>
+                <el-radio-button label="message">{{ $t('cfg.message') }}</el-radio-button>
               </el-radio-group>
             </el-row>
           </el-col>
           <el-col :offset="1" :span="7" v-if="currentConfig.config.formmode=='table'">
             <el-row>
-              <el-button @click="setFocus('index')" type="text">Index</el-button>
+              <el-button @click="setFocus('index')" type="text">{{ $t('cfg.index') }}</el-button>
             </el-row>
             <el-row>
               <el-input
@@ -43,7 +43,7 @@
           </el-col>
           <el-col :offset="1" :span="7" v-else>
             <el-row>
-              <el-button @click="setFocus('index')" type="text">Destination</el-button>
+              <el-button @click="setFocus('index')" type="text">{{ $t('cfg.destination') }}</el-button>
             </el-row>
             <el-row>
               <el-input
@@ -58,18 +58,18 @@
         </el-row>
 
         <el-row>
-              <el-button type="text">Fields</el-button>
+              <el-button type="text">{{ $t('cfg.fields') }}</el-button>
         </el-row>
         <el-row>
           <el-card shadow="never" style="padding-bottom: 20px;">
 
           <el-col :span="4">
-            <el-button size="mini" @click="handleAddField()">Add Field</el-button>
+            <el-button size="mini" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
           </el-col>
           <el-col :span="20">
             <FormFieldEditor
               :currentField="currentField"
-              :title="'Form Field Edition'"
+              :title="$t('cfg.form_field_edition')"
               v-if="formFielfEditorVisible"
               v-on:dialogclose="formFieldEditorClosed"
             ></FormFieldEditor>

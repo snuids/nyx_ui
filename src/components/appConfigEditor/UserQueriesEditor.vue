@@ -9,21 +9,21 @@
         <el-col :span="fieldsToFilterEmpty ? 12 : 6">
           <el-switch
             v-model="currentConfig.queryBarChecked"
-            active-text="Query bar"
+            :active-text="$t('cfg.query_bar')"
             @change="query_bar_changed"
           ></el-switch>
         </el-col>
         <el-col :span="fieldsToFilterEmpty ? 12 : 6">
           <el-switch
             v-model="currentConfig.queryFilterChecked"
-            active-text="Query filter"
+            :active-text="$t('cfg.query_filter')"
             @change="query_filter_changed"
           ></el-switch>
         </el-col>
       </el-row>
 
       <el-row v-if="currentConfig.queryFilterChecked">
-        <el-button @click="setFocus('fieldsToFilter')" type="text">Fields to filter</el-button>        
+        <el-button @click="setFocus('fieldsToFilter')" type="text">{{ $t('cfg.fields_to_filter') }}</el-button>        
       </el-row>
       <el-row v-if="currentConfig.queryFilterChecked">
         <el-col
@@ -37,7 +37,7 @@
             filterable
             @change="selectFieldsToFilterChanged"
             ref="fieldsToFilter"
-            placeholder="Field to filter"
+            :placeholder="$t('cfg.field_to_filter')"
             size="mini"
             style="width:100%;"
           >
@@ -57,7 +57,7 @@
             <table class="table-display">
               <thead class="thead-display">
                 <tr>
-                  <th>Field</th>
+                  <th>{{ $t('cfg.field') }}</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -72,7 +72,7 @@
                 <tr v-for="(item, index) in currentConfig.config.queryfilters" :key="index">
                   <td>{{item.field}}</td>
                   <td>
-                    <el-button @click="configureQueryFilter(item)" size="mini">Configure</el-button>
+                    <el-button @click="configureQueryFilter(item)" size="mini">{{ $t('cfg.configure') }}</el-button>
                   </td>
 
                   <td>
@@ -82,7 +82,7 @@
               </draggable>
             </table>
             <div style="width:100%;text-align:center;margin-top:10px;">
-              <el-button @click="addGlobalFilter()" size="mini" v-if="fieldsToFilter.indexOf('Global_Filter')<0">Add Global Filter</el-button>  
+              <el-button @click="addGlobalFilter()" size="mini" v-if="fieldsToFilter.indexOf('Global_Filter')<0">{{ $t('cfg.add_global_filter') }}</el-button>  
             </div>                        
           </el-card>
           
@@ -93,12 +93,12 @@
 
               <el-col :span="12" class="padding-right">
                 <el-row>
-                  <el-button @click="setFocus('label')" type="text">Label</el-button>
+                  <el-button @click="setFocus('label')" type="text">{{ $t('cfg.label') }}</el-button>
                 </el-row>
                 <el-row>
                   <el-input
                     ref="label"
-                    placeholder="Label displayed"
+                    :placeholder="$t('cfg.label_displayed')"
                     v-model="filterFieldToConfigure.title"
                     size="mini"
                   ></el-input>
@@ -106,12 +106,12 @@
               </el-col>
               <el-col :span="12">
                 <el-row>
-                  <el-button @click="setFocus('default')" type="text">Default</el-button>
+                  <el-button @click="setFocus('default')" type="text">{{ $t('cfg.default') }}</el-button>
                 </el-row>
                 <el-row>
                   <el-input
                     ref="default"
-                    placeholder="Default value"
+                    :placeholder="$t('cfg.default_value')"
                     v-model="filterFieldToConfigure.default"
                     size="mini"
                   ></el-input>
@@ -122,13 +122,13 @@
             <el-row>
               <el-col :span="12" v-if="filterFieldToConfigure.type != 'globaltext'">
                 <el-row>
-                  <el-button @click="setFocus('type')" type="text">Type</el-button>
+                  <el-button @click="setFocus('type')" type="text">{{ $t('cfg.type') }}</el-button>
                 </el-row>
                 <el-row>
                   <el-select
                     size="mini"
                     v-model="filterFieldToConfigure.type"
-                    placeholder="Please select a type"
+                    :placeholder="$t('cfg.select_type')"
                   >
                     <el-option
                       v-for="(type, index) in queryFilterOptions"
@@ -143,14 +143,14 @@
             <el-row v-if="filterFieldToConfigure.type == 'selecter'">
               <el-col :span="12">
                 <el-row>
-                  <el-button type="text">Options</el-button>
+                  <el-button type="text">{{ $t('cfg.options') }}</el-button>
                       <el-popover
                         placement="left-end"
-                        title="Format Options"
+                        :title="$t('cfg.format_options')"
                         width="250"
                         trigger="hover">
-                        <el-row>Each line represents an <b>Option</b></el-row>
-                        <el-row>There are 2 ways to create an <b>Option</b></el-row>
+                        <el-row>{{ $t('cfg.each_line_represents') }} <b>{{ $t('cfg.option') }}</b></el-row>
+                        <el-row>{{ $t('cfg.two_ways_create') }} <b>{{ $t('cfg.option') }}</b></el-row>
                         <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value=label </i></el-row>
                         <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value </i></el-row>
                         

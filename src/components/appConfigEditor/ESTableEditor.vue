@@ -1,10 +1,10 @@
 <template>
   <div id="config-table-editor">
     <el-card v-if="step==1">
-      <h1 style="text-align:left;">Step 1 of 2: Define index pattern</h1>
+      <h1 style="text-align:left;">{{ $t('cfg.step1') }}</h1>
 
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('indexPattern')" type="text">Index pattern</el-button>
+        <el-button @click="setFocus('indexPattern')" type="text">{{ $t('cfg.index_pattern') }}</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -27,13 +27,13 @@
             icon="el-icon-arrow-right"
             @click="goToStep(2)"
             size="mini"
-          >Next step</el-button>
+          >{{ $t('cfg.next_step') }}</el-button>
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
         <span>
-          You can use a * as a wildcard in your index pattern.
-          <br />You can't use spaces or the characters \, /, ?, &quot;, &lt;, &gt;, |.
+          {{ $t('cfg.index_pattern_help') }}
+          <br />{{ $t('cfg.index_pattern_chars') }} \, /, ?, &quot;, &lt;, &gt;, |.
         </span>
       </el-row>
 
@@ -60,7 +60,7 @@
     <el-card v-if="step==2">
       <el-row>
         <el-col :span="18" style="text-align:left;">
-          <h1 style="text-align:left;">Step 2 of 2: Configure settings</h1>
+          <h1 style="text-align:left;">{{ $t('cfg.step2') }}</h1>
         </el-col>
         <el-col :span="6" style="text-align:right;">
           <el-button
@@ -70,28 +70,28 @@
             icon="el-icon-arrow-left"
             @click="goToStep(1)"
             size="mini"
-          >Back</el-button>
+          >{{ $t('cfg.back') }}</el-button>
         </el-col>
       </el-row>
 
       <el-row style="text-align:left;" v-if="!noTimeField">
         <span>
-          You've defined
-          <b>{{currentConfig.config.index}}</b> as your index pattern. Now you can specify some settings before we create it.
+          {{ $t('cfg.youve_defined') }}
+          <b>{{currentConfig.config.index}}</b> {{ $t('cfg.index_pattern_settings') }}
         </span>
       </el-row>
       <el-row style="text-align:left;" v-if="noTimeField">
-        <span>The indices which match this index pattern don't contain any time fields.</span>
+        <span>{{ $t('cfg.no_time_fields') }}</span>
       </el-row>
       <el-row style="text-align:left;">
         <el-col :span="12" style="text-align:left;" v-if="!noTimeField">
-          <el-button @click="setFocus('timeField')" type="text">Time Filter field field</el-button>
+          <el-button @click="setFocus('timeField')" type="text">{{ $t('cfg.time_filter_field') }}</el-button>
         </el-col>
         <el-col :span="6" style="text-align:left;">
-          <el-button @click="setFocus('docType')" type="text">Document type</el-button>
+          <el-button @click="setFocus('docType')" type="text">{{ $t('cfg.document_type') }}</el-button>
         </el-col>
         <el-col :span="6" style="text-align:left;">
-          <el-button @click="setFocus('refreshtime')" type="text">Auto Refresh</el-button>
+          <el-button @click="setFocus('refreshtime')" type="text">{{ $t('cfg.auto_refresh') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -99,7 +99,7 @@
           <!-- v-model="currentConfig.config.timefield"  -->
           <el-select
             v-model="timefieldSelected"
-            placeholder="Select"
+            :placeholder="$t('cfg.select')"
             size="mini"
             ref="timeField"
             @change="timeFieldChanged()"
@@ -115,7 +115,7 @@
         </el-col>
         <el-col :span="6" class="padding-right">
           <el-input
-            placeholder="Default doc"
+            :placeholder="$t('cfg.default_doc')"
             ref="docType"
             type="text"
             size="mini"
@@ -124,7 +124,7 @@
           ></el-input>
         </el-col>
         <el-col :span="6">
-          <el-select size="mini" style="width:100%" v-model="currentConfig.autoRefreshTime" placeholder="Select">
+          <el-select size="mini" style="width:100%" v-model="currentConfig.autoRefreshTime" :placeholder="$t('cfg.select')">
             <el-option
               v-for="item in timeRefreshOptions"
               :key="item.value"
@@ -139,11 +139,11 @@
         <el-col :span="12" class="padding-right">
           <el-card shadow="never">
             <el-row>
-              <el-switch v-model="currentConfig.graphicChecked" active-text="Time line"></el-switch>
+              <el-switch v-model="currentConfig.graphicChecked" :active-text="$t('cfg.time_line')"></el-switch>
             </el-row>
             <el-row>
               <el-col style="width:150px; margin-top:4px;">
-                <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time selector"></el-switch>
+                <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
               </el-col>
               <el-col style="width:200px">
                 <el-select
@@ -151,12 +151,12 @@
                   style="margin-left:20px;"
                   size="mini"
                   v-model="currentConfig.timeSelectorType"
-                  placeholder="Please select a type"
+                  :placeholder="$t('cfg.select_type')"
                 >
-                  <el-option label="Free" value="classic"></el-option>
-                  <el-option label="Month" value="month"></el-option>
-                  <el-option label="Week" value="week"></el-option>
-                  <el-option label="Year" value="year"></el-option>
+                  <el-option :label="$t('cfg.free')" value="classic"></el-option>
+                  <el-option :label="$t('cfg.month')" value="month"></el-option>
+                  <el-option :label="$t('cfg.week')" value="week"></el-option>
+                  <el-option :label="$t('cfg.year')" value="year"></el-option>
                 </el-select>
               </el-col>
             </el-row>
@@ -165,7 +165,7 @@
       </el-row>
 
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('fieldsToDisplay')" type="text">Fields to display</el-button>
+        <el-button @click="setFocus('fieldsToDisplay')" type="text">{{ $t('cfg.fields_to_display') }}</el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -175,7 +175,7 @@
             filterable
             @change="selectFieldsToDisplayChanged"
             ref="fieldsToDisplay"
-            placeholder="Field to display"
+            :placeholder="$t('cfg.field_to_display')"
             size="mini"
             style="width:100%;"
           >
@@ -195,11 +195,11 @@
             <table class="table-display">
               <thead class="thead-display">
                 <tr>
-                  <th>Field</th>
-                  <th>Label</th>
+                  <th>{{ $t('cfg.field') }}</th>
+                  <th>{{ $t('cfg.label') }}</th>
 
-                  <th>Type</th>
-                  <th>Format</th>
+                  <th>{{ $t('cfg.type') }}</th>
+                  <th>{{ $t('cfg.format') }}</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -217,7 +217,7 @@
                     <el-input
                       class="display-name-input"
                       ref="author"
-                      placeholder="Name"
+                      :placeholder="$t('cfg.name')"
                       v-model="item.title"
                       size="mini"
                     ></el-input>
@@ -244,17 +244,17 @@
                       v-else-if="item.type=='keyword' || item.type=='text'"
                       v-model="item.format"
                       filterable
-                      placeholder="Default"
+                      :placeholder="$t('cfg.default')"
                       size="mini"
                       style="width:100%;"
                     >
-                      <el-option label="Default" value="default"></el-option>
-                      <el-option label="Icon" value="icon"></el-option>
-                      <el-option label="Link" value="link"></el-option>
+                      <el-option :label="$t('cfg.default')" value="default"></el-option>
+                      <el-option :label="$t('cfg.icon')" value="icon"></el-option>
+                      <el-option :label="$t('cfg.link')" value="link"></el-option>
                     </el-select>
                   </td>
                   <td>
-                    <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="mini">conf</el-button>
+                    <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="mini">{{ $t('cfg.configure') }}</el-button>
                   </td>
                   <td>
                     <i class="el-icon-d-caret handle"></i>
@@ -272,10 +272,10 @@
 
       <el-row>
         <el-col :span="12">
-          <el-button @click="setFocus('order')" type="text">Sort</el-button>
+          <el-button @click="setFocus('order')" type="text">{{ $t('cfg.sort') }}</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button @click="setFocus('hiddenQuery')" type="text">Hidden query</el-button>
+          <el-button @click="setFocus('hiddenQuery')" type="text">{{ $t('cfg.hidden_query') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -285,7 +285,7 @@
             filterable
             clearable
             ref="order"
-            placeholder="Field to sort on"
+            :placeholder="$t('cfg.sort_field')"
             size="mini"
             style="width:100%;"
           >
@@ -299,7 +299,7 @@
         </el-col>
         <el-col :span="12">
           <el-input
-            placeholder="Records in the table will be filtered by this query"
+            :placeholder="$t('cfg.filter_query')"
             ref="hiddenQuery"
             type="text"
             size="mini"
@@ -313,15 +313,15 @@
           <el-card shadow="never">
             <el-switch
               v-model="currentConfig.config.orderDirection"
-              active-text="Descending"
-              inactive-text="Ascending"
+              :active-text="$t('cfg.descending')"
+              :inactive-text="$t('cfg.ascending')"
             ></el-switch>
           </el-card>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button @click="setFocus('')" type="text">User queries</el-button>
+          <el-button @click="setFocus('')" type="text">{{ $t('cfg.user_queries') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -332,10 +332,10 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button @click="setFocus('download')" type="text">Download records</el-button>
+          <el-button @click="setFocus('download')" type="text">{{ $t('cfg.download_records') }}</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button @click="setFocus('geofields')" type="text">Geo fields</el-button>
+          <el-button @click="setFocus('geofields')" type="text">{{ $t('cfg.geo_fields') }}</el-button>
         </el-col>
       </el-row>
 
@@ -343,7 +343,7 @@
         <el-col :span="12" class="padding-right">
           <el-card shadow="never">
             <el-row>
-                <el-switch v-model="currentConfig.downloadChecked" active-text="Download button"></el-switch>
+                <el-switch v-model="currentConfig.downloadChecked" :active-text="$t('cfg.download_button')"></el-switch>
             </el-row>
             <el-row v-if="currentConfig.downloadChecked">
               
@@ -352,7 +352,7 @@
                   type="text"
                   size="mini"
                   style="color: #606266;"
-                >Copy from fields to display</el-button>
+                >{{ $t('cfg.copy_from_fields') }}</el-button>
               
             </el-row>
             <el-row v-if="currentConfig.downloadChecked">
@@ -362,7 +362,7 @@
                 filterable
                 @change="selectFieldsToDownloadChanged"
                 ref="fieldsToDownload"
-                placeholder="Field to download, if empty, all fields are dowloaded"
+                :placeholder="$t('cfg.field_to_download')"
                 size="mini"
                 style="width:100%;"
               >
@@ -379,8 +379,8 @@
                 <table class="table-display">
                   <thead class="thead-display">
                     <tr>
-                      <th>Field</th>
-                      <th>Label</th>
+                      <th>{{ $t('cfg.field') }}</th>
+                      <th>{{ $t('cfg.label') }}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -400,7 +400,7 @@
                         <el-input
                           class="display-name-input"
                           ref="author2"
-                          placeholder="Name"
+                          :placeholder="$t('cfg.name')"
                           v-model="item.title"
                           size="mini"
                         ></el-input>
@@ -420,21 +420,21 @@
             <el-row>
               <el-switch 
               :disabled="isEmpty(geoFields)"
-              v-model="currentConfig.mapChecked" active-text="Map"></el-switch>
+              v-model="currentConfig.mapChecked" :active-text="$t('cfg.map')"></el-switch>
             </el-row>
             <el-row v-if="currentConfig.mapChecked" style="margin-top: 15px;">
               <el-col :span="12">
-                <el-button @click="setFocus('geoField')" type="text">Geo field</el-button>
+                <el-button @click="setFocus('geoField')" type="text">{{ $t('cfg.geo_field') }}</el-button>
               </el-col>
               <el-col :span="12">
-                <el-button @click="setFocus('zoom')" type="text">Zoom</el-button>
+                <el-button @click="setFocus('zoom')" type="text">{{ $t('cfg.zoom') }}</el-button>
               </el-col>
             </el-row>
             <el-row  v-if="currentConfig.mapChecked">
               <el-col :span="12">
                 <el-select
                   v-model="currentConfig.config.mapfield"
-                  placeholder="Select"
+                  :placeholder="$t('cfg.select')"
                   size="mini"
                   ref="geoField"
                   style="width:90%;"
@@ -487,7 +487,7 @@
 
           <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('transparency')" type="text">Transparency</el-button>
+                <el-button @click="setFocus('transparency')" type="text">{{ $t('cfg.transparency') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -498,7 +498,7 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('colorfunc')" type="text">Fields Used By Functions</el-button>
+                <el-button @click="setFocus('colorfunc')" type="text">{{ $t('cfg.fields_used_by_functions') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -506,7 +506,7 @@
                 <el-input
                   size="mini"
                   ref:="colorfunc"
-                  placeholder="Fields used by the functions separated by a comma."
+                  :placeholder="$t('cfg.fields_used_by_functions_hint')"
                   v-model="currentConfig.config.functionfields"
                   autocomplete="off"
                 ></el-input>
@@ -515,7 +515,7 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('colorfunc')" type="text">Color Function</el-button>
+                <el-button @click="setFocus('colorfunc')" type="text">{{ $t('cfg.color_function') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -532,7 +532,7 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('iconfunc')" type="text">Icon Function</el-button>
+                <el-button @click="setFocus('iconfunc')" type="text">{{ $t('cfg.icon_function') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -552,16 +552,16 @@
      
       <el-row style="text-align:left;">
         <el-col :span="12">
-          <el-button @click="setFocus('specificEditor')" type="text">Specific editor</el-button>
+          <el-button @click="setFocus('specificEditor')" type="text">{{ $t('cfg.specific_editor') }}</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button @click="setFocus('writePrivileges')" type="text">Write privileges</el-button>
+          <el-button @click="setFocus('writePrivileges')" type="text">{{ $t('cfg.write_privileges') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12" class="padding-right">
           <el-input
-            placeholder="your specific component url. Eg. specificComponent"
+            :placeholder="$t('cfg.component_url')"
             ref="specificEditor"
             type="text"
             size="mini"
@@ -576,7 +576,7 @@
             filterable
             allow-create
             ref="writePrivileges"
-            placeholder="write privileges"
+            :placeholder="$t('cfg.write_privileges_hint')"
             size="mini"
             style="width:100%;"
           >

@@ -5,7 +5,7 @@
       <el-form>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="Folder Name" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.folder_name')" :label-width="formLabelWidth">
               <el-input size="mini" v-model="currentConfig.config.foldername" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -13,14 +13,14 @@
 
         <el-row>
           <el-col :span="24">
-            <el-form-item label="Reg Ex" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.reg_ex')" :label-width="formLabelWidth">
               <el-input size="mini" v-model="currentConfig.config.regexNO" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
-          <el-form-item label="Root Path" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.root_path')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="currentConfig.config.rootpath" autocomplete="off"></el-input>
           </el-form-item>
         </el-row>

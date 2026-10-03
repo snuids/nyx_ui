@@ -33,7 +33,7 @@
                 type="danger"
                 @click="openInGrafana()"
                 style="width:100%"
-              >Open in Grafana</el-button>
+              >{{ $t('cfg.open_in_grafana') }}</el-button>
             </el-form-item>
           </el-col>
 
@@ -41,7 +41,7 @@
         </el-row>
         <el-row>
           <el-col :span="8" style="text-align: left;">
-            <el-form-item label="Extra parameters" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.extra_parameters')" :label-width="formLabelWidth">
               <el-input size="mini" v-model="currentConfig.config.extraParameters" autocomplete="off"></el-input>
             </el-form-item>
             
@@ -50,21 +50,21 @@
         </el-row>
         <el-row>
           <el-col :span="8" style="text-align: left;">
-            <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+            <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
           </el-col>
           <el-col :span="8" style="text-align: left;">
                 <el-select
                   size="mini"
                   v-model="currentConfig.timeSelectorType"
-                  placeholder="Please select a type"
+                  :placeholder="$t('cfg.select_type')"
                   @change="timeSelectorTypeChange"
                   :disabled="!currentConfig.timeSelectorChecked"
                 >
-                  <el-option label="Free" value="classic"></el-option>
-                  <el-option label="Day" value="day"></el-option>
-                  <el-option label="Month" value="month"></el-option>
-                  <el-option label="Week" value="week"></el-option>
-                  <el-option label="Year" value="year"></el-option>
+                  <el-option :label="$t('cfg.free')" value="classic"></el-option>
+                  <el-option :label="$t('cfg.day')" value="day"></el-option>
+                  <el-option :label="$t('cfg.month')" value="month"></el-option>
+                  <el-option :label="$t('cfg.week')" value="week"></el-option>
+                  <el-option :label="$t('cfg.year')" value="year"></el-option>
                 </el-select>
               </el-col>
               
@@ -75,7 +75,7 @@
               <el-switch
                 v-model="currentConfig.timeRefresh"
                 @change="timeRefreshSwitchChange"
-                active-text="Time Refresh"
+                :active-text="$t('cfg.time_refresh')"
               ></el-switch>
               </el-col>
               <el-col :span="8" style="text-align: left;">
@@ -83,21 +83,21 @@
                 :disabled="!currentConfig.timeRefresh"
                 size="mini"
                 v-model="currentConfig.timeRefreshValue"
-                placeholder="Refresh Interval"
+                :placeholder="$t('cfg.refresh_interval')"
                 @change="timeRefreshSelectChange"
               >
-                <el-option label="5 seconds" value="5s"></el-option>
-                <el-option label="10 seconds" value="10s"></el-option>
-                <el-option label="30 seconds" value="30s"></el-option>
-                <el-option label="45 seconds" value="45s"></el-option>
-                <el-option label="1 minute" value="1m"></el-option>
-                <el-option label="5 minutes" value="5m"></el-option>
-                <el-option label="15 minutes" value="15m"></el-option>
-                <el-option label="30 minutes" value="30m"></el-option>
-                <el-option label="1 hour" value="1h"></el-option>
-                <el-option label="2 hours" value="2h"></el-option>
-                <el-option label="12 hours" value="12h"></el-option>
-                <el-option label="1 day" value="1d"></el-option>
+                <el-option :label="$t('cfg.seconds_5')" value="5s"></el-option>
+                <el-option :label="$t('cfg.seconds_10')" value="10s"></el-option>
+                <el-option :label="$t('cfg.seconds_30')" value="30s"></el-option>
+                <el-option :label="$t('cfg.seconds_45')" value="45s"></el-option>
+                <el-option :label="$t('cfg.minute_1')" value="1m"></el-option>
+                <el-option :label="$t('cfg.minutes_5')" value="5m"></el-option>
+                <el-option :label="$t('cfg.minutes_15')" value="15m"></el-option>
+                <el-option :label="$t('cfg.minutes_30')" value="30m"></el-option>
+                <el-option :label="$t('cfg.hour_1')" value="1h"></el-option>
+                <el-option :label="$t('cfg.hours_2')" value="2h"></el-option>
+                <el-option :label="$t('cfg.hours_12')" value="12h"></el-option>
+                <el-option :label="$t('cfg.day_1')" value="1d"></el-option>
               </el-select>
               </el-col>
             </el-row>

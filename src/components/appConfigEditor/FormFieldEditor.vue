@@ -9,25 +9,25 @@
     <el-form v-if="curField" :model="curField">
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Field" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.field')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.field" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Title" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.title')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.title" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-form-item label="Type" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.type')" :label-width="formLabelWidth">
             <el-select
               size="mini"
               v-model="curField.type"
-              placeholder="Please select a type"
+              :placeholder="$t('cfg.select_type')"
               @change="changeType"
             >
               <el-option
@@ -41,11 +41,11 @@
         </el-col>
         <el-col :span="10">
           <el-form-item
-            label="Subtype"
+            :label="$t('cfg.subtype')"
             :label-width="formLabelWidth"
             v-if="selectedType && selectedType.subTypes"
           >
-            <el-select size="mini" v-model="curField.subType" placeholder="Please select a subtype">
+            <el-select size="mini" v-model="curField.subType" :placeholder="$t('cfg.select_subtype')">
               <el-option
                 v-for="(subType, index) in selectedType.subTypes"
                 :label="subType.label"
@@ -59,7 +59,7 @@
 
       <el-row :gutter="20" v-if="curField.type=='string' || curField.type=='number'">
         <el-col :span="20">
-          <el-form-item label="Default" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.default')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.default" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
@@ -67,7 +67,7 @@
 
       <el-row :gutter="20" v-if="selectedType && selectedType.clearable">
         <el-col :span="9">
-          <el-form-item label="Clearable" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.clearable')" :label-width="formLabelWidth">
             <el-switch v-model="curField.clearable"></el-switch>
           </el-form-item>
         </el-col>
@@ -75,7 +75,7 @@
 
       <el-row :gutter="20" v-if="curField.type && curField.type == 'selecter'">
         <el-col :span="20">
-          <el-form-item label="Options" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.options')" :label-width="formLabelWidth">
             <el-tag
               :key="tag"
               v-for="tag in curField.selectOptions"
@@ -98,21 +98,21 @@
       </el-row>
       <el-row :gutter="20" v-if="curField.type && curField.type == 'selecter'">
         <el-col :span="20">
-          <el-form-item label="Multiple" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.multiple')" :label-width="formLabelWidth">
             <el-switch v-model="curField.multiple"></el-switch>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Color" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.color')" :label-width="formLabelWidth">
             <el-input size="mini" v-model="curField.color" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="20">
-          <el-form-item label="Inverted" :label-width="formLabelWidth">
+          <el-form-item :label="$t('cfg.inverted')" :label-width="formLabelWidth">
             <el-switch v-model="curField.inverted"></el-switch>
           </el-form-item>
         </el-col>

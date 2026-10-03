@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.16 03/Oct/2026
+* Localized the application config editors (Kibana, Grafana, ES table, form, link, upload, file system, query filter) in en/fr/el
+
+
 ## V3.29.15 03/Oct/2026
 * Localized the Nyx Info dashboard (en/fr/el)
 

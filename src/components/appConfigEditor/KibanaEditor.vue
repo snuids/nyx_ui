@@ -5,19 +5,19 @@
       <el-form>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="Use Short Url" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.use_short_url')" :label-width="formLabelWidth">
               <el-switch size="mini" v-model="currentConfig.config.useShortUrl" autocomplete="off"></el-switch>
             </el-form-item>
           </el-col>
           
           <el-col :span="8">
-            <el-form-item label="Hidden Query" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.hidden_query')" :label-width="formLabelWidth">
               <el-input :disabled="currentConfig.config.useShortUrl" size="mini" v-model="currentConfig.config.hiddenQuery" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="Filter Column" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.filter_column')" :label-width="formLabelWidth">
               <el-input :disabled="currentConfig.config.useShortUrl" size="mini" v-model="currentConfig.config.filtercolumn" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -25,12 +25,12 @@
 
         <el-row>
           <el-col :span="8" style="text-align: left;">
-            <el-form-item label="Dashboard" :label-width="formLabelWidth">
+            <el-form-item :label="$t('cfg.dashboard')" :label-width="formLabelWidth">
               <el-select
                 size="mini"
                 @change="kibanaDashboardSelected"
                 v-model="currentConfig.config.kibanaId"
-                placeholder="Select"
+                :placeholder="$t('cfg.select')"
                 :loading="listLoading"
                 style="width:100%"
                 filterable
@@ -52,13 +52,13 @@
                 type="danger"
                 @click="openInKibana()"
                 style="width:100%"
-              >Open in Kibana</el-button>
+              >{{ $t('cfg.open_in_kibana') }}</el-button>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item
-              label="Kibana Time"
+              :label="$t('cfg.kibana_time')"
               :label-width="formLabelWidth"
               prop="config.kibanaTime"
             >
@@ -80,12 +80,12 @@
               <el-row>
                 <el-switch :disabled="currentConfig.config.useShortUrl"
                   v-model="currentConfig.queryBarChecked"
-                  active-text="Query Bar"
+                  :active-text="$t('cfg.query_bar')"
                   @change="query_bar_changed"
                 ></el-switch>
               </el-row>
               <el-row>
-                <el-switch :disabled="currentConfig.config.useShortUrl" v-model="currentConfig.downloadChecked" active-text="Download"></el-switch>
+                <el-switch :disabled="currentConfig.config.useShortUrl" v-model="currentConfig.downloadChecked" :active-text="$t('generic.download')"></el-switch>
               </el-row>
               <el-row>
                 
@@ -98,28 +98,28 @@
                 <el-switch
                   :disabled="currentConfig.config.useShortUrl"
                   v-model="currentConfig.queryFilterChecked"
-                  active-text="Query Filter"
+                  :active-text="$t('cfg.query_filter')"
                   @change="query_filter_changed"
                 ></el-switch>
               </el-row>
 
               <el-row>
-                <el-switch v-model="currentConfig.timeSelectorChecked" active-text="Time Selector"></el-switch>
+                <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
               </el-row>
 
               <el-row>
                 <el-select
                   size="mini"
                   v-model="currentConfig.timeSelectorType"
-                  placeholder="Please select a type"
+                  :placeholder="$t('cfg.select_type')"
                   @change="timeSelectorTypeChange"
                   :disabled="!currentConfig.timeSelectorChecked"
                 >
-                  <el-option label="Free" value="classic"></el-option>
-                  <el-option label="Day" value="day"></el-option>
-                  <el-option label="Month" value="month"></el-option>
-                  <el-option label="Week" value="week"></el-option>
-                  <el-option label="Year" value="year"></el-option>
+                  <el-option :label="$t('cfg.free')" value="classic"></el-option>
+                  <el-option :label="$t('cfg.day')" value="day"></el-option>
+                  <el-option :label="$t('cfg.month')" value="month"></el-option>
+                  <el-option :label="$t('cfg.week')" value="week"></el-option>
+                  <el-option :label="$t('cfg.year')" value="year"></el-option>
                 </el-select>
               </el-row>
             </el-form-item>
@@ -127,13 +127,13 @@
           <el-col :span="8">
             <el-form-item label :label-width="formLabelWidth">
             <el-row>
-              <el-switch :disabled="currentConfig.config.useShortUrl" v-model="currentConfig.hideFilter" active-text="Hide Filter"></el-switch>
+              <el-switch :disabled="currentConfig.config.useShortUrl" v-model="currentConfig.hideFilter" :active-text="$t('cfg.hide_filter')"></el-switch>
             </el-row>
             <el-row>
               <el-switch
                 v-model="currentConfig.timeRefresh"
                 @change="timeRefreshSwitchChange"
-                active-text="Time Refresh"
+                :active-text="$t('cfg.time_refresh')"
               ></el-switch>
             </el-row>
             <el-row>
@@ -141,21 +141,21 @@
                 :disabled="!currentConfig.timeRefresh"
                 size="mini"
                 v-model="currentConfig.timeRefreshValue"
-                placeholder="Refresh Interval"
+                :placeholder="$t('cfg.refresh_interval')"
                 @change="timeRefreshSelectChange"
               >
-                <el-option label="5 seconds" value="5000"></el-option>
-                <el-option label="10 seconds" value="10000"></el-option>
-                <el-option label="30 seconds" value="30000"></el-option>
-                <el-option label="45 seconds" value="45000"></el-option>
-                <el-option label="1 minute" value="60000"></el-option>
-                <el-option label="5 minutes" value="300000"></el-option>
-                <el-option label="15 minutes" value="900000"></el-option>
-                <el-option label="30 minutes" value="1800000"></el-option>
-                <el-option label="1 hour" value="3600000"></el-option>
-                <el-option label="2 hours" value="7200000"></el-option>
-                <el-option label="12 hours" value="43200000"></el-option>
-                <el-option label="1 day" value="86400000"></el-option>
+                <el-option :label="$t('cfg.seconds_5')" value="5000"></el-option>
+                <el-option :label="$t('cfg.seconds_10')" value="10000"></el-option>
+                <el-option :label="$t('cfg.seconds_30')" value="30000"></el-option>
+                <el-option :label="$t('cfg.seconds_45')" value="45000"></el-option>
+                <el-option :label="$t('cfg.minute_1')" value="60000"></el-option>
+                <el-option :label="$t('cfg.minutes_5')" value="300000"></el-option>
+                <el-option :label="$t('cfg.minutes_15')" value="900000"></el-option>
+                <el-option :label="$t('cfg.minutes_30')" value="1800000"></el-option>
+                <el-option :label="$t('cfg.hour_1')" value="3600000"></el-option>
+                <el-option :label="$t('cfg.hours_2')" value="7200000"></el-option>
+                <el-option :label="$t('cfg.hours_12')" value="43200000"></el-option>
+                <el-option :label="$t('cfg.day_1')" value="86400000"></el-option>
               </el-select>
             </el-row>
             </el-form-item>
