@@ -69,7 +69,7 @@
                   style="width:210px;"
                   size="mini"
                   v-model="newRec._source.language"
-                  placeholder="Please select a language"
+                  :placeholder="$t('ui.select_language')"
                 >
                   <el-option
                     :key="lang.value"
@@ -142,6 +142,7 @@
 import userresetpassword from "@/components/UserResetPassword";
 import Vue from "vue";
 import axios from "axios";
+import { i18n } from "../i18n-setup";
 
 Vue.component("UserResetPassword", userresetpassword);
 
@@ -183,12 +184,12 @@ export default {
         _id: [
           {
             required: true,
-            message: "Please input email address",
+            message: i18n.t("ui.input_email"),
             trigger: "blur"
           },
           {
             type: "email",
-            message: "Please input correct email address",
+            message: i18n.t("ui.input_correct_email"),
             trigger: ["blur"]
           },
           {
@@ -200,24 +201,24 @@ export default {
           firstname: [
             {
               required: true,
-              message: "Please input firstname",
+              message: i18n.t("ui.input_firstname"),
               trigger: "blur"
             }
           ],
           lastname: [
             {
               required: true,
-              message: "Please input lastname",
+              message: i18n.t("ui.input_lastname"),
               trigger: "blur"
             }
           ],
           phone: [
-            { required: false, message: "Please input phone", trigger: "blur" }
+            { required: false, message: i18n.t("ui.input_phone"), trigger: "blur" }
           ],
           language: [
             {
               required: true,
-              message: "Please input language",
+              message: i18n.t("ui.input_language"),
               trigger: "change"
             }
           ]

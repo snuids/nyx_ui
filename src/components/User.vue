@@ -159,7 +159,7 @@ export default {
           this.$notify({
             title: "Success",
             type: "success",
-            message: "Delete completed",
+            message: this.$t("rep.delete_completed"),
             position: "bottom-right"
           });
         })
@@ -167,7 +167,7 @@ export default {
           this.$notify({
             title: "Cancelled",
             type: "info",
-            message: "Delete canceled",
+            message: this.$t("rep.delete_canceled"),
             position: "bottom-right"
           });
         });

@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.18 03/Oct/2026
+* Localized the table/viewer components and notifications (generic/PG tables, details, file system, users, send message, config, form) in en/fr/el
+
+
 ## V3.29.17 03/Oct/2026
 * Localized the report components (report editor, list, periodic scheduler, task, generator) in en/fr/el
 

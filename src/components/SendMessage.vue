@@ -72,9 +72,9 @@ export default {
           if (response.data.error != "") console.log("Report list error...");
           else {
             this.$notify({
-              title: "Message Sent.",
+              title: this.$t("ui.message_sent"),
               type: "success",
-              message: "Message Sent.",
+              message: this.$t("ui.message_sent"),
               position: "bottom-right",
               duration: 1000
             });

@@ -3,7 +3,7 @@
 <template>
 
   <div>
-    <!-- <h1>File System</h1>
+    <!-- <h1>{{ $t('ui.file_system') }}</h1>
         v-on:dialogcloseupdated="recordUpdated()"
     <h1>{{multipleSelection}}</h1> -->
     <span v-if="dialogFileEditor">
@@ -63,7 +63,7 @@
         :height="tableHeight"
 
         style="width: 100%;overflow-y: auto/scroll;" 
-        empty-text="This folder is empty">
+        :empty-text="$t('ui.folder_empty')">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="name" label="Name" sortable>
           <template slot-scope="scope" style="font-weight:bold;">
@@ -81,10 +81,10 @@
             <span  class="noselect">{{scope.row.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Last modified" sortable prop="modification_time" width="150">
+        <el-table-column :label="$t('ui.last_modified')" sortable prop="modification_time" width="150">
           <template slot-scope="scope"><span class="noselect" >{{scope.row.modification_time | formatTS}}</span> </template>
         </el-table-column>
-        <el-table-column prop="size" sortable label="File size" width="150">
+        <el-table-column prop="size" sortable :label="$t('ui.file_size')" width="150">
           <template slot-scope="scope"><span  class="noselect" v-if="scope.row.type=='file'">{{scope.row.size | prettyBytes}}</span></template>
         </el-table-column>
 
@@ -285,7 +285,7 @@ export default {
             console.log('file saved')
             this.selectedFile = tmp_file  
             this.$notify({
-              title: "File saved",
+              title: this.$t("ui.file_saved"),
               type: "success",
               duration: 1000,
               position: "bottom-right"
@@ -295,7 +295,7 @@ export default {
             console.log(response);
             this.$notify({
               title: "Error",
-              message: "Failed to save file",
+              message: this.$t("ui.failed_save_file"),
               type: "error",
               position: "bottom-right"
             });
@@ -307,7 +307,7 @@ export default {
           console.log(error);
           this.$notify({
             title: "Error",
-            message: "Failed to save file",
+            message: this.$t("ui.failed_save_file"),
             type: "error",
             position: "bottom-right"
           });
@@ -370,7 +370,7 @@ export default {
           console.log(error);
           this.$notify({
             title: "Error",
-            message: "Failed to download file(s)",
+            message: this.$t("ui.failed_download_files"),
             type: "error",
             position: "bottom-right"
           });
@@ -416,7 +416,7 @@ export default {
           console.log(error);
           this.$notify({
             title: "Error",
-            message: "Failed to list directory",
+            message: this.$t("ui.failed_list_dir"),
             type: "error",
             position: "bottom-right"
           });

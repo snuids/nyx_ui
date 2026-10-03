@@ -378,9 +378,9 @@ export default {
       //   data: newObj
       // });
       // this.$notify({
-      //   title: "Record updated.",
+      //   title: this.$t("rep.record_updated"),
       //   type: "success",
-      //   message: "Record updated.",
+      //   message: this.$t("rep.record_updated"),
       //   position: "bottom-right",
       //   duration: 1000
       // });
@@ -462,7 +462,7 @@ export default {
           this.$notify({
             title: "Success",
             type: "success",
-            message: "Delete completed",
+            message: this.$t("rep.delete_completed"),
             position: "bottom-right"
           });
         })
@@ -470,7 +470,7 @@ export default {
           this.$notify({
             title: "Cancelled",
             type: "info",
-            message: "Delete canceled",
+            message: this.$t("rep.delete_canceled"),
             position: "bottom-right"
           });
         });
@@ -577,7 +577,7 @@ export default {
             if (download) {
               if (response.data.type == "mail") {
                 this.$notify({
-                  title: "Data Sent By Mail",
+                  title: this.$t("ui.data_sent_mail"),
                   message:
                     "Records : " +
                     response.data.total +
@@ -674,7 +674,7 @@ export default {
           console.log(error);
           this.$notify({
             title: "Error",
-            message: "Query Failed",
+            message: this.$t("ui.query_failed"),
             type: "error",
             position: "bottom-right"
           });

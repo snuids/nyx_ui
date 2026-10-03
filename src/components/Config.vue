@@ -222,7 +222,7 @@ export default {
         _id: "id_" + Math.floor((1 + Math.random()) * 0x1000000),
         _index: "nyx_app",
         _source: {
-          title: "New App",
+          title: this.$t("ui.new_app"),
           type: "generic-table",
           category: "",
           order: 1000,

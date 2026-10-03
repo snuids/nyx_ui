@@ -53,7 +53,7 @@ export default {
       });
       this.$notify({
         title: "Success",
-        message: "Bye Bye",
+        message: this.$t("notifications.byebye"),
         type: "success",
         position: "bottom-right"
       });

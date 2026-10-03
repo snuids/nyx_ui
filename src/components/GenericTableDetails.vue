@@ -249,9 +249,9 @@ export default {
       });
       this.$emit("dialogcloseupdated");
       this.$notify({
-        title: "Record saved.",
+        title: this.$t("rep.record_saved"),
         type: "success",
-        message: "Record updated.",
+        message: this.$t("rep.record_updated"),
         position: "bottom-right"
       });
     }

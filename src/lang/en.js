@@ -561,6 +561,35 @@ export const messages = {
         pdf_viewer:"PDF Viewer",
         report_asked:"Report asked.",
         regen_asked:"Regeneration of a report asked"
+      },
+      ui:{
+        query_failed:"Query Failed",
+        data_sent_mail:"Data Sent By Mail",
+        file_system:"File System",
+        folder_empty:"This folder is empty",
+        last_modified:"Last modified",
+        file_size:"File size",
+        file_saved:"File saved",
+        failed_save_file:"Failed to save file",
+        failed_download_files:"Failed to download file(s)",
+        failed_list_dir:"Failed to list directory",
+        select_language:"Please select a language",
+        input_email:"Please input email address",
+        input_correct_email:"Please input correct email address",
+        input_firstname:"Please input firstname",
+        input_lastname:"Please input lastname",
+        input_phone:"Please input phone",
+        input_language:"Please input language",
+        cannot_be_empty:"Cannot be empty",
+        new_password_saved:"New Password Saved",
+        message_sent:"Message Sent.",
+        new_app:"New App",
+        pick_datetime:"Pick a date and a time",
+        logout_login_changes:"Logout/Login to see changes.",
+        record_saved_alert:"Your record has been saved.",
+        table_sql_desc:"Displays a table stored in SQL.",
+        table_sql_detail_1:"It displays the data as a table that can optionally include a time line or a map.",
+        table_sql_detail_2:"It can also display the result of a query."
       }
     }
   }

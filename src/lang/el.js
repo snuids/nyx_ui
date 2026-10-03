@@ -552,6 +552,35 @@ export const messages = {
       pdf_viewer:"Προβολή PDF",
       report_asked:"Ζητήθηκε αναφορά.",
       regen_asked:"Ζητήθηκε επαναδημιουργία αναφοράς"
+    },
+    ui:{
+      query_failed:"Αποτυχία ερωτήματος",
+      data_sent_mail:"Δεδομένα που στάλθηκαν με email",
+      file_system:"Σύστημα αρχείων",
+      folder_empty:"Ο φάκελος είναι κενός",
+      last_modified:"Τελευταία τροποποίηση",
+      file_size:"Μέγεθος αρχείου",
+      file_saved:"Το αρχείο αποθηκεύτηκε",
+      failed_save_file:"Αποτυχία αποθήκευσης αρχείου",
+      failed_download_files:"Αποτυχία λήψης αρχείου(ων)",
+      failed_list_dir:"Αποτυχία καταλόγου",
+      select_language:"Παρακαλώ επιλέξτε γλώσσα",
+      input_email:"Παρακαλώ εισάγετε διεύθυνση email",
+      input_correct_email:"Παρακαλώ εισάγετε σωστή διεύθυνση email",
+      input_firstname:"Παρακαλώ εισάγετε όνομα",
+      input_lastname:"Παρακαλώ εισάγετε επώνυμο",
+      input_phone:"Παρακαλώ εισάγετε τηλέφωνο",
+      input_language:"Παρακαλώ εισάγετε γλώσσα",
+      cannot_be_empty:"Δεν μπορεί να είναι κενό",
+      new_password_saved:"Ο νέος κωδικός αποθηκεύτηκε",
+      message_sent:"Το μήνυμα στάλθηκε.",
+      new_app:"Νέα εφαρμογή",
+      pick_datetime:"Επιλέξτε ημερομηνία και ώρα",
+      logout_login_changes:"Αποσυνδεθείτε/συνδεθείτε για να δείτε τις αλλαγές.",
+      record_saved_alert:"Η εγγραφή σας αποθηκεύτηκε.",
+      table_sql_desc:"Εμφανίζει πίνακα αποθηκευμένο σε SQL.",
+      table_sql_detail_1:"Εμφανίζει τα δεδομένα ως πίνακα που μπορεί να περιλαμβάνει χρονολόγιο ή χάρτη.",
+      table_sql_detail_2:"Μπορεί επίσης να εμφανίσει το αποτέλεσμα ενός ερωτήματος."
     }
   }
 }

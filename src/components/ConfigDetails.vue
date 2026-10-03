@@ -135,10 +135,10 @@
                 <v-icon name="database" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                <b>Displays a table stored in SQL.</b>
+                <b>{{ $t('ui.table_sql_desc') }}</b>
                 <br/> 
-                It displays the data as a table that can optionaly include a time line or a map.<br/> 
-                It can also display the result of a query.                
+                {{ $t('ui.table_sql_detail_1') }}<br/> 
+                {{ $t('ui.table_sql_detail_2') }}                
                 <br/> 
               </el-col>
               </el-card>
@@ -602,7 +602,7 @@
               </el-row>
               <el-row>
                 <el-col :span="4">
-                  <el-button size="mini" @click="handleAddField()">Add Field</el-button>
+                  <el-button size="mini" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
                 </el-col>
                 <el-col :span="20">
                   <!-- Header dialog -->
@@ -811,7 +811,7 @@
             <div>
               <el-row>
                 <el-col :span="4">
-                  <el-button size="mini" @click="handleAddQueryFilterField()">Add Field</el-button>
+                  <el-button size="mini" @click="handleAddQueryFilterField()">{{ $t('cfg.add_field') }}</el-button>
                 </el-col>
                 <el-col :span="20">
                   <QueryFilterEditor
@@ -945,7 +945,7 @@ export default {
         queryFilterEditorVisible: false,
         currentHeader: {},
         currentQueryFilter: {},
-        formLabelWidth: "auto",
+        formLabelWidth: "200px",
         privileges: [],
         dashboards: [],
         selectedDash: null,
@@ -1355,9 +1355,9 @@ export default {
         data: this.orgConfig
       });
       this.$notify({
-        title: "Record saved.",
+        title: this.$t("rep.record_saved"),
         type: "success",
-        message: "Logout/Login to see changes.",
+        message: this.$t("ui.logout_login_changes"),
         position: "bottom-right"
       });
       this.$emit("dialogclose");

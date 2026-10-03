@@ -66,7 +66,7 @@ export default {
         newPassword: [
           {
             required: true,
-            message: "Cannot be empty",
+            message: this.$t("ui.cannot_be_empty"),
             trigger: ["blur"]
           },
           { validator: checkPwd, trigger: ["blur"] }
@@ -249,7 +249,7 @@ export default {
           if (response.data.error == "") {
             this.$notify({
               title: "Success",
-              message: "New Password Saved",
+              message: this.$t("ui.new_password_saved"),
               type: "success",
               position: "bottom-right"
             });
@@ -258,7 +258,7 @@ export default {
         .catch(() => {
           this.$notify({
             title: "Error",
-            message: "Query Failed",
+            message: this.$t("ui.query_failed"),
             type: "error",
             position: "bottom-right"
           });

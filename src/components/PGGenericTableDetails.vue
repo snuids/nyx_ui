@@ -52,7 +52,7 @@
                   v-model="field.value"
                   type="datetime"
                   size="mini"
-                  placeholder="Select date and time"
+                  :placeholder="$t('rep.select_datetime')"
                   default-time="12:00:00"
                 ></el-date-picker>
               </el-form-item>
@@ -245,9 +245,9 @@ export default {
       // });
       // this.$emit("dialogcloseupdated")
       // this.$notify({
-      //   title: "Record saved.",
+      //   title: this.$t("rep.record_saved"),
       //   type: "success",
-      //   message: "Record updated.",
+      //   message: this.$t("rep.record_updated"),
       //   position: "bottom-right"
       // });
 
@@ -283,9 +283,9 @@ export default {
           if (response.data.error == "") {
             this.$emit("dialogcloseupdated");
             this.$notify({
-              title: "Record saved.",
+              title: this.$t("rep.record_saved"),
               type: "success",
-              message: "Record updated.",
+              message: this.$t("rep.record_updated"),
               position: "bottom-right"
             });
           }

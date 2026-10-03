@@ -565,6 +565,35 @@ export const messages = {
         pdf_viewer:"Visionneuse PDF",
         report_asked:"Rapport demandé.",
         regen_asked:"Régénération d'un rapport demandée"
+      },
+      ui:{
+        query_failed:"Échec de la requête",
+        data_sent_mail:"Données envoyées par e-mail",
+        file_system:"Système de fichiers",
+        folder_empty:"Ce dossier est vide",
+        last_modified:"Dernière modification",
+        file_size:"Taille du fichier",
+        file_saved:"Fichier enregistré",
+        failed_save_file:"Échec de l'enregistrement du fichier",
+        failed_download_files:"Échec du téléchargement du/des fichier(s)",
+        failed_list_dir:"Échec de la liste du répertoire",
+        select_language:"Veuillez sélectionner une langue",
+        input_email:"Veuillez saisir l'adresse e-mail",
+        input_correct_email:"Veuillez saisir une adresse e-mail correcte",
+        input_firstname:"Veuillez saisir le prénom",
+        input_lastname:"Veuillez saisir le nom",
+        input_phone:"Veuillez saisir le téléphone",
+        input_language:"Veuillez saisir la langue",
+        cannot_be_empty:"Ne peut pas être vide",
+        new_password_saved:"Nouveau mot de passe enregistré",
+        message_sent:"Message envoyé.",
+        new_app:"Nouvelle application",
+        pick_datetime:"Choisir une date et une heure",
+        logout_login_changes:"Déconnectez-vous/reconnectez-vous pour voir les modifications.",
+        record_saved_alert:"Votre enregistrement a été sauvegardé.",
+        table_sql_desc:"Affiche une table stockée en SQL.",
+        table_sql_detail_1:"Il affiche les données sous forme de tableau pouvant inclure une chronologie ou une carte.",
+        table_sql_detail_2:"Il peut également afficher le résultat d'une requête."
       }
     }
   }

@@ -17,7 +17,7 @@
               :label-width="formLabelWidth"
               v-else-if="item.type =='date'"
             >
-              <el-date-picker :size="formSize" v-model="item.value" type="date" placeholder="Pick a day"></el-date-picker>
+              <el-date-picker :size="formSize" v-model="item.value" type="date" :placeholder="$t('reportgenerator.pick_day')"></el-date-picker>
             </el-form-item>
             <el-form-item
               :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
@@ -28,7 +28,7 @@
                 size="mini"
                 v-model="item.value"
                 type="datetime"
-                placeholder="Pick a date and a time"
+                :placeholder="$t('ui.pick_datetime')"
               ></el-date-picker>
             </el-form-item>
 
@@ -141,16 +141,16 @@ export default {
             });
 
               this.$notify({
-                title: "Message Sent.",
+                title: this.$t("ui.message_sent"),
                 type: "success",
-                message: "Message Sent.",
+                message: this.$t("ui.message_sent"),
                 position: "bottom-right",
                 duration: 1000
               });
           }
           
 
-          this.$alert("Your record has been saved.", "Message", {
+          this.$alert(this.$t("ui.record_saved_alert"), "Message", {
             confirmButtonText: "OK"
           });
           this.commitunderway = false;
