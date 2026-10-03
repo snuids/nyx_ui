@@ -249,7 +249,7 @@ export default {
       this.titleEditor = "New Report";
 
       this.curReport = {
-        title: "New Report",
+        title: this.$t("rep.new_report"),
         exec: "./reports/pythondef/myreport.py",
         jasper: "./reports/jasper/myjasper.jrxml",
         notebook:"mynotebook",
@@ -298,7 +298,7 @@ export default {
             this.loadData();
           }, 1000);
           this.$notify({
-            title: "Delete completed",
+            title: this.$t("rep.delete_completed"),
             type: "success",
             position: "bottom-right"
           });
@@ -307,7 +307,7 @@ export default {
           /*
         this.$message({
           type: 'info',
-          message: 'Delete canceled'
+          message: this.$t("rep.delete_canceled")
         });
         */
         });

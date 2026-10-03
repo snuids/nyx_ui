@@ -24,7 +24,7 @@
     </el-dialog>
 
     <el-dialog
-      title="PDF Viewer"
+      :title="$t('rep.pdf_viewer')"
       :visible.sync="pdfDialogVisible"
       :before-close="closePdfDialog"
       width="90%"
@@ -356,9 +356,9 @@ export default {
           }
 
           this.$notify({
-            title: "Report asked.",
+            title: this.$t("rep.report_asked"),
             type: "success",
-            message: "Regeneration of a report asked",
+            message: this.$t("rep.regen_asked"),
             position: "bottom-right"
           });
 

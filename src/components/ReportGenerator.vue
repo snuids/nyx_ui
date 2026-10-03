@@ -461,7 +461,7 @@ export default {
             this.$notify({
               title: "Failed",
               type: "danger",
-              message: "Unable to send message.",
+              message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
           } else {

@@ -2,36 +2,36 @@
   <el-dialog width="80%" :title="title" :visible.sync="visible" :before-close="closeDialog">
     <el-form v-if="visible" :model="newRec" :rules="rules" ref="newRec">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="Main" name="main">
+        <el-tab-pane :label="$t('configdetails.tab_main')" name="main">
           <el-row>
             <el-col :span="14">
               
-              <el-form-item label="Title" :label-width="formLabelWidth" prop="title">
+              <el-form-item :label="$t('cfg.title')" :label-width="formLabelWidth" prop="title">
                 <el-input size="mini" v-model="newRec.title" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
-              <el-form-item label="Icon" :label-width="formLabelWidth"  prop="icon">
+              <el-form-item :label="$t('cfg.icon')" :label-width="formLabelWidth"  prop="icon">
                 <IconPicker v-model="newRec.icon" size="mini" :icon-preview="true" :preview-scale="2.2" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="Description" :label-width="formLabelWidth"  prop="description">
+              <el-form-item :label="$t('rep.description')" :label-width="formLabelWidth"  prop="description">
                 <el-input size="mini" v-model="newRec.description" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>            
             <el-col :span="22">
-              <el-form-item label="Report Type" :label-width="formLabelWidth" style="text-align:left">
+              <el-form-item :label="$t('rep.report_type')" :label-width="formLabelWidth" style="text-align:left">
                 <el-radio-group v-model="newRec.reportType" @change="reportTypeChanged">
-                  <el-radio label="notebook_doc">Notebook + Word</el-radio>
-                  <el-radio label="notebook">Notebook</el-radio>
-                  <el-radio label="python">Python</el-radio>
-                  <el-radio label="jasper">Jasper</el-radio>
-                  <el-radio label="jasper_jdbc">Jasper JDBC</el-radio>
+                  <el-radio label="notebook_doc">{{ $t('rep.notebook_word') }}</el-radio>
+                  <el-radio label="notebook">{{ $t('rep.notebook') }}</el-radio>
+                  <el-radio label="python">{{ $t('rep.python') }}</el-radio>
+                  <el-radio label="jasper">{{ $t('rep.jasper') }}</el-radio>
+                  <el-radio label="jasper_jdbc">{{ $t('rep.jasper_jdbc') }}</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>            
@@ -43,9 +43,7 @@
                 <v-icon name="code" scale="2.2" />
               </el-col>
               <el-col :span="20">
-                A simple report based on a python source code that will generate the output. 
-                <br/> 
-                The source code will be saved in the pythondef sub directory.<br/> 
+                {{ $t('rep.desc_python') }}
                 <br/> 
               </el-col>
               </el-card>
@@ -56,7 +54,7 @@
               <v-icon name="regular/file-word" scale="2.2" />
             </el-col>
             <el-col :span="20">
-              A report that uses a word template with tags and a python notebook to replace the tags by the approriate values.
+              {{ $t('rep.desc_notebook_doc') }}
                <br/>
                <br/> 
             </el-col>
@@ -69,7 +67,7 @@
               <v-icon name="regular/file-excel" scale="2.2" />
             </el-col>
             <el-col :span="20">
-              A report that uses a python notebook to generate the output. Ideal to generate Excel files.
+              {{ $t('rep.desc_notebook') }}
                <br/> 
             </el-col>
             </el-card>
@@ -80,8 +78,7 @@
               <v-icon name="regular/file-pdf" scale="2.2" />
             </el-col>
             <el-col :span="20">
-              A report that uses Jasper report and Elastic Search. In most cases, the output will be a PDF file. <br/>
-              Download Jasper iReport application from the internet in order to create your report.<br/>
+              {{ $t('rep.desc_jasper') }}
                <br/> 
             </el-col>
             </el-card>
@@ -92,9 +89,7 @@
               <v-icon name="regular/file-pdf" scale="2.2" />
             </el-col>
             <el-col :span="20">
-              A report that uses Jasper report and a JDBC compliant database such as SQL server or PostgreSQL. <br/>
-              In most cases, the output will be a PDF file. <br/>
-              Download Jasper iReport application from the internet in order to create your report.<br/>
+              {{ $t('rep.desc_jasper_jdbc') }}
                <br/> 
             </el-col>
             </el-card>
@@ -106,7 +101,7 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="Output" :label-width="formLabelWidth">
+              <el-form-item :label="$t('report.output')" :label-width="formLabelWidth">
                 <!--<el-input size="mini" v-model="newRec.output" autocomplete="off"></el-input>-->
                 <div style="display:">
                   <el-tag
@@ -130,7 +125,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6" style="text-align:left">
-              <el-form-item label="Generate PDF" label-width="160px">
+              <el-form-item :label="$t('rep.generate_pdf')" label-width="160px">
                 <el-checkbox v-model="newRec.generatePDF"></el-checkbox>
               </el-form-item>
             </el-col>
@@ -152,7 +147,7 @@
           <el-row :span="24" v-show="newRec.reportType=='jasper_jdbc'">
             <el-col :span="12">
               <el-form-item
-                label="JDBC Driver"
+                :label="$t('rep.jdbc_driver')"
                 :label-width="formLabelWidth"                
               >
                 <el-input size="mini" v-model="newRec.jdbc_driver" autocomplete="off"></el-input>
@@ -160,7 +155,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item
-                label="JDBC URL"
+                :label="$t('rep.jdbc_url')"
                 :label-width="formLabelWidth"                
               >
                 <el-input size="mini" v-model="newRec.jdbc_url" autocomplete="off"></el-input>
@@ -170,7 +165,7 @@
           <el-row :span="24" v-show="newRec.reportType=='jasper_jdbc'">
             <el-col :span="12">
               <el-form-item
-                label="Login"
+                :label="$t('rep.login')"
                 :label-width="formLabelWidth"                
               >
                 <el-input size="mini" v-model="newRec.jdbc_login" autocomplete="off"></el-input>
@@ -178,7 +173,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item
-                label="Password"
+                :label="$t('rep.password')"
                 :label-width="formLabelWidth"                
               >
                 <el-input type="password" size="mini" v-model="newRec.jdbc_password" autocomplete="off"></el-input>
@@ -189,13 +184,13 @@
           <el-row v-show="newRec.reportType=='jasper'">
             <el-col :span="12">
               <el-form-item
-                label="Datasource"
+                :label="$t('rep.datasource')"
                 :label-width="formLabelWidth"
               >
                 <el-select
                   size="mini"
                   v-model="newRec.datasource"
-                  placeholder="Select a datasource"
+                  :placeholder="$t('rep.select_datasource')"
                   filterable
                 >
                   <el-option
@@ -212,21 +207,21 @@
           <el-row>
             <el-col :span="12">
               <el-form-item
-                label="Exec"
+                :label="$t('rep.exec')"
                 :label-width="formLabelWidth"
                 v-show="newRec.reportType==undefined || newRec.reportType=='python'"
               >
                 <el-input size="mini" v-model="newRec.exec" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item
-                label="Jasper Path"
+                :label="$t('rep.jasper_path')"
                 :label-width="formLabelWidth"
                 v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'"
               >
                 <el-input size="mini" v-model="newRec.jasper" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item
-                label="Notebook Path"
+                :label="$t('rep.notebook_path')"
                 :label-width="formLabelWidth"
                 v-show="newRec.reportType=='notebook' || newRec.reportType=='notebook_doc'"
               >
@@ -246,8 +241,8 @@
                 style="height:30px"
               >              
                 <div class="el-upload__text">
-                  Drop you jrxml file here.<br/>
-                  <em>Click to upload</em>
+                  {{ $t('rep.drop_jrxml') }}<br/>
+                  <em>{{ $t('rep.click_upload') }}</em>
                 </div>
                 
               </el-upload> 
@@ -258,19 +253,19 @@
 
         </el-tab-pane>
 
-        <el-tab-pane label="Parameters" name="parameters">
+        <el-tab-pane :label="$t('configdetails.parameters')" name="parameters">
           <el-row v-for="(param, index) in newRec.parameters" :key="index">
             <el-col :span="5">
-              <el-form-item :label="'Parameter '+(index+1)" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="param.title" placeholder="Title" autocomplete="off"></el-input>
+              <el-form-item :label="$t('rep.parameter')+' '+(index+1)" :label-width="formLabelWidth">
+                <el-input size="mini" v-model="param.title" :placeholder="$t('cfg.title')" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="5">
-              <el-form-item label="Type" :label-width="formLabelWidth">
+              <el-form-item :label="$t('cfg.type')" :label-width="formLabelWidth">
                 <el-select
                   v-model="param.type"
                   @change="param.value=null"
-                  placeholder="Select"
+                  :placeholder="$t('cfg.select')"
                   size="mini"
                 >
                   <el-option
@@ -283,7 +278,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="Default" :label-width="formLabelWidth">
+              <el-form-item :label="$t('cfg.default')" :label-width="formLabelWidth">
                 <el-input
                   v-if="param.type=='number'"
                   type="number"
@@ -321,7 +316,7 @@
                   type="text"
                   size="mini"
                   v-model="param.combos"
-                  placeholder="items separated by a comma"
+                  :placeholder="$t('rep.items_comma')"
                   autocomplete="off"
                 ></el-input>
 
@@ -341,12 +336,12 @@
                   type="text"
                   size="mini"
                   v-model="param.escomboindex"
-                  placeholder="Index of the selected value"
+                  :placeholder="$t('rep.index_selected')"
                   autocomplete="off"
                 ></el-input>
                 </el-col>
                 <el-col :span="8">
-                <el-button round @click="applyIndex(param.escomboindex)" type="primary" size="mini">Apply
+                <el-button round @click="applyIndex(param.escomboindex)" type="primary" size="mini">{{ $t('rep.apply') }}
                 
 
                 </el-button>
@@ -357,7 +352,7 @@
                 <el-select
                   v-if="param.type=='escombo'"
                   v-model="param.escombokey"
-                  placeholder="Select"
+                  :placeholder="$t('cfg.select')"
                   size="mini"
                 >
                   <el-option
@@ -371,7 +366,7 @@
                 </el-row>
                 <el-row v-if="param.type=='escombo'">
                   <el-col>
-                    <el-form-item label="Use Timestamp field ?" :label-width="formLabelWidth2">
+                    <el-form-item :label="$t('rep.use_timestamp')" :label-width="formLabelWidth2">
                       <el-switch size="mini" v-model="param.usetimestamp"></el-switch>
                     </el-form-item>
                   </el-col>
@@ -379,7 +374,7 @@
                 <el-select
                   v-if="param.usetimestamp"
                   v-model="param.timestampfield"
-                  placeholder="Select"
+                  :placeholder="$t('cfg.select')"
                   size="mini"
                 >
                   <el-option
@@ -393,7 +388,7 @@
                 </el-row>
                 <el-row v-if="param.type=='escombo'">
                   <el-col>
-                    <el-form-item label="Use Boolean field ?" :label-width="formLabelWidth2">
+                    <el-form-item :label="$t('rep.use_boolean')" :label-width="formLabelWidth2">
                       <el-switch size="mini" v-model="param.useboolean"></el-switch>
                     </el-form-item>
                   </el-col>
@@ -401,7 +396,7 @@
                 <el-select
                   v-if="param.useboolean"
                   v-model="param.booleanfield"
-                  placeholder="Select"
+                  :placeholder="$t('cfg.select')"
                   size="mini"
                 >
                   <el-option
@@ -416,7 +411,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="4">
-              <el-form-item label="Hidden" :label-width="formLabelWidth">
+              <el-form-item :label="$t('rep.hidden')" :label-width="formLabelWidth">
                 <el-switch size="mini" v-model="param.hidden"></el-switch>
               </el-form-item>
             </el-col>
@@ -436,12 +431,12 @@
 
           <el-row type="flex" justify="space-around" style="margin-bottom:30px">
             <el-col :span="12">
-              <el-button round @click="addParameter()" type="primary" size="mini">Add Parameter</el-button>
+              <el-button round @click="addParameter()" type="primary" size="mini">{{ $t('rep.add_parameter') }}</el-button>
             </el-col>
           </el-row>
         </el-tab-pane>
 
-        <el-tab-pane label="Privileges" name="privileges">
+        <el-tab-pane :label="$t('configdetails.tab_privileges')" name="privileges">
           <div>
             <div style="display: table;margin: 0 auto;">
               <el-transfer
@@ -453,7 +448,7 @@
             label: 'desc'
           }"
                 :data="allPrivileges"
-                :titles="['Available', 'Assigned']"
+                :titles="[$t('configdetails.available'), $t('configdetails.assigned')]"
               ></el-transfer>
             </div>
           </div>
@@ -494,6 +489,7 @@
 <script>
 import axios from "axios";
 import IconPicker from "@/components/IconPicker";
+import { i18n } from "../i18n-setup";
 
 export default {
   name: "ReportEditor",
@@ -517,13 +513,13 @@ export default {
     datasources: [],  
     rules: {
       title: [
-        { required: true, message: "Please input a Title", trigger: "change" }
+        { required: true, message: i18n.t("rep.input_title"), trigger: "change" }
       ],
       description: [        
-        { required: true, message: "Please input a Description", trigger: "change" }
+        { required: true, message: i18n.t("rep.input_description"), trigger: "change" }
       ],
       icon: [
-        { required: true, message: "Please pick an icon ex:bug", trigger: "change" }
+        { required: true, message: i18n.t("rep.pick_icon"), trigger: "change" }
         
       ]
     },
@@ -820,9 +816,9 @@ export default {
       const login = this.$store.getters.creds.user.login;
       this.newRec.jasper="./jasperdef/"+login+"/"+file.raw.name;
       this.$notify({
-        title: "Jasper uploaded.",
+        title: this.$t("rep.jasper_uploaded"),
         type: "success",
-        message: "The file has been uploaded",
+        message: this.$t("rep.file_uploaded"),
         position: "bottom-right",
         duration: 3000
       });
@@ -912,9 +908,9 @@ export default {
         data: obj
       });
       this.$notify({
-        title: "Record saved.",
+        title: this.$t("rep.record_saved"),
         type: "success",
-        message: "Record updated.",
+        message: this.$t("rep.record_updated"),
         position: "bottom-right"
       });
 
@@ -936,7 +932,7 @@ export default {
             this.$notify({
               title: "Failed",
               type: "danger",
-              message: "Unable to send message.",
+              message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
           } else {
@@ -960,9 +956,9 @@ export default {
         data: obj
       });
       this.$notify({
-        title: "Record saved.",
+        title: this.$t("rep.record_saved"),
         type: "success",
-        message: "Record updated.",
+        message: this.$t("rep.record_updated"),
         position: "bottom-right"
       });
       this.closeDialog();

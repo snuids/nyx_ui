@@ -197,7 +197,7 @@ export default {
           .substr(0, 5),
         _index: "nyx_reportperiodic",
         _source: {
-          title: "New Periodic Task",
+          title: this.$t("rep.new_periodic"),
           report: null,
           icon: "clock",
           nextRun: moment().format(),
@@ -230,7 +230,7 @@ export default {
             this.loadData();
           }, 1000);
           this.$notify({
-            title: "Delete completed",
+            title: this.$t("rep.delete_completed"),
             type: "success",
             position: "bottom-right"
           });
@@ -239,7 +239,7 @@ export default {
           /*
         this.$message({
           type: 'info',
-          message: 'Delete canceled'
+          message: this.$t("rep.delete_canceled")
         });
         */
         });

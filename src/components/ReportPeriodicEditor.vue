@@ -53,7 +53,7 @@
                     step: '00:15',
                     end: '23:45'
                   }"
-                  placeholder="Select time"
+                  :placeholder="$t('rep.select_time')"
                 ></el-time-select>
               </el-form-item>
             </el-col>
@@ -71,7 +71,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item :label="$t('scheduler.path')" :label-width="formLabelWidth">
-                <el-input size="mini" placeholder="The path + filename  on the server used to save the report. Empty by default." v-model="record._source.path" autocomplete="off"></el-input>
+                <el-input size="mini" :placeholder="$t('rep.path_hint')" v-model="record._source.path" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -117,7 +117,7 @@
             </el-col>
             <el-col :span="12" v-if="param.type == 'combo'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                <el-select size="mini" v-model="param.value" placeholder="Please select a type" @change="paramsChanged()">
+                <el-select size="mini" v-model="param.value" :placeholder="$t('cfg.select_type')" @change="paramsChanged()">
                   <el-option
                     v-for="item in param.combos.split(',')"
                     :key="item"
@@ -129,7 +129,7 @@
             </el-col>
             <el-col :span="12" v-if="param.type == 'escombo'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                <el-select size="mini" v-model="param.value" placeholder="Please select a type" @change="paramsChanged()">
+                <el-select size="mini" v-model="param.value" :placeholder="$t('cfg.select_type')" @change="paramsChanged()">
                   <el-option
                     v-for="item in param.valuelist"
                     :key="item"
@@ -175,7 +175,7 @@
                 <el-date-picker siez="mini"
                   v-model="record._source.nextRun"
                   type="datetime"
-                  placeholder="Select date and time">
+                  :placeholder="$t('rep.select_datetime')">
                 </el-date-picker>
                 <!-- <el-input size="mini" v-model="record._source.nextRun" autocomplete="off"></el-input> -->
               </el-form-item>
@@ -199,7 +199,7 @@
               :titles="[$t('scheduler.excluded'), $t('scheduler.included'), 'Cc', 'Cci']"
             ></el-transfer-->
             <el-row style="text-align:left;">
-              <el-button @click="setFocus('maillingListTo')" type="text">To : </el-button>
+              <el-button @click="setFocus('maillingListTo')" type="text">{{ $t('reportgenerator.to') }}</el-button>
             </el-row>
             <el-row>
               <el-col :span="24" style="text-align:left;">
@@ -209,7 +209,7 @@
                   filterable
                   @change="usersMailListToChanged"
                   ref="maillingListTo"
-                  placeholder="Choose Users"
+                  :placeholder="$t('reportgenerator.choose_users')"
                   size="mini"
                   style="width:100%;"
                 >
@@ -223,7 +223,7 @@
               </el-col>
             </el-row>
             <el-row style="text-align:left;">
-              <el-button @click="setFocus('maillingListCc')" type="text">Cc : </el-button>
+              <el-button @click="setFocus('maillingListCc')" type="text">{{ $t('reportgenerator.cc') }}</el-button>
             </el-row>
             <el-row>
               <el-col :span="24" style="text-align:left;">
@@ -233,7 +233,7 @@
                   filterable
                   @change="usersMailListCcChanged"
                   ref="maillingListCc"
-                  placeholder="Choose Users"
+                  :placeholder="$t('reportgenerator.choose_users')"
                   size="mini"
                   style="width:100%;"
                 >
@@ -247,7 +247,7 @@
               </el-col>
             </el-row>
             <el-row style="text-align:left;">
-              <el-button @click="setFocus('maillingListCc')" type="text">Cci : </el-button>
+              <el-button @click="setFocus('maillingListCc')" type="text">{{ $t('reportgenerator.cci') }}</el-button>
             </el-row>
             <el-row>
               <el-col :span="24" style="text-align:left;">
@@ -257,7 +257,7 @@
                   filterable
                   @change="usersMailListCciChanged"
                   ref="maillingListCci"
-                  placeholder="Choose Users"
+                  :placeholder="$t('reportgenerator.choose_users')"
                   size="mini"
                   style="width:100%;"
                 >
@@ -272,7 +272,7 @@
             </el-row>
             <el-row>
               <el-col :span="16">
-                <el-form-item label="Add Mail : " :label-width="formLabelWidth">
+                <el-form-item :label="$t('reportgenerator.add_mail')" :label-width="formLabelWidth">
                   <el-input size="mini" v-model="mailToAdd" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
@@ -314,7 +314,7 @@
               <el-input
                 type="textarea"
                 :rows="10"
-                placeholder="Mail Template"
+                :placeholder="$t('rep.mail_template')"
                 v-model="record._source.mailTemplate"
               ></el-input>
             </el-form-item>
@@ -335,6 +335,7 @@
 import axios from "axios";
 import moment from "moment";
 import {computeTranslatedText} from '../globalfunctions'
+import { i18n } from "../i18n-setup";
 
 export default {
   name: "ReportPeriodicEditor",
@@ -342,7 +343,7 @@ export default {
         
     rules: {
       title: [
-        { required: true, message: "Please input a Title", trigger: "change" }
+        { required: true, message: i18n.t("rep.input_title"), trigger: "change" }
       ]
     },
     activeName: "scheduler",
@@ -671,7 +672,7 @@ export default {
             this.$notify({
               title: "Failed",
               type: "danger",
-              message: "Unable to send message.",
+              message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
           } else {
@@ -717,7 +718,7 @@ export default {
         data: this.record
       });
       this.$notify({
-        title: "Record saved.",
+        title: this.$t("rep.record_saved"),
         type: "success",
         message: "Saved.",
         position: "bottom-right"
