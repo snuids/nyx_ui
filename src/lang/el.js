@@ -350,6 +350,31 @@ export const messages = {
     },
     sendmessage:{
       send_message:"Αποστολή μηνύματος"
+    },
+    nyxinfo:{
+      active_mq:"Active MQ",
+      version:"Έκδοση:",
+      connections:"Συνδέσεις:",
+      memory:"Μνήμη:",
+      store:"Αποθήκευση:",
+      temp:"Θερμ.:",
+      load:"Φόρτος",
+      load_1m:"Φόρτος 1m:",
+      load_5m:"Φόρτος 5m:",
+      load_15m:"Φόρτος 15m:",
+      elastalert_24h:"Elast Alert 24H",
+      logstash_24h:"Logstash 24H",
+      containers_stopped:"Σταματημένα κοντέινερ",
+      lambdas_24h:"Lambdas 24H",
+      users:"Χρήστες",
+      connected:"Συνδεδεμένοι:",
+      uniques:"Μοναδικοί:",
+      es_nodes:"ΚΟΜΒΟΙ ES",
+      node:"Κόμβος",
+      indices:"Ευρετήρια",
+      percent:"Ποσοστό",
+      total:"Σύνολο",
+      shards:"Shards"
     }
   }
 }

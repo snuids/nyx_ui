@@ -363,6 +363,31 @@ export const messages = {
         showing_first_rows:"Affichage des {max} premières lignes pour la performance. Téléchargez pour voir toutes les données.",
         error:"Erreur",
         failed_load_excel:"Échec du chargement du fichier Excel"
+      },
+      nyxinfo:{
+        active_mq:"Active MQ",
+        version:"Version :",
+        connections:"Connexions :",
+        memory:"Mémoire :",
+        store:"Stockage :",
+        temp:"Temp. :",
+        load:"Charge",
+        load_1m:"Charge 1m :",
+        load_5m:"Charge 5m :",
+        load_15m:"Charge 15m :",
+        elastalert_24h:"Elast Alert 24H",
+        logstash_24h:"Logstash 24H",
+        containers_stopped:"Conteneurs arrêtés",
+        lambdas_24h:"Lambdas 24H",
+        users:"Utilisateurs",
+        connected:"Connectés :",
+        uniques:"Uniques :",
+        es_nodes:"NODES ES",
+        node:"Nœud",
+        indices:"Index",
+        percent:"Pourcentage",
+        total:"Total",
+        shards:"Shards"
       }
     }
   }

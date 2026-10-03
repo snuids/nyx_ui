@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.15 03/Oct/2026
+* Localized the Nyx Info dashboard (en/fr/el)
+
+
 ## V3.29.14 02/Oct/2026
 * Widened the application editor dialog and auto-sized its labels so translations no longer wrap
 

@@ -6,12 +6,12 @@
         <el-row>
           <el-card shadow="never" v-if="activeMQ && activeMQ[0] && activeMQ[0]._source">
             <div slot="header" class="clearfix">
-              <b>Active MQ</b>
+              <b>{{ $t('nyxinfo.active_mq') }}</b>
               -
-              Version:
+              {{ $t('nyxinfo.version') }}
               <b>{{activeMQ[0]._source.version}}</b>
               -
-              Connections:
+              {{ $t('nyxinfo.connections') }}
               <b>{{activeMQ[0]._source.currentconnectionscount}}</b>
             </div>
             <el-row>
@@ -23,7 +23,7 @@
                 ></el-progress>
                 <div>
                   <h3>
-                    <b>Memory: {{activeMQ[0]._source.memorypercentusage}}%</b>
+                    <b>{{ $t('nyxinfo.memory') }} {{activeMQ[0]._source.memorypercentusage}}%</b>
                   </h3>
                 </div>
               </el-col>
@@ -35,7 +35,7 @@
                 ></el-progress>
                 <div>
                   <h3>
-                    <b>Store: {{activeMQ[0]._source.storepercentusage}}%</b>
+                    <b>{{ $t('nyxinfo.store') }} {{activeMQ[0]._source.storepercentusage}}%</b>
                   </h3>
                 </div>
               </el-col>
@@ -47,7 +47,7 @@
                 ></el-progress>
                 <div>
                   <h3>
-                    <b>Temp: {{activeMQ[0]._source.temppercentusage}}%</b>
+                    <b>{{ $t('nyxinfo.temp') }} {{activeMQ[0]._source.temppercentusage}}%</b>
                   </h3>
                 </div>
               </el-col>
@@ -57,7 +57,7 @@
         <el-row>
           <el-card shadow="never" v-if="loads && loads[0] && loads[0]._source">
             <div slot="header" class="clearfix">
-              <b>Load</b>
+              <b>{{ $t('nyxinfo.load') }}</b>
             </div>
             <el-row>
               <el-col :span="8" style="text-align:center">
@@ -68,7 +68,7 @@
                 ></el-progress>
                 <div>
                   <h3>
-                    <b>Load 1m: {{loads[0]._source.load_1m}}</b>
+                    <b>{{ $t('nyxinfo.load_1m') }} {{loads[0]._source.load_1m}}</b>
                   </h3>
                 </div>
               </el-col>
@@ -80,7 +80,7 @@
                 ></el-progress>
                 <div>
                   <h3>
-                    <b>Load 5m: {{loads[0]._source.load_5m}}</b>
+                    <b>{{ $t('nyxinfo.load_5m') }} {{loads[0]._source.load_5m}}</b>
                   </h3>
                 </div>
               </el-col>
@@ -92,7 +92,7 @@
                 ></el-progress>
                 <div>
                   <h3>
-                    <b>Load 15m: {{loads[0]._source.load_15m}}</b>
+                    <b>{{ $t('nyxinfo.load_15m') }} {{loads[0]._source.load_15m}}</b>
                   </h3>
                 </div>
               </el-col>
@@ -105,7 +105,7 @@
         <el-row>
           <el-card shadow="never" v-if="elastalert">
             <div slot="header" class="clearfix" v-on:click="switch_to('elastalert')">
-              <b>Elast Alert 24H</b>
+              <b>{{ $t('nyxinfo.elastalert_24h') }}</b>
             </div>
             <div
               class="background-alert"
@@ -121,7 +121,7 @@
         <el-row>
           <el-card shadow="never" v-if="logstash">
             <div slot="header" class="clearfix" v-on:click="switch_to('logstash')">
-              <b>Logstash 24H</b>
+              <b>{{ $t('nyxinfo.logstash_24h') }}</b>
             </div>
             <div
               class="background-alert"
@@ -140,7 +140,7 @@
         <el-row>
           <el-card shadow="never" v-if="docker_status && docker_status.records">
             <div slot="header" class="clearfix" v-on:click="switch_to('containers')">
-              <b>Containers Stopped</b>
+              <b>{{ $t('nyxinfo.containers_stopped') }}</b>
             </div>
 
             <div
@@ -157,7 +157,7 @@
         <el-row>
           <el-card shadow="never" v-if="lambdas && lambdas.aggs">
             <div slot="header" class="clearfix" v-on:click="switch_to('lambdas')">
-              <b>Lambdas 24H</b>
+              <b>{{ $t('nyxinfo.lambdas_24h') }}</b>
             </div>
             <div
               class="background-alert"
@@ -180,9 +180,9 @@
           v-if="WebSocketServer && WebSocketServer[0] && WebSocketServer[0]._source"
         >
           <div slot="header" class="clearfix" v-on:click="switch_to('users config')">
-            <b>Users</b> - Connected:
+            <b>{{ $t('nyxinfo.users') }}</b> - {{ $t('nyxinfo.connected') }}
             <b>{{WebSocketServer[0]._source.clients[0].clients}}</b>
-            - Uniques:
+            - {{ $t('nyxinfo.uniques') }}
             <b>{{Array.from(new Set(WebSocketServer[0]._source.clients[0].logins)).length}}</b>
           </div>
           <div class="text item" v-on:click="switch_to('users config')">
@@ -196,14 +196,14 @@
       <el-col :span="12">
         <el-card shadow="never" v-if="nodes">
           <div slot="header" class="clearfix">
-            <b>ES NODES</b>
+            <b>{{ $t('nyxinfo.es_nodes') }}</b>
           </div>
           <el-table :data="nodes" style="width: 100%">
-            <el-table-column prop="node" label="Node"></el-table-column>
-            <el-table-column prop="disk_indices" label="Indices"></el-table-column>
-            <el-table-column prop="disk_percent" label="Percent"></el-table-column>
-            <el-table-column prop="disk_total" label="Total"></el-table-column>
-            <el-table-column prop="shards" label="Shards"></el-table-column>
+            <el-table-column prop="node" :label="$t('nyxinfo.node')"></el-table-column>
+            <el-table-column prop="disk_indices" :label="$t('nyxinfo.indices')"></el-table-column>
+            <el-table-column prop="disk_percent" :label="$t('nyxinfo.percent')"></el-table-column>
+            <el-table-column prop="disk_total" :label="$t('nyxinfo.total')"></el-table-column>
+            <el-table-column prop="shards" :label="$t('nyxinfo.shards')"></el-table-column>
           </el-table>
         </el-card>
       </el-col>
