@@ -29,7 +29,7 @@
         <el-col :span="24">
           <el-form-item label>
             <el-input
-              placeholder="Enter email address"
+                            :placeholder="$t('ui.enter_email')"
               name="login"
               autocomplete="none"
               v-model="form.login"
@@ -169,7 +169,7 @@ export default {
               .catch(() => {
                 this.$message({
                   type: "info",
-                  message: "Input canceled"
+                  message: this.$t("ui.input_canceled")
                 });
               });
           } else {

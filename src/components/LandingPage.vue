@@ -2,7 +2,7 @@
   <!--LANDING PAGE -->
   <div  style="text-align:left overflow:auto;">
     <div v-if="siteMap">
-      <h1>Site Map</h1>
+      <h1>{{ $t('ui.site_map') }}</h1>
       <el-card 
         shadow="never"
         v-for="cat in $store.getters.filteredmenus" :key="cat.loc_category" style="margin:10px 10px 10px 0px; ">

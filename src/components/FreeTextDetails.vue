@@ -159,7 +159,7 @@ export default {
     
     if (this.config.config.freetext==undefined)
     {
-      this.config.config.freetext="<p>Free Text</p>"
+      this.config.config.freetext="<p>{{ $t('ui.free_text') }}</p>"
     }
     this.editor = new Editor({
       extensions: [

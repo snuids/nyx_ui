@@ -14,7 +14,7 @@
           filterable
           size="mini"
           v-model="queryfilter.selected"
-          placeholder="Please select a type"
+          :placeholder="$t('cfg.select_type')"
           :clearable="queryfilter.selected != '*'"
           @change="refresh()"
         >
@@ -31,7 +31,7 @@
           filterable
           size="mini"
           v-model="queryfilter.selected"
-          placeholder="Please select a type"
+          :placeholder="$t('cfg.select_type')"
           :clearable="queryfilter.selected != '*'"
           @change="refreshLinkedCombo(mainindex)"
         >
@@ -77,7 +77,7 @@
       <el-popover placement="bottom-start" width="150" trigger="hover">
         <el-col>
           <el-row class="popover-title">
-            <span>Download the selection</span>
+            <span>{{ $t('querybar.download') }}</span>
           </el-row>
           <el-row class="button-dl">
             <el-button

@@ -8,7 +8,7 @@
           size="mini"
           :disabled="!passwordRulesModelModified"
           type="danger"
-        >Save Rules</el-button>
+        >{{ $t('ui.save_rules') }}</el-button>
       </el-row>
       <el-row>
         <el-col :span="12" class="pwd-rule-label">
@@ -33,7 +33,7 @@
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
                 type="text"
-              >Upper case</el-button>
+              >{{ $t('ui.upper_case') }}</el-button>
               <el-switch
                 style="float: right; padding: 3px 0"
                 v-model="passwordRulesModel.forceUpper"
@@ -41,7 +41,7 @@
             </div>
             <div v-show="passwordRulesModel.forceUpper">
               <el-row>
-                <b>Minimum number of upper cases</b>
+                <b>{{ $t('ui.min_upper') }}</b>
               </el-row>
               <el-row>
                 <el-input-number
@@ -66,7 +66,7 @@
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
                 type="text"
-              >Numbers</el-button>
+              >{{ $t('ui.numbers') }}</el-button>
               <el-switch
                 style="float: right; padding: 3px 0"
                 v-model="passwordRulesModel.forceNumber"
@@ -74,7 +74,7 @@
             </div>
             <div v-show="passwordRulesModel.forceNumber">
               <el-row>
-                <b>Minimum number of numbers</b>
+                <b>{{ $t('ui.min_numbers') }}</b>
               </el-row>
               <el-row>
                 <el-input-number
@@ -99,7 +99,7 @@
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
                 type="text"
-              >Special char</el-button>
+              >{{ $t('ui.special_char') }}</el-button>
               <el-switch
                 style="float: right; padding: 3px 0"
                 v-model="passwordRulesModel.forceSpecial"
@@ -107,7 +107,7 @@
             </div>
             <div v-show="passwordRulesModel.forceSpecial">
               <el-row>
-                <b>Minimum number of special char</b>
+                <b>{{ $t('ui.min_special') }}</b>
               </el-row>
               <el-row>
                 <el-input-number
@@ -133,12 +133,12 @@
         class="demo-ruleForm"
         size="small"
       >
-        <el-form-item label="Try a password" prop="testPwd" style="padding-bottom:20px;">
+        <el-form-item :label="$t('ui.try_password')" prop="testPwd" style="padding-bottom:20px;">
           <el-input v-model="testPwdForm.testPwd" clearable size="mini" style="padding-bottom:5px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('testPwdForm')">Test</el-button>
-          <el-button type="default" @click="generateRandom(passwordRulesModel)">Generate random</el-button>
+          <el-button type="default" @click="generateRandom(passwordRulesModel)">{{ $t('ui.generate_random') }}</el-button>
           <el-button @click="resetForm('testPwdForm')">Reset</el-button>
         </el-form-item>
       </el-form>

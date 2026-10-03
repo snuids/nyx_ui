@@ -40,12 +40,13 @@
 <script>
 import YAML from "js-yaml";
 import axios from "axios";
+import { i18n } from "../../i18n-setup";
 
 export default {
   name: "yamlEditor",
   data: () => ({
     dialogFormVisible: false,
-    title: "yaml editor",
+    title: i18n.t("ui.yaml_editor"),
     localFileName: null,
     localFile: '',
     loading: true,

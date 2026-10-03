@@ -40,19 +40,19 @@ export default {
     },
     info() {
       this.$alert(
-        "<strong>UI Version:</strong> " +
+        "<strong>"+this.$t('ui.ui_version')+"</strong> " +
           this.$store.getters.version +
-          "<br/><strong>API Version:</strong> "+this.$store.getters.apiVersion+ "<br/><strong>Window size:</strong> (" +
+          "<br/><strong>"+this.$t('ui.api_version')+"</strong> "+this.$store.getters.apiVersion+ "<br/><strong>"+this.$t('ui.window_size')+"</strong> (" +
           this.$store.getters.containerSize.width +
           "," +
           this.$store.getters.containerSize.height +
           ")"
-          +"<br/><strong>Browser:</strong> "+this.$browserDetect.meta.name 
-          +"<br/><strong>Browser Version:</strong> "+this.$browserDetect.meta.version
-          +"<br/><strong>Token:</strong> "+this.$store.getters.creds.token
+          +"<br/><strong>"+this.$t('ui.browser')+"</strong> "+this.$browserDetect.meta.name 
+          +"<br/><strong>"+this.$t('ui.browser_version')+"</strong> "+this.$browserDetect.meta.version
+          +"<br/><strong>"+this.$t('ui.token_label')+"</strong> "+this.$store.getters.creds.token
           
           ,
-        "Nyx Version",
+        this.$t('ui.nyx_version'),
         {
           confirmButtonText: "OK",
           dangerouslyUseHTMLString: true

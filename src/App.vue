@@ -70,7 +70,7 @@ export default {
 
       if(badToken) {
         this.$notify({
-          title: "Bad token",
+          title: this.$t("ui.bad_token"),
           message: "Logout",
           type: "error",
           position: "bottom-right"

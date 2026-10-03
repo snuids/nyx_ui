@@ -16,7 +16,7 @@
               <el-input
                 size="mini"
                 v-model="description"
-                placeholder="Enter a description for this SQL query"
+                :placeholder="$t('ui.sql_query_desc')"
                 autocomplete="off"
               ></el-input>
             </el-form-item>
@@ -24,7 +24,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="SQL Query" :label-width="formLabelWidth">
+            <el-form-item :label="$t('ui.sql_query')" :label-width="formLabelWidth">
               <editor
                 v-if="sqlQuery"
                 :key="editorKey"
@@ -302,7 +302,7 @@ export default {
 
       this.$notify({
         title: "Success",
-        message: "SQL query updated successfully",
+        message: this.$t("ui.sql_query_updated"),
         type: "success",
         position: "bottom-right"
       });

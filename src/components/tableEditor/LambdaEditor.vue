@@ -90,7 +90,7 @@
                 cancelButtonText='No, Thanks'
                 icon="el-icon-info"
                 iconColor="red"
-                title="Overwrite existing file?"
+                :title="$t('ui.overwrite_file')"
               >-->
               <el-button
                 v-if="locEditMode!='edit'"
@@ -99,7 +99,7 @@
                 size="mini"
                 type="primary"
                 :disabled="goBtnDisabled"
-              >Create function</el-button>
+              >{{ $t('ui.create_function') }}</el-button>
               <!-- </el-popconfirm> -->
             </el-col>
           </el-row>
@@ -159,14 +159,14 @@
                 @click="resetStats()"
                 type="warning"
                 size="mini"
-              >Reset Stats</el-button>
+              >{{ $t('ui.reset_stats') }}</el-button>
             </el-col>
           </el-row>
           <el-divider v-if="locEditMode=='edit'"></el-divider>
 
           <el-row style="text-align:left;" type="flex" v-if="locEditMode=='edit'">
             <el-col :span="10">
-              <el-button @click="setFocus('runId')" type="text">Run Uuid</el-button>
+              <el-button @click="setFocus('runId')" type="text">{{ $t('ui.run_uuid') }}</el-button>
             </el-col>
             <el-col :span="10">
               <el-button @click="setFocus('return')" type="text">Return</el-button>
@@ -180,7 +180,7 @@
                 class="inline-input"
                 v-model="selectedUuid"
                 :fetch-suggestions="searchLastRun"
-                placeholder="Select run"
+                :placeholder="$t('ui.select_run')"
                 @select="handleSelectRun"
                 size="mini"
                 clearable
@@ -310,7 +310,7 @@ export default {
     formLabelWidth: "120px",
     changed: false,
     dialogFormVisible: false,
-    title: "Lambda Status",
+    title: this.$t("ui.lambda_status"),
     activeName: "main",
     lastRuns: [],
     selectedRun: null,
@@ -643,7 +643,7 @@ export default {
             this.$notify({
               title: "Failed",
               type: "danger",
-              message: "Unable to send message.",
+              message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
           } else {
@@ -656,7 +656,7 @@ export default {
       this.$notify({
         title: "Creating...",
         type: "info",
-        message: "The lambda is under creation.",
+        message: this.$t("ui.lambda_creating"),
         position: "bottom-right"
       });
 

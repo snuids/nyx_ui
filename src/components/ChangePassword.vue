@@ -181,7 +181,7 @@ export default {
           this.$emit("changepassword_closed");
           this.$notify({
             title: "Message",
-            message: "Password changed",
+            message: this.$t("ui.password_changed"),
             type: "success",
             position: "bottom-right"
           });

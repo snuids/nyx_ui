@@ -34,7 +34,7 @@
               </el-table-column>
               <el-table-column
                 prop="maxSize"
-                label="Max Size">
+                :label="$t('ui.max_size')">
               </el-table-column>
             </el-table>
           </el-card>
@@ -227,8 +227,8 @@ export default {
     },
     handleCommand: function(output) {
       this.$notify({
-        title: "Message sent to server", //"Data loaded",
-        message: "Waiting for response...",
+        title: this.$t("ui.msg_sent_server"), //"Data loaded",
+        message: this.$t("ui.waiting_response"),
         type: "success",
         position: "bottom-right",
         duration: 3000
@@ -250,7 +250,7 @@ export default {
         if (response.data.error == "") {
           if (response.data.type == "mail") {
             this.$notify({
-              title: "Data Sent By Mail",
+              title: this.$t("ui.data_sent_mail"),
               message:
                 "Records : " +
                 response.data.total +

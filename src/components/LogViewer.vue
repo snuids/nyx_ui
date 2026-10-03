@@ -79,7 +79,7 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="Type to search"/>
+                :placeholder="$t('ui.type_to_search')"/>
             </template>
       
           </el-table-column> -->

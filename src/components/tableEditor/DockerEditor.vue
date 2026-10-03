@@ -66,7 +66,7 @@ export default {
   name: "DockerEditor",
   data: () => ({
     dialogFormVisible: false,
-    title: "Docker Actions",    
+    title: this.$t("ui.docker_actions"),    
     actions:[],
     action:"restart",
     orgRecord:""
@@ -104,9 +104,9 @@ export default {
             });
 
               this.$notify({
-                title: "Message Sent.",
+                title: this.$t("ui.message_sent"),
                 type: "success",
-                message: "Message Sent.",
+                message: this.$t("ui.message_sent"),
                 position: "bottom-right",
                 duration: 1000
               });

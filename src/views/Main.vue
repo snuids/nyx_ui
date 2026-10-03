@@ -50,7 +50,7 @@
                           style="width:97%"
                           size="mini"
                           v-model="relativeTimeType"
-                          placeholder="Please select a value"
+                          :placeholder="$t('ui.select_value')"
                           @change="relativeTimeClosed"
                         >
                           <el-option :label="$t('time.minute')" value="m"></el-option>
@@ -81,8 +81,8 @@
                   size="mini"
                   type="datetimerange"
                   range-separator="To"
-                  start-placeholder="Start date"
-                  end-placeholder="End date"
+                  :start-placeholder="$t('reportgenerator.start_date')"
+                  :end-placeholder="$t('reportgenerator.end_date')"
                   align="center"
                   :clearable="false"
                   :default-time="['00:00:00', '23:59:59']"
@@ -111,7 +111,7 @@
                 :picker-options="{firstDayOfWeek:1}"
                 type="date"
                 size="mini"
-                placeholder="Pick a day"
+                :placeholder="$t('reportgenerator.pick_day')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
             </div>
@@ -126,7 +126,7 @@
                 :picker-options="{firstDayOfWeek:1}"
                 type="week"
                 size="mini"
-                placeholder="Pick a week"
+                :placeholder="$t('ui.pick_week')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
             </div>
@@ -139,7 +139,7 @@
                 v-on:change="monthChanged"
                 type="month"
                 size="mini"
-                placeholder="Pick a month"
+                :placeholder="$t('ui.pick_month')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
             </div>
@@ -152,7 +152,7 @@
                 v-on:change="yearChanged"
                 type="year"
                 size="mini"
-                placeholder="Pick a year"
+                :placeholder="$t('ui.pick_year')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
             </div>
