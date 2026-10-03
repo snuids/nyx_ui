@@ -561,6 +561,11 @@ export default {
               type: "login",
               data: authResponse.data
             });
+
+            // Restore the user's language after a page reload.
+            if(authResponse.data.cred.user.language != undefined) {
+              this.$i18n.locale = authResponse.data.cred.user.language;
+            }
             
             this.$store.commit({
               type: "changeApp",

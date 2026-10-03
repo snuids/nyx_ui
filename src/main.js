@@ -108,6 +108,26 @@ if (vars["api"]!=undefined)
   store.state.apiurl=vars["api"].split('#')[0];
 }
 
+// Resolve the UI language on startup so a page reload keeps the user's language.
+// Priority: URL parameter (language/lang/locale) > persisted logged-in user language > 'en'.
+function resolveLanguage() {
+  var fromUrl = vars["language"] || vars["lang"] || vars["locale"];
+  if (fromUrl != undefined && fromUrl != '') {
+    return fromUrl.split('#')[0];
+  }
+  try {
+    var stored = JSON.parse(localStorage.authResponse);
+    var lang = stored && stored.data && stored.data.cred &&
+      stored.data.cred.user && stored.data.cred.user.language;
+    if (lang != undefined && lang != '') {
+      return lang;
+    }
+  } catch (e) { /* no stored session */ }
+  return 'en';
+}
+
+i18n.locale = resolveLanguage();
+
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 
 new Vue({

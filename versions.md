@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.20 03/Oct/2026
+* Keep the user's language across page reloads: resolve locale at startup from URL (language/lang/locale) then persisted user language, and re-apply after session restore
+
 ## V3.29.19 03/Oct/2026
 * Finished i18n: views, login, logout info, password rules, table editors and remaining components localized (en/fr/el)
 
