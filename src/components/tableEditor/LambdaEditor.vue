@@ -310,7 +310,6 @@ export default {
     formLabelWidth: "120px",
     changed: false,
     dialogFormVisible: false,
-    title: this.$t("ui.lambda_status"),
     activeName: "main",
     lastRuns: [],
     selectedRun: null,
@@ -338,6 +337,9 @@ export default {
     fileOptions: []
   }),
   computed: {
+    title: function() {
+      return this.$t("ui.lambda_status");
+    },
     recordin: function() {
       return this.record;
     },
