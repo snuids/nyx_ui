@@ -105,6 +105,8 @@ To add a new specific table editor:
 
 ### Building the container
 
+The build and runtime stages use Node.js 22 LTS. Vega-Lite 6.5 and newer require Node.js 22 or newer.
+
 ```
 docker build .
 ```

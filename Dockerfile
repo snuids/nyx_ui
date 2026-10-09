@@ -1,4 +1,4 @@
-FROM node:20.19.0-bullseye as base
+FROM node:22-bullseye as base
 #FROM node:18.20.8-bullseye as base
 #FROM node:12.13.1-slim as base
 
