@@ -111,5 +111,9 @@ docker build .
 
 ### Version History
 
-[Versions](versions.md)
+Current version: **v3.29.22** (09/Oct/2026).
 
+* Fixed Docker action editor initialization so the Restart/Start/Stop dropdown works again.
+* Fixed the Action label to focus the dropdown.
+
+[Versions](versions.md)

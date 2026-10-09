@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.22 09/Oct/2026
+* Fixed Docker action editor initialization so the Restart/Start/Stop dropdown works again
+* Fixed the Action label to focus the dropdown
+
 ## V3.29.20 03/Oct/2026
 * Keep the user's language across page reloads: resolve locale at startup from URL (language/lang/locale) then persisted user language, and re-apply after session restore
 

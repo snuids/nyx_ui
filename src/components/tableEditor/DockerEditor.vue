@@ -15,7 +15,7 @@
 
       <el-row>
         <el-col :span="24">
-          <el-button @click="setFocus('fr')" type="text">Action</el-button>
+          <el-button @click="setFocus('type')" type="text">Action</el-button>
         </el-col>
       </el-row>      
       
@@ -66,12 +66,14 @@ export default {
   name: "DockerEditor",
   data: () => ({
     dialogFormVisible: false,
-    title: this.$t("ui.docker_actions"),    
     actions:[],
     action:"restart",
     orgRecord:""
   }),
   computed: {
+    title: function() {
+      return this.$t("ui.docker_actions");
+    },
     modified:function(){
       return JSON.stringify(this.record)!=this.orgRecord;
     }
