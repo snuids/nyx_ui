@@ -16,7 +16,6 @@
       style="width: 100%"
       highlight-current-row
       @current-change="handleCurrentChange"
-      height="1000"
     >
       <el-table-column sortable prop="_source.category" :label="$t('config.category')"></el-table-column>
       <el-table-column sortable prop="_source.subcategory" :label="$t('config.subcategory')"></el-table-column>
