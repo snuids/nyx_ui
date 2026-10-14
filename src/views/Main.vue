@@ -264,7 +264,8 @@ export default {
     },
     styleAsideComputed: function() {
       return {
-        overflow: "auto",
+        overflowX: "hidden",
+        overflowY: "auto",
         height: this.containerSize.height - 60 + "px"
       };
     },
@@ -686,8 +687,8 @@ body {
   overflow: none;
   height: 100%;
 }
-.el-menu-vertical:not(.el-menu--collapse) {
-  width: 200px;
+.aside .el-menu-vertical:not(.el-menu--collapse) {
+  width: 100%;
 }
 
 .el-submenu__title {
@@ -701,6 +702,10 @@ body {
   line-height: 40px !important;
   padding: 0 45px;
   min-width: 200px;
+}
+
+.aside .el-submenu .el-menu-item {
+  min-width: 0;
 }
 
 .menuiconaside {

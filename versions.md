@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.23 14/Oct/2026
+* Removed the extra horizontal scrollbar from the menu selector
+
 ## V3.29.22 09/Oct/2026
 * Fixed Docker action editor initialization so the Restart/Start/Stop dropdown works again
 * Fixed the Action label to focus the dropdown
