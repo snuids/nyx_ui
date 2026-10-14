@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.25 14/Oct/2026
+* Reused the external JupyterLab application's token for Lambda notebook and input links
+
 ## V3.29.24 14/Oct/2026
 * Removed the duplicate vertical scrollbar from the AppConfig component
 * Removed the duplicate vertical scrollbar from the ReportTask component

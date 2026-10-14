@@ -481,21 +481,65 @@ export default {
         );
       };
     },
+    getJupyterLabToken() {
+      const menus = this.$store.getters.menus || [];
+
+      for (const menu of menus) {
+        for (const submenu of menu.submenus || []) {
+          for (const app of submenu.apps || []) {
+            if (
+              app.type !== "external" ||
+              !app.config ||
+              typeof app.config.url !== "string"
+            ) {
+              continue;
+            }
+
+            try {
+              const url = new URL(app.config.url, window.location.origin);
+              if (!/\/jupylab(?:\/|$)/i.test(url.pathname)) continue;
+
+              const token = url.searchParams.get("token");
+              if (token) return token;
+            } catch (error) {
+              console.warn("Unable to parse external JupyterLab URL", error);
+            }
+          }
+        }
+      }
+
+      return "";
+    },
+    addJupyterLabToken(url) {
+      const token = this.getJupyterLabToken();
+      if (!token) return url;
+
+      return (
+        url +
+        (url.includes("?") ? "&" : "?") +
+        "token=" +
+        encodeURIComponent(token)
+      );
+    },
     openTabCode: function() {
       window.open(
-        "./jupylab/lab/workspaces/auto-f/tree/notebooks/lambdas/runner_" +
-          this.runner +
-          "/" +
-          this.notebook
+        this.addJupyterLabToken(
+          "./jupylab/lab/workspaces/auto-f/tree/notebooks/lambdas/runner_" +
+            this.runner +
+            "/" +
+            this.notebook
+        )
       );
     },
     openTabInput: function() {
       window.open(
-        "./jupylab/lab/workspaces/auto-f/tree/notebooks/lambdas/runner_" +
-          this.runner +
-          "/inputs/" +
-          this.selectedUuid +
-          ".txt"
+        this.addJupyterLabToken(
+          "./jupylab/lab/workspaces/auto-f/tree/notebooks/lambdas/runner_" +
+            this.runner +
+            "/inputs/" +
+            this.selectedUuid +
+            ".txt"
+        )
       );
     },
     setFocus: function(el) {

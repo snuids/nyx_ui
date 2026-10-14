@@ -113,9 +113,8 @@ docker build .
 
 ### Version History
 
-Current version: **v3.29.24** (14/Oct/2026).
+Current version: **v3.29.25** (14/Oct/2026).
 
-* Fixed Docker action editor initialization so the Restart/Start/Stop dropdown works again.
-* Fixed the Action label to focus the dropdown.
+* Lambda notebook and input links now reuse the JupyterLab token configured on the external JupyterLab application.
 
 [Versions](versions.md)
