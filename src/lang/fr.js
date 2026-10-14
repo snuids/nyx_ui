@@ -554,6 +554,7 @@ export const messages = {
         record_saved:"Enregistrement sauvegardé.",
         record_updated:"Enregistrement mis à jour.",
         unable_send:"Impossible d'envoyer le message.",
+        edit_report:"Modifier le rapport",
         new_report:"Nouveau rapport",
         new_periodic:"Nouvelle tâche périodique",
         delete_completed:"Suppression effectuée",

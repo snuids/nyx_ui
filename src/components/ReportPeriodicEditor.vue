@@ -362,7 +362,7 @@ export default {
       { key: 0, label: "Monday" },
       { key: 1, label: "Tuesday" },
       { key: 2, label: "Wednesday" },
-      { key: 3, label: "Tuesday" },
+      { key: 3, label: "Thursday" },
       { key: 4, label: "Friday" },
       { key: 5, label: "Saturday" },
       { key: 6, label: "Sunday" }

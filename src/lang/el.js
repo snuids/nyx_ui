@@ -541,6 +541,7 @@ export const messages = {
       record_saved:"Η εγγραφή αποθηκεύτηκε.",
       record_updated:"Η εγγραφή ενημερώθηκε.",
       unable_send:"Αδυναμία αποστολής μηνύματος.",
+      edit_report:"Επεξεργασία αναφοράς",
       new_report:"Νέα αναφορά",
       new_periodic:"Νέα περιοδική εργασία",
       delete_completed:"Η διαγραφή ολοκληρώθηκε",

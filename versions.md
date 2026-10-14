@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.26 14/Oct/2026
+* Fixed the duplicated Tuesday entry in the periodic report scheduler so Thursday is available
+
 ## V3.29.25 14/Oct/2026
 * Reused the external JupyterLab application's token for Lambda notebook and input links
 

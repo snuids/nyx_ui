@@ -550,6 +550,7 @@ export const messages = {
         record_saved:"Record saved.",
         record_updated:"Record updated.",
         unable_send:"Unable to send message.",
+        edit_report:"Edit Report",
         new_report:"New Report",
         new_periodic:"New Periodic Task",
         delete_completed:"Delete completed",
@@ -635,4 +636,3 @@ export const messages = {
       }
     }
   }
-

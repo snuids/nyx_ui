@@ -218,7 +218,7 @@ export default {
       this.curReport = JSON.parse(JSON.stringify(row._source));
       this.curReportId = row._id;
       this.curReportIndex = row._index;
-      this.titleEditor = "Edit Report";
+      this.titleEditor = this.$t("rep.edit_report");
 
       if (this.curReport.parameters === undefined)
         this.curReport.parameters = [];
@@ -232,7 +232,7 @@ export default {
       this.curReportId = "id_" + Math.floor((1 + Math.random()) * 0x1000000);
       this.curReportIndex = "nyx_reportdef";
 
-      this.titleEditor = "New Report";
+      this.titleEditor = this.$t("rep.new_report");
 
       this.curReport = JSON.parse(JSON.stringify(this.currentRow._source));
 
@@ -246,7 +246,7 @@ export default {
         .substr(0, 5);
       this.curReportIndex = "nyx_reportdef";
 
-      this.titleEditor = "New Report";
+      this.titleEditor = this.$t("rep.new_report");
 
       this.curReport = {
         title: this.$t("rep.new_report"),
@@ -374,4 +374,3 @@ export default {
   width: 380px;
 }
 </style>
-

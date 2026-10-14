@@ -113,8 +113,8 @@ docker build .
 
 ### Version History
 
-Current version: **v3.29.25** (14/Oct/2026).
+Current version: **v3.29.26** (14/Oct/2026).
 
-* Lambda notebook and input links now reuse the JupyterLab token configured on the external JupyterLab application.
+* Fixed the duplicated Tuesday entry in the periodic report scheduler so Thursday is available.
 
 [Versions](versions.md)
