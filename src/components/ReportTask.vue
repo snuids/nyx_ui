@@ -99,7 +99,6 @@
       :data="tableData.filter(data => !search || data._source.creds.user.id.toLowerCase().includes(search.toLowerCase()) ||   data._source.report.title.toLowerCase().includes(search.toLowerCase() ))"
       :default-sort="{prop: '_source.treatment.creation', order: 'descending'}"
       style="width: 100%"
-      height="1000"
       highlight-current-row
     >
       <el-table-column width="60">
@@ -641,4 +640,3 @@ export default {
   width: 380px;
 }
 </style>
-

@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.24 14/Oct/2026
+* Removed the duplicate vertical scrollbar from the AppConfig component
+* Removed the duplicate vertical scrollbar from the ReportTask component
+
 ## V3.29.23 14/Oct/2026
 * Removed the extra horizontal scrollbar from the menu selector
 
