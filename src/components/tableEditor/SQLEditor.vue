@@ -66,7 +66,7 @@ export default {
     description: "",
     originalDescription: "",
     queryFieldPath: null, // Store the path to the query field
-    _keyListener: null,
+    keyListener: null,
     aceEditor: null, // Store ace editor instance
     editorKey: 0 // Key to force re-render
   }),
@@ -134,7 +134,7 @@ export default {
       }
     }, 500);
     
-    this._keyListener = function(e) {
+    this.keyListener = function(e) {
       if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         if (this.hasChanged) {
@@ -142,11 +142,11 @@ export default {
         }
       }
     };
-    document.addEventListener("keydown", this._keyListener.bind(this));
+    document.addEventListener("keydown", this.keyListener.bind(this));
   },
   beforeDestroy: function() {
-    if (this._keyListener) {
-      document.removeEventListener("keydown", this._keyListener);
+    if (this.keyListener) {
+      document.removeEventListener("keydown", this.keyListener);
     }
   },
   methods: {

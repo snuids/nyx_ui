@@ -1,5 +1,11 @@
 # Version History
 
+## V3.29.27 24/Oct/2026
+* Disabled production source maps to shrink the bundle and stop shipping source code
+* Removed unused dependencies and replaced jQuery with native DOM APIs
+* Fixed lint errors across the codebase so `npm run lint` passes again
+* Fixed bar chart width side effect, unreachable code, `v-if`/`v-for` usage, and unsafe `hasOwnProperty` calls
+
 ## V3.29.26 14/Oct/2026
 * Fixed the duplicated Tuesday entry in the periodic report scheduler so Thursday is available
 

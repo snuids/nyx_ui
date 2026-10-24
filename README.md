@@ -113,8 +113,8 @@ docker build .
 
 ### Version History
 
-Current version: **v3.29.26** (14/Oct/2026).
+Current version: **v3.29.27** (24/Oct/2026).
 
-* Fixed the duplicated Tuesday entry in the periodic report scheduler so Thursday is available.
+* Disabled production source maps, removed unused dependencies and fixed lint/code defects.
 
 [Versions](versions.md)

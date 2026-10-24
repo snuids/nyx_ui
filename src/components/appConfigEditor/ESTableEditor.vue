@@ -40,7 +40,7 @@
       <el-row>
         <el-table :data="esMapping" size="mini" style="width: 100%">
           <el-table-column label="id" prop="id">
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
               <p
                 v-bind:class="{ 'text-success': succesIndexPatternDefinition }"
                 v-html="helpMessage"
@@ -828,7 +828,7 @@ export default {
 
         console.log(tmp);
 
-        for (var i = 0; i < tmp.length; i++) {
+        for (let i = 0; i < tmp.length; i++) {
           var obj = {
             field: tmp[i].split("->")[0],
             title: tmp[i].split("->")[1]
@@ -990,8 +990,6 @@ export default {
     },
     goToStep: function(step) {
       console.log("go to step" + step);
-      if (step == 2) {
-      }
 
       this.step = step;
     },
@@ -1021,7 +1019,6 @@ export default {
               this.getRecMappings("", indexMapping.obj.mappings[_type]);
             }
           }
-        } else {
         }
       }
 

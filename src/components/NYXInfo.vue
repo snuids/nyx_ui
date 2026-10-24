@@ -237,7 +237,7 @@ export default {
 
           console.log(response);
         },
-        error => {
+        () => {
           console.error(
             "Got nothing from server. Prompt user to check internet connection and try again"
           );
@@ -496,7 +496,7 @@ export default {
           nodes = nodes.slice(0, uniquesnodes.size);
 
           this.nodes = [];
-          for (var i = 0; i < nodes.length; i++) {
+          for (let i = 0; i < nodes.length; i++) {
             nodes[i]._source["disk_avail"] = nodes[i]._source["disk.avail"];
             nodes[i]._source["disk_indices"] = nodes[i]._source["disk.indices"];
             nodes[i]._source["disk_percent"] =

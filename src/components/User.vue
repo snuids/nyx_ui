@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column align="right" width="250">
         <!-- Removed from line below: slot-scope="scope" -->
-        <template slot="header" slot-scope="scope">
+        <template slot="header">
           <div>
             <el-button
               size="mini"

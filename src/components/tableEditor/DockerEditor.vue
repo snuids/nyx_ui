@@ -58,9 +58,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
-import moment from "moment";
 
 export default {
   name: "DockerEditor",

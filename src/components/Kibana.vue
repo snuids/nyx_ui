@@ -63,12 +63,6 @@ import Vue from "vue";
 import browserDetect from "vue-browser-detect-plugin";
 Vue.use(browserDetect);
 
-
-
-const $ = require("jquery");
-
-window.$ = $;
-
 export default {
   name: "Kibana",
   data: () => ({
@@ -469,16 +463,17 @@ export default {
           "  filter-bar {display: none;}  .filter-bar {   background-color: white !important; border-bottom:none !important; height: 0px;visibility: hidden; padding: 0px !important;}";
       }
 
-      $("iframe")
-        .contents()
-        .find("head")
-        .append(
-          $(
-            "<style type='text/css'> dashboard-viewport-provider {background-color: white !important;}  .theme-light .dshDashboardViewport-withMargins{background-color:white !important;} " +
-              hideFilterStyle +
-              "  </style>"
-          )
-        );
+      if (!iframe || !iframe.contentDocument || !iframe.contentDocument.head) {
+        return;
+      }
+
+      var style = document.createElement("style");
+      style.type = "text/css";
+      style.textContent =
+        "dashboard-viewport-provider {background-color: white !important;}  .theme-light .dshDashboardViewport-withMargins{background-color:white !important;} " +
+        hideFilterStyle;
+
+      iframe.contentDocument.head.appendChild(style);
     }
   },
   created: function() {

@@ -191,7 +191,7 @@ export default {
 
       editor.setReadOnly(true);
     },
-    editorInit: function(editor) {
+    editorInit: function() {
       // eslint-disable-line
       require("brace/ext/language_tools"); //language extension prerequsite...
       require("brace/mode/html");

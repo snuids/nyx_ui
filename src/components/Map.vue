@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Vue2Leaflet from "vue2-leaflet";
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
@@ -164,7 +162,7 @@ export default {
             icons[key]=newicon;          
         }
 
-        var icon=icons[key];
+        icon=icons[key];
 //        if(this.tableData.length>300)
 //          icon=null;
 
@@ -178,7 +176,7 @@ export default {
 
         } else if (res!=null)
         {
-          var newm={"source":this.tableData[rec],"icon":icon,"id":this.tableData[rec]._id,"latlng": L.latLng(res[0],res[1])}
+          newm={"source":this.tableData[rec],"icon":icon,"id":this.tableData[rec]._id,"latlng": L.latLng(res[0],res[1])}
           newmarkers.push(newm);
         }
 

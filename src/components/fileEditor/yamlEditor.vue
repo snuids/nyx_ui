@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import YAML from "js-yaml";
-import axios from "axios";
 import { i18n } from "../../i18n-setup";
 
 export default {
@@ -50,7 +48,7 @@ export default {
     localFileName: null,
     localFile: '',
     loading: true,
-    _keyListener: null,
+    keyListener: null,
   }),
   components: {
     editor: require("vue2-ace-editor")
@@ -85,7 +83,7 @@ export default {
     this.dialogFormVisible = true;
   },
   mounted: function() {
-    this._keyListener = e => {
+    this.keyListener = e => {
         if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
             e.preventDefault(); // present "Save Page" from getting triggered.
             console.log(e)
@@ -94,11 +92,11 @@ export default {
         }
     };
 
-    document.addEventListener('keydown', this._keyListener);
+    document.addEventListener('keydown', this.keyListener);
   },
   beforeDestroy: function() {
     console.log('beforeDestroy')
-    document.removeEventListener('keydown', this._keyListener)
+    document.removeEventListener('keydown', this.keyListener)
   },
   methods: {
     prepareData() {
@@ -116,7 +114,7 @@ export default {
     closeDialog: function() {
       this.$emit("dialogclose");
     },
-    editorInit: function(editor) {
+    editorInit: function() {
       // eslint-disable-line
       require("brace/ext/language_tools"); //language extension prerequsite...
       require("brace/mode/html");

@@ -127,7 +127,6 @@
 </template>
 <script>
 import Vue from "vue";
-import axios from "axios";
 // import _ from "lodash";
 
 import formfieldeditor from "@/components/appConfigEditor/FormFieldEditor";

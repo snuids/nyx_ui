@@ -145,7 +145,7 @@ export default {
       });
     },
     refresh2: function() {},
-    valueChanged: function(item) {},
+    valueChanged: function() {},
     prepareData: function() {
       this.dialogFormVisible = true;
       console.log("prepare data");
@@ -187,10 +187,10 @@ export default {
       }
       if (this.editMode == "duplicate") {
         this.loadedrecord = this.record;
-        for (var rec in this.tableSchema) {
-          var field = this.tableSchema[rec];
-          if (this.config.config.pkey == field.col) continue;
-          this.loadedrecord[field.col + "_$type"] = field.type;
+        for (let recKey in this.tableSchema) {
+          const schField = this.tableSchema[recKey];
+          if (this.config.config.pkey == schField.col) continue;
+          this.loadedrecord[schField.col + "_$type"] = schField.type;
         }
 
         this.record._id = "NEW";
@@ -258,8 +258,6 @@ export default {
       }
 
       console.log(record);
-
-      var id = this.record._id;
 
       var url =
         this.$store.getters.apiurl +

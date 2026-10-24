@@ -86,7 +86,7 @@ export default {
         if (this.vegaSpec.hconcat != undefined) {
           // Divide width among horizontally concatenated charts
           const individualWidth = Math.floor(chartWidth / this.vegaSpec.hconcat.length) - 20;
-          for (var i = 0; i < this.vegaSpec.hconcat.length; i++) {
+          for (let i = 0; i < this.vegaSpec.hconcat.length; i++) {
             this.vegaSpec.hconcat[i].width = individualWidth;
           }
         }
@@ -157,7 +157,7 @@ export default {
   },
   mounted: function() {
     console.log("===============  REGISTERING VEGA:");
-    this.$globalbus.$on("timerangechanged", payLoad => {
+    this.$globalbus.$on("timerangechanged", () => {
       console.log("GLOBALBUS/VEGATIMERANGE/");
       this.prepareVega();
     });

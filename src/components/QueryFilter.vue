@@ -135,7 +135,6 @@ export default {
       console.log("===>" + field);
       if (" ".indexOf(field) >= 0) console.log("2==>" + field);
       return field.replace(/ /g, "\\ ");
-      return field;
     },
     refreshLinkedCombo: function(filterchangedindex) {
       for (let queryind in this.queryFilterCopy) {
@@ -378,8 +377,7 @@ export default {
         break;
       }
     }
-    if (this.mustloadqueryfilters) {
-    } else this.prepareData();
+    if (!this.mustloadqueryfilters) this.prepareData();
   },
   mounted: function() {
     this.alreadymounted = true;

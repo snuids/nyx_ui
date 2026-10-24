@@ -140,7 +140,7 @@ import _ from "lodash";
 export default {
   name: "ProcessList",
   watch: {
-    selectedTimeframe: function (val) {
+    selectedTimeframe: function () {
       this.loadData();
     }
   },

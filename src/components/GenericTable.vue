@@ -128,7 +128,7 @@
             </template>
           </el-table-column>
           <el-table-column label="Actions" align="right" width="150px;">
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
               <div>
                 <el-tooltip
                   v-if="config.config.index.indexOf('*')==-1 && currentRow && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
@@ -363,7 +363,7 @@ export default {
       this.dontrefreshMap=true;
       this.refreshData();
     },
-    handleCurrentChange: function(e) {
+    handleCurrentChange: function() {
       //console.log("Current changed....."); 
       this.dontrefreshMap=true;
       this.refreshData();     

@@ -108,7 +108,7 @@
           </el-table-column>
           <el-table-column label="Actions" align="right">
             <!-- Removed from line below: slot-scope="scope" -->
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
               <div>
                 <el-tooltip
                   v-if="config.config.index && config.config.index.length>0 && currentRow"
@@ -333,7 +333,7 @@ export default {
       this.pagesize=e;
       this.refreshData();
     },
-    handleCurrentChange: function(e) {
+    handleCurrentChange: function() {
       console.log("Current changed....."); 
       this.refreshData();     
     },
@@ -364,7 +364,7 @@ export default {
       this.dialogFormVisible = true;
       this.editMode = "add";
     },
-    partialUpdateRecord: function(newRec, header) {
+    partialUpdateRecord: function() {
       // var headerName = header.field.replace("_source.", "");
       // var newObj = newRec.original;
       // // for (var i in newObj._source) {

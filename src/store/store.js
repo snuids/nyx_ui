@@ -442,8 +442,6 @@ export default new Vuex.Store({
       let startTime = null;
       let endTime = null;
       let minutes = 0;
-      let startTimeAsUtc = null; // eslint-disable-line
-      let endTimeAsUtc = null;  // eslint-disable-line
 
       switch (payload.data.subtype) {
         case "day":
@@ -451,8 +449,6 @@ export default new Vuex.Store({
           startTime = moment(state.timeRangeDay[0]);
           endTime = moment(state.timeRangeDay[1]);
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-          startTimeAsUtc = moment(state.timeRangeDay[0]).utc();
-          endTimeAsUtc = moment(state.timeRangeDay[1]).utc();
 
           break;
         case "week":
@@ -460,8 +456,6 @@ export default new Vuex.Store({
           startTime = moment(state.timeRangeWeek[0]);
           endTime = moment(state.timeRangeWeek[1]);
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-          startTimeAsUtc = moment(state.timeRangeWeek[0]).utc();
-          endTimeAsUtc = moment(state.timeRangeWeek[1]).utc();
 
           break;
         case "month":
@@ -469,8 +463,6 @@ export default new Vuex.Store({
           startTime = moment(state.timeRangeMonth[0]);
           endTime = moment(state.timeRangeMonth[1]);
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-          startTimeAsUtc = moment(state.timeRangeMonth[0]).utc();
-          endTimeAsUtc = moment(state.timeRangeMonth[1]).utc();
 
           break;
         case "year":
@@ -478,8 +470,6 @@ export default new Vuex.Store({
           startTime = moment(state.timeRangeYear[0]);
           endTime = moment(state.timeRangeYear[1]);
           minutes = moment.duration(endTime.diff(startTime)).asMinutes();
-          startTimeAsUtc = moment(state.timeRangeYear[0]).utc();
-          endTimeAsUtc = moment(state.timeRangeYear[1]).utc();
           break;
 
         default:
@@ -490,8 +480,6 @@ export default new Vuex.Store({
             state.autoTime = "1h";
             minutes = moment.duration(endTime.diff(startTime)).asMinutes();
             state.autoTime = computeAutoTime(minutes);
-            startTimeAsUtc = moment(state.timeRange[0]).utc();
-            endTimeAsUtc = moment(state.timeRange[1]).utc();
           }
           else {
             var minutesmulti = 1;

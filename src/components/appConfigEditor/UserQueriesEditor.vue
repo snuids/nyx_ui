@@ -215,9 +215,6 @@
   </el-col>
 </template>
 <script>
-import Vue from "vue";
-import axios from "axios";
-import YAML from "js-yaml";
 import _ from "lodash";
 
 export default {
@@ -413,7 +410,7 @@ export default {
       this.inputVisible = false;
       this.inputValue = "";
     },
-    editorInit: function(editor) {
+    editorInit: function() {
       // eslint-disable-line
       require("brace/ext/language_tools"); //language extension prerequsite...
       require("brace/mode/html");

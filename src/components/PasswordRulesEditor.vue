@@ -147,7 +147,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "PasswordRuleEditor",
   data() {
@@ -350,8 +349,7 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {
-        } else {
+        if (!valid) {
           console.log("error submit!!");
           return false;
         }

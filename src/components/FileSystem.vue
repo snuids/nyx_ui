@@ -66,7 +66,7 @@
         :empty-text="$t('ui.folder_empty')">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="name" label="Name" sortable>
-          <template slot-scope="scope" style="font-weight:bold;">
+          <template slot-scope="scope">
             <span class="icon-items">
               <v-icon v-if="scope.row.type=='dir'" name="regular/folder" scale="1.3" />
               <v-icon v-else-if="scope.row.type=='file' && ['png', 'jpg'].indexOf(scope.row.extension.toLowerCase())>-1" name="regular/image" scale="1.3" />
@@ -233,7 +233,7 @@ export default {
       }
 
     },
-    rowDoubleClick: function(row, column, event) {
+    rowDoubleClick: function(row) {
       if (row.type == "dir") {
         console.log("explore dir");
         this.curPath += "/" + row.name;

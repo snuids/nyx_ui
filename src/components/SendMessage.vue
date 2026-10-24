@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    sendMessage: function(e) {
+    sendMessage: function() {
       console.log("Send Message");
 
       var url =

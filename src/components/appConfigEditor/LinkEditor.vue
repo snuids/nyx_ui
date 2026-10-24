@@ -68,10 +68,6 @@
   
 </template>
 <script>
-import Vue from "vue";
-import axios from "axios";
-import _ from "lodash";
-
 export default {
    name: "LinkEditor",
   data: () => ({

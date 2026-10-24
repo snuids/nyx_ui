@@ -400,10 +400,10 @@ export default {
       }
 
       if(par.usetimestamp && fixdate){
-        var timestampfield = par.timestampfield
-        var start = fixdateValue.toISOString()
-        var enddt = new Date(fixdateValue.setHours(23,59,59,999))
-        var end = enddt.toISOString()
+        const timestampfield = par.timestampfield
+        const start = fixdateValue.toISOString()
+        const enddt = new Date(fixdateValue.setHours(23,59,59,999))
+        const end = enddt.toISOString()
         query["query"]= {
                 "bool": {
                   "must": [

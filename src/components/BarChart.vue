@@ -61,7 +61,8 @@
     <!-- clip-path="url(#mainrect)" -->
 
     <rect
-      v-for="bar in bars"
+      v-for="(bar, index) in bars"
+      :key="index"
       :x="bar.x"
       :y="bar.y"
       :width="bar.w"
@@ -77,14 +78,15 @@
   -->
 
     <line
-      v-for="tick in ticks"
+      v-for="(tick, index) in ticks"
+      :key="index"
       :x1="tick.x"
       :y1="tick.y+10"
       :x2="tick.x"
       :y2="tick.y"
       style="stroke:rgb(128,128,128);stroke-width:2"
     />
-    <text v-for="tick in ticks" :x="tick.x-16" :y="tick.y+23" class="barchart_tick">{{tick.t}}</text>
+    <text v-for="(tick, index) in ticks" :key="index" :x="tick.x-16" :y="tick.y+23" class="barchart_tick">{{tick.t}}</text>
 
     <!-- eslint-enable -->
 
@@ -148,18 +150,26 @@ export default {
 
       return "0 0 " + (this.$store.getters.containerSize.width - left) + " 200";
     },
-    containerWidth: function() {
+    availableWidth: function() {
       var left = 210;
       if (!this.$store.state.menuOpen) left = 0;
 
-      this.width = this.$store.getters.containerSize.width - left;
+      return this.$store.getters.containerSize.width - left;
+    },
+    containerWidth: function() {
       // console.log("CONTAINER W=" + this.width);
 
-      return this.$store.getters.containerSize.width - left - 50 + "px";
+      return this.availableWidth - 50 + "px";
       //return "1400px";
     }
   },
   watch: {
+    availableWidth: {
+      handler: function(newWidth) {
+        this.width = newWidth;
+      },
+      immediate: true
+    },
     seriesIn: {
       handler: function() {
         this.prepareData();

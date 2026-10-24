@@ -291,9 +291,7 @@
 </template>
 
 <script>
-import Vue from "vue";
 
-import YAML from "js-yaml";
 import axios from "axios";
 
 export default {
@@ -368,8 +366,12 @@ export default {
       )
         return true;
       else if (
-        this.hierarchy.hasOwnProperty(this.newRec._source.runner) &&
-        this.hierarchy[this.newRec._source.runner].hasOwnProperty(
+        Object.prototype.hasOwnProperty.call(
+          this.hierarchy,
+          this.newRec._source.runner
+        ) &&
+        Object.prototype.hasOwnProperty.call(
+          this.hierarchy[this.newRec._source.runner],
           this.newRec._source.file
         ) &&
         this.hierarchy[this.newRec._source.runner][
@@ -439,7 +441,7 @@ export default {
 
             axios
               .post(url, obj._source)
-              .then(response => {
+              .then(() => {
                 // console.log("update");
                 this.newRec = JSON.parse(JSON.stringify(obj));
                 this.orgRec = JSON.parse(JSON.stringify(obj));
@@ -560,10 +562,7 @@ export default {
     handleSelectRunner(item) {
       this.fileOptions = [];
 
-      if (item == "") {
-      }
-
-      if (this.hierarchy.hasOwnProperty(item)) {
+      if (Object.prototype.hasOwnProperty.call(this.hierarchy, item)) {
         Object.keys(this.hierarchy[item]).forEach(not => {
           this.fileOptions.push({
             value: not,
@@ -599,10 +598,15 @@ export default {
               this.allNotebooks.add(notebook);
               this.allFunctions.add(funct);
 
-              if (!this.hierarchy.hasOwnProperty(runner))
+              if (!Object.prototype.hasOwnProperty.call(this.hierarchy, runner))
                 this.hierarchy[runner] = {};
 
-              if (!this.hierarchy[runner].hasOwnProperty(notebook))
+              if (
+                !Object.prototype.hasOwnProperty.call(
+                  this.hierarchy[runner],
+                  notebook
+                )
+              )
                 this.hierarchy[runner][notebook] = new Set();
 
               this.hierarchy[runner][notebook].add(funct);
@@ -692,7 +696,6 @@ export default {
               message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
-          } else {
           }
         })
         .catch(error => {

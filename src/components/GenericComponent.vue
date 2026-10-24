@@ -41,7 +41,7 @@
         @tab-click="handleTabClick">
         <el-tab-pane
           v-bind:style="styleContainerComputed"
-          v-for="(app, index) in $store.getters.currentSubCategory.apps"
+          v-for="app in $store.getters.currentSubCategory.apps"
           :key="app.rec_id"
           :label="app.loc_title"
           :name="app.rec_id"
@@ -106,7 +106,6 @@
 // import LandingPage from "@/components/LandingPage";
 // import NYXInfo from "@/components/NYXInfo";
 // import SendMessage from "@/components/SendMessage";
-import Vue from "vue";
 
 const req = require.context('../components/', true, /\.vue$/)
 

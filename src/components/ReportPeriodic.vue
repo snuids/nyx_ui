@@ -41,22 +41,18 @@
 
       <el-table-column :label="$t('report.days')">
         <template slot-scope="scope">
-          <span
-            v-if="scope.row._source.trigger.type=='daily'"
-            v-for="item in scope.row._source.trigger.days"
-            :key="item"
-          >
-            &nbsp;
-            <el-tag size="mini" type="info">{{(item+1)}}</el-tag>
-          </span>
-          <span
-            v-if="scope.row._source.trigger.type=='monthly'"
-            v-for="item in scope.row._source.trigger.days"
-            :key="item"
-          >
-            &nbsp;
-            <el-tag size="mini" type="info">{{(item)}}</el-tag>
-          </span>
+          <template v-if="scope.row._source.trigger.type=='daily'">
+            <span v-for="item in scope.row._source.trigger.days" :key="item">
+              &nbsp;
+              <el-tag size="mini" type="info">{{(item+1)}}</el-tag>
+            </span>
+          </template>
+          <template v-else-if="scope.row._source.trigger.type=='monthly'">
+            <span v-for="item in scope.row._source.trigger.days" :key="item">
+              &nbsp;
+              <el-tag size="mini" type="info">{{(item)}}</el-tag>
+            </span>
+          </template>
         </template>
       </el-table-column>
 
@@ -68,7 +64,7 @@
 
       <el-table-column align="right" width="220">
         <!-- Removed from line below: slot-scope="scope" -->
-        <template slot="header" slot-scope="scope">
+        <template slot="header">
           <div>
             <el-tooltip
               v-if="currentRow"

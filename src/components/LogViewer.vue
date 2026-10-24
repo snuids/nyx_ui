@@ -51,7 +51,7 @@
             width="170"
             >
             
-             <template slot="header" slot-scope="scope" style="text-align:right">
+             <template slot="header">
               <el-input
                 v-model="search"                
                 size="mini"
@@ -93,7 +93,6 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-import Vue from "vue";
 
 
 export default {

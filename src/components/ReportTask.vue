@@ -207,7 +207,7 @@
       </el-table-column>
       <el-table-column prop="_source.downloads.length" align="right">
         <!-- Removed from line below: slot-scope="scope" -->
-        <template slot="header" slot-scope="scope">
+        <template slot="header">
           <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">
@@ -437,7 +437,7 @@ export default {
         let hasLimitedRows = false;
         
         // Process each sheet
-        workbook.SheetNames.forEach((sheetName, index) => {
+        workbook.SheetNames.forEach(sheetName => {
           const worksheet = workbook.Sheets[sheetName];
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
           

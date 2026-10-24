@@ -811,7 +811,7 @@ export default {
       }
       }
     },
-    successUpload: function(response, file, fileList) {
+    successUpload: function(response, file) {
       console.log("emit event on-success");
       const login = this.$store.getters.creds.user.login;
       this.newRec.jasper="./jasperdef/"+login+"/"+file.raw.name;
@@ -823,7 +823,7 @@ export default {
         duration: 3000
       });
     },
-    valueChanged: function(item) {
+    valueChanged: function() {
       // eslint-disable-line
       this.changed = true;
     },
@@ -898,11 +898,6 @@ export default {
         _source: this.newRec
       };
 
-      if(this.newRec.reportType=="python")
-      {
-
-      }
-
       this.$store.commit({
         type: "updateRecord",
         data: obj
@@ -935,7 +930,6 @@ export default {
               message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
-          } else {
           }
         })
         .catch(error => {
@@ -986,7 +980,7 @@ export default {
     },
     showInput: function() {
       this.inputVisible = true;
-      this.$nextTick(_ => {
+      this.$nextTick(() => {
         // eslint-disable-line
         this.$refs.saveTagInput.$refs.input.focus();
       });
