@@ -1,6 +1,6 @@
 {
   "name": "nyx_ui2",
-  "version": "3.29.28",
+  "version": "3.29.29",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -23,8 +23,8 @@
     "prosemirror-utils": "^1.2.2",
     "prosemirror-view": "^1.41.7",
     "rison": "^0.1.1",
-    "tiptap": "^0.15.0",
-    "tiptap-extensions": "^0.17.0",
+    "tiptap": "^1.32.2",
+    "tiptap-extensions": "^1.35.2",
     "vega": "^6.4.0",
     "vega-embed": "^7.3.0",
     "vega-lite": "^6.4.3",

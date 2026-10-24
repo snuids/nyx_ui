@@ -1,5 +1,10 @@
 # Version History
 
+## V3.29.29 24/Oct/2026
+* Upgraded tiptap to 1.32.2 and tiptap-extensions to 1.35.2 so the Free Text editor imports resolve
+* Fixed the Free Text default content to use the translated label instead of a literal `{{ $t(...) }}` string
+* The Free Text editor now edits the working config copy
+
 ## V3.29.28 24/Oct/2026
 * Fixed the white screen caused by the container build resolving webpack 5.112 (now pinned to 5.107.2)
 * Committed `package-lock.json` and switched the container build to `npm ci` for reproducible builds

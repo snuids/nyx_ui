@@ -785,7 +785,7 @@
           v-if="(curConfig.type === 'free-text')"
         >
           <el-card>
-            <FreeTextDetails :config="currentConfig" v-on:freetextchanged="freeTextChanged"></FreeTextDetails>
+            <FreeTextDetails :config="curConfig" v-on:freetextchanged="freeTextChanged"></FreeTextDetails>
           </el-card>
         </el-tab-pane>
         <!-- Vega -->

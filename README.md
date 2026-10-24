@@ -113,8 +113,8 @@ docker build .
 
 ### Version History
 
-Current version: **v3.29.28** (24/Oct/2026).
+Current version: **v3.29.29** (24/Oct/2026).
 
-* Fixed the white screen caused by webpack version drift in the container build; builds are now reproducible via the committed lockfile.
+* Upgraded tiptap to v1 so the Free Text rich-text editor works.
 
 [Versions](versions.md)
