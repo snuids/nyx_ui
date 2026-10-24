@@ -1,6 +1,6 @@
 {
   "name": "nyx_ui2",
-  "version": "3.29.27",
+  "version": "3.29.28",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -55,6 +55,7 @@
     "sass": "^1.77.8",
     "sass-loader": "^13.3.3",
     "style-loader": "^4.0.0",
-    "vue-template-compiler": "^2.7.16"
+    "vue-template-compiler": "^2.7.16",
+    "webpack": "5.107.2"
   }
 }

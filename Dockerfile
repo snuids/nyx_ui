@@ -1,13 +1,11 @@
-FROM node:22-bullseye as base
-#FROM node:18.20.8-bullseye as base
-#FROM node:12.13.1-slim as base
+FROM node:22-bullseye AS base
 
-FROM base as builder
-COPY . /etc/build
+FROM base AS builder
+COPY package.json package-lock.json /etc/build/
 WORKDIR /etc/build
-RUN corepack enable
-RUN yarn install
-RUN yarn run build
+RUN npm ci
+COPY . /etc/build
+RUN npm run build
 
 
 FROM base

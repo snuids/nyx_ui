@@ -1,5 +1,9 @@
 # Version History
 
+## V3.29.28 24/Oct/2026
+* Fixed the white screen caused by the container build resolving webpack 5.112 (now pinned to 5.107.2)
+* Committed `package-lock.json` and switched the container build to `npm ci` for reproducible builds
+
 ## V3.29.27 24/Oct/2026
 * Disabled production source maps to shrink the bundle and stop shipping source code
 * Removed unused dependencies and replaced jQuery with native DOM APIs
