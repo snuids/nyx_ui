@@ -51,7 +51,7 @@
             width="170"
             >
             
-             <template slot="header">
+             <template slot="header" slot-scope="_scope">
               <el-input
                 v-model="search"                
                 size="mini"

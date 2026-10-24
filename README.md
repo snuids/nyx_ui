@@ -113,8 +113,8 @@ docker build .
 
 ### Version History
 
-Current version: **v3.29.29** (24/Oct/2026).
+Current version: **v3.29.30** (24/Oct/2026).
 
-* Upgraded tiptap to v1 so the Free Text rich-text editor works.
+* Fixed table header inputs (configuration filter/search) by restoring scoped header slots.
 
 [Versions](versions.md)

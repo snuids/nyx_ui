@@ -206,8 +206,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="_source.downloads.length" align="right">
-        <!-- Removed from line below: slot-scope="scope" -->
-        <template slot="header">
+        <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
+        <template slot="header" slot-scope="_scope">
           <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template slot-scope="scope">

@@ -128,7 +128,7 @@
             </template>
           </el-table-column>
           <el-table-column label="Actions" align="right" width="150px;">
-            <template slot="header">
+            <template slot="header" slot-scope="_scope">
               <div>
                 <el-tooltip
                   v-if="config.config.index.indexOf('*')==-1 && currentRow && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"

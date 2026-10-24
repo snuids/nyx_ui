@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.30 24/Oct/2026
+* Fixed the configuration list search field and other table header inputs by restoring scoped header slots (Element UI renders header content through `$scopedSlots`)
+
 ## V3.29.29 24/Oct/2026
 * Upgraded tiptap to 1.32.2 and tiptap-extensions to 1.35.2 so the Free Text editor imports resolve
 * Fixed the Free Text default content to use the translated label instead of a literal `{{ $t(...) }}` string

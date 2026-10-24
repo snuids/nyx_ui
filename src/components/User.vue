@@ -48,8 +48,8 @@
         </template>
       </el-table-column>
       <el-table-column align="right" width="250">
-        <!-- Removed from line below: slot-scope="scope" -->
-        <template slot="header">
+        <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
+        <template slot="header" slot-scope="_scope">
           <div>
             <el-button
               size="mini"
