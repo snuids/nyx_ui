@@ -102,6 +102,25 @@
               </el-col>
             </el-row>
 
+            <el-row>
+              <el-col :span="8" style="text-align: left;">
+                <el-switch
+                  v-model="currentConfig.downloadChecked"
+                  :active-text="$t('configdetails.download')"
+                ></el-switch>
+              </el-col>
+              <el-col :span="16" style="text-align: left;">
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  :content="$t('grafana.download_hint')"
+                  placement="top"
+                >
+                  <i class="el-icon-question" style="color:#909399"></i>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+
         </el-form>
         <el-form>
         <el-row>&nbsp;</el-row>
@@ -148,7 +167,16 @@ export default {
   methods: {
     
     prepareData() {
+      this.syncGrafanaUid();
       this.loadGrafanaDashboards();
+    },
+    syncGrafanaUid() {
+      if (!this.currentConfig || !this.currentConfig.config) return;
+      if (this.currentConfig.config.grafanaUid) return;
+      var match = String(this.currentConfig.config.url || "").match(
+        /(?:^|\/)d\/([^/?#]+)/
+      );
+      if (match) this.currentConfig.config.grafanaUid = match[1];
     },
     openInGrafana() {
       //console.log(this.currentConfig);
@@ -162,7 +190,17 @@ export default {
       //console.log("Selected Grafana Dashboard ID:", value);
       
       this.curConfig.config.url="./"+value;
-      
+
+      var selected = this.dashboards.find(function(dash) {
+        return dash.url === value;
+      });
+      if (selected && selected.uid) {
+        this.currentConfig.config.grafanaUid = selected.uid;
+      } else {
+        var match = String(value || "").match(/(?:^|\/)d\/([^/?#]+)/);
+        this.currentConfig.config.grafanaUid = match ? match[1] : "";
+      }
+
       //this.currentConfig.config.grafanaId = value;
       //this.$emit("update:currentConfig", this.currentConfig);
     },

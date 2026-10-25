@@ -328,6 +328,17 @@ export const messages = {
       details_on_run:"Λεπτομέρειες εκτέλεσης",
       logs_viewer:"Προβολή αρχείων καταγραφής"
     },
+    grafana:{
+      download_data:"Λήψη δεδομένων",
+      download_hint:"Εξάγει τα δεδομένα όλων των πάνελ σε αρχείο Excel μέσω του συστήματος αναφορών.",
+      export_title:"Εξαγωγή δεδομένων Grafana",
+      export_hint:"Εξαγωγή δεδομένων πάνελ για τον πίνακα ελέγχου.",
+      export_queued:"Η εξαγωγή μπήκε σε ουρά",
+      export_queued_message:"Το αρχείο Excel θα είναι διαθέσιμο στις Αναφορές > Εργασίες όταν ολοκληρωθεί η αναφορά.",
+      export_failed:"Η εξαγωγή απέτυχε",
+      export_failed_message:"Δεν ήταν δυνατή η προσθήκη της εξαγωγής δεδομένων Grafana στην ουρά.",
+      no_dashboard:"Δεν ήταν δυνατός ο προσδιορισμός του UID του πίνακα Grafana."
+    },
     querybar:{
       default:"Αναζήτηση... (π.χ. status:200 AND platform:NYX)",
       download:"Λήψη της επιλογής"

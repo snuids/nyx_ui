@@ -1,5 +1,8 @@
 # Version History
 
+## V3.29.31 25/Oct/2026
+* Added a “Download data” option to Grafana apps; all panel query results are exported to an Excel workbook by the report system, with one sheet per panel and resolved dashboard variables
+
 ## V3.29.30 24/Oct/2026
 * Fixed the configuration list search field and other table header inputs by restoring scoped header slots (Element UI renders header content through `$scopedSlots`)
 

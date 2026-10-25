@@ -138,6 +138,18 @@ export const messages = {
         days:"Jours",
         time:"Heure"
       }
+      ,grafana:
+      {
+        download_data:"Télécharger les données",
+        download_hint:"Exporte les données de tous les panneaux dans un fichier Excel via le système de rapports.",
+        export_title:"Export des données Grafana",
+        export_hint:"Export des données des panneaux du tableau de bord.",
+        export_queued:"Export en file d'attente",
+        export_queued_message:"Le fichier Excel sera disponible dans Rapports > Tâches lorsque le rapport sera terminé.",
+        export_failed:"Échec de l'export",
+        export_failed_message:"Impossible de mettre l'export des données Grafana en file d'attente.",
+        no_dashboard:"Impossible de déterminer l'UID du tableau de bord Grafana."
+      }
       ,querybar:
       {
         default:"Chercher... (p.e. status:200 AND platform:NYX)",

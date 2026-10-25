@@ -134,6 +134,18 @@ export const messages = {
         days:"Days",
         time:"Time"
       }
+      ,grafana:
+      {
+        download_data:"Download data",
+        download_hint:"Exports all panel data to an Excel file through the report system.",
+        export_title:"Grafana data export",
+        export_hint:"Panel data export for the dashboard.",
+        export_queued:"Export queued",
+        export_queued_message:"The Excel file will be available in Reports > Tasks when the report finishes.",
+        export_failed:"Export failed",
+        export_failed_message:"Unable to queue the Grafana data export.",
+        no_dashboard:"Unable to determine the Grafana dashboard UID."
+      }
       ,querybar:
       {
         default:"Search... (e.g. status:200 AND platform:NYX)",
