@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - master
-    # This regex checks for version numbers in the commit message
     paths-ignore:
       - '**.md'
-    # Example versioning pattern: v1.0.0
-    # Adjust the regex as needed for your versioning scheme
-    if: contains(github.event.head_commit.message, 'v')
+      # a change to the workflow itself does not change the image
+      - '.github/**'
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   build:
@@ -19,16 +21,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version from commit message
+      # The tag is the version of the release, taken from the commit message. Squash, rebase and
+      # merge commits all carry it (GitHub repeats the pull request title in the body of a merge
+      # commit), but a pull request whose title has no version would fail here with a bare
+      # "no version" — so the pull request title is the fallback, and the run fails with an
+      # explicit message instead of publishing an untagged image.
+      - name: Resolve the version
         id: extract_version
+        env:
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION=$(echo "${{ github.event.head_commit.message }}" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
+          set -euo pipefail
+
+          VERSION=$(printf '%s\n' "$HEAD_MESSAGE" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
+
           if [ -z "$VERSION" ]; then
-            echo "No valid version found in commit message"
+            echo "No version in the commit message, reading the pull request title"
+            PR_TITLE=$(curl -sS \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" \
+              | jq -r 'if type == "array" and length > 0 then .[0].title else empty end' 2>/dev/null || true)
+            VERSION=$(printf '%s\n' "$PR_TITLE" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
+          fi
+
+          if [ -z "$VERSION" ]; then
+            echo "::error::No version (vX.Y.Z) in the commit message nor in the pull request title; refusing to publish an untagged image."
             exit 1
           fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
