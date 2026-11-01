@@ -649,6 +649,8 @@ export const messages = {
       pick_month:"Επιλέξτε μήνα",
       pick_year:"Επιλέξτε έτος",
       enter_email:"Εισάγετε διεύθυνση email",
+      enter_password:"Εισάγετε κωδικό πρόσβασης",
+      login_button:"Σύνδεση",
       input_canceled:"Η εισαγωγή ακυρώθηκε",
       bad_token:"Μη έγκυρο token",
       site_map:"Χάρτης ιστότοπου",

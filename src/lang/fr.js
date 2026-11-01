@@ -663,6 +663,8 @@ export const messages = {
         pick_month:"Choisir un mois",
         pick_year:"Choisir une année",
         enter_email:"Saisir l'adresse e-mail",
+        enter_password:"Saisir le mot de passe",
+        login_button:"Se connecter",
         input_canceled:"Saisie annulée",
         bad_token:"Jeton invalide",
         site_map:"Plan du site",

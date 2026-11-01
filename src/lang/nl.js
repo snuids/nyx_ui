@@ -659,6 +659,8 @@ export const messages = {
         pick_month:"Kies een maand",
         pick_year:"Kies een jaar",
         enter_email:"E-mailadres invoeren",
+        enter_password:"Voer wachtwoord in",
+        login_button:"Aanmelden",
         input_canceled:"Invoer geannuleerd",
         bad_token:"Ongeldig token",
         site_map:"Sitemap",
