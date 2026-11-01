@@ -41,6 +41,13 @@ export default {
       return fillNotice(privacyNotice(locale), this.mentions);
     },
   },
+  mounted() {
+    // Au cas où une vue précédente aurait verrouillé le défilement du document.
+    document.body.classList.add("nyx-privacy");
+  },
+  beforeDestroy() {
+    document.body.classList.remove("nyx-privacy");
+  },
   async created() {
     // Route publique : la notice doit s'afficher même si l'API ne répond pas. En cas d'échec,
     // le texte garde ses mentions « à compléter » plutôt que de rester vide.
@@ -61,18 +68,19 @@ export default {
 </script>
 
 <style>
-.privacy-page {
-  /* Couche fixe : la mise en page de l'application coupe l'overflow de ses conteneurs, donc
-     une page qui se contente de « min-height: 100vh » ne défile pas — le texte est tronqué. */
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+body.nyx-privacy,
+body.nyx-privacy #app {
+  height: auto;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 40px 16px;
-  background: #f4f6f8;
+}
+
+.privacy-page {
+  /* Bloc normal : le défilement est celui du document. Une couche `position: fixed` avec son
+     propre overflow défile bien dans Chrome, mais Safari refuse le wheel sur ce montage. */
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 14mm 6mm;
+  background: #eef1f4;
 }
 
 .privacy-language {
@@ -82,18 +90,49 @@ export default {
 }
 
 .privacy-sheet {
+  /* Format A4 réel (210 x 297 mm), marges de saisie : ce que l'on voit à l'écran est ce
+     qui sortira à l'impression ou en PDF. */
   position: relative;
-  max-width: 820px;
+  box-sizing: border-box;
+  width: 210mm;
+  max-width: 100%;
+  min-height: 297mm;
   margin: 0 auto;
-  padding: 36px 44px 44px;
+  padding: 18mm 16mm;
   background: #ffffff;
-  border-radius: 6px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
   color: #333;
   line-height: 1.55;
   /* La feuille de style globale centre tout le texte de l'application : une notice
      juridique alignée au centre est illisible. */
   text-align: left;
+}
+
+/* Impression / PDF : mêmes marges, sans décor d'écran. */
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}
+
+@media print {
+  .privacy-page {
+    min-height: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .privacy-sheet {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .privacy-back,
+  .privacy-language {
+    display: none !important;
+  }
 }
 
 .privacy-sheet h1 {
@@ -129,4 +168,4 @@ export default {
 .privacy-back {
   margin-top: 32px;
 }
-
+</style>
