@@ -60,16 +60,13 @@
             :loading="loginunderway"
           >Login</el-button>
           <div class="login_error" v-if="form.error">{{form.error}}</div>
-          <div class="privacy-inline">
-            <router-link to="/privacy">{{ privacyLink }}</router-link>
-          </div>
         </el-col>
       </el-form>
     </el-card>
-    <h1 class="title-login">
-      {{config.welcome}}
-      
-    </h1>
+    <div class="title-login">
+      <h1 class="title-text">{{config.welcome}}</h1>
+      <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
+    </div>
 
   </div>
 </template>
@@ -323,6 +320,25 @@ export default {
   color: white;
   margin-top: 170px;
   font-family: "Helvetica Neue";
+}
+
+.title-text {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Sous le titre de l'application, sur le fond : même famille, plus discret. */
+.privacy-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+}
+
+.privacy-link:hover {
+  color: #ffffff;
 }
 
 .title-disclaimer {

@@ -11,6 +11,11 @@
 
 const fr = {
   link: 'Confidentialité',
+  defaults: {
+    controller: '« raison sociale à compléter »',
+    address: '« adresse à compléter »',
+    contact: '« adresse de contact à compléter »',
+  },
   title: 'Protection des données',
   updated: 'Dernière mise à jour : 1er novembre 2026',
   intro:
@@ -21,8 +26,8 @@ const fr = {
   sections: [
     {
       h: 'Qui est responsable du traitement',
-      p: "« Raison sociale à compléter », « adresse à compléter ». Contact pour toute question " +
-         "relative aux données personnelles : « adresse de contact à compléter ».",
+      p: "{controller}, {address}. Contact pour toute question relative aux données " +
+         "personnelles : {contact}.",
     },
     {
       h: 'Quelles données sont traitées',
@@ -78,7 +83,7 @@ const fr = {
       h: 'Vos droits',
       p: "Vous pouvez demander l'accès à vos données, leur rectification, leur effacement, la " +
          "limitation d'un traitement, vous y opposer et en demander la portabilité. Écrivez à " +
-         "« adresse de contact à compléter ». Si la réponse ne vous satisfait pas, vous pouvez " +
+         "{contact}. Si la réponse ne vous satisfait pas, vous pouvez " +
          "introduire une réclamation auprès de l'Autorité de protection des données, rue de la " +
          "Presse 35, 1000 Bruxelles (autoriteprotectiondonnees.be).",
     },
@@ -87,6 +92,11 @@ const fr = {
 
 const nl = {
   link: 'Privacy',
+  defaults: {
+    controller: '« rechtsvorm aan te vullen »',
+    address: '« adres aan te vullen »',
+    contact: '« contactadres aan te vullen »',
+  },
   title: 'Gegevensbescherming',
   updated: 'Laatst bijgewerkt: 1 november 2026',
   intro:
@@ -97,8 +107,7 @@ const nl = {
   sections: [
     {
       h: 'Wie is verwerkingsverantwoordelijke',
-      p: '« Rechtsvorm aan te vullen », « adres aan te vullen ». Contact voor vragen over ' +
-         'persoonsgegevens: « contactadres aan te vullen ».',
+      p: '{controller}, {address}. Contact voor vragen over persoonsgegevens: {contact}.',
     },
     {
       h: 'Welke gegevens',
@@ -152,7 +161,7 @@ const nl = {
     {
       h: 'Uw rechten',
       p: 'U kunt inzage, rectificatie, wissing, beperking, verzet en overdraagbaarheid vragen. ' +
-         'Schrijf naar « contactadres aan te vullen ». Bent u niet tevreden met het antwoord, dan ' +
+         'Schrijf naar {contact}. Bent u niet tevreden met het antwoord, dan ' +
          'kunt u een klacht indienen bij de Gegevensbeschermingsautoriteit, Drukpersstraat 35, ' +
          '1000 Brussel (gegevensbeschermingsautoriteit.be).',
     },
@@ -161,6 +170,11 @@ const nl = {
 
 const en = {
   link: 'Privacy',
+  defaults: {
+    controller: '« company name to be completed »',
+    address: '« address to be completed »',
+    contact: '« contact address to be completed »',
+  },
   title: 'Data protection',
   updated: 'Last updated: 1 November 2026',
   intro:
@@ -171,8 +185,7 @@ const en = {
   sections: [
     {
       h: 'Who is the controller',
-      p: '« Company name to be completed », « address to be completed ». Contact for any ' +
-         'question about personal data: « contact address to be completed ».',
+      p: '{controller}, {address}. Contact for any question about personal data: {contact}.',
     },
     {
       h: 'What data is processed',
@@ -225,8 +238,8 @@ const en = {
     {
       h: 'Your rights',
       p: 'You may request access to your data, its rectification, erasure, restriction of ' +
-         'processing, object to it and request portability. Write to « contact address to be ' +
-         'completed ». If the answer does not satisfy you, you may lodge a complaint with the ' +
+         'processing, object to it and request portability. Write to {contact}. If the answer ' +
+         'does not satisfy you, you may lodge a complaint with the ' +
          'Belgian Data Protection Authority, Rue de la Presse 35, 1000 Brussels ' +
          '(autoriteprotectiondonnees.be).',
     },
@@ -234,6 +247,30 @@ const en = {
 };
 
 const notices = { fr, nl, en };
+
+/**
+ * Remplace les jetons {controller}, {address} et {contact} par les mentions légales reelles.
+ *
+ * Les valeurs viennent de l'environnement de l'API (PRIVACY_CONTROLLER, PRIVACY_ADDRESS,
+ * PRIVACY_CONTACT) : les renseigner ne demande donc ni reconstruction de l'image ni
+ * republication de l'interface, seulement un redemarrage de l'API. Tant qu'elles sont vides,
+ * le texte garde ses mentions « a completer », visibles a l'ecran : une notice incomplete doit
+ * se voir.
+ */
+export function fillNotice(notice, values) {
+  const resolved = {};
+  for (const key of ['controller', 'address', 'contact']) {
+    const provided = values && values[key];
+    resolved[key] = provided && String(provided).trim() ? String(provided).trim() : notice.defaults[key];
+  }
+  const substitute = (text) =>
+    String(text).replace(/\{(controller|address|contact)\}/g, (match, key) => resolved[key]);
+
+  return {
+    ...notice,
+    sections: notice.sections.map((section) => ({ h: substitute(section.h), p: substitute(section.p) })),
+  };
+}
 
 export function privacyNotice(locale) {
   return notices[locale] || notices.en;

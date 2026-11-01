@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import { privacyNotice } from "@/content/privacy";
+import axios from "axios";
+import { privacyNotice, fillNotice } from "@/content/privacy";
 import LanguageSelect from "@/components/LanguageSelect";
 
 /**
@@ -31,10 +32,24 @@ import LanguageSelect from "@/components/LanguageSelect";
 export default {
   name: "Privacy",
   components: { LanguageSelect },
+  data() {
+    return { mentions: null };
+  },
   computed: {
     notice() {
-      return privacyNotice((this.$i18n && this.$i18n.locale) || "en");
+      const locale = (this.$i18n && this.$i18n.locale) || "en";
+      return fillNotice(privacyNotice(locale), this.mentions);
     },
+  },
+  async created() {
+    // Route publique : la notice doit s'afficher même si l'API ne répond pas. En cas d'échec,
+    // le texte garde ses mentions « à compléter » plutôt que de rester vide.
+    try {
+      const response = await axios.get(this.$store.getters.apiurl + "config", { timeout: 4000 });
+      this.mentions = (response.data && response.data.privacy) || null;
+    } catch (e) {
+      this.mentions = null;
+    }
   },
   methods: {
     goBack() {
@@ -120,23 +135,6 @@ export default {
 
 .privacy-back {
   margin-top: 32px;
-}
-
-/* Lien sous le bouton de connexion, dans la carte blanche : lisible, mais sans
-   concurrencer l'action principale. */
-.privacy-inline {
-  margin-top: 14px;
-  text-align: center;
-}
-
-.privacy-inline a {
-  font-size: 12px;
-  color: #6b7c8a;
-  text-decoration: underline;
-}
-
-.privacy-inline a:hover {
-  color: #04416b;
 }
 
 .privacy-link-aside {
