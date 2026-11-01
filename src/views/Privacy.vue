@@ -137,15 +137,23 @@ export default {
   margin-top: 32px;
 }
 
-.privacy-link-aside {
-  display: block;
-  padding: 10px 20px;
+/* Bandeau du menu latéral : petit, blanc, collé en bas de la zone qui défile. */
+.privacy-aside {
+  position: sticky;
+  bottom: 0;
+  padding: 6px 0 8px;
+  text-align: center;
+  background: #04416b;
+}
+
+.privacy-aside a {
   font-size: 11px;
-  color: #9fb3c8;
+  color: #ffffff;
   text-decoration: underline;
 }
 
-.privacy-link-aside:hover {
+.privacy-aside a:hover {
   color: #ffffff;
+  opacity: 0.85;
 }
 </style>
