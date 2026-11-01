@@ -26,6 +26,9 @@ jobs:
       # commit), but a pull request whose title has no version would fail here with a bare
       # "no version" — so the pull request title is the fallback, and the run fails with an
       # explicit message instead of publishing an untagged image.
+      - name: Check the language files are aligned
+        run: node scripts/check-lang-keys.mjs
+
       - name: Resolve the version
         id: extract_version
         env:

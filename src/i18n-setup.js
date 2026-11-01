@@ -4,9 +4,11 @@ import VueI18n from 'vue-i18n'
 import {messages as enmessages} from '@/lang/en'
 import {messages as frmessages} from '@/lang/fr'
 import {messages as elmessages} from '@/lang/el'
+import {messages as nlmessages} from '@/lang/nl'
 import enlocale from 'element-ui/lib/locale/lang/en.js'
 import frlocale from 'element-ui/lib/locale/lang/fr.js'
 import ellocale from 'element-ui/lib/locale/lang/el.js'
+import nllocale from 'element-ui/lib/locale/lang/nl.js'
 
 // Ready translated locale messages
 
@@ -26,6 +28,10 @@ const messages = {
   el: {
     ...ellocale,
     ...elmessages.el
+  },
+  nl: {
+    ...nllocale,
+    ...nlmessages.nl
   }
 }
 
