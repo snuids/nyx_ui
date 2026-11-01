@@ -1,5 +1,11 @@
 # Version History
 
+## V3.31.0 01/Nov/2026
+* The `internal` application type now offers a list of the existing controllers instead of a free text field: the pages first (`Activity`, `Config`, `User`, `ProcessList`, `ReportList`, `ReportTask`, `ReportPeriodic`, `SendMessage`, `QueryFilter`, `NYXInfo`, `LandingPage`), then any other component of `src/components`
+* The chosen controller is described under the field, so an administrator does not have to guess what a component does; a name that is not in the list can still be typed
+* The list is read from `src/components` (`src/controllerCatalog.js`), so a component added to the project shows up without editing the catalogue
+* Corrected the help text that claimed a controller must be added to "the external nyx_ui folder" and the UI recompiled
+
 ## V3.30.0 01/Nov/2026
 * Added an Activity page (internal controller) reading the API audit trail from `nyx_apicalls-*`: `1h`/`24h`/`7d`/`30d` presets and custom range, user/path/error filters, call, error and active-user counters, p50/p95/p99 latency, most called endpoints, error and user breakdowns, the last 200 calls and a CSV export through the standard export path
 * Counters use `filter` and `cardinality` aggregations so they stay exact when the `terms` lists are capped at ten buckets
