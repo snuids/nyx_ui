@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../views/Login.vue'
 import Main from '../views/Main.vue'
+import Privacy from '../views/Privacy.vue'
 
 
 import GenericComponent from '../components/GenericComponent.vue'
@@ -19,6 +20,12 @@ export default new Router({
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      // Page publique : on doit pouvoir lire la notice avant d'avoir un compte.
+      path: '/privacy',
+      name: 'Privacy',
+      component: Privacy
     },
     {
       path: '/main',

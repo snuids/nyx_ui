@@ -204,6 +204,7 @@
                     </el-menu-item>
                   </el-submenu>
                 </el-menu>
+                <router-link class="privacy-link-aside" to="/privacy">{{ privacyLink }}</router-link>
               </el-col>
             </el-row>
             <!--span style="color:white;font-size:8px;">{{$store.getters.containerSize}}</span-->
@@ -225,6 +226,7 @@ import apps from "@/components/Apps";
 import changepassword from "@/components/ChangePassword";
 import Vue from "vue";
 import moment from "moment";
+import { privacyNotice } from "@/content/privacy";
 import _ from "lodash";
 
 Vue.component("Logout", logout);
@@ -254,6 +256,9 @@ export default {
     }
   }),
   computed: {
+    privacyLink() {
+      return privacyNotice((this.$i18n && this.$i18n.locale) || "en").link;
+    },
     styleContainerComputed: function() {
       return {
         overflow: "hidden",
