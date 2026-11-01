@@ -1,5 +1,8 @@
 # Version History
 
+## V3.31.2 01/Nov/2026
+* Dutch: the process list column is now « Levenssignaal » instead of « Laatste levenssignaal », which did not fit the column
+
 ## V3.31.1 01/Nov/2026
 * Dutch (`nl`) added as a fourth interface language: `src/lang/nl.js` translates the 630 keys of `en.js`, and the user form offers « Nederlands » as a choice
 * The Greek file was 16 keys behind: the whole `internal` controller picker added in 3.31.0 was missing, so those labels fell back to English — added, and the file is now aligned on all 630 keys

@@ -362,7 +362,7 @@ export const messages = {
         version:"Versie",
         lifesigns:"Levenssignalen",
         messages:"Berichten",
-        last_lifesign:"Laatste levenssignaal",
+        last_lifesign:"Levenssignaal",
         start_time:"Starttijd"
       },
       barchart:{
