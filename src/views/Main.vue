@@ -206,12 +206,6 @@
                 </el-menu>
               </el-col>
             </el-row>
-
-            <!-- Frère du menu, pas enfant : la structure et la hauteur du menu restent
-                 intactes. Collé en bas de la zone défilante pour rester visible. -->
-            <div class="privacy-aside">
-              <router-link to="/privacy">{{ privacyLink }}</router-link>
-            </div>
             <!--span style="color:white;font-size:8px;">{{$store.getters.containerSize}}</span-->
           </el-aside>
         </transition>
@@ -231,7 +225,6 @@ import apps from "@/components/Apps";
 import changepassword from "@/components/ChangePassword";
 import Vue from "vue";
 import moment from "moment";
-import { privacyNotice } from "@/content/privacy";
 import _ from "lodash";
 
 Vue.component("Logout", logout);
@@ -261,9 +254,6 @@ export default {
     }
   }),
   computed: {
-    privacyLink() {
-      return privacyNotice((this.$i18n && this.$i18n.locale) || "en").link;
-    },
     styleContainerComputed: function() {
       return {
         overflow: "hidden",

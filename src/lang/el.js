@@ -3,7 +3,8 @@ export const messages = {
     logout: {
       logout: 'Αποσύνδεση',
       change_pass: 'Αλλαγή κωδικού πρόσβασης',
-      info: 'Πληροφορίες'
+      info: 'Πληροφορίες',
+      privacy: 'Απόρρητο'
     },
     notifications:{
       data_loaded: 'Δεδομένα φορτώθηκαν',

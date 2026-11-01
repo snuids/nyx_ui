@@ -3,7 +3,8 @@ export const messages = {
       logout: {
         logout:'Afmelden',
         change_pass:'Wachtwoord wijzigen',
-        info:'Info'
+        info:'Info',
+        privacy:'Privacy'
       },
       scheduler: {
         edit_scheduler:'Planner bewerken',

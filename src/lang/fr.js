@@ -36,7 +36,8 @@ export const messages = {
       logout: {
         logout: 'Déconnexion',
         change_pass: 'Changer le mot de passe',
-        info: 'Info'
+        info: 'Info',
+        privacy: 'Confidentialité'
       }
       ,
       notifications:{
