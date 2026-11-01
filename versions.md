@@ -1,5 +1,12 @@
 # Version History
 
+## V3.30.0 01/Nov/2026
+* Added an Activity page (internal controller) reading the API audit trail from `nyx_apicalls-*`: `1h`/`24h`/`7d`/`30d` presets and custom range, user/path/error filters, call, error and active-user counters, p50/p95/p99 latency, most called endpoints, error and user breakdowns, the last 200 calls and a CSV export through the standard export path
+* Counters use `filter` and `cardinality` aggregations so they stay exact when the `terms` lists are capped at ten buckets
+* The index mapping is read through `/api/v1/esmapping/` so the terms aggregations work with or without `.keyword` sub-fields
+* The page is metadata-driven: it is enabled by an `internal` `nyx_app` document with `config.controller = "Activity"` (see `docs/apps/`)
+* Added English, French and Greek translations for the page
+
 ## V3.29.31 25/Oct/2026
 * Added a “Download data” option to Grafana apps; all panel query results are exported to an Excel workbook by the report system, with one sheet per panel and resolved dashboard variables
 
