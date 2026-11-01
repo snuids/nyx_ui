@@ -1,6 +1,7 @@
 <template>
   <div class="privacy-page">
     <div class="privacy-sheet">
+      <language-select class="privacy-language" />
       <h1>{{ notice.title }}</h1>
       <p class="privacy-updated">{{ notice.updated }}</p>
       <p class="privacy-intro">{{ notice.intro }}</p>
@@ -17,6 +18,7 @@
 
 <script>
 import { privacyNotice } from "@/content/privacy";
+import LanguageSelect from "@/components/LanguageSelect";
 
 /**
  * Notice de protection des données.
@@ -28,6 +30,7 @@ import { privacyNotice } from "@/content/privacy";
  */
 export default {
   name: "Privacy",
+  components: { LanguageSelect },
   computed: {
     notice() {
       return privacyNotice((this.$i18n && this.$i18n.locale) || "en");
@@ -44,13 +47,34 @@ export default {
 
 <style>
 .privacy-page {
-  min-height: 100vh;
+  /* Couche fixe : la mise en page de l'application coupe l'overflow de ses conteneurs, donc
+     une page qui se contente de « min-height: 100vh » ne défile pas — le texte est tronqué. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 40px 16px;
   background: #f4f6f8;
-  overflow-y: auto;
+}
+
+.login-language {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
+}
+
+.privacy-language {
+  position: absolute;
+  top: 18px;
+  right: 20px;
 }
 
 .privacy-sheet {
+  position: relative;
   max-width: 820px;
   margin: 0 auto;
   padding: 36px 44px 44px;

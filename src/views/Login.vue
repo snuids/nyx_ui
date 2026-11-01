@@ -1,6 +1,7 @@
 <template>
   
   <div class="login-container">
+    <language-select dark class="login-language" />
     <div class="title-icon"></div>
     <div class="login-logo1">
     </div>
@@ -80,6 +81,7 @@ import Vue from "vue";
 import axios from "axios";
 import { loadLanguageAsync } from "../i18n-setup";
 import { privacyNotice } from "@/content/privacy";
+import LanguageSelect from "@/components/LanguageSelect";
 
 function getUrlVars() {
   var vars = {};
@@ -94,6 +96,7 @@ function getUrlVars() {
 }
 
 export default {
+  components: { LanguageSelect },
   data: () => ({
     form: {
       login: "",
