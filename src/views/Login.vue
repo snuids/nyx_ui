@@ -59,6 +59,9 @@
             :loading="loginunderway"
           >Login</el-button>
           <div class="login_error" v-if="form.error">{{form.error}}</div>
+          <div class="privacy-inline">
+            <router-link to="/privacy">{{ privacyLink }}</router-link>
+          </div>
         </el-col>
       </el-form>
     </el-card>
@@ -66,7 +69,6 @@
       {{config.welcome}}
       
     </h1>
-    <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
 
   </div>
 </template>
