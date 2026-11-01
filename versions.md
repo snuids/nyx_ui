@@ -1,5 +1,11 @@
 # Version History
 
+## V3.31.1 01/Nov/2026
+* Dutch (`nl`) added as a fourth interface language: `src/lang/nl.js` translates the 630 keys of `en.js`, and the user form offers « Nederlands » as a choice
+* The Greek file was 16 keys behind: the whole `internal` controller picker added in 3.31.0 was missing, so those labels fell back to English — added, and the file is now aligned on all 630 keys
+* New `scripts/check-lang-keys.mjs`, run by the build workflow before the image is built: it compares the key sets of every language file with `en.js` against the real objects, and fails when a string is missing. A missing key used to be invisible — the interface silently falls back to English
+* Element UI's own Dutch locale is loaded alongside ours (date pickers, table pagination, transfer lists)
+
 ## V3.31.0 01/Nov/2026
 * The `internal` application type now offers a list of the existing controllers instead of a free text field: the pages first (`Activity`, `Config`, `User`, `ProcessList`, `ReportList`, `ReportTask`, `ReportPeriodic`, `SendMessage`, `QueryFilter`, `NYXInfo`, `LandingPage`), then any other component of `src/components`
 * The chosen controller is described under the field, so an administrator does not have to guess what a component does; a name that is not in the list can still be typed

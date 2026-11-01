@@ -227,6 +227,7 @@ export default {
       languagesAvailable: [
         { label: "English", value: "en" },
         { label: "Français", value: "fr" },
+        { label: "Nederlands", value: "nl" },
         { label: "Ελληνικά", value: "el" }
       ]
     };
