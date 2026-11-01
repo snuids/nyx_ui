@@ -339,7 +339,40 @@
               :label="$t('configdetails.controller')"
               :label-width="formLabelWidth"
             >
-              <el-input size="mini" v-model="curConfig.config.controller" autocomplete="off"></el-input>
+              <el-select
+                v-model="curConfig.config.controller"
+                size="mini"
+                filterable
+                allow-create
+                clearable
+                default-first-option
+                style="width:100%"
+                :placeholder="$t('configdetails.controller_placeholder')"
+              >
+                <el-option-group :label="$t('configdetails.controller_pages')">
+                  <el-option
+                    v-for="page in controllerPages"
+                    :key="page.name"
+                    :label="page.name"
+                    :value="page.name"
+                  ></el-option>
+                </el-option-group>
+                <el-option-group
+                  v-if="otherControllers.length > 0"
+                  :label="$t('configdetails.controller_components')"
+                >
+                  <el-option
+                    v-for="name in otherControllers"
+                    :key="name"
+                    :label="name"
+                    :value="name"
+                  ></el-option>
+                </el-option-group>
+              </el-select>
+              <div class="controller-help">
+                <i class="el-icon-info"></i>
+                <span>{{ selectedControllerHelp }}</span>
+              </div>
             </el-form-item>
             <el-form-item
               v-if="(curConfig.type === 'internal')"
@@ -912,6 +945,8 @@ import uploadeditor from "@/components/appConfigEditor/UploadEditor";
 import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
 
 
+import { CONTROLLER_PAGES, describeController, otherComponents } from "@/controllerCatalog";
+
 import Vue from "vue";
 import rison from "rison";
 import YAML from "js-yaml";
@@ -964,6 +999,23 @@ export default {
     curConfigIn: function() {
       return this.currentConfig;
     },
+    // Pages available as an `internal` application, described for the person creating it.
+    controllerPages: function() {
+      return CONTROLLER_PAGES.map(page => ({
+        name: page.name,
+        description: this.controllerDescription(page)
+      }));
+    },
+    otherControllers: function() {
+      return otherComponents();
+    },
+    selectedControllerHelp: function() {
+      const selected = this.curConfig && this.curConfig.config && this.curConfig.config.controller;
+      const page = describeController(selected);
+      if (page) return this.controllerDescription(page);
+      if (selected) return this.$t("configdetails.controller_custom");
+      return this.$t("configdetails.controller_help");
+    },
     curConfig: {
       get() {
         return this.$store.getters.appConfigObj;
@@ -991,6 +1043,12 @@ export default {
     this.prepareData();
   },
   methods: {
+    // The translation wins when it exists, the English description of the catalogue is the fallback.
+    controllerDescription: function(page) {
+      const key = "configdetails.ctrl." + page.name;
+      if (typeof this.$te === "function" && this.$te(key)) return this.$t(key);
+      return page.description;
+    },
     query_filter_changed:function() {
         if(this.curConfig.queryFilterChecked)
           this.curConfig.queryBarChecked=false;
@@ -1388,6 +1446,19 @@ export default {
 <style>
 .el-form-item {
   margin-bottom: 5px !important;
+}
+.controller-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #909399;
+}
+.controller-help .el-icon-info {
+  margin-top: 2px;
+  flex: 0 0 auto;
 }
 .searchfield {
   width: 150px !important;
