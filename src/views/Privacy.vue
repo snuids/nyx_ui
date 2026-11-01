@@ -98,17 +98,21 @@ export default {
   margin-top: 32px;
 }
 
-/* Lien discret, présent sur l'écran de connexion et en bas du menu. */
-.privacy-link {
-  display: inline-block;
-  margin-top: 18px;
+/* Lien sous le bouton de connexion, dans la carte blanche : lisible, mais sans
+   concurrencer l'action principale. */
+.privacy-inline {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.privacy-inline a {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.75);
+  color: #6b7c8a;
   text-decoration: underline;
 }
 
-.privacy-link:hover {
-  color: #ffffff;
+.privacy-inline a:hover {
+  color: #04416b;
 }
 
 .privacy-link-aside {
