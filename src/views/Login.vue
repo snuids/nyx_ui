@@ -66,6 +66,7 @@
       {{config.welcome}}
       
     </h1>
+    <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
 
   </div>
 </template>
@@ -76,6 +77,7 @@
 import Vue from "vue";
 import axios from "axios";
 import { loadLanguageAsync } from "../i18n-setup";
+import { privacyNotice } from "@/content/privacy";
 
 function getUrlVars() {
   var vars = {};
@@ -273,6 +275,9 @@ export default {
     }
   },
   computed: {
+    privacyLink() {
+      return privacyNotice((this.$i18n && this.$i18n.locale) || "en").link;
+    },
     loginDisabled() {
       return (
         this.form.login.length == 0 ||
