@@ -40,7 +40,7 @@
           </el-form-item>
           <el-form-item label>
             <el-input
-              placeholder="Password"
+              :placeholder="$t('ui.enter_password')"
               v-on:keyup.enter.native="validateUser()"
               type="password"
               name="password"
@@ -58,7 +58,7 @@
             
             :disabled="loginDisabled"
             :loading="loginunderway"
-          >Login</el-button>
+          >{{ $t("ui.login_button") }}</el-button>
           <div class="login_error" v-if="form.error">{{form.error}}</div>
         </el-col>
       </el-form>

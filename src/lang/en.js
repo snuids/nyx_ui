@@ -659,6 +659,8 @@ export const messages = {
         pick_month:"Pick a month",
         pick_year:"Pick a year",
         enter_email:"Enter email address",
+        enter_password:"Enter password",
+        login_button:"Login",
         input_canceled:"Input canceled",
         bad_token:"Bad token",
         site_map:"Site Map",
