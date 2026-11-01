@@ -3,7 +3,8 @@ export const messages = {
       logout: {
         logout: 'Logout',
         change_pass: 'Change Password',
-        info: 'Info'
+        info: 'Info',
+        privacy: 'Privacy'
       },
       scheduler: {
         edit_scheduler: 'Edit Scheduler',

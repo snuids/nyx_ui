@@ -15,6 +15,10 @@
           <v-icon class="menuicon" name="key" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.change_pass") }}
         </el-dropdown-item>
+        <el-dropdown-item command="privacy">
+          <v-icon class="menuicon" name="shield-alt" scale="1" />
+          &nbsp;&nbsp;{{ $t("logout.privacy") }}
+        </el-dropdown-item>
         <el-dropdown-item divided command="logout">
           <v-icon class="menuicon" name="external-link-alt" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.logout") }}
@@ -33,6 +37,7 @@ export default {
   methods: {
     handleCommand(e) {
       if (e == "info") this.info();
+      else if (e == "privacy") this.$router.push("/privacy");
       else if (e == "password") {
         //this.password();
         this.$emit("changepassword");
