@@ -1,0 +1,13 @@
+{
+  "category": "Administration",
+  "subcategory": "Monitoring",
+  "title": "Activity",
+  "order": 90,
+  "icon": "history",
+  "apptags": [],
+  "privileges": ["admin"],
+  "type": "internal",
+  "config": {
+    "controller": "Activity"
+  }
+}
