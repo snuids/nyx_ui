@@ -204,9 +204,14 @@
                     </el-menu-item>
                   </el-submenu>
                 </el-menu>
-                <router-link class="privacy-link-aside" to="/privacy">{{ privacyLink }}</router-link>
               </el-col>
             </el-row>
+
+            <!-- Frère du menu, pas enfant : la structure et la hauteur du menu restent
+                 intactes. Collé en bas de la zone défilante pour rester visible. -->
+            <div class="privacy-aside">
+              <router-link to="/privacy">{{ privacyLink }}</router-link>
+            </div>
             <!--span style="color:white;font-size:8px;">{{$store.getters.containerSize}}</span-->
           </el-aside>
         </transition>

@@ -63,10 +63,10 @@
         </el-col>
       </el-form>
     </el-card>
-    <div class="title-login">
-      <h1 class="title-text">{{config.welcome}}</h1>
+    <h1 class="title-login">
+      {{config.welcome}}
       <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
-    </div>
+    </h1>
 
   </div>
 </template>
@@ -322,23 +322,20 @@ export default {
   font-family: "Helvetica Neue";
 }
 
-.title-text {
-  margin: 0;
-  font-size: inherit;
-  font-weight: inherit;
-}
-
-/* Sous le titre de l'application, sur le fond : même famille, plus discret. */
+/* Le titre est de nouveau l'élément d'origine, avec sa classe : taille, graisse et couleur
+   inchangées. Le lien vit à l'intérieur, en bloc, pour se poser dessous sans déplacer le titre. */
 .privacy-link {
-  display: inline-block;
-  margin-top: 6px;
+  display: block;
+  margin-top: 2px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
+  font-weight: normal;
+  color: #ffffff;
   text-decoration: underline;
 }
 
 .privacy-link:hover {
   color: #ffffff;
+  opacity: 0.85;
 }
 
 .title-disclaimer {
