@@ -75,13 +75,6 @@ export default {
   background: #f4f6f8;
 }
 
-.login-language {
-  position: fixed;
-  top: 16px;
-  right: 20px;
-  z-index: 10;
-}
-
 .privacy-language {
   position: absolute;
   top: 18px;
