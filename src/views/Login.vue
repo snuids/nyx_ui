@@ -324,6 +324,15 @@ export default {
 
 /* Le titre est de nouveau l'élément d'origine, avec sa classe : taille, graisse et couleur
    inchangées. Le lien vit à l'intérieur, en bloc, pour se poser dessous sans déplacer le titre. */
+/* Le sélecteur de langue : en haut à droite, au-dessus du fond. Il est déclaré ici et non
+   dans Privacy.vue, dont la feuille de style n'est chargée qu'à l'ouverture de la notice. */
+.login-language {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
+}
+
 .privacy-link {
   display: block;
   margin-top: 2px;
