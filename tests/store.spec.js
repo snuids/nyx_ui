@@ -1,13 +1,13 @@
 /**
- * Le store de la console : session, droits, menus, plages de temps.
+ * The console store: session, privileges, menus, time ranges.
  *
- * C'est le module le plus central de l'interface — `hasPrivilege` décide de ce qu'un utilisateur
- * voit, `filteredmenus` construit les routes (`value`/`fulltitle`), et `setTimeRange` choisit
- * l'intervalle d'agrégation envoyé à Elasticsearch. Rien de tout cela n'était testé : les
- * régressions ne se voyaient qu'à l'écran, chez un utilisateur qui n'a pas les mêmes privilèges.
+ * It is the most central module of the interface — `hasPrivilege` decides what a user sees,
+ * `filteredmenus` builds the routes (`value`/`fulltitle`), and `setTimeRange` chooses the
+ * aggregation interval sent to Elasticsearch. None of this was tested: regressions only showed
+ * on screen, for a user who does not have the same privileges.
  *
- * Le store est un singleton Vuex : chaque test repart d'un état neuf via `replaceState`, sinon
- * l'ordre d'exécution devient significatif.
+ * The store is a Vuex singleton: every test starts from a fresh state via `replaceState`,
+ * otherwise the execution order becomes significant.
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
@@ -48,7 +48,7 @@ function freshState() {
   }
 }
 
-/** Charge de session minimal, tel que `Login.vue` le reçoit de l'API. */
+/** Minimal session payload, as `Login.vue` receives it from the API. */
 function loginPayload(privileges) {
   return {
     data: {
@@ -80,35 +80,35 @@ beforeEach(() => {
   store.replaceState(freshState())
 })
 
-describe('mutations simples', () => {
-  it('recopie la version de l API dans apiVersion', () => {
+describe('simple mutations', () => {
+  it('copies the API version into apiVersion', () => {
     store.commit('version', { data: '3.22.14' })
     expect(store.getters.apiVersion).toBe('3.22.14')
   })
 
-  it('expose la version du paquet dans le getter version', () => {
+  it('exposes the package version in the version getter', () => {
     expect(store.getters.version).toBe(`v${packageJson.version}`)
   })
 
-  it('stocke la version elasticsearch', () => {
+  it('stores the Elasticsearch version', () => {
     store.commit('elasticVersion', { data: 8 })
     expect(store.getters.elasticVersion).toBe(8)
   })
 
-  it('stocke les filtres et les privileges', () => {
+  it('stores the filters and the privileges', () => {
     store.commit('filters', { data: ['A', 'B'] })
     store.commit('privileges', { data: ['YUL'] })
     expect(store.getters.filters).toEqual(['A', 'B'])
     expect(store.getters.privileges).toEqual(['YUL'])
   })
 
-  it('ouvre et ferme le menu', () => {
+  it('opens and closes the menu', () => {
     store.commit('setMenuState', { data: false })
     expect(store.getters.menuOpen).toBe(false)
   })
 
-  it('copie la configuration d application au lieu de la referencer', () => {
-    // un `state.appConfigObj = payload` laisserait l ecran modifier l objet de l appelant
+  it('copies the application configuration instead of referencing it', () => {
+    // a `state.appConfigObj = payload` would let the screen modify the object of the caller
     const payload = { title: 'Energy', config: { index: 'nyx_energy' } }
     store.commit('setAppConfigObj', payload)
     payload.config.index = 'autre'
@@ -116,21 +116,21 @@ describe('mutations simples', () => {
   })
 })
 
-describe('mutation login', () => {
-  it('range les identifiants de session', () => {
+describe('login mutation', () => {
+  it('stores the session credentials', () => {
     store.commit('login', loginPayload(['YUL']))
     expect(store.getters.creds.token).toBe('jeton')
     expect(store.getters.creds.user.login).toBe('alice@example.com')
   })
 
-  it('donne tous les droits a un administrateur', () => {
+  it('gives every right to an administrator', () => {
     store.commit('login', loginPayload(['admin']))
     const has = store.state.creds.hasPrivilege
     expect(has('n importe quoi')).toBe(true)
     expect(has(['kibana', 'report'])).toBe(true)
   })
 
-  it('accepte une privilege simple comme une liste', () => {
+  it('accepts a single privilege as well as a list', () => {
     store.commit('login', loginPayload(['YUL', 'report']))
     const has = store.state.creds.hasPrivilege
     expect(has('YUL')).toBe(true)
@@ -139,17 +139,17 @@ describe('mutation login', () => {
     expect(has(['kibana', 'logs'])).toBe(false)
   })
 
-  it('ne donne rien quand la liste de privileges est vide', () => {
+  it('grants nothing when the privilege list is empty', () => {
     store.commit('login', loginPayload([]))
     expect(store.state.creds.hasPrivilege('YUL')).toBe(false)
   })
 
-  it('extrait les applications de la categorie apps', () => {
+  it('extracts the applications of the apps category', () => {
     store.commit('login', loginPayload(['YUL']))
     expect(store.getters.apps).toEqual([{ rec_id: 'app-3', title: 'Raw Data' }])
   })
 
-  it('construit les menus filtres sans la categorie apps', () => {
+  it('builds the filtered menus without the apps category', () => {
     store.commit('login', loginPayload(['YUL']))
     const menus = store.getters.filteredmenus
     expect(menus.map(m => m.category)).toEqual(['Admin'])
@@ -158,16 +158,16 @@ describe('mutation login', () => {
     expect(menus[0].submenus[0].fulltitle).toBe('admin/monitoringsite')
   })
 
-  it('sluggifie les espaces et la casse, pas les accents', () => {
-    // contrat actuel : seuls les espaces sont retires (`replace(/ /g, '')`), donc « Reporting
-    // mensuel » devient reportingmensuel mais « Reporting généré » garde son accent dans la route
+  it('slugifies spaces and case, not accents', () => {
+    // current contract: only spaces are removed (`replace(/ /g, '')`), so "Reporting mensuel"
+    // becomes reportingmensuel, but "Reporting généré" keeps its accent in the route
     const payload = loginPayload(['YUL'])
     payload.data.menus[0].submenus[0].title = 'Reporting  généré'
     store.commit('login', payload)
     expect(store.state.filteredmenus[0].submenus[0].value).toBe('reportinggénéré')
   })
 
-  it('initialise les quatre plages de temps de reference', () => {
+  it('initialises the four reference time ranges', () => {
     store.commit('login', loginPayload(['YUL']))
     for (const key of ['timeRangeDay', 'timeRangeWeek', 'timeRangeMonth', 'timeRangeYear']) {
       const range = store.state[key]
@@ -177,18 +177,18 @@ describe('mutation login', () => {
     }
   })
 
-  it('pose les regles de mot de passe par defaut et marque le websocket vivant', () => {
+  it('sets the default password rules and marks the websocket alive', () => {
     store.commit('login', loginPayload(['YUL']))
     expect(store.state.passwordRules.length).toEqual([10, 40])
     expect(store.state.wsObject.check_alive).toBe(true)
   })
 })
 
-describe('mutation setTimeRange', () => {
+describe('setTimeRange mutation', () => {
   const relative = (type, value) => ({ data: { type: 'relative', relativeType: type, relativeValue: value } })
 
-  it('choisit un intervalle court pour deux heures', () => {
-    // 120 minutes -> palier « 1m » de computeAutoTime
+  it('chooses a short interval for two hours', () => {
+    // 120 minutes -> "1m" bucket of computeAutoTime
     store.commit('setTimeRange', relative('h', 2))
     expect(store.state.autoTime).toBe('1m')
     expect(store.state.timeRange[0]).toBeInstanceOf(Date)
@@ -196,7 +196,7 @@ describe('mutation setTimeRange', () => {
     expect(Math.round(minutes)).toBe(120)
   })
 
-  it('elargit progressivement l intervalle', () => {
+  it('widens the interval progressively', () => {
     const cases = [
       [['h', 2], '1m'],
       [['d', 1], '20m'],
@@ -210,15 +210,15 @@ describe('mutation setTimeRange', () => {
     }
   })
 
-  it('accepte une plage absolue et cadre l intervalle sur sa duree', () => {
-    // 48 h = 2880 minutes -> palier « 30m » de computeAutoTime
+  it('accepts an absolute range and fits the interval to its duration', () => {
+    // 48 h = 2880 minutes -> "30m" bucket of computeAutoTime
     store.commit('setTimeRange', {
       data: { type: 'absolute', range: [new Date('2026-01-01T00:00:00Z'), new Date('2026-01-03T00:00:00Z')] },
     })
     expect(store.state.autoTime).toBe('30m')
   })
 
-  it('remplit les plages predefinies par sous-type', () => {
+  it('fills the predefined ranges per subtype', () => {
     for (const [subtype, key] of [['day', 'timeRangeDay'], ['week', 'timeRangeWeek'],
                                   ['month', 'timeRangeMonth'], ['year', 'timeRangeYear']]) {
       const range = [new Date('2026-03-01T00:00:00Z'), new Date('2026-03-02T00:00:00Z')]
@@ -227,26 +227,26 @@ describe('mutation setTimeRange', () => {
     }
   })
 
-  it('force le sous-type classic quand il manque, sur l objet de l appelant', () => {
-    // effet de bord assume : la mutation ecrit dans `payload.data`
+  it('forces the classic subtype when missing, on the caller object', () => {
+    // accepted side effect: the mutation writes into `payload.data`
     const payload = { data: { type: 'relative', relativeType: 'h', relativeValue: 1 } }
     store.commit('setTimeRange', payload)
     expect(payload.data.subtype).toBe('classic')
   })
 })
 
-describe('action switchToApp', () => {
+describe('switchToApp action', () => {
   beforeEach(() => {
     store.commit('login', loginPayload(['YUL']))
   })
 
-  it('retrouve une application par son titre, sans tenir compte de la casse', async () => {
+  it('finds an application by its title, ignoring case', async () => {
     await expect(store.dispatch('switchToApp', 'energy')).resolves.toBe('app-1')
     await expect(store.dispatch('switchToApp', 'alerts')).resolves.toBe('app-2')
   })
 
-  it('ne rend rien pour un titre inconnu', async () => {
-    // contrat actuel : la promesse se resout sur `undefined`, elle n echoue pas
+  it('returns nothing for an unknown title', async () => {
+    // current contract: the promise resolves to `undefined`, it does not fail
     await expect(store.dispatch('switchToApp', 'inexistant')).resolves.toBeUndefined()
   })
 })

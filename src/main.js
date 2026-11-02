@@ -115,12 +115,12 @@ function resolveLanguage() {
   if (fromUrl != undefined && fromUrl != '') {
     return fromUrl.split('#')[0];
   }
-  // Choix fait depuis le sélecteur : il vaut avant la connexion, puis la préférence du compte
-  // prend le relais au moment où l'utilisateur s'authentifie.
+  // Choice made in the selector: it applies before sign-in, then the account preference takes
+  // over once the user authenticates.
   try {
     var remembered = localStorage.nyx_language;
     if (remembered) return remembered;
-  } catch (e) { /* stockage refusé */ }
+  } catch (e) { /* storage refused */ }
   try {
     var stored = JSON.parse(localStorage.authResponse);
     var lang = stored && stored.data && stored.data.cred &&

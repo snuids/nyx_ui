@@ -2,12 +2,12 @@ import { defineConfig } from 'vitest/config'
 import { fileURLToPath } from 'node:url'
 
 /**
- * Vitest ne sert ici qu'à la logique : aucun montage de composant, pas de DOM.
+ * Vitest is only used for the logic here: no component mounting, no DOM.
  *
- * Les tests couvrent les modules purs et le store (getters/mutations), c'est-à-dire l'endroit où
- * les bugs d'écran naissent vraiment — une clé de traduction mal découpée, un catalogue de pages
- * qui perd une entrée, un filtre de lignes mal calculé. Monter des composants Vue 2 demanderait
- * jsdom, @vue/test-utils@1 et le plugin vue2 ; ce n'est pas le sujet du premier passage.
+ * The tests cover the pure modules and the store (getters/mutations), that is, the place where
+ * screen bugs really come from — a translation key split the wrong way, a page catalogue that
+ * loses an entry, a row filter computed incorrectly. Mounting Vue 2 components would require
+ * jsdom, @vue/test-utils@1 and the vue2 plugin; that is not what this first pass is about.
  */
 export default defineConfig({
   resolve: {

@@ -10,11 +10,11 @@
 
 <script>
 /**
- * Sélecteur de langue.
+ * Language selector.
  *
- * Les quatre catalogues sont déjà embarqués dans le bundle (i18n-setup les importe tous), donc
- * changer de langue est immédiat : pas d'appel réseau. Le choix est mémorisé dans le stockage
- * local, car avant la connexion il n'y a pas de compte dont on puisse lire la préférence.
+ * All four catalogues are already bundled (i18n-setup imports every one of them), so switching
+ * language is immediate: no network call. The choice is remembered in local storage, because
+ * before signing in there is no account whose preference could be read.
  */
 export default {
   name: "LanguageSelect",
@@ -45,7 +45,7 @@ export default {
       try {
         localStorage.nyx_language = code;
       } catch (e) {
-        /* stockage refusé : le choix ne survivra pas au rechargement, sans plus */
+        /* storage refused: the choice will not survive a reload, nothing more */
       }
       this.$emit("change", code);
     },

@@ -569,17 +569,17 @@ export default {
     const collect = (node, prefix = "") => {
       const out = [];
 
-      // node est une map: { key: def }
+      // node is a map: { key: def }
       for (const [key, def] of Object.entries(node || {})) {
         const path = prefix ? `${prefix}.${key}` : key;
         if (!def) continue;
 
-        // 1) Champ "simple" avec un type direct
+        // 1) "Simple" field with a direct type
         if (def.type && allowed.has(def.type)) {
           out.push(path);
         }
 
-        // 2) Sous-champs (Elasticsearch: multi-fields)
+        // 2) Sub-fields (Elasticsearch: multi-fields)
         if (def.fields && typeof def.fields === "object") {
           for (const [subKey, subDef] of Object.entries(def.fields)) {
             if (subDef && allowed.has(subDef.type)) {
@@ -588,14 +588,14 @@ export default {
           }
         }
 
-        // 3) Objets/nested avec "properties" (structure hiérarchique)
+        // 3) Objects/nested with "properties" (hierarchical structure)
         if (def.properties && typeof def.properties === "object") {
           out.push(...collect(def.properties, path));
         }
 
-        // 4) Si parfois des sous-structures sont “inline” (non ES pur), on gère un objet brut
-        // Exemple: { stock: { C531: { type: "long" } } }
-        // On descend si pas de type mais que c'est un objet
+        // 4) When some sub-structures are "inline" (not pure ES), treat them as a plain object
+        // Example: { stock: { C531: { type: "long" } } }
+        // Recurse down when there is no type but the value is an object
         if (!def.type && typeof def === "object" && !def.fields && !def.properties) {
           out.push(...collect(def, path));
         }
@@ -603,10 +603,10 @@ export default {
 
       return out;
     };
-    // Lance la collecte sur la racine de ton mapping
+    // Run the collection from the root of the mapping
     const flat = collect(this.esMapping);
 
-    // Dédup + tri naturel FR
+    // Deduplicate + natural FR ordering
     return Array.from(new Set(flat)).sort((a, b) =>
       a.localeCompare(b, "fr", { numeric: true })
     );
@@ -617,17 +617,17 @@ export default {
     const collect = (node, prefix = "") => {
       const out = [];
 
-      // node est une map: { key: def }
+      // node is a map: { key: def }
       for (const [key, def] of Object.entries(node || {})) {
         const path = prefix ? `${prefix}.${key}` : key;
         if (!def) continue;
 
-        // 1) Champ "simple" avec un type direct
+        // 1) "Simple" field with a direct type
         if (def.type && allowed.has(def.type)) {
           out.push(path);
         }
 
-        // 2) Sous-champs (Elasticsearch: multi-fields)
+        // 2) Sub-fields (Elasticsearch: multi-fields)
         if (def.fields && typeof def.fields === "object") {
           for (const [subKey, subDef] of Object.entries(def.fields)) {
             if (subDef && allowed.has(subDef.type)) {
@@ -636,14 +636,14 @@ export default {
           }
         }
 
-        // 3) Objets/nested avec "properties" (structure hiérarchique)
+        // 3) Objects/nested with "properties" (hierarchical structure)
         if (def.properties && typeof def.properties === "object") {
           out.push(...collect(def.properties, path));
         }
 
-        // 4) Si parfois des sous-structures sont “inline” (non ES pur), on gère un objet brut
-        // Exemple: { stock: { C531: { type: "long" } } }
-        // On descend si pas de type mais que c'est un objet
+        // 4) When some sub-structures are "inline" (not pure ES), treat them as a plain object
+        // Example: { stock: { C531: { type: "long" } } }
+        // Recurse down when there is no type but the value is an object
         if (!def.type && typeof def === "object" && !def.fields && !def.properties) {
           out.push(...collect(def, path));
         }
@@ -652,10 +652,10 @@ export default {
       return out;
     };
 
-    // Lance la collecte sur la racine de ton mapping
+    // Run the collection from the root of the mapping
     const flat = collect(this.esMapping);
 
-    // Dédup + tri naturel FR
+    // Deduplicate + natural FR ordering
     return Array.from(new Set(flat)).sort((a, b) =>
       a.localeCompare(b, "fr", { numeric: true })
     );
@@ -666,17 +666,17 @@ export default {
     const collect = (node, prefix = "") => {
       const out = [];
 
-      // node est une map: { key: def }
+      // node is a map: { key: def }
       for (const [key, def] of Object.entries(node || {})) {
         const path = prefix ? `${prefix}.${key}` : key;
         if (!def) continue;
 
-        // 1) Champ "simple" avec un type direct
+        // 1) "Simple" field with a direct type
         if (def.type && allowed.has(def.type)) {
           out.push(path);
         }
 
-        // 2) Sous-champs (Elasticsearch: multi-fields)
+        // 2) Sub-fields (Elasticsearch: multi-fields)
         if (def.fields && typeof def.fields === "object") {
           for (const [subKey, subDef] of Object.entries(def.fields)) {
             if (subDef && allowed.has(subDef.type)) {
@@ -685,14 +685,14 @@ export default {
           }
         }
 
-        // 3) Objets/nested avec "properties" (structure hiérarchique)
+        // 3) Objects/nested with "properties" (hierarchical structure)
         if (def.properties && typeof def.properties === "object") {
           out.push(...collect(def.properties, path));
         }
 
-        // 4) Si parfois des sous-structures sont “inline” (non ES pur), on gère un objet brut
-        // Exemple: { stock: { C531: { type: "long" } } }
-        // On descend si pas de type mais que c'est un objet
+        // 4) When some sub-structures are "inline" (not pure ES), treat them as a plain object
+        // Example: { stock: { C531: { type: "long" } } }
+        // Recurse down when there is no type but the value is an object
         if (!def.type && typeof def === "object" && !def.fields && !def.properties) {
           out.push(...collect(def, path));
         }
@@ -701,10 +701,10 @@ export default {
       return out;
     };
 
-    // Lance la collecte sur la racine de ton mapping
+    // Run the collection from the root of the mapping
     const flat = collect(this.esMapping);
 
-    // Dédup + tri naturel FR
+    // Deduplicate + natural FR ordering
     return Array.from(new Set(flat)).sort((a, b) =>
       a.localeCompare(b, "fr", { numeric: true })
     );

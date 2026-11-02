@@ -157,7 +157,7 @@ export default {
       welcome: "loading"
     },
     loginunderway: false,
-    // Mot de passe provisoire : l'API n'ouvre que le changement tant qu'il n'est pas choisi.
+    // Provisional password: the API only allows the password change until one is chosen.
     forceChange: false,
     newPassword: { current: "", first: "", second: "", error: "" },
     initialized: false
@@ -240,8 +240,8 @@ export default {
         this.loginunderway = false;
         const data = e && e.response && e.response.data;
         if (data && data.error === "TOO_MANY_ATTEMPTS") {
-          // Le garde applicatif répond 429 : sans ce message, l'utilisateur voyait
-          // « Request failed with status code 429 » et croyait à un mot de passe faux.
+          // The application gate answers 429: without this message, the user saw
+          // "Request failed with status code 429" and believed the password was wrong.
           this.form.error = this.$t("firstlogin.locked", { seconds: data.retry_after });
         } else if (data && data.error) {
           this.form.error = data.error;
@@ -303,8 +303,8 @@ export default {
       this.loginunderway = false;
 
       if (response.data.cred.user.mustResetPassword === true) {
-        // Le mot de passe est provisoire : l'API refuserait tous les appels suivants. On le
-        // fait choisir ici, avant d'entrer dans l'application.
+        // The password is provisional: the API would refuse every following call. So it is
+        // chosen here, before entering the application.
         this.forceChange = true;
         return;
       }
@@ -315,9 +315,9 @@ export default {
         rec_id  = this.$store.getters.filteredmenus[0].submenus[0].apps[0].rec_id
       }
       catch (e) {
-        // Compte sans application assignée : on s'arrête ici. Poursuivre avec un rec_id nul
-        // faisait planter l'interface sur « reading 'loc_title' », ce qui affichait une
-        // TypeError en guise de message d'erreur.
+        // Account without an assigned application: stop here. Continuing with a null rec_id
+        // crashed the interface on "reading 'loc_title'", which showed a TypeError as the
+        // error message.
         this.loginunderway = false;
         console.log(e);
         this.form.error = this.$t("firstlogin.no_menu");
@@ -435,10 +435,10 @@ export default {
   font-family: "Helvetica Neue";
 }
 
-/* Le titre est de nouveau l'élément d'origine, avec sa classe : taille, graisse et couleur
-   inchangées. Le lien vit à l'intérieur, en bloc, pour se poser dessous sans déplacer le titre. */
-/* Le sélecteur de langue : en haut à droite, au-dessus du fond. Il est déclaré ici et non
-   dans Privacy.vue, dont la feuille de style n'est chargée qu'à l'ouverture de la notice. */
+/* The title is again the original element, with its class: size, weight and colour unchanged.
+   The link lives inside it, as a block, so it sits below without shifting the title. */
+/* The language selector: top right, above the background. It is declared here and not in
+   Privacy.vue, whose stylesheet is only loaded when the notice is opened. */
 .login-language {
   position: fixed;
   top: 16px;
@@ -523,8 +523,8 @@ export default {
   margin-left: -200px;
 }
 
-/* Le panneau de premier changement compte trois champs : la carte de connexion, elle, a une
-   hauteur fixe de 200 px. Sans cette variante, le dernier champ et le bouton sortent du cadre. */
+/* The first-change panel has three fields: the login card itself has a fixed height of 200 px.
+   Without this variant, the last field and the button fall outside the frame. */
 .login-card.force {
   height: 340px;
   margin-top: -180px;
