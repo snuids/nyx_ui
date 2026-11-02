@@ -1,5 +1,12 @@
 # Version History
 
+## V3.31.16 02/Nov/2026
+* First test suite for the console: Vitest (node environment, no component mounting) and 39 cases over the store, `globalfunctions.js` and the internal-page catalogue — the interface had no test runner, and 27 456 lines of components without a single assertion
+* `store.js` is the target that matters: `hasPrivilege` decides what a user sees, `filteredmenus` builds the routes (`value` / `fulltitle` slugs from the category and submenu titles), and `setTimeRange` picks the aggregation interval sent to Elasticsearch (its thresholds are now pinned, from « 1m » for two hours to « 7d » for four months)
+* `computeTranslatedText` — the `@en=Hello;fr=Bonjour@` format used by every translated field of the model — is now covered, including two current quirks that a label author must know: a value containing `=` is truncated at the second one, and an untranslated locale returns the raw segments as an **array**, not a string
+* `CONTROLLER_PAGES` is checked against the files of `src/components/`: an orphan entry renders a blank page in the screen builder, and a duplicate name makes the picker ambiguous
+* New `ci-tests.yml` runs `npm ci`, the language-key check and `npm test` on every pull request; `npm test` and `npm test:coverage` are now scripts
+
 ## V3.31.2 01/Nov/2026
 * Dutch: the process list column is now « Levenssignaal » instead of « Laatste levenssignaal », which did not fit the column
 

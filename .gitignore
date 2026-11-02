@@ -5,3 +5,6 @@ dist/*
 yarn.lock
 available-icons.txt
 AGENTS.md
+
+# rapports de couverture des tests (vitest)
+coverage/
