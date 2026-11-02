@@ -44,5 +44,5 @@ jobs:
       - name: Check the language files are aligned
         run: node scripts/check-lang-keys.mjs
 
-      - name: Run the test suite
-        run: npm test
+      - name: Run the test suite with the coverage gate
+        run: npm run test:coverage

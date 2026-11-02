@@ -61,9 +61,8 @@ export const CONTROLLER_PAGES = [
 
 // Components that exist in the folder but can never be a page: they expect props that
 // GenericComponent does not pass, or they are editor dialogs / pure widgets.
-const NOT_A_PAGE = new Set([
+export const NOT_A_PAGE = new Set([
   "Activity",
-  "App",
   "Apps",
   "BarChart",
   "ChangePassword",
@@ -109,19 +108,30 @@ const NOT_A_PAGE = new Set([
 /**
  * Names of the single-file components of `src/components/` (top level only — the editors live in
  * sub-folders and are never pages).
+ *
+ * `require.context` only exists inside webpack, so the two functions that decide *which* of those
+ * names can be a page take the list as an argument and are testable; this one is the thin adapter.
  */
 export function listComponents() {
   const context = require.context("./components/", false, /\.vue$/);
-  return context
-    .keys()
+  return componentNames(context.keys());
+}
+
+/** The `./X.vue` keys of `require.context` as bare, sorted component names. */
+export function componentNames(keys) {
+  return keys
     .map(key => key.replace(/^\.\//, "").replace(/\.vue$/, ""))
     .sort((a, b) => a.localeCompare(b));
 }
 
 /** Components that are not part of the curated page list and cannot be a page. */
-export function otherComponents() {
+export function componentsNotInPages(names) {
   const pages = new Set(CONTROLLER_PAGES.map(page => page.name));
-  return listComponents().filter(name => !pages.has(name) && !NOT_A_PAGE.has(name));
+  return names.filter(name => !pages.has(name) && !NOT_A_PAGE.has(name));
+}
+
+export function otherComponents() {
+  return componentsNotInPages(listComponents());
 }
 
 /** Curated page entry for a component name, if it is one. */

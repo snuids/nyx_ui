@@ -8,10 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 import locale_en from 'element-ui/lib/locale/lang/en.js'
 import 'vue-awesome/icons';
 import Icon from 'vue-awesome/components/Icon';
-import moment from "moment";
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/reset.css'
 import {i18n} from  './i18n-setup'
+import {filters} from '@/utils/filters'
+import {getUrlVars, resolveLanguage} from '@/utils/language'
 import ElementLocale from 'element-ui/lib/locale'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import draggable from "vuedraggable";
@@ -38,71 +39,10 @@ Vue.config.productionTip = false
 Vue.prototype.$globalbus = new Vue();
 Vue.prototype.$localbus = new Vue();
 
-Vue.filter('formatDate', function(value) {
-  if (value) {
-    return moment(String(value)).format('DD/MM/YYYY HH:mm')
-  }
-});
+// The filters themselves live in src/utils/filters.js, where they are testable.
+Object.keys(filters).forEach(name => Vue.filter(name, filters[name]))
 
-Vue.filter('formatTS', function(value) {
-  if (value) {
-    if(value < 10000000000)
-      value *= 1000 
-
-    return moment(value).format('DD/MM/YYYY HH:mm')
-  }
-});
-
-Vue.filter('formatTS2', function(value) {
-  if (value) {
-    if(value < 10000000000)
-      value *= 1000 
-
-    return moment.utc(value).local().format('DD/MM HH:mm:ss')
-  }
-});
-
-Vue.filter('capitalize', function (value) {
-  if (!value) return ''
-  value = value.toString()
-  return value.charAt(0).toUpperCase() + value.slice(1)
-})
-
-Vue.filter('prettyBytes', function (num) {
-  // jacked from: https://github.com/sindresorhus/pretty-bytes
-  if (typeof num !== 'number' || isNaN(num)) {
-    throw new TypeError('Expected a number');
-  }
-
-  var exponent;
-  var unit;
-  var neg = num < 0;
-  var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-  if (neg) {
-    num = -num;
-  }
-
-  if (num < 1) {
-    return (neg ? '-' : '') + num + ' bytes';
-  }
-
-  exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1);
-  num = (num / Math.pow(1000, exponent)).toFixed(0) * 1;
-  unit = units[exponent];
-
-  return (neg ? '-' : '') + num + ' ' + unit;
-});
-
-function getUrlVars() {
-  var vars = {};
-  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-      vars[key] = value;
-  });
-  return vars;
-}
-
-var vars=getUrlVars();
+const vars = getUrlVars(window.location.href);
 if (vars["api"]!=undefined)
 {  
   store.state.apiurl=vars["api"].split('#')[0];
@@ -110,29 +50,12 @@ if (vars["api"]!=undefined)
 
 // Resolve the UI language on startup so a page reload keeps the user's language.
 // Priority: URL parameter (language/lang/locale) > persisted logged-in user language > 'en'.
-function resolveLanguage() {
-  var fromUrl = vars["language"] || vars["lang"] || vars["locale"];
-  if (fromUrl != undefined && fromUrl != '') {
-    return fromUrl.split('#')[0];
-  }
-  // Choice made in the selector: it applies before sign-in, then the account preference takes
-  // over once the user authenticates.
-  try {
-    var remembered = localStorage.nyx_language;
-    if (remembered) return remembered;
-  } catch (e) { /* storage refused */ }
-  try {
-    var stored = JSON.parse(localStorage.authResponse);
-    var lang = stored && stored.data && stored.data.cred &&
-      stored.data.cred.user && stored.data.cred.user.language;
-    if (lang != undefined && lang != '') {
-      return lang;
-    }
-  } catch (e) { /* no stored session */ }
-  return 'en';
-}
+let storage = {};
+try {
+  storage = window.localStorage;
+} catch (e) { /* storage refused */ }
 
-i18n.locale = resolveLanguage();
+i18n.locale = resolveLanguage(vars, storage);
 
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 

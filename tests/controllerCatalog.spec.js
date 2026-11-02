@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest'
 import { readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { join, dirname } from 'node:path'
-import { CONTROLLER_PAGES, describeController } from '@/controllerCatalog.js'
+import { CONTROLLER_PAGES, NOT_A_PAGE, describeController, componentNames, componentsNotInPages } from '@/controllerCatalog.js'
 
 const componentsDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'components')
 const components = readdirSync(componentsDir)
@@ -61,5 +61,42 @@ describe('describeController', () => {
     expect(describeController('')).toBeNull()
     expect(describeController(null)).toBeNull()
     expect(describeController(undefined)).toBeNull()
+  })
+})
+
+describe('NOT_A_PAGE', () => {
+  it('only names components that exist', () => {
+    // a stale entry silently hides a component from the picker of the screen builder
+    const missing = [...NOT_A_PAGE].filter(name => !components.includes(name))
+    expect(missing).toEqual([])
+  })
+})
+
+describe('componentNames', () => {
+  it('turns the keys of require.context into sorted, bare names', () => {
+    expect(componentNames(['./User.vue', './Activity.vue', './Apps.vue'])).toEqual([
+      'Activity',
+      'Apps',
+      'User',
+    ])
+  })
+
+  it('accepts an empty list', () => {
+    expect(componentNames([])).toEqual([])
+  })
+})
+
+describe('componentsNotInPages', () => {
+  it('keeps only what is neither a page nor a widget', () => {
+    expect(componentsNotInPages(['User', 'Activity', 'BrandNew', 'Vega'])).toEqual(['BrandNew'])
+  })
+
+  it('lets the curated page list win over the exclusion list', () => {
+    // LandingPage is both: the page list is what the builder offers, so it must not be filtered out
+    expect(componentsNotInPages(['LandingPage'])).toEqual([])
+  })
+
+  it('returns an empty list when every component is accounted for', () => {
+    expect(componentsNotInPages(['User', 'Vega'])).toEqual([])
   })
 })
