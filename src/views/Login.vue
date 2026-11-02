@@ -25,7 +25,12 @@
       <b>Nyx</b> Platform <b>{{this.$store.getters.version}}</b> ({{$store.getters.elasticVersion}})
     </div>
 
-    <el-card v-if="forceChange" class="login-card" :body-style="{ padding: '30px 20px' }" shadow="hover">
+    <el-card
+      v-if="forceChange"
+      class="login-card force"
+      :body-style="{ padding: '24px 20px' }"
+      shadow="hover"
+    >
       <el-form class="login-form" label-width="0px" @submit.native.prevent>
         <el-col :span="24">
           <div class="force-change-title">{{ $t("firstlogin.title") }}</div>
@@ -503,6 +508,15 @@ export default {
   margin-top: -50px;
   width: 400px;
   margin-left: -200px;
+}
+
+/* Le panneau de premier changement compte trois champs : la carte de connexion, elle, a une
+   hauteur fixe de 200 px. Sans cette variante, le dernier champ et le bouton sortent du cadre. */
+.login-card.force {
+  height: 340px;
+  margin-top: -180px;
+  width: 420px;
+  margin-left: -210px;
 }
 
 .login-form .el-input__inner{
