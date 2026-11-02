@@ -181,8 +181,9 @@ export default {
           login: "",
           firstname: "",
           lastname: "",
-          password:
-            "$pbkdf2-sha256$29000$Yqy1VmotpRTCOAdAaO0dww$/c6x7Fns2XPzyWByRQkb.HF4HxYpLFih7smLE5Uqq/Q",
+          // Aucun mot de passe n'est envoyé : l'API en fabrique un que personne ne connaît
+          // et marque le compte « mustResetPassword ». Le condensat partagé qui figurait ici
+          // donnait le même secret à tous les comptes créés depuis l'interface.
           privileges: [],
           filters: [],
           language: "en",
