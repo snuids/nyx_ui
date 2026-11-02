@@ -1,5 +1,13 @@
 # Version History
 
+## V3.31.18 02/Nov/2026
+* The test suite covers the store's actions, not only its mutations: `switchToApp`, `changeApp`, `logout`, `refreshTimeRange`, `setTab` and the six record/message writes, with axios mocked and a fake websocket — every one of them used to be an untested write whose only failure mode is a screen that keeps its old value. **39 → 133 tests**
+* `src/utils/filters.js` and `src/utils/language.js` take over the five Vue filters and the language resolution that were inlined in `main.js`, where importing them mounted the whole application: `formatTS` decides on its own whether a timestamp is in seconds or milliseconds, and `resolveLanguage` picks the interface language on every page load (URL parameter > selector choice > account > English). The duplicate `getUrlVars` of `Login.vue` is gone
+* `controllerCatalog`: the page filtering is now a function of the component list (`componentNames`, `componentsNotInPages`), so the "which component can be a page" rule is testable; `NOT_A_PAGE` is exported and checked against `src/components/` — it still carried a stale `App` entry, which no longer exists as a component
+* Coverage is measured and gated: v8 over `src` javascript, minus the translation and notice text, the entry point and the router (which imports `.vue` files a node environment cannot parse). Measured on that assiette, the same suite goes from **56.6 % to 99.1 % of lines, 57.4 % to 98.0 % of branches, 31.3 % to 96.7 % of functions** (the 43.28 % of the previous release was computed over data files and the entry point as well), and `ci-tests.yml` now runs `npm run test:coverage` so a pull request that loses assertions turns red instead of passing quietly
+* The 62 single-file components are still outside the assiette — they are about three quarters of the code, and measuring them needs `jsdom` + `@vue/test-utils@1` + the vue2 plugin: that is the next decision, not a silent gap. The comment at the top of `vitest.config.mjs` says so
+* Current quirks are pinned with a comment rather than fixed in passing: `switchToApp` compares a lower-cased title with the argument as given, `changeApp` throws on an unknown `rec_id`, a relative `apiurl` ending in `/` yields a doubled slash in the websocket URL, `refreshTimeRange` throws before the first `setTimeRange`, and every record write swallows its error
+
 ## V3.31.17 02/Nov/2026
 * Every French comment of the interface is now English, together with the `describe` / `it` titles of the three spec files — 14 files, and Vitest still reports 39 passed
 * Translation data (`src/lang/*.js`) and the privacy notice text are untouched: they are content, not comments. `check-lang-keys` still exits 0

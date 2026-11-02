@@ -131,18 +131,7 @@ import axios from "axios";
 import { loadLanguageAsync } from "../i18n-setup";
 import { privacyNotice } from "@/content/privacy";
 import LanguageSelect from "@/components/LanguageSelect";
-
-function getUrlVars() {
-  var vars = {};
-  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(
-    m,
-    key,
-    value
-  ) {
-    vars[key] = value;
-  });
-  return vars;
-}
+import { getUrlVars } from "@/utils/language";
 
 export default {
   components: { LanguageSelect },
@@ -402,7 +391,7 @@ export default {
     }
   },
   mounted: function() {
-    var vars = getUrlVars();
+    var vars = getUrlVars(window.location.href);
     if (vars["user"] != undefined) {
       this.form.login = vars["user"].split("#")[0];
     }
