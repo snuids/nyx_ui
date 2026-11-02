@@ -25,7 +25,54 @@
       <b>Nyx</b> Platform <b>{{this.$store.getters.version}}</b> ({{$store.getters.elasticVersion}})
     </div>
 
-    <el-card class="login-card" :body-style="{ padding: '30px 20px'  }" shadow="hover">
+    <el-card v-if="forceChange" class="login-card" :body-style="{ padding: '30px 20px' }" shadow="hover">
+      <el-form class="login-form" label-width="0px" @submit.native.prevent>
+        <el-col :span="24">
+          <div class="force-change-title">{{ $t("firstlogin.title") }}</div>
+          <div class="force-change-help">{{ $t("firstlogin.help") }}</div>
+          <el-form-item label>
+            <el-input
+              :placeholder="$t('firstlogin.current')"
+              type="password"
+              autocomplete="off"
+              v-model="newPassword.current"
+              show-password
+            />
+          </el-form-item>
+          <el-form-item label>
+            <el-input
+              :placeholder="$t('firstlogin.new')"
+              type="password"
+              autocomplete="off"
+              v-model="newPassword.first"
+              show-password
+            />
+          </el-form-item>
+          <el-form-item label>
+            <el-input
+              :placeholder="$t('firstlogin.repeat')"
+              type="password"
+              autocomplete="off"
+              v-model="newPassword.second"
+              show-password
+              v-on:keyup.enter.native="submitNewPassword()"
+            />
+          </el-form-item>
+          <el-button
+            class="login-button"
+            type="primary"
+            size="default"
+            color="#048"
+            :disabled="changeDisabled"
+            :loading="loginunderway"
+            @click="submitNewPassword()"
+          >{{ $t("firstlogin.submit") }}</el-button>
+          <div class="login_error" v-if="newPassword.error">{{ newPassword.error }}</div>
+        </el-col>
+      </el-form>
+    </el-card>
+
+    <el-card v-else class="login-card" :body-style="{ padding: '30px 20px'  }" shadow="hover">
       <el-form class="login-form" label-width="0px">
         <el-col :span="24">
           <el-form-item label>
@@ -105,6 +152,9 @@ export default {
       welcome: "loading"
     },
     loginunderway: false,
+    // Mot de passe provisoire : l'API n'ouvre que le changement tant qu'il n'est pas choisi.
+    forceChange: false,
+    newPassword: { current: "", first: "", second: "", error: "" },
     initialized: false
   }),
   created: function() {
@@ -187,6 +237,40 @@ export default {
         console.log(e);
       }
     },
+    submitNewPassword() {
+      const p = this.newPassword;
+      p.error = "";
+      if (p.first !== p.second) {
+        p.error = this.$t("firstlogin.mismatch");
+        return;
+      }
+      if (p.first.length < 12) {
+        p.error = this.$t("firstlogin.too_short");
+        return;
+      }
+      this.loginunderway = true;
+      const url = this.$store.getters.apiurl + "cred/changepassword?token=" +
+        this.$store.getters.creds.token;
+      axios
+        .post(url, { old_password: p.current, new_password: p.first })
+        .then(() => {
+          this.loginunderway = false;
+          this.forceChange = false;
+          this.newPassword = { current: "", first: "", second: "", error: "" };
+          this.form.password = "";
+          this.$notify({
+            title: this.$t("firstlogin.done_title"),
+            message: this.$t("firstlogin.done"),
+            type: "success",
+            position: "bottom-right"
+          });
+        })
+        .catch(error => {
+          this.loginunderway = false;
+          const details = error && error.response && error.response.data;
+          p.error = (details && details.error) || this.$t("firstlogin.failed");
+        });
+    },
     authenticate(response) {
       
       console.log('LOGIN -- authenticate')
@@ -203,6 +287,13 @@ export default {
         data: response.data
       });
       this.loginunderway = false;
+
+      if (response.data.cred.user.mustResetPassword === true) {
+        // Le mot de passe est provisoire : l'API refuserait tous les appels suivants. On le
+        // fait choisir ici, avant d'entrer dans l'application.
+        this.forceChange = true;
+        return;
+      }
 
       var rec_id = null
       try {
@@ -277,6 +368,10 @@ export default {
     }
   },
   computed: {
+    changeDisabled() {
+      const p = this.newPassword;
+      return !p.current || !p.first || p.first !== p.second || this.loginunderway;
+    },
     privacyLink() {
       return privacyNotice((this.$i18n && this.$i18n.locale) || "en").link;
     },

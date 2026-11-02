@@ -1,5 +1,18 @@
 export const messages = {
     nl: {
+      firstlogin: {
+        title: 'Kies uw wachtwoord',
+        help: 'Dit account gebruikt een tijdelijk wachtwoord. Kies een eigen wachtwoord om verder te gaan.',
+        current: 'Tijdelijk wachtwoord',
+        new: 'Nieuw wachtwoord (minimaal 12 tekens)',
+        repeat: 'Herhaal het nieuwe wachtwoord',
+        submit: 'Opslaan en doorgaan',
+        mismatch: 'De twee invoeren verschillen.',
+        too_short: 'Het wachtwoord moet minstens 12 tekens bevatten.',
+        failed: 'De wijziging is mislukt.',
+        done_title: 'Wachtwoord gewijzigd',
+        done: 'Meld u opnieuw aan met uw nieuwe wachtwoord.'
+      },
       logout: {
         logout:'Afmelden',
         change_pass:'Wachtwoord wijzigen',

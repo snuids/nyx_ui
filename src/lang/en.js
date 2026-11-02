@@ -1,5 +1,18 @@
 export const messages = {
     en: {
+      firstlogin: {
+        title: 'Choose your password',
+        help: 'This account uses a temporary password. Choose your own to continue.',
+        current: 'Temporary password',
+        new: 'New password (12 characters minimum)',
+        repeat: 'Repeat the new password',
+        submit: 'Save and continue',
+        mismatch: 'The two entries differ.',
+        too_short: 'The password must be at least 12 characters long.',
+        failed: 'The change failed.',
+        done_title: 'Password changed',
+        done: 'Sign in again with your new password.'
+      },
       logout: {
         logout: 'Logout',
         change_pass: 'Change Password',

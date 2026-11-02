@@ -33,6 +33,19 @@ export const messages = {
         content:'Contenu',
 
       },
+      firstlogin: {
+        title: 'Choisissez votre mot de passe',
+        help: 'Ce compte utilise un mot de passe provisoire. Choisissez-en un personnel pour continuer.',
+        current: 'Mot de passe provisoire',
+        new: 'Nouveau mot de passe (12 caractères minimum)',
+        repeat: 'Répétez le nouveau mot de passe',
+        submit: 'Enregistrer et continuer',
+        mismatch: 'Les deux saisies diffèrent.',
+        too_short: 'Le mot de passe doit contenir au moins 12 caractères.',
+        failed: 'Le changement a échoué.',
+        done_title: 'Mot de passe modifié',
+        done: 'Reconnectez-vous avec votre nouveau mot de passe.'
+      },
       logout: {
         logout: 'Déconnexion',
         change_pass: 'Changer le mot de passe',
