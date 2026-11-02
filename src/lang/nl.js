@@ -1,6 +1,9 @@
 export const messages = {
     nl: {
       firstlogin: {
+        locked: "Te veel pogingen. Probeer het over {seconds} seconden opnieuw.",
+        unreachable: "De server is onbereikbaar. Probeer het zo dadelijk opnieuw.",
+        no_menu: "Dit account heeft geen toegang tot een toepassing. Neem contact op met een beheerder.",
         title: 'Kies uw wachtwoord',
         help: 'Dit account gebruikt een tijdelijk wachtwoord. Kies een eigen wachtwoord om verder te gaan.',
         current: 'Tijdelijk wachtwoord',
