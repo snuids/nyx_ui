@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 /**
- * Vérifie que tous les fichiers de langue exposent exactement les mêmes clés que en.js.
+ * Checks that every language file exposes exactly the same keys as en.js.
  *
- * el.js avait quinze chaînes de retard sur en.js sans que rien ne le signale : le grec
- * affichait donc l'anglais par intermittence, et personne ne l'a vu. Ce contrôle tourne
- * avant le build.
+ * el.js was fifteen strings behind en.js without anything reporting it: Greek therefore showed
+ * English intermittently, and nobody saw it. This check runs before the build.
  *
- * Les fichiers sont évalués tels quels (ce sont de simples littéraux d'objet) plutôt que
- * découpés à la main : la comparaison porte donc sur les clés réelles, pas sur la mise en
- * forme — el.js indente ses clés au niveau de leur section, ce qui trompe un parseur
- * basé sur les espaces.
+ * The files are evaluated as they are (they are plain object literals) rather than split by
+ * hand: the comparison therefore bears on the real keys, not on the formatting — el.js indents
+ * its keys at the level of their section, which defeats a parser based on whitespace.
  *
- * Usage : node scripts/check-lang-keys.mjs   (code 0 si aligné, 1 sinon)
+ * Usage: node scripts/check-lang-keys.mjs   (exit code 0 when aligned, 1 otherwise)
  */
 import { readFileSync, readdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -20,13 +18,13 @@ import { fileURLToPath } from 'node:url'
 const here = dirname(fileURLToPath(import.meta.url))
 const langDir = join(here, '..', 'src', 'lang')
 
-/** Charge le littéral `messages` d'un fichier de langue. */
+/** Loads the `messages` literal of a language file. */
 function loadMessages(file) {
   const source = readFileSync(join(langDir, file), 'utf8').replace(/^\s*export\s+const\s+messages\s*=/, 'return')
   return new Function(source)()
 }
 
-/** Aplatit un objet en chemins de clés feuilles. */
+/** Flattens an object into leaf key paths. */
 function flatten(node, prefix = '') {
   const out = []
   for (const [key, value] of Object.entries(node)) {
@@ -58,9 +56,9 @@ for (const file of others) {
     console.log(`  ${file.padEnd(8)} ${String(keys.size).padStart(4)} clés — complet`)
     continue
   }
-  // Une clé manquante fait échouer le build : c'est une chaîne qui s'affichera en anglais.
-  // Une clé en trop est seulement signalée : elle ne casse rien, mais elle trahit souvent
-  // une faute de frappe qui empêche le libellé de s'afficher.
+  // A missing key makes the build fail: it is a string that will be displayed in English.
+  // An extra key is only reported: it breaks nothing, but it often betrays a typo that
+  // prevents the label from being displayed.
   if (missing.length) failed = true
   console.error(`  ${file.padEnd(8)} ${keys.size} clés — ${missing.length} manquante(s), ${extra.length} en trop`)
   if (missing.length) console.error(`    manquantes : ${missing.join(', ')}`)

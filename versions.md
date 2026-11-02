@@ -1,5 +1,10 @@
 # Version History
 
+## V3.31.17 02/Nov/2026
+* Every French comment of the interface is now English, together with the `describe` / `it` titles of the three spec files — 14 files, and Vitest still reports 39 passed
+* Translation data (`src/lang/*.js`) and the privacy notice text are untouched: they are content, not comments. `check-lang-keys` still exits 0
+* Comments only: string literals, CSS and template markup are unchanged, and the comment markers count identically in every file
+
 ## V3.31.16 02/Nov/2026
 * First test suite for the console: Vitest (node environment, no component mounting) and 39 cases over the store, `globalfunctions.js` and the internal-page catalogue — the interface had no test runner, and 27 456 lines of components without a single assertion
 * `store.js` is the target that matters: `hasPrivilege` decides what a user sees, `filteredmenus` builds the routes (`value` / `fulltitle` slugs from the category and submenu titles), and `setTimeRange` picks the aggregation interval sent to Elasticsearch (its thresholds are now pinned, from « 1m » for two hours to « 7d » for four months)

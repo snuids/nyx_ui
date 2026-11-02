@@ -22,7 +22,7 @@ export default new Router({
       component: Login
     },
     {
-      // Page publique : on doit pouvoir lire la notice avant d'avoir un compte.
+      // Public page: the notice must be readable before having an account.
       path: '/privacy',
       name: 'Privacy',
       component: Privacy

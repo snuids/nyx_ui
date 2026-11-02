@@ -32,12 +32,12 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          # meme version que le Dockerfile de production, pour tester le meme npm
+          # same version as the production Dockerfile, so that the same npm is tested
           node-version: '22'
           cache: npm
 
-      # `xlsx` vient d'un tarball distant (cdn.sheetjs.com) : npm 10 du runner l'accepte, comme
-      # dans l'image de build. En local, npm 11+ exige `--allow-remote=all`.
+      # `xlsx` comes from a remote tarball (cdn.sheetjs.com): the runner's npm 10 accepts it, as
+      # in the build image. Locally, npm 11+ requires `--allow-remote=all`.
       - name: Install dependencies
         run: npm ci
 

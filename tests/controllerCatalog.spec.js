@@ -1,10 +1,10 @@
 /**
- * Le catalogue des pages « internal » : cohérence et existence.
+ * The catalogue of "internal" pages: consistency and existence.
  *
- * `CONTROLLER_PAGES` alimente la liste déroulante du constructeur d'écrans ; chaque nom doit
- * désigner un composant qui existe vraiment dans `src/components/`, sinon l'écran créé pointe sur
- * un contrôleur introuvable et la page reste blanche. Un nom en double casse la sélection. Rien
- * de tout cela n'était vérifié.
+ * `CONTROLLER_PAGES` feeds the drop-down list of the screen builder; every name must designate
+ * a component that really exists in `src/components/`, otherwise the screen created points at an
+ * unknown controller and the page stays blank. A duplicate name breaks the selection. None of
+ * this was checked.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -19,12 +19,12 @@ const components = readdirSync(componentsDir)
   .map(file => file.replace(/\.vue$/, ''))
 
 describe('CONTROLLER_PAGES', () => {
-  it('ne contient aucun doublon', () => {
+  it('contains no duplicate', () => {
     const names = CONTROLLER_PAGES.map(page => page.name)
     expect(new Set(names).size).toBe(names.length)
   })
 
-  it('donne un nom et une description a chaque entree', () => {
+  it('gives a name and a description to every entry', () => {
     for (const page of CONTROLLER_PAGES) {
       expect(typeof page.name).toBe('string')
       expect(page.name.length).toBeGreaterThan(0)
@@ -33,13 +33,13 @@ describe('CONTROLLER_PAGES', () => {
     }
   })
 
-  it('ne designe que des composants presents dans src/components', () => {
-    // une entree orpheline = une page blanche dans le constructeur
+  it('only points at components present in src/components', () => {
+    // an orphan entry = a blank page in the builder
     const missing = CONTROLLER_PAGES.map(page => page.name).filter(name => !components.includes(name))
     expect(missing).toEqual([])
   })
 
-  it('nomme les pages comme des composants (PascalCase, sans espace)', () => {
+  it('names pages like components (PascalCase, no space)', () => {
     for (const page of CONTROLLER_PAGES) {
       expect(page.name).toMatch(/^[A-Z][A-Za-z0-9]*$/)
     }
@@ -47,17 +47,17 @@ describe('CONTROLLER_PAGES', () => {
 })
 
 describe('describeController', () => {
-  it('retrouve une page connue', () => {
+  it('finds a known page', () => {
     const first = CONTROLLER_PAGES[0].name
     expect(describeController(first).name).toBe(first)
   })
 
-  it('rend null pour une page inconnue', () => {
+  it('returns null for an unknown page', () => {
     expect(describeController('PageQuiNExistePas')).toBeNull()
   })
 
-  it('rend null pour une valeur vide', () => {
-    // `name` vient d une liste deroulante : la premiere option peut etre vide
+  it('returns null for an empty value', () => {
+    // `name` comes from a drop-down list: the first option can be empty
     expect(describeController('')).toBeNull()
     expect(describeController(null)).toBeNull()
     expect(describeController(undefined)).toBeNull()

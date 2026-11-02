@@ -181,9 +181,9 @@ export default {
           login: "",
           firstname: "",
           lastname: "",
-          // Aucun mot de passe n'est envoyé : l'API en fabrique un que personne ne connaît
-          // et marque le compte « mustResetPassword ». Le condensat partagé qui figurait ici
-          // donnait le même secret à tous les comptes créés depuis l'interface.
+          // No password is sent: the API generates one that nobody knows and marks the account
+          // "mustResetPassword". The shared hash that used to sit here gave the same secret to
+          // every account created from the interface.
           privileges: [],
           filters: [],
           language: "en",

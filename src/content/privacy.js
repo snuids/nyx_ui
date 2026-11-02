@@ -1,12 +1,12 @@
 /**
- * Notice de protection des données, affichée sur /privacy.
+ * Data protection notice, displayed on /privacy.
  *
- * Le texte vit ici plutôt que dans les fichiers de langue : il change rarement, il est long,
- * et surtout il doit pouvoir être relu par la personne responsable du traitement sans ouvrir
- * un composant. Les valeurs entre « » sont à remplacer par les mentions légales réelles.
+ * The text lives here rather than in the language files: it changes rarely, it is long, and
+ * above all it must be reviewable by the person responsible for the processing without opening
+ * a component. The values between « » are to be replaced by the actual legal details.
  *
- * Les quatre langues de la plateforme sont couvertes. Une relecture du grec par un locuteur
- * natif reste souhaitable, comme pour toute notice légale traduite.
+ * All four languages of the platform are covered. A review of the Greek by a native speaker
+ * remains desirable, as for any translated legal notice.
  */
 
 const fr = {
@@ -333,13 +333,12 @@ const el = {
 const notices = { fr, nl, en, el };
 
 /**
- * Remplace les jetons {controller}, {address} et {contact} par les mentions légales reelles.
+ * Replaces the {controller}, {address} and {contact} tokens with the actual legal details.
  *
- * Les valeurs viennent de l'environnement de l'API (PRIVACY_CONTROLLER, PRIVACY_ADDRESS,
- * PRIVACY_CONTACT) : les renseigner ne demande donc ni reconstruction de l'image ni
- * republication de l'interface, seulement un redemarrage de l'API. Tant qu'elles sont vides,
- * le texte garde ses mentions « a completer », visibles a l'ecran : une notice incomplete doit
- * se voir.
+ * The values come from the API environment (PRIVACY_CONTROLLER, PRIVACY_ADDRESS,
+ * PRIVACY_CONTACT): filling them in therefore requires neither an image rebuild nor a
+ * republication of the interface, only an API restart. While they are empty, the text keeps
+ * its "to be completed" placeholders, visible on screen: an incomplete notice must show.
  */
 export function fillNotice(notice, values) {
   const resolved = {};

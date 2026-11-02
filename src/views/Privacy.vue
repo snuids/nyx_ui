@@ -22,12 +22,11 @@ import { privacyNotice, fillNotice } from "@/content/privacy";
 import LanguageSelect from "@/components/LanguageSelect";
 
 /**
- * Notice de protection des données.
+ * Data protection notice.
  *
- * Page autonome, volontairement sans authentification : on doit pouvoir lire ce texte avant
- * de posséder un compte, et y revenir ensuite depuis un lien permanent. Aucun bandeau, aucun
- * bouton « j'accepte » — il n'y a pas de consentement à recueillir, seulement une information
- * à rendre accessible.
+ * Standalone page, deliberately unauthenticated: the text must be readable before owning an
+ * account, and reachable again later from a permanent link. No banner, no "I accept" button —
+ * there is no consent to collect, only information to make accessible.
  */
 export default {
   name: "Privacy",
@@ -42,15 +41,15 @@ export default {
     },
   },
   mounted() {
-    // Au cas où une vue précédente aurait verrouillé le défilement du document.
+    // In case a previous view had locked the document scrolling.
     document.body.classList.add("nyx-privacy");
   },
   beforeDestroy() {
     document.body.classList.remove("nyx-privacy");
   },
   async created() {
-    // Route publique : la notice doit s'afficher même si l'API ne répond pas. En cas d'échec,
-    // le texte garde ses mentions « à compléter » plutôt que de rester vide.
+    // Public route: the notice must be displayed even if the API does not answer. On failure,
+    // the text keeps its "to be completed" placeholders rather than staying empty.
     try {
       const response = await axios.get(this.$store.getters.apiurl + "config", { timeout: 4000 });
       this.mentions = (response.data && response.data.privacy) || null;
@@ -75,8 +74,8 @@ body.nyx-privacy #app {
 }
 
 .privacy-page {
-  /* Bloc normal : le défilement est celui du document. Une couche `position: fixed` avec son
-     propre overflow défile bien dans Chrome, mais Safari refuse le wheel sur ce montage. */
+  /* Normal block: scrolling is the document's own. A `position: fixed` layer with its own
+     overflow scrolls fine in Chrome, but Safari refuses the wheel on that setup. */
   box-sizing: border-box;
   min-height: 100vh;
   padding: 14mm 6mm;
@@ -90,8 +89,8 @@ body.nyx-privacy #app {
 }
 
 .privacy-sheet {
-  /* Format A4 réel (210 x 297 mm), marges de saisie : ce que l'on voit à l'écran est ce
-     qui sortira à l'impression ou en PDF. */
+  /* Real A4 format (210 x 297 mm), input margins: what is seen on screen is what will come
+     out of the printer or the PDF. */
   position: relative;
   box-sizing: border-box;
   width: 210mm;
@@ -103,12 +102,12 @@ body.nyx-privacy #app {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
   color: #333;
   line-height: 1.55;
-  /* La feuille de style globale centre tout le texte de l'application : une notice
-     juridique alignée au centre est illisible. */
+  /* The global stylesheet centres all the application text: a legal notice aligned to the
+     centre is unreadable. */
   text-align: left;
 }
 
-/* Impression / PDF : mêmes marges, sans décor d'écran. */
+/* Print / PDF: same margins, without the screen decoration. */
 @page {
   size: A4;
   margin: 18mm 16mm;
