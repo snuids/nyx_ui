@@ -237,9 +237,18 @@ export default {
           }
         }
       } catch (e) {
-        this.form.error = e;
         this.loginunderway = false;
-        console.log(e);
+        const data = e && e.response && e.response.data;
+        if (data && data.error === "TOO_MANY_ATTEMPTS") {
+          // Le garde applicatif répond 429 : sans ce message, l'utilisateur voyait
+          // « Request failed with status code 429 » et croyait à un mot de passe faux.
+          this.form.error = this.$t("firstlogin.locked", { seconds: data.retry_after });
+        } else if (data && data.error) {
+          this.form.error = data.error;
+        } else {
+          this.form.error = this.$t("firstlogin.unreachable");
+          console.log(e);
+        }
       }
     },
     submitNewPassword() {
@@ -306,10 +315,14 @@ export default {
         rec_id  = this.$store.getters.filteredmenus[0].submenus[0].apps[0].rec_id
       }
       catch (e) {
-        
+        // Compte sans application assignée : on s'arrête ici. Poursuivre avec un rec_id nul
+        // faisait planter l'interface sur « reading 'loc_title' », ce qui affichait une
+        // TypeError en guise de message d'erreur.
         this.loginunderway = false;
         console.log(e);
+        this.form.error = this.$t("firstlogin.no_menu");
         this.$router.push("/");
+        return;
       }
 
       // var path = "/main/"+app.fulltitle.replace(/ /g,'').toLowerCase()

@@ -34,6 +34,9 @@ export const messages = {
 
       },
       firstlogin: {
+        locked: "Trop de tentatives. Réessayez dans {seconds} secondes.",
+        unreachable: "Le serveur est injoignable. Réessayez dans un instant.",
+        no_menu: "Ce compte n'a accès à aucune application. Contactez un administrateur.",
         title: 'Choisissez votre mot de passe',
         help: 'Ce compte utilise un mot de passe provisoire. Choisissez-en un personnel pour continuer.',
         current: 'Mot de passe provisoire',

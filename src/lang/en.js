@@ -1,6 +1,9 @@
 export const messages = {
     en: {
       firstlogin: {
+        locked: "Too many attempts. Try again in {seconds} seconds.",
+        unreachable: "The server is unreachable. Try again in a moment.",
+        no_menu: "This account has no application. Contact an administrator.",
         title: 'Choose your password',
         help: 'This account uses a temporary password. Choose your own to continue.',
         current: 'Temporary password',
