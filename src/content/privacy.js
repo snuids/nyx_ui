@@ -17,7 +17,7 @@ const fr = {
     contact: '« adresse de contact à compléter »',
   },
   title: 'Protection des données',
-  updated: 'Dernière mise à jour : 1er novembre 2026',
+  updated: 'Dernière mise à jour : 4 novembre 2026',
   intro:
     "Cette page décrit les données personnelles que la plateforme NYX traite, pourquoi, " +
     "combien de temps, et comment exercer vos droits. Aucun consentement ne vous est demandé : " +
@@ -63,7 +63,9 @@ const fr = {
       h: 'Combien de temps',
       p: "Le compte : aussi longtemps qu'il est actif, puis trente jours avant suppression. Les " +
          "journaux d'appels et les tentatives de connexion refusées : sept jours, supprimés " +
-         "automatiquement par une tâche planifiée. Les sauvegardes du serveur : trente jours.",
+         "automatiquement par une tâche planifiée. Les journaux d'exécution des rapports et les " +
+         "rapports produits : quatre-vingt-dix jours, supprimés de la même façon. Les sauvegardes " +
+         "du serveur : trente jours.",
     },
     {
       h: 'Cookies et stockage du navigateur',
@@ -98,7 +100,7 @@ const nl = {
     contact: '« contactadres aan te vullen »',
   },
   title: 'Gegevensbescherming',
-  updated: 'Laatst bijgewerkt: 1 november 2026',
+  updated: 'Laatst bijgewerkt: 4 november 2026',
   intro:
     'Deze pagina beschrijft welke persoonsgegevens het NYX-platform verwerkt, waarom, hoe lang, ' +
     'en hoe u uw rechten uitoefent. Er wordt u geen toestemming gevraagd: de hier beschreven ' +
@@ -142,7 +144,8 @@ const nl = {
       h: 'Hoe lang',
       p: 'Het account: zolang het actief is, daarna dertig dagen vóór verwijdering. Oproeplogboeken ' +
          'en geweigerde aanmeldingen: zeven dagen, automatisch verwijderd door een geplande ' +
-         'taak. Serverback-ups: dertig dagen.',
+         'taak. Uitvoeringslogboeken van rapporten en geproduceerde rapporten: negentig dagen, op ' +
+         'dezelfde manier verwijderd. Serverback-ups: dertig dagen.',
     },
     {
       h: 'Cookies en browseropslag',
@@ -176,7 +179,7 @@ const en = {
     contact: '« contact address to be completed »',
   },
   title: 'Data protection',
-  updated: 'Last updated: 1 November 2026',
+  updated: 'Last updated: 4 November 2026',
   intro:
     'This page describes the personal data the NYX platform processes, why, for how long, and ' +
     'how to exercise your rights. No consent is requested: the processing described here is ' +
@@ -219,6 +222,7 @@ const en = {
       h: 'How long',
       p: 'The account: as long as it is active, then thirty days before deletion. Call logs and ' +
          'rejected sign-in attempts: seven days, deleted automatically by a scheduled task. ' +
+         'Report execution logs and the reports produced: ninety days, deleted the same way. ' +
          'Server backups: thirty days.',
     },
     {
@@ -250,7 +254,7 @@ const en = {
 const el = {
   link: 'Απόρρητο',
   title: 'Προστασία δεδομένων',
-  updated: 'Τελευταία ενημέρωση: 1 Νοεμβρίου 2026',
+  updated: 'Τελευταία ενημέρωση: 4 Νοεμβρίου 2026',
   defaults: {
     controller: '« επωνυμία προς συμπλήρωση »',
     address: '« διεύθυνση προς συμπλήρωση »',
@@ -302,7 +306,8 @@ const el = {
       h: 'Για πόσο διάστημα',
       p: 'Ο λογαριασμός: όσο είναι ενεργός, και στη συνέχεια τριάντα ημέρες πριν από τη ' +
          'διαγραφή. Τα αρχεία κλήσεων και οι απορριφθείσες απόπειρες σύνδεσης: επτά ημέρες, με ' +
-         'αυτόματη διαγραφή από προγραμματισμένη εργασία. Τα αντίγραφα ασφαλείας του ' +
+         'αυτόματη διαγραφή από προγραμματισμένη εργασία. Τα αρχεία εκτέλεσης αναφορών και οι ' +
+         'παραγόμενες αναφορές: ενενήντα ημέρες, με τον ίδιο τρόπο. Τα αντίγραφα ασφαλείας του ' +
          'διακομιστή: τριάντα ημέρες.',
     },
     {
