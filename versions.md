@@ -1,5 +1,8 @@
 # Version History
 
+## V3.31.19 04/Nov/2026
+* The privacy notice states the two retentions the platform actually enforces: report execution logs and the reports produced are kept **ninety days**, deleted by a scheduled task, in the four languages (the notice stopped at the account, the seven days of call logs and the thirty days of backups). "Last updated" moves to 4 November 2026 in each language
+
 ## V3.31.18 02/Nov/2026
 * The test suite covers the store's actions, not only its mutations: `switchToApp`, `changeApp`, `logout`, `refreshTimeRange`, `setTab` and the six record/message writes, with axios mocked and a fake websocket — every one of them used to be an untested write whose only failure mode is a screen that keeps its old value. **39 → 133 tests**
 * `src/utils/filters.js` and `src/utils/language.js` take over the five Vue filters and the language resolution that were inlined in `main.js`, where importing them mounted the whole application: `formatTS` decides on its own whether a timestamp is in seconds or milliseconds, and `resolveLanguage` picks the interface language on every page load (URL parameter > selector choice > account > English). The duplicate `getUrlVars` of `Login.vue` is gone
