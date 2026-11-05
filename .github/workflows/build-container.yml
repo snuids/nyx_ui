@@ -6,6 +6,11 @@ on:
       - master
     paths-ignore:
       - '**.md'
+      # A licence or workflow change does not change the image, and its commit message carries
+      # no version: the version step would fail on it.
+      - 'LICENSE'
+      - 'LICENCE'
+      - '.github/**'
       # a change to the workflow itself does not change the image
       - '.github/**'
 
