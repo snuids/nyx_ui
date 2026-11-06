@@ -1,7 +1,9 @@
 <template>
   <!--MAIN DIALOG -->
   <div style="text-align:left">
-    <span v-html="config.config.freetext"></span>
+    <!-- Interpolated, not v-html: this field holds an application's free text, and a configuration
+         written by an administrator would otherwise execute in every visitor's session. -->
+    <span>{{ config.config.freetext }}</span>
   </div>
 </template>
 

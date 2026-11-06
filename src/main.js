@@ -13,6 +13,7 @@ import 'element-ui/lib/theme-chalk/reset.css'
 import {i18n} from  './i18n-setup'
 import {filters} from '@/utils/filters'
 import {getUrlVars, resolveLanguage} from '@/utils/language'
+import {apiOverride} from '@/utils/devOverrides'
 import ElementLocale from 'element-ui/lib/locale'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import draggable from "vuedraggable";
@@ -43,9 +44,14 @@ Vue.prototype.$localbus = new Vue();
 Object.keys(filters).forEach(name => Vue.filter(name, filters[name]))
 
 const vars = getUrlVars(window.location.href);
-if (vars["api"]!=undefined)
-{  
-  store.state.apiurl=vars["api"].split('#')[0];
+
+// `?api=` is a development convenience: the block is compiled out of a production bundle, so the
+// console can only talk to the API it was built for. See src/utils/devOverrides.js.
+if (process.env.NODE_ENV !== 'production') {
+  const apiUrlOverride = apiOverride(window.location.href);
+  if (apiUrlOverride) {
+    store.state.apiurl = apiUrlOverride;
+  }
 }
 
 // Resolve the UI language on startup so a page reload keeps the user's language.
