@@ -99,9 +99,4 @@ export default {
   justify-content: center;
 }
 
-#app-popover .el-button svg,
-.el-popover .el-button svg {
-  width: 24px;
-  height: 24px;
-}
 </style>
