@@ -414,6 +414,25 @@ export default {
 </script>
 
 <style>
+/* Les cartes de modules sont placees DANS un `el-radio`, qui sert de conteneur cliquable. Element UI 2
+   le rendait en `inline-block`, sans hauteur ; Element Plus en fait un `inline-flex` de 32 px de
+   haut, aligne au centre : une carte de 120 px deborde, le titre est rogne et le contenu se decale.
+   On rend au radio son comportement de conteneur. */
+.el-radio {
+  display: inline-block;
+  height: auto;
+  align-items: initial;
+  white-space: normal;
+  margin-right: 0;
+  vertical-align: top;
+}
+
+.el-radio__label {
+  padding-left: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
 .process_ok {
   width: 280px;
   height: 120px;
