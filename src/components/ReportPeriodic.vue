@@ -64,7 +64,7 @@
 
       <el-table-column align="right" width="220">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template #header #default="_scope">
+        <template #header>
           <div>
             <el-tooltip
               v-if="currentRow"

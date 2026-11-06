@@ -32,13 +32,15 @@
               >{{format.label}}</el-button>
             </el-row>
           </el-col>
-          <el-button
-            class="search-dl-bt"
-            type="text"
-            :icon="$icons.Download"
-            slot="reference"
-            size="medium"
-          ></el-button>
+          <!-- `slot="reference"` n'existe plus : la reference d'un popover est un slot nomme. -->
+          <template #reference>
+            <el-button
+              class="search-dl-bt"
+              link
+              :icon="$icons.Download"
+              size="small"
+            ></el-button>
+          </template>
         </el-popover></template>
       </el-input>
     </div>

@@ -55,9 +55,11 @@ export default {
   vertical-align: -0.125em;
 }
 
-/* La taille vient de `font-size`, posee sur le conteneur : le SVG suit 1em et ne se deforme pas. */
+/* La hauteur vient de `font-size` (scale x 1em), posee sur le conteneur. On ne fixe PAS la largeur :
+   FontAwesome la deduit du viewBox, et les icones larges (640 de large, comme « cogs ») sont plus
+   larges que hautes. Les forcer a 1em les rapetissait. */
 .nyx-icon svg {
-  width: 1em;
   height: 1em;
+  overflow: visible;
 }
 </style>

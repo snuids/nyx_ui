@@ -207,7 +207,7 @@
       </el-table-column>
       <el-table-column prop="_source.downloads.length" align="right">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template #header #default="_scope">
+        <template #header>
           <el-input v-model="search" size="small" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template #default="scope">

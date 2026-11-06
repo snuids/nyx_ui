@@ -51,7 +51,7 @@
             width="170"
             >
             
-             <template #header #default="_scope">
+             <template #header>
               <el-input
                 v-model="search"                
                 size="small"
@@ -65,7 +65,7 @@
             label="Message"
             prop="message"
             header-align="right">
-            <template #header #default="scope" style="text-align:right">
+            <template #header style="text-align:right">
               <el-input
                 v-model="search"
                 style="width:50%"
@@ -75,7 +75,7 @@
             </template>
           </el-table-column-->
           <!-- <el-table-column v-if="logObj"  align="right">
-            <template #header #default="scope">
+            <template #header>
               <el-input
                 v-model="search"
                 size="small"

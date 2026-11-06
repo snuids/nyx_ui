@@ -108,7 +108,7 @@
           </el-table-column>
           <el-table-column label="Actions" align="right">
             <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-            <template #header #default="_scope">
+            <template #header>
               <div>
                 <el-tooltip
                   v-if="config.config.index && config.config.index.length>0 && currentRow"

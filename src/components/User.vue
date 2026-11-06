@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column align="right" width="250">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template #header #default="_scope">
+        <template #header>
           <div>
             <el-button
               size="small"

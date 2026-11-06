@@ -40,7 +40,7 @@
       <el-row>
         <el-table :data="esMapping" size="small" style="width: 100%">
           <el-table-column label="id" prop="id">
-            <template #header #default="_scope">
+            <template #header>
               <p
                 v-bind:class="{ 'text-success': succesIndexPatternDefinition }"
                 v-html="helpMessage"

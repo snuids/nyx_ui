@@ -31,7 +31,7 @@
       :body-style="{ padding: '24px 20px' }"
       shadow="hover"
     >
-      <el-form class="login-form" label-width="0px" @submit.native.prevent>
+      <el-form class="login-form" label-width="0px" @submit.prevent>
         <el-col :span="24">
           <div class="force-change-title">{{ $t("firstlogin.title") }}</div>
           <div class="force-change-help">{{ $t("firstlogin.help") }}</div>
