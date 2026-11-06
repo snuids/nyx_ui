@@ -168,7 +168,7 @@ export default {
       localStorage.authResponse = JSON.stringify(response)
 
       this.$i18n.locale = response.data.cred.user.language;
-      Vue.config.lang = response.data.cred.user.language;
+      // Vue 3 has no global `Vue` object: see Login.vue.
       //alert(this.$i18n.locale);
 
       response.data.cred.user.user = this.form.login;

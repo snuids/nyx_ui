@@ -281,8 +281,9 @@ export default {
       localStorage.authResponse = JSON.stringify(response)
 
       this.$i18n.locale = response.data.cred.user.language;
-      Vue.config.lang = response.data.cred.user.language;
-      //alert(this.$i18n.locale);
+      // `Vue.config.lang` was Element UI 2's locale switch; Element Plus reads the locale from
+      // the i18n instance, and Vue 3 has no global `Vue` object — the assignment threw here, after
+      // the token was stored and before the store commit, so the login looked refused.
 
       response.data.cred.user.user = this.form.login;
       this.$store.commit({
