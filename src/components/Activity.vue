@@ -26,10 +26,10 @@
           ></el-date-picker>
         </el-col>
         <el-col :span="6" style="text-align:right;white-space:nowrap;">
-          <el-button size="small" icon="el-icon-refresh" :loading="loading" @click="load()">
+          <el-button size="small" :icon="$icons.Refresh" :loading="loading" @click="load()">
             {{ $t('activity.refresh') }}
           </el-button>
-          <el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportFile()">
+          <el-button size="small" :icon="$icons.Download" :loading="exporting" @click="exportFile()">
             CSV
           </el-button>
         </el-col>
@@ -41,7 +41,7 @@
             v-model="filters.user"
             size="small"
             clearable
-            prefix-icon="el-icon-user"
+            prefix-:icon="$icons.User"
             :placeholder="$t('activity.filter_user')"
             @change="load()"
           ></el-input>
@@ -51,7 +51,7 @@
             v-model="filters.path"
             size="small"
             clearable
-            prefix-icon="el-icon-search"
+            prefix-:icon="$icons.Search"
             :placeholder="$t('activity.filter_path')"
             @change="load()"
           ></el-input>

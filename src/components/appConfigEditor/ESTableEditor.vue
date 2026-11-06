@@ -24,7 +24,7 @@
             :disabled="!succesIndexPatternDefinition || currentConfig.config.index==''"
             plain
             :type="succesIndexPatternDefinition && currentConfig.config.index!=''?'primary': ''"
-            icon="el-icon-arrow-right"
+            :icon="$icons.ArrowRight"
             @click="goToStep(2)"
             size="small"
           >{{ $t('cfg.next_step') }}</el-button>
@@ -67,7 +67,7 @@
             :disabled="!succesIndexPatternDefinition || currentConfig.config.index==''"
             plain
             :type="succesIndexPatternDefinition && currentConfig.config.index!=''?'primary': ''"
-            icon="el-icon-arrow-left"
+            :icon="$icons.ArrowLeft"
             @click="goToStep(1)"
             size="small"
           >{{ $t('cfg.back') }}</el-button>
@@ -257,7 +257,7 @@
                     <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="small">{{ $t('cfg.configure') }}</el-button>
                   </td>
                   <td>
-                    <i class="el-icon-d-caret handle"></i>
+                    <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
                   </td>
                 </tr>
               </draggable>
@@ -406,7 +406,7 @@
                         ></el-input>
                       </td>
                       <td>
-                        <i class="el-icon-d-caret handle"></i>
+                        <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
                       </td>
                     </tr>
                   </draggable>

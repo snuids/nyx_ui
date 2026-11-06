@@ -370,7 +370,7 @@
                 </el-option-group>
               </el-select>
               <div class="controller-help">
-                <i class="el-icon-info"></i>
+                <el-icon><component :is="$icons.InfoFilled" /></el-icon>
                 <span>{{ selectedControllerHelp }}</span>
               </div>
             </el-form-item>
@@ -709,14 +709,14 @@
                           size="small"
                           circle
                           @click="handleEditHeader(scope2.$index, scope2.row)"
-                          icon="el-icon-edit"
+                          :icon="$icons.Edit"
                         ></el-button>
                         <el-button
                           size="small"
                           circle
                           type="danger"
                           @click="handleDeleteHeader(scope2.$index, scope2.row)"
-                          icon="el-icon-delete"
+                          :icon="$icons.Delete"
                         ></el-button>
 
                         <el-button
@@ -724,7 +724,7 @@
                           circle
                           type="primary"
                           @click="handleMoveHeader(scope2.$index, scope2.row,false)"
-                          icon="el-icon-arrow-down"
+                          :icon="$icons.ArrowDown"
                           v-if="scope2.$index<curConfig.config.headercolumns.length-1"
                         ></el-button>
                         <el-button
@@ -732,7 +732,7 @@
                           circle
                           type="primary"
                           @click="handleMoveHeader(scope2.$index, scope2.row,true)"
-                          icon="el-icon-arrow-up"
+                          :icon="$icons.ArrowUp"
                           v-if="scope2.$index>0"
                         ></el-button>
                       </template>
@@ -870,14 +870,14 @@
                           size="small"
                           circle
                           @click="handleEditQueryFilterField(scope2.$index, scope2.row)"
-                          icon="el-icon-edit"
+                          :icon="$icons.Edit"
                         ></el-button>
                         <el-button
                           size="small"
                           circle
                           type="danger"
                           @click="handleDeleteQueryFilter(scope2.$index, scope2.row)"
-                          icon="el-icon-delete"
+                          :icon="$icons.Delete"
                         ></el-button>
 
                         <el-button
@@ -885,7 +885,7 @@
                           circle
                           type="primary"
                           @click="handleMoveQueryFilter(scope2.$index, scope2.row,false)"
-                          icon="el-icon-arrow-down"
+                          :icon="$icons.ArrowDown"
                           v-if="scope2.$index<curConfig.config.queryfilters.length-1"
                         ></el-button>
                         <el-button
@@ -893,7 +893,7 @@
                           circle
                           type="primary"
                           @click="handleMoveQueryFilter(scope2.$index, scope2.row,true)"
-                          icon="el-icon-arrow-up"
+                          :icon="$icons.ArrowUp"
                           v-if="scope2.$index>0"
                         ></el-button>
                       </template>

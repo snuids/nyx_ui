@@ -12,6 +12,7 @@ import './styles/element-legacy.css'
 import draggable from 'vuedraggable'
 import InfiniteLoading from 'vue3-infinite-loading'
 import numeral from 'numeral'
+import * as ElementPlusIcons from '@element-plus/icons-vue'
 import { i18n, elementLocale } from './i18n-setup'
 import VIcon from './components/VIcon.vue'
 import { filters } from '@/utils/filters'
@@ -55,6 +56,9 @@ app.config.globalProperties.$browserDetect = browserDetect
 app.config.globalProperties.$geolocation = geolocation
 // Vue 3 removed template filters: `x | formatDate` became `$filters.formatDate(x)` (migration
 // codemod). `$numeral` replaces the `numeral` filter of vue-numeral-filter.
+// Element Plus n'a plus de police d'icones : ses icones sont des composants. Ils sont exposes ici
+// une fois pour toutes, ce qui evite un import par fichier dans les 62 composants.
+app.config.globalProperties.$icons = ElementPlusIcons
 app.config.globalProperties.$filters = filters
 app.config.globalProperties.$numeral = (value, format) => numeral(value).format(format)
 

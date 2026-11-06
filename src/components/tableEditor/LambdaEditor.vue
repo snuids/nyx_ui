@@ -79,7 +79,7 @@
             <el-col :span="4" style="text-align:right;">
               <el-button
                 style="min-width: 112px;"
-                icon="el-icon-notebook-2"
+                :icon="$icons.Notebook"
                 @click="openTabCode()"
                 size="small"
                 v-if="locEditMode=='edit'"
@@ -88,7 +88,7 @@
                 v-if="locEditMode!='edit'" 
                 confirmButtonText='GO!'
                 cancelButtonText='No, Thanks'
-                icon="el-icon-info"
+                :icon="$icons.InfoFilled"
                 iconColor="red"
                 :title="$t('ui.overwrite_file')"
               >-->
@@ -154,7 +154,7 @@
             <el-col :span="4" style="text-align:right;">
               <el-button
                 style="min-width: 112px;"
-                icon="el-icon-refresh-left"
+                :icon="$icons.RefreshLeft"
                 :loading="resetStatsLoading"
                 @click="resetStats()"
                 type="warning"
@@ -189,16 +189,14 @@
                   <div class="value">
                     <span style="font-weight:bold;">{{ $filters.formatTS2(item.time) }} -&nbsp;</span>
                     <span>({{item.duration}}ms)</span>
-                    <i
+                    <el-icon
                       v-if="item.crashed"
                       style="color:red; float:right; margin-top:10px;"
-                      class="el-icon-close"
-                    ></i>
-                    <i
+                    ><component :is="$icons.CircleClose" /></el-icon>
+                    <el-icon
                       v-else
                       style="color:green; float:right; margin-top:10px;"
-                      class="el-icon-check"
-                    ></i>
+                    ><component :is="$icons.CircleCheck" /></el-icon>
                   </div>
                 </template>
               </el-autocomplete>
@@ -216,7 +214,7 @@
               <el-button
                 v-if="selectedRun && selectedRun.inputuuid"
                 style="min-width: 112px;"
-                icon="el-icon-download"
+                :icon="$icons.Download"
                 @click="openTabInput"
                 size="small"
               >Input</el-button>

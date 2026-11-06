@@ -76,7 +76,7 @@
                   </td>
 
                   <td>
-                    <i class="el-icon-d-caret handle"></i>
+                    <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
                   </td>
                 </tr>
               </draggable>
@@ -151,11 +151,11 @@
                         trigger="hover">
                         <el-row>{{ $t('cfg.each_line_represents') }} <b>{{ $t('cfg.option') }}</b></el-row>
                         <el-row>{{ $t('cfg.two_ways_create') }} <b>{{ $t('cfg.option') }}</b></el-row>
-                        <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value=label </i></el-row>
-                        <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value </i></el-row>
+                        <el-row> <el-icon style="margin-left:5px; margin-right:5px"><component :is="$icons.CaretRight" /></el-icon> <i>value=label </i></el-row>
+                        <el-row> <el-icon style="margin-left:5px; margin-right:5px"><component :is="$icons.CaretRight" /></el-icon> <i>value </i></el-row>
                         
                         
-                        <template #reference><el-button type="text" icon="el-icon-info" style="margin-left:15px;"></el-button></template>
+                        <template #reference><el-button type="text" :icon="$icons.InfoFilled" style="margin-left:15px;"></el-button></template>
                       </el-popover>
                 </el-row>
               </el-col>

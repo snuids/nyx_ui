@@ -80,7 +80,7 @@
                 class="dupbutton"
                 type="primary"
                 plain
-                icon="el-icon-copy-document"
+                :icon="$icons.CopyDocument"
               ></el-button>
             </el-tooltip>
             <el-tooltip
@@ -97,7 +97,7 @@
                 class="addbutton"
                 type="primary"
                 plain
-                icon="el-icon-plus"
+                :icon="$icons.Plus"
               ></el-button>
             </el-tooltip>            
           </div>
@@ -108,7 +108,7 @@
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
-              icon="el-icon-edit"
+              :icon="$icons.Edit"
               @click="editScheduler(scope.$index, scope.row)"
               circle
             ></el-button>
@@ -118,7 +118,7 @@
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
               type="danger"
-              icon="el-icon-delete"
+              :icon="$icons.Delete"
               @click="askDeleteScheduler(scope.$index, scope.row)"
               circle
             ></el-button>

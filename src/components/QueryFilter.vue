@@ -69,7 +69,7 @@
           @click="refresh()"
           class="regreshbutton"
           plain
-          icon="el-icon-refresh"
+          :icon="$icons.Refresh"
         ></el-button>
       </el-tooltip>
     </div>
@@ -90,7 +90,7 @@
             >{{format.label}}</el-button>
           </el-row>
         </el-col>
-        <template #reference><el-button round type="default" icon="el-icon-download" size="small"></el-button></template>
+        <template #reference><el-button round type="default" :icon="$icons.Download" size="small"></el-button></template>
       </el-popover>
     </div>
   </el-row>

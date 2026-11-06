@@ -11,7 +11,7 @@
         >
           <template #append><el-button 
             
-            icon="el-icon-search" 
+            :icon="$icons.Search" 
             @click="dialogVisible = true"></el-button></template>
         </el-input>
       </el-col>
@@ -35,7 +35,7 @@
         <el-input
           v-model="searchQuery"
           :placeholder="$t('iconpicker.search_placeholder')"
-          prefix-icon="el-icon-search"
+          prefix-:icon="$icons.Search"
           size="small"
           clearable
           style="margin-bottom: 20px;"

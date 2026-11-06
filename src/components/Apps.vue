@@ -18,7 +18,7 @@
     </el-form>
 
     <template #reference><el-button circle type="primary">
-      <i class="el-icon-menu"></i>
+      <el-icon><component :is="$icons.Menu" /></el-icon>
     </el-button></template>
   </el-popover>
 </template>

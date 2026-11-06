@@ -116,7 +116,7 @@
                   :content="$t('grafana.download_hint')"
                   placement="top"
                 >
-                  <i class="el-icon-question" style="color:#909399"></i>
+                  <el-icon style="color:#909399"><component :is="$icons.QuestionFilled" /></el-icon>
                 </el-tooltip>
               </el-col>
             </el-row>

@@ -115,7 +115,7 @@
                 class="dupbutton"
                 type="primary"
                 plain
-                icon="el-icon-copy-document"
+                :icon="$icons.CopyDocument"
               ></el-button>
             </el-tooltip>
             <el-tooltip
@@ -132,7 +132,7 @@
                 class="addbutton"
                 type="primary"
                 plain
-                icon="el-icon-plus"
+                :icon="$icons.Plus"
               ></el-button>
             </el-tooltip>
           </div>
@@ -142,7 +142,7 @@
           <el-tooltip class="item" effect="dark" :content="$t('generic.generate')" placement="bottom-start">
             <el-button
               size="small"
-              icon="el-icon-caret-right"
+              :icon="$icons.CaretRight"
               @click="askParameters(scope.$index, scope.row)"
               plain
             ></el-button>
@@ -151,7 +151,7 @@
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
-              icon="el-icon-setting"
+              :icon="$icons.Setting"
               @click="editReport(scope.$index, scope.row)"
               plain
             ></el-button>
@@ -161,7 +161,7 @@
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
               type="danger"
-              icon="el-icon-delete"
+              :icon="$icons.Delete"
               @click="askDeleteReport(scope.$index, scope.row)"
               plain
             ></el-button>

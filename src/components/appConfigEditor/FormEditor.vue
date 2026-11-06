@@ -89,14 +89,14 @@
                     size="small"
                     circle
                     @click="handleEditField(scope2.$index, scope2.row)"
-                    icon="el-icon-edit"
+                    :icon="$icons.Edit"
                   ></el-button>
                   <el-button
                     size="small"
                     circle
                     type="danger"
                     @click="handleDeleteField(scope2.$index, scope2.row)"
-                    icon="el-icon-delete"
+                    :icon="$icons.Delete"
                   ></el-button>
 
                   <el-button
@@ -104,7 +104,7 @@
                     circle
                     type="primary"
                     @click="handleMoveField(scope2.$index, scope2.row,false)"
-                    icon="el-icon-arrow-down"
+                    :icon="$icons.ArrowDown"
                     v-if="scope2.$index<currentConfig.config.headercolumns.length-1"
                   ></el-button>
                   <el-button
@@ -112,7 +112,7 @@
                     circle
                     type="primary"
                     @click="handleMoveField(scope2.$index, scope2.row,true)"
-                    icon="el-icon-arrow-up"
+                    :icon="$icons.ArrowUp"
                     v-if="scope2.$index>0"
                   ></el-button>
                 </template>

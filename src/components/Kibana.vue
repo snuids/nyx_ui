@@ -12,7 +12,7 @@
     <div v-if="urlTooLong()">
 
         <el-row>
-          <i style="font-size:100px;" class="el-icon-warning-outline"></i>
+          <el-icon style="font-size:100px;"><component :is="$icons.WarningFilled" /></el-icon>
         </el-row>
 
         <el-row>

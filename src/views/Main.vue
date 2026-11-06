@@ -9,7 +9,7 @@
       <el-header style="text-align: right; font-size: 12px">
         <el-row :gutter="24">
           <el-col :span="1">
-            <el-button circle type="primary" icon="el-icon-more" @click="changeMenuState"></el-button>
+            <el-button circle type="primary" :icon="$icons.MoreFilled" @click="changeMenuState"></el-button>
           </el-col>
           <el-col :span="5" style="text-align: left; font-size: 22px;color:white;">
             <span>
@@ -181,7 +181,7 @@
                     :index="menu.category"
                   >
                     <template #title>
-                      <!--<i class="el-icon-location"></i>-->
+                      <!--<el-icon><component :is="$icons.Location" /></el-icon>-->
                       <span>{{menu.loc_category}}</span>
                     </template>
                     <el-menu-item

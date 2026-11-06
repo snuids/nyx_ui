@@ -25,7 +25,7 @@
     <!-- <p>{{tableData.length}}/{{numberOfItems}}/{{allData.length}}</p> -->
         <el-row style="height:28px;" flex>
           <el-col :span="16">            
-            <el-breadcrumb  separator-class="el-icon-arrow-right" style="font-size:18px; margin-top: 8px;">
+            <el-breadcrumb  :separator-icon="$icons.ArrowRight" style="font-size:18px; margin-top: 8px;">
               <el-breadcrumb-item class="noselect" :to="{ path: rootRouterPath }">{{config.config.foldername}}</el-breadcrumb-item>
               <el-breadcrumb-item
                 class="noselect"
@@ -42,10 +42,10 @@
           <el-col :span="8" style="align:right;">
             <el-row style="margin-bottom:0px !important; text-align:right;">
               <el-tooltip class="item" effect="dark" content="Download" placement="bottom" v-if="multipleSelection.length>0" >
-                <el-button size="small" style="font-weight:bold;" @click="downloadBtnClick()" circle plain icon="el-icon-download"></el-button>
+                <el-button size="small" style="font-weight:bold;" @click="downloadBtnClick()" circle plain :icon="$icons.Download"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="Refresh" placement="bottom">
-                <el-button size="small" style="font-weight:bold;" @click="listDir(refresh=true)"  plain circle icon="el-icon-refresh"></el-button>
+                <el-button size="small" style="font-weight:bold;" @click="listDir(refresh=true)"  plain circle :icon="$icons.Refresh"></el-button>
               </el-tooltip>
             </el-row>
           </el-col>

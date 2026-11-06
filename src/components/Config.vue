@@ -58,7 +58,7 @@
                 @click="duplicate()"
                 class="dupbutton"
                 type="primary"
-                icon="el-icon-copy-document"
+                :icon="$icons.CopyDocument"
               ></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="light" :content="$t('config.add')" placement="bottom">
@@ -68,7 +68,7 @@
                 @click="handleAddApp()"
                 class="addbutton"
                 type="primary"
-                icon="el-icon-plus"
+                :icon="$icons.Plus"
               ></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="light" :content="$t('config.reload')" placement="bottom-start">
@@ -78,7 +78,7 @@
                 @click="reloadConfig()"
                 class="regreshbutton"
                 plain
-                icon="el-icon-refresh"
+                :icon="$icons.Refresh"
               ></el-button>
             </el-tooltip>
           </div>
@@ -93,14 +93,14 @@
           />&nbsp;&nbsp;
           <el-button
             size="small"
-            icon="el-icon-setting"
+            :icon="$icons.Setting"
             plain
             @click="handleEdit(scope.$index, scope.row)"
           ></el-button>
           <el-button
             size="small"
             type="danger"
-            icon="el-icon-delete"
+            :icon="$icons.Delete"
             plain
             @click="handleDelete(scope.$index, scope.row)"
           ></el-button>

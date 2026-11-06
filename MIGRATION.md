@@ -91,6 +91,27 @@ En développement, le thème `api/v1/ui_css` doit être pris sur l'API pointée 
 `index.html` le demande en relatif au serveur webpack, qui répond 404 : c'est ce que fait
 désormais `main.js`, uniquement hors production.
 
+## Icônes et tailles : ce qui ne se voyait pas
+
+Element UI 2 dessinait ses icônes avec une **police** (`class="el-icon-edit"`), Element Plus utilise
+des **composants SVG**. Rien ne casse dans la console, mais les boutons concernés s'affichent vides —
+d'où l'impression de boutons « cassés » un peu partout.
+
+- 66 attributs `icon="el-icon-x"` convertis en `:icon="$icons.X"` (et `:prefix-icon` sur les champs).
+- 7 icônes posées en `<i class="el-icon-x">` converties en `<el-icon><component :is="$icons.X" /></el-icon>`.
+- Les 28 noms de composants utilisés sont exposés une fois pour toutes dans `main.js`
+  (`app.config.globalProperties.$icons`), pour éviter un import par fichier.
+- Les **configurations existantes** stockent encore des noms d'origine (`linkbuttonicon:
+  "el-icon-download"`) : `src/utils/icons.js` les traduit au rendu, sinon le bouton serait vide.
+  Les enregistrements futurs peuvent porter directement le nom Element Plus (`Download`).
+
+Côté tailles, `size="mini"` a disparu d'Element Plus : **349 occurrences** retombaient sur la taille
+par défaut, ce qui épaissit tous les tableaux et barres de boutons. Elles sont passées à
+`size="small"`.
+
+Cinq tests vérifient que les icônes produisent réellement un `<svg>` monté (jsdom), trois que la
+table de correspondance résout tous les noms hérités.
+
 ## À savoir (hors migration)
 
 - `master` porte la version **3.31.19** alors que la production tourne en **3.31.21** : les deux

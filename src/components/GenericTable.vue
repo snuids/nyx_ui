@@ -116,7 +116,7 @@
                 <el-button 
                   v-if="scope && computeRec(scope.row,header.field)" 
                   size="small"
-                  :icon="header.linkbuttonicon"
+                  :icon="buttonIcon(header.linkbuttonicon)"
                   :circle="header.linkbuttoncircle" 
                   :round="header.linkbuttonround" 
                   :plain="header.linkbuttonplain" 
@@ -143,7 +143,7 @@
                     size="small"
                     @click="duplicateRecord()"
                     type="primary"
-                    icon="el-icon-copy-document"
+                    :icon="$icons.CopyDocument"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -159,7 +159,7 @@
                     size="small"
                     @click="addRecord()"
                     type="primary"
-                    icon="el-icon-plus"
+                    :icon="$icons.Plus"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -176,7 +176,7 @@
                     @click="refreshData()"
                     class="regreshbutton"
                     plain
-                    icon="el-icon-refresh"
+                    :icon="$icons.Refresh"
                   ></el-button>
                 </el-tooltip>
               </div>
@@ -185,14 +185,14 @@
               <el-button
                 size="small"
                 plain
-                icon="el-icon-setting"
+                :icon="$icons.Setting"
                 @click="handleView(scope.$index, scope.row)"
               ></el-button>
               <el-button
                 v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
                 size="small"
                 type="danger"
-                icon="el-icon-delete"
+                :icon="$icons.Delete"
                 @click="handleDelete(scope.$index, scope.row)"
               ></el-button>
             </template>
@@ -204,6 +204,7 @@
 </template>
 
 <script>
+import { iconComponent } from "@/utils/icons";
 import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import moment from "moment";
@@ -348,6 +349,11 @@ export default {
     }
   },
   methods: {
+    // Les configurations enregistrees portent un nom d'icone Element UI 2 ("el-icon-download") :
+    // Element Plus attend un composant, donc on traduit ici.
+    buttonIcon: function(name) {
+      return iconComponent(name, this.$icons)
+    },
     sortChanged:function(e){
       //alert(JSON.stringify(e.column));
       

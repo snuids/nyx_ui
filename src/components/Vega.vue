@@ -8,7 +8,7 @@
       class="regreshbutton"
       type="primary"
       plain
-      icon="el-icon-refresh"
+      :icon="$icons.Refresh"
     ></el-button>
     
   </div>

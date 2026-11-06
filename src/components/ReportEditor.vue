@@ -421,7 +421,7 @@
                   size="small"
                   @click="deleteParameter(param)"
                   type="danger"
-                  icon="el-icon-delete"
+                  :icon="$icons.Delete"
                   circle
                   plain
                 ></el-button>
@@ -462,7 +462,7 @@
       <el-col>
         <el-button
                   style="min-width: 112px;"
-                  icon="el-icon-notebook-2"
+                  :icon="$icons.Notebook"
                   @click="openTabCode()"
                   size="small"
                   v-if="!isAdd && (newRec.reportType=='notebook' || newRec.reportType=='notebook_doc')"

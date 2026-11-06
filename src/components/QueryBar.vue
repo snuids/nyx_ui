@@ -9,7 +9,7 @@
         v-model="query"
         @change="refresh()"
       >
-        <template #prefix><i class="prefix-icon el-input__icon el-icon-arrow-right"></i></template>
+        <template #prefix><el-icon class="prefix-icon"><component :is="$icons.ArrowRight" /></el-icon></template>
         <template #suffix><el-popover
          
           placement="bottom-start"
@@ -35,7 +35,7 @@
           <el-button
             class="search-dl-bt"
             type="text"
-            icon="el-icon-download"
+            :icon="$icons.Download"
             slot="reference"
             size="medium"
           ></el-button>

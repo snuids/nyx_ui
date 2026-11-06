@@ -87,7 +87,7 @@
                   @click="handleResetPassword()"
                   class="addbutton"
                   type="danger"
-                  icon="el-icon-warning"
+                  :icon="$icons.WarningFilled"
                   v-if="!newRec.isadd"
                 >{{$t('user.reset_password')}}</el-button>
               </el-form-item>

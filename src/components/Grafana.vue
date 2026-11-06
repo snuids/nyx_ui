@@ -6,7 +6,7 @@
     <div v-if="config.downloadChecked" :style="toolbarStyle">
       <el-button
         size="small"
-        icon="el-icon-download"
+        :icon="$icons.Download"
         :loading="downloadLoading"
         :disabled="!dashboardUid"
         @click="downloadData"

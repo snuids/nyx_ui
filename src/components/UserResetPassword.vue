@@ -20,7 +20,7 @@
       </el-row>
       <el-row>
         <el-button
-          icon="el-icon-key"
+          :icon="$icons.Key"
           style="width:100%; margin-top:8px;"
           type
           @click="generateStrongPassword()"

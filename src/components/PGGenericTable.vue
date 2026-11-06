@@ -122,7 +122,7 @@
                     size="small"
                     @click="duplicateRecord()"
                     type="primary"
-                    icon="el-icon-copy-document"
+                    :icon="$icons.CopyDocument"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -137,7 +137,7 @@
                     size="small"
                     @click="addRecord()"
                     type="primary"
-                    icon="el-icon-plus"
+                    :icon="$icons.Plus"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -153,7 +153,7 @@
                     @click="refreshData()"
                     class="regreshbutton"
                     plain
-                    icon="el-icon-refresh"
+                    :icon="$icons.Refresh"
                   ></el-button>
                 </el-tooltip>
               </div>
@@ -162,14 +162,14 @@
               <el-button
                 size="small"
                 plain
-                icon="el-icon-setting"
+                :icon="$icons.Setting"
                 @click="handleView(scope.$index, scope.row)"
               ></el-button>
               <el-button
                 v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
                 size="small"
                 type="danger"
-                icon="el-icon-delete"
+                :icon="$icons.Delete"
                 @click="handleDelete(scope.$index, scope.row)"
               ></el-button>
             </template>

@@ -12,7 +12,7 @@
         :on-success="successUpload"
         multiple
       >
-        <i class="el-icon-upload"></i>
+        <el-icon><component :is="$icons.Upload" /></el-icon>
         <div class="el-upload__text">
           {{$t("upload.drop_file_here")}}
           <em>{{$t("upload.click_to_upload")}}</em>

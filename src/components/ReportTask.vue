@@ -189,7 +189,7 @@
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
-              icon="el-icon-document"
+              :icon="$icons.Document"
               @click="openLogs(scope.$index, scope.row)"
               plain
             ></el-button>
@@ -198,7 +198,7 @@
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
-              icon="el-icon-refresh-right"
+              :icon="$icons.RefreshRight"
               @click="regenerateReport(scope.$index, scope.row)"
               plain
             ></el-button>

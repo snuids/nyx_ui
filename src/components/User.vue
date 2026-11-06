@@ -57,7 +57,7 @@
               class="addbutton"
               type="primary"
               circle
-              icon="el-icon-plus"
+              :icon="$icons.Plus"
               plain
             ></el-button>
           </div>
@@ -68,14 +68,14 @@
             size="small"
             type="primary"
             plain
-            icon="el-icon-edit"
+            :icon="$icons.Edit"
             @click="handleView(scope.$index, scope.row)"
           ></el-button>
           <el-button
             size="small"
             type="danger"
             plain
-            icon="el-icon-delete"
+            :icon="$icons.Delete"
             @click="handleDelete(scope.$index, scope.row)"
           ></el-button>
         </template>
