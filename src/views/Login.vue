@@ -131,7 +131,7 @@ import axios from "axios";
 import { loadLanguageAsync } from "../i18n-setup";
 import { privacyNotice } from "@/content/privacy";
 import LanguageSelect from "@/components/LanguageSelect";
-import { getUrlVars } from "@/utils/language";
+import { credentialsOverride } from "@/utils/devOverrides";
 
 export default {
   components: { LanguageSelect },
@@ -391,12 +391,17 @@ export default {
     }
   },
   mounted: function() {
-    var vars = getUrlVars(window.location.href);
-    if (vars["user"] != undefined) {
-      this.form.login = vars["user"].split("#")[0];
-    }
-    if (vars["password"] != undefined) {
-      this.form.password = vars["password"].split("#")[0];
+    // `?user=` / `?password=` prefill the form in development only: the block is compiled out of a
+    // production bundle, where the same link would put a password in the URL, the history and the
+    // proxy logs. See utils/devOverrides.js.
+    if (process.env.NODE_ENV !== 'production') {
+      const prefill = credentialsOverride(window.location.href);
+      if (prefill.login) {
+        this.form.login = prefill.login;
+      }
+      if (prefill.password) {
+        this.form.password = prefill.password;
+      }
     }
   }
 };

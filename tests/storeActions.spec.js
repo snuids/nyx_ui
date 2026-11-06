@@ -234,6 +234,19 @@ describe('logout', () => {
   it('does not throw when no socket was ever opened', () => {
     expect(() => store.commit('logout')).not.toThrow()
   })
+
+  it('forgets the stored session so a reload does not restore it', () => {
+    // `Main.vue` rehydrates the session from `localStorage.authResponse` on load: leaving it there
+    // brings back a session whose token has just been revoked.
+    const removeItem = vi.fn()
+    global.window = { localStorage: { removeItem } }
+    try {
+      store.commit('logout')
+      expect(removeItem).toHaveBeenCalledWith('authResponse')
+    } finally {
+      delete global.window
+    }
+  })
 })
 
 describe('changeApp', () => {
