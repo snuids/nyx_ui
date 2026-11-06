@@ -1,0 +1,21 @@
+/*
+ * Element UI 2 avait des composants de 36 px (champs) et 40 px (boutons) ; Element Plus part de
+ * 32 px. Sans ce réglage, chaque champ du console rapetisse de 4 à 8 px et les rangées se
+ * décalent — c'est la première chose qui se voit en comparant les deux interfaces.
+ *
+ * `--el-component-size` est la variable qu'Element Plus consulte pour la hauteur des champs, des
+ * sélecteurs et des boutons : la fixer ici rétablit les hauteurs d'origine sans toucher aux 62
+ * composants.
+ */
+:root {
+  --el-component-size: 36px;
+  --el-component-size-large: 40px;
+  --el-component-size-small: 24px;
+}
+
+/* Les champs prennent toute la largeur de leur conteneur, comme avec Element UI 2. */
+.el-form-item__content .el-input,
+.el-form-item__content .el-select,
+.el-form-item__content .el-textarea {
+  width: 100%;
+}

@@ -86,7 +86,6 @@
               name="login"
               autocomplete="none"
               v-model="form.login"
-              size="medium"
               clearable
             ></el-input>
           </el-form-item>
@@ -98,16 +97,12 @@
               name="password"
               autocomplete="none"
               v-model="form.password"
-              size="medium"
             />
           </el-form-item>
           <el-button
             class="login-button"
             @click="validateUser()"
             type="primary"
-            size="default"
-            color="#048"
-            
             :disabled="loginDisabled"
             :loading="loginunderway"
           >{{ $t("ui.login_button") }}</el-button>
@@ -428,6 +423,10 @@ export default {
   color: white;
   margin-top: 170px;
   font-family: "Helvetica Neue";
+  /* Element UI 2 ramenait les titres a 20 px en graisse normale ; sans sa feuille de style, le
+     navigateur applique son h1 par defaut (32 px, gras). */
+  font-size: 20px;
+  font-weight: 400;
 }
 
 /* The title is again the original element, with its class: size, weight and colour unchanged.
@@ -535,6 +534,8 @@ export default {
 
 .login-form .el-button{
   margin-top: 12px;
-
+  /* Element UI 2 : bouton de 40 px. Element Plus suit --el-component-size (36 px ici). */
+  height: 40px;
+  width: 100%;
 }
 </style>

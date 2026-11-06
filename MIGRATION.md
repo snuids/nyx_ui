@@ -68,6 +68,29 @@ npx vitest run                    # 153 tests
 c'est le constat de l'analyse : les 142 couleurs codées en dur dans 29 fichiers de l'application
 doivent passer en variables CSS avant qu'un thème complet soit possible.
 
+## Rendu : pourquoi tout était décalé, et ce qui a été corrigé
+
+Trois causes, mesurées en comparant les styles calculés de l'écran de connexion avec la production :
+
+1. **`theme/index.css` était le thème Element UI 2 compilé** (1 Mo, 4474 règles `.el-*`), chargé
+   *après* Element Plus. Il écrasait donc les composants par leurs anciennes règles : doubles
+   bordures sur les champs, largeurs faussées. Il est retiré ; le thème de l'application vient de
+   `api/v1/ui_css` (servi par l'API), qui reste chargé.
+2. **Hauteurs de composants** : Element UI 2 faisait des champs de 36 px, Element Plus part de 32.
+   `src/styles/element-legacy.css` fixe `--el-component-size: 36px`.
+3. **Le titre de la page de connexion** reprenait le `h1` par défaut du navigateur (32 px, gras) au
+   lieu des 20 px en graisse normale d'Element UI : règle explicite dans `Login.vue`.
+
+Le bouton portait aussi `color="#048"` (propriété inconnue d'Element UI 2, donc sans effet) et
+`size="medium"` (valeur qu'Element Plus ne connaît pas) : les deux sont retirés.
+
+Après correction, l'écran de connexion est **au pixel de la production** : carte 402 × 202, champs
+360 × 36, bouton 360 × 40 `#a0cfff`, titre 20 px / 400, même dégradé.
+
+En développement, le thème `api/v1/ui_css` doit être pris sur l'API pointée (`?api=…`), sinon
+`index.html` le demande en relatif au serveur webpack, qui répond 404 : c'est ce que fait
+désormais `main.js`, uniquement hors production.
+
 ## À savoir (hors migration)
 
 - `master` porte la version **3.31.19** alors que la production tourne en **3.31.21** : les deux

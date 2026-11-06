@@ -7,6 +7,8 @@ import 'element-plus/dist/index.css'
 // Variables CSS du theme sombre : la bascule se fait ensuite en posant `data-theme="dark"` sur
 // <html>, sans bibliotheque supplementaire.
 import 'element-plus/theme-chalk/dark/css-vars.css'
+// Dimensions d'Element UI 2 (36 px) que le gabarit suppose : voir le fichier.
+import './styles/element-legacy.css'
 import draggable from 'vuedraggable'
 import InfiniteLoading from 'vue3-infinite-loading'
 import numeral from 'numeral'
@@ -19,7 +21,9 @@ import { globalBus, localBus } from '@/utils/bus'
 import { browserDetect } from '@/utils/browser'
 import { geolocation } from '@/utils/geolocation'
 import { flushRegistrations } from '@/utils/vue3shim'
-import '../theme/index.css'
+// `theme/index.css` etait le theme Element UI 2 compile (1 Mo, 4474 regles `.el-*`). Charge apres
+// Element Plus, il ecrasait ses composants : doubles bordures sur les champs, largeurs faussees.
+// Le theme de l'application vient de `api/v1/ui_css`, servi par l'API (degrade, en-tete, dialogues).
 
 const vars = getUrlVars(window.location.href)
 
@@ -60,6 +64,13 @@ if (process.env.NODE_ENV !== 'production') {
   const apiUrlOverride = apiOverride(window.location.href)
   if (apiUrlOverride) {
     store.state.apiurl = apiUrlOverride
+    // Le theme de l'application est servi par l'API (`api/v1/ui_css`) et index.html le demande en
+    // relatif : en developpement il tomberait sur le serveur webpack, qui repond 404. On le prend
+    // donc sur l'API pointee. En production, ce bloc est compile hors du bundle.
+    const themeLink = document.createElement('link')
+    themeLink.rel = 'stylesheet'
+    themeLink.href = apiUrlOverride.replace(/\/?$/, '/') + 'ui_css'
+    document.head.appendChild(themeLink)
   }
 }
 
