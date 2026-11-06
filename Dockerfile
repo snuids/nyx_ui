@@ -5,6 +5,9 @@ COPY package.json package-lock.json /etc/build/
 WORKDIR /etc/build
 RUN npm ci
 COPY . /etc/build
+# Le chemin public est fige a la construction (les URL des fichiers sont ecrites dans index.html).
+ARG PUBLIC_PATH=/
+ENV VUE_APP_PUBLIC_PATH=$PUBLIC_PATH
 RUN npm run build
 
 
