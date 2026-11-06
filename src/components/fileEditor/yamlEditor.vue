@@ -43,7 +43,7 @@ export default {
   name: "yamlEditor",
   data: () => ({
     dialogFormVisible: false,
-    title: i18n.t("ui.yaml_editor"),
+    title: i18n.global.t("ui.yaml_editor"),
     localFileName: null,
     localFile: '',
     loading: true,

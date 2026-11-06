@@ -343,7 +343,7 @@ export default {
         
     rules: {
       title: [
-        { required: true, message: i18n.t("rep.input_title"), trigger: "change" }
+        { required: true, message: i18n.global.t("rep.input_title"), trigger: "change" }
       ]
     },
     activeName: "scheduler",

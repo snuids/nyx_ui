@@ -514,13 +514,13 @@ export default {
     datasources: [],  
     rules: {
       title: [
-        { required: true, message: i18n.t("rep.input_title"), trigger: "change" }
+        { required: true, message: i18n.global.t("rep.input_title"), trigger: "change" }
       ],
       description: [        
-        { required: true, message: i18n.t("rep.input_description"), trigger: "change" }
+        { required: true, message: i18n.global.t("rep.input_description"), trigger: "change" }
       ],
       icon: [
-        { required: true, message: i18n.t("rep.pick_icon"), trigger: "change" }
+        { required: true, message: i18n.global.t("rep.pick_icon"), trigger: "change" }
         
       ]
     },

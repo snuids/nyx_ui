@@ -185,12 +185,12 @@ export default {
         _id: [
           {
             required: true,
-            message: i18n.t("ui.input_email"),
+            message: i18n.global.t("ui.input_email"),
             trigger: "blur"
           },
           {
             type: "email",
-            message: i18n.t("ui.input_correct_email"),
+            message: i18n.global.t("ui.input_correct_email"),
             trigger: ["blur"]
           },
           {
@@ -202,24 +202,24 @@ export default {
           firstname: [
             {
               required: true,
-              message: i18n.t("ui.input_firstname"),
+              message: i18n.global.t("ui.input_firstname"),
               trigger: "blur"
             }
           ],
           lastname: [
             {
               required: true,
-              message: i18n.t("ui.input_lastname"),
+              message: i18n.global.t("ui.input_lastname"),
               trigger: "blur"
             }
           ],
           phone: [
-            { required: false, message: i18n.t("ui.input_phone"), trigger: "blur" }
+            { required: false, message: i18n.global.t("ui.input_phone"), trigger: "blur" }
           ],
           language: [
             {
               required: true,
-              message: i18n.t("ui.input_language"),
+              message: i18n.global.t("ui.input_language"),
               trigger: "change"
             }
           ]
