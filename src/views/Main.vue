@@ -728,6 +728,10 @@ body {
   display: flex;
   align-items: center;
   height: 60px;
+  /* L'en-tete herite de `line-height: 60px`. Avec des colonnes en flex, cette ligne de 60 px
+     s'ajoute au contenu des qu'un selecteur de date apparait et decale les boutons de quelques
+     pixels. En flex, le centrage se fait par `align-items` : la ligne n'a plus lieu d'etre. */
+  line-height: normal;
 }
 
 .el-header .el-row > .el-col {

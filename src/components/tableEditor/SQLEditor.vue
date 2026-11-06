@@ -34,9 +34,7 @@
                 @init="editorInit"
                 lang="sql"
                 theme="chrome"
-                width="100%"
-                height="200"
-                style="border: solid 1px #c0c4cc;"
+                style="border: solid 1px #c0c4cc; height: 200px; width: 100%;"
               ></editor>
             </el-form-item>
           </el-col>

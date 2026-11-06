@@ -28,9 +28,7 @@
         @init="editorInit"
         lang="yaml"
         theme="chrome"
-        width="99%"
-        :height="($store.getters.containerSize.height-160)"
-        style="border: solid 1px #c0c4cc;"
+        :style="'border: solid 1px #c0c4cc; width: 99%; height: ' + ($store.getters.containerSize.height - 160) + 'px;'"
       ></editor>
       <div>
       </div>

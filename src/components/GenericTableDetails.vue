@@ -52,9 +52,7 @@
           @init="editorInitRO"
           lang="yaml"
           theme="chrome"
-          width="99%"
-          style="border: solid 1px #c0c4cc;"
-          height="600"
+          style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
         ></editor>
         <div>&nbsp;</div>
       </el-tab-pane>
@@ -70,9 +68,7 @@
           @init="editorInit"
           lang="yaml"
           theme="chrome"
-          width="99%"
-          style="border: solid 1px #c0c4cc;"
-          height="600"
+          style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
         ></editor>
         <div>&nbsp;</div>
       </el-tab-pane>

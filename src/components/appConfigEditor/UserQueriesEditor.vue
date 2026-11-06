@@ -166,9 +166,7 @@
                 @init="editorInit"
                 lang="text"
                 theme="chrome"
-                width="99%"
-                style="border: solid 1px #c0c4cc;"
-                height="200"
+                style="border: solid 1px #c0c4cc; height: 200px; width: 99%;"
               ></editor>
             </el-row>
 
