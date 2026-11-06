@@ -112,6 +112,17 @@ par défaut, ce qui épaissit tous les tableaux et barres de boutons. Elles sont
 Cinq tests vérifient que les icônes produisent réellement un `<svg>` monté (jsdom), trois que la
 table de correspondance résout tous les noms hérités.
 
+## Barre de gauche : `el-submenu` n'existe plus
+
+Element UI 2 : `<el-submenu>`. Element Plus : **`<el-sub-menu>`**. Un nom qui n'existe plus ne
+produit aucune erreur — Vue le traite comme un composant inconnu, affiche le contenu sans le
+comportement de repli/dépli, et la barre de gauche cesse de s'ouvrir. `text-color` a également
+disparu au profit d'une variable CSS (`--el-menu-text-color`).
+
+Plutôt que de corriger ce seul nom, `tests/element-tags.spec.js` lit les 62 composants du projet et
+vérifie que **chaque balise `el-*` utilisée est réellement exportée par Element Plus**. C'est le
+garde-fou contre les autres renommages de la même famille, et il aurait signalé celui-ci.
+
 ## À savoir (hors migration)
 
 - `master` porte la version **3.31.19** alors que la production tourne en **3.31.21** : les deux

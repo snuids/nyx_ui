@@ -172,10 +172,10 @@
                   :default-active="$store.getters.currentSubCategory.fulltitle"
                   :unique-opened="true"
                   class="el-menu-vertical"
-                  text-color="#666"
+                  style="--el-menu-text-color: #666"
                 >
                   <!--            v-if="menu.category!='apps'"-->
-                  <el-submenu
+                  <el-sub-menu
                     v-for="menu in filteredmenus"
                     :key="menu.category"
                     :index="menu.category"
@@ -201,7 +201,7 @@
                       />
                       &nbsp;{{subMenu.loc_title}}
                     </el-menu-item>
-                  </el-submenu>
+                  </el-sub-menu>
                 </el-menu>
               </el-col>
             </el-row>
