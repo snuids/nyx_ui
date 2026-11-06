@@ -776,7 +776,10 @@ body {
    `__header` et `__body`. L'en-tete bleu ne touchait donc plus les bords de la fenetre : il
    flottait a l'interieur, sans les coins arrondis, et la croix de fermeture devenait noire. On
    retablit le modele de boite d'Element UI 2. */
-.el-dialog {
+/* Le prefixe `.el-overlay` n'est pas cosmetique : Element Plus definit `.el-dialog` avec une seule
+   classe, et selon l'ordre d'injection des feuilles (developpement, HMR) sa regle peut passer apres
+   la notre. Avec deux classes, la notre gagne dans tous les cas. */
+.el-overlay .el-dialog {
   padding: 0;
   border-radius: 4px;
   overflow: hidden;
@@ -785,19 +788,19 @@ body {
 /* Element UI 2 : bande de 54 px, titre a gauche, croix de 16 px dans le coin. Element Plus centre
    (il herite du `text-align: center` de #app), reserve 32 px a droite pour une croix de 48 px, et
    laisse donc beaucoup de vide en haut — c'est ce qui se voyait. */
-.el-dialog__header {
+.el-overlay .el-dialog__header {
   background-color: #409eff !important;
   padding: 20px 40px 10px 20px;
   text-align: left;
 }
 
-.el-dialog__title {
+.el-overlay .el-dialog__title {
   color: white !important;
   font-size: 18px;
   line-height: 24px;
 }
 
-.el-dialog__headerbtn {
+.el-overlay .el-dialog__headerbtn {
   top: 20px;
   right: 20px;
   width: 24px;
@@ -805,52 +808,52 @@ body {
   font-size: 16px;
 }
 
-.el-dialog__headerbtn .el-dialog__close {
+.el-overlay .el-dialog__headerbtn .el-dialog__close {
   font-size: 16px;
 }
 
-.el-dialog__body {
+.el-overlay .el-dialog__body {
   padding: 30px 20px;
   color: #606266;
   font-size: 14px;
 }
 
-.el-dialog__footer {
+.el-overlay .el-dialog__footer {
   padding: 10px 20px 20px;
 }
 
 /* Meme ecart pour les boites de confirmation ($alert / $confirm / $prompt) : Element Plus met un
    rembourrage de 12 px autour de la boite et aucun en haut de l'en-tete, si bien que le titre
    demarrait 12 px plus bas que dans Element UI 2. */
-.el-message-box {
+.el-overlay-message-box .el-message-box {
   padding: 0 0 10px;
   border-radius: 4px;
 }
 
-.el-message-box__header {
+.el-overlay-message-box .el-message-box__header {
   padding: 15px 15px 10px;
 }
 
-.el-message-box__title {
+.el-overlay-message-box .el-message-box__title {
   font-size: 18px;
   line-height: 24px;
   color: #303133;
 }
 
-.el-message-box__headerbtn {
+.el-overlay-message-box .el-message-box__headerbtn {
   top: 15px;
   right: 15px;
   width: 24px;
   height: 24px;
 }
 
-.el-message-box__content {
+.el-overlay-message-box .el-message-box__content {
   padding: 10px 15px;
   color: #606266;
   font-size: 14px;
 }
 
-.el-message-box__btns {
+.el-overlay-message-box .el-message-box__btns {
   padding: 5px 15px 0;
 }
 

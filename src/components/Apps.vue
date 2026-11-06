@@ -87,16 +87,31 @@ export default {
   margin-bottom: -3px;
 }
 
-/* Element UI 2 donnait a ces boutons 39 x 40 px (un carre, a la bordure pres). Avec des icones SVG
-   de largeurs variables, ils s'etirent en rectangles : on fixe la boite et on centre le contenu. */
+/* La capture de la version Vue 2 montre, dans ce panneau, de grands boutons carres (~80 x 64 px)
+   avec une icone de 40 px et le libelle SOUS le bouton. Les forcer a 40 x 40 laissait les cellules de
+   90 px presque vides : c'est ce qui donnait l'impression de « trop de padding ». On rend au bouton
+   sa taille naturelle et on fixe l'icone a 40 px. */
 #app-popover .el-button,
 .el-popover .el-button {
-  width: 40px;
-  height: 40px;
-  padding: 0;
+  width: auto;
+  height: auto;
+  min-width: 72px;
+  min-height: 64px;
+  padding: 12px 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+#app-popover .el-button .nyx-icon,
+.el-popover .el-button .nyx-icon {
+  height: 40px;
+}
+
+#app-popover .el-button .nyx-icon svg,
+.el-popover .el-button .nyx-icon svg {
+  width: 40px;
+  height: 40px;
 }
 
 </style>
