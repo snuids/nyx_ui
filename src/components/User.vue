@@ -8,7 +8,7 @@
     ></UserDetails>
 
     <el-table
-      size="mini"
+      size="small"
       :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase())))      
       )"
       :default-sort="{prop: '_id', order: 'descending'}"
@@ -24,9 +24,9 @@
           <el-popover placement="left-start" :title="$t('generic.privileges')" width="200" trigger="hover">
             <span :key="item" v-for="item in scope.row._source.privileges">
               &nbsp;
-              <el-tag size="mini">{{item}}</el-tag>
+              <el-tag size="small">{{item}}</el-tag>
             </span>
-            <template #reference><el-button size="mini">{{scope.row._source.privileges.length}}</el-button></template>
+            <template #reference><el-button size="small">{{scope.row._source.privileges.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
@@ -41,9 +41,9 @@
           >
             <span :key="item" v-for="item in scope.row._source.filters">
               &nbsp;
-              <el-tag size="mini">{{item}}</el-tag>
+              <el-tag size="small">{{item}}</el-tag>
             </span>
-            <template #reference><el-button size="mini">{{scope.row._source.filters.length}}</el-button></template>
+            <template #reference><el-button size="small">{{scope.row._source.filters.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
@@ -52,7 +52,7 @@
         <template #header #default="_scope">
           <div>
             <el-button
-              size="mini"
+              size="small"
               @click="handleAddUser()"
               class="addbutton"
               type="primary"
@@ -61,18 +61,18 @@
               plain
             ></el-button>
           </div>
-          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
+          <el-input v-model="search" size="small" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template #default="scope">
           <el-button
-            size="mini"
+            size="small"
             type="primary"
             plain
             icon="el-icon-edit"
             @click="handleView(scope.$index, scope.row)"
           ></el-button>
           <el-button
-            size="mini"
+            size="small"
             type="danger"
             plain
             icon="el-icon-delete"

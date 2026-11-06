@@ -7,7 +7,7 @@
     <div v-else>
       <el-table
           class="table-logs"
-          size="mini"
+          size="small"
           v-if="tableLogs"
           :data="tableLogs.filter(data => !search || JSON.stringify(data).toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%"
@@ -26,10 +26,10 @@
           >
             <template #default="scope">
               
-              <el-tag size="mini" v-if="scope.row.severity.toLowerCase()=='error'" type="danger" effect="dark">{{scope.row.severity}}</el-tag>
-              <el-tag size="mini" v-else-if="scope.row.severity.toLowerCase()=='warning'" type="warning" effect="dark">{{scope.row.severity}}</el-tag>
-              <el-tag size="mini" v-else-if="scope.row.severity.toLowerCase()=='info'" type="" effect="plain">{{scope.row.severity}}</el-tag>
-              <el-tag size="mini" v-else type="info" effect="dark">{{scope.row.severity}}</el-tag>
+              <el-tag size="small" v-if="scope.row.severity.toLowerCase()=='error'" type="danger" effect="dark">{{scope.row.severity}}</el-tag>
+              <el-tag size="small" v-else-if="scope.row.severity.toLowerCase()=='warning'" type="warning" effect="dark">{{scope.row.severity}}</el-tag>
+              <el-tag size="small" v-else-if="scope.row.severity.toLowerCase()=='info'" type="" effect="plain">{{scope.row.severity}}</el-tag>
+              <el-tag size="small" v-else type="info" effect="dark">{{scope.row.severity}}</el-tag>
             </template>
           </el-table-column>
           
@@ -54,7 +54,7 @@
              <template #header #default="_scope">
               <el-input
                 v-model="search"                
-                size="mini"
+                size="small"
                 :placeholder="$t('generic.type_to_search')"/>
 
             </template>
@@ -69,7 +69,7 @@
               <el-input
                 v-model="search"
                 style="width:50%"
-                size="mini"
+                size="small"
                 :placeholder="$t('generic.type_to_search')"/>
 
             </template>
@@ -78,7 +78,7 @@
             <template #header #default="scope">
               <el-input
                 v-model="search"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.type_to_search')"/>
             </template>
       

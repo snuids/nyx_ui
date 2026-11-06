@@ -8,7 +8,7 @@
           <el-col :span="16" style="text-align: left;">
             <el-form-item label="Dashboard" :label-width="formLabelWidth">
               <el-select
-                size="mini"
+                size="small"
                 @change="grafanaDashboardSelected"
                 v-model="currentConfig.config.url"
                 placeholder="Select"
@@ -29,7 +29,7 @@
             <el-form-item :label-width="formLabelWidth">
               <el-button
                 :disabled="currentConfig.config.url==null||dashboards.length==0"
-                size="mini"
+                size="small"
                 type="danger"
                 @click="openInGrafana()"
                 style="width:100%"
@@ -42,7 +42,7 @@
         <el-row>
           <el-col :span="8" style="text-align: left;">
             <el-form-item :label="$t('cfg.extra_parameters')" :label-width="formLabelWidth">
-              <el-input size="mini" v-model="currentConfig.config.extraParameters" autocomplete="off"></el-input>
+              <el-input size="small" v-model="currentConfig.config.extraParameters" autocomplete="off"></el-input>
             </el-form-item>
             
           </el-col>
@@ -54,7 +54,7 @@
           </el-col>
           <el-col :span="8" style="text-align: left;">
                 <el-select
-                  size="mini"
+                  size="small"
                   v-model="currentConfig.timeSelectorType"
                   :placeholder="$t('cfg.select_type')"
                   @change="timeSelectorTypeChange"
@@ -81,7 +81,7 @@
               <el-col :span="8" style="text-align: left;">
               <el-select
                 :disabled="!currentConfig.timeRefresh"
-                size="mini"
+                size="small"
                 v-model="currentConfig.timeRefreshValue"
                 :placeholder="$t('cfg.refresh_interval')"
                 @change="timeRefreshSelectChange"

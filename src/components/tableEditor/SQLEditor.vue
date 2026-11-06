@@ -14,7 +14,7 @@
           <el-col :span="24">
             <el-form-item label="Description" :label-width="formLabelWidth">
               <el-input
-                size="mini"
+                size="small"
                 v-model="description"
                 :placeholder="$t('ui.sql_query_desc')"
                 autocomplete="off"

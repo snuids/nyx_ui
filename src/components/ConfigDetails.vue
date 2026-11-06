@@ -20,7 +20,7 @@
                     :fetch-suggestions="categorySuggestion"
                     :placeholder="$t('configdetails.enter_category')"
                     @select="handleSelect"
-                    size="mini"
+                    size="small"
                     style="width:100%"
                   ></el-autocomplete>
                 </el-form-item>
@@ -33,14 +33,14 @@
                     :fetch-suggestions="subcategorySuggestion"
                     :placeholder="$t('configdetails.enter_subcategory')"
                     @select="handleSelect"
-                    size="mini"
+                    size="small"
                     style="width:100%"
                   ></el-autocomplete>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item :label="$t('configdetails.title')" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.title" autocomplete="off"></el-input>
+                  <el-input size="small" v-model="curConfig.title" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -48,7 +48,7 @@
               <el-col :span="8">
                 <el-form-item :label="$t('configdetails.type')" :label-width="formLabelWidth" style="text-align: left;">
                   <el-select
-                    size="mini"
+                    size="small"
                     @change="typeChanged"
                     v-model="curConfig.type"
                     :placeholder="$t('configdetails.select_type')"
@@ -73,7 +73,7 @@
                   <el-input-number
                     style="width:100%"
                     :min="1"
-                    size="mini"
+                    size="small"
                     v-model="curConfig.order"
                     autocomplete="off"
                   ></el-input-number>
@@ -81,7 +81,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item :label="$t('configdetails.icon')" :label-width="formLabelWidth">
-                  <IconPicker v-model="curConfig.icon" size="mini" :icon-preview="true" :preview-scale="2" />
+                  <IconPicker v-model="curConfig.icon" size="small" :icon-preview="true" :preview-scale="2" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -275,7 +275,7 @@
 
                   <el-row>
                     <el-select
-                      size="mini"
+                      size="small"
                       v-model="curConfig.timeSelectorType"
                       :placeholder="$t('configdetails.select_type')"
                       @change="timeSelectorTypeChange"
@@ -312,14 +312,14 @@
               :label="$t('configdetails.url')"
               :label-width="formLabelWidth"
             >
-              <el-input size="mini" v-model="curConfig.config.url" autocomplete="off"></el-input>
+              <el-input size="small" v-model="curConfig.config.url" autocomplete="off"></el-input>
               <el-row>
                 <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
               </el-row>
 
               <el-row>
                 <el-select
-                  size="mini"
+                  size="small"
                   v-model="curConfig.timeSelectorType"
                   :placeholder="$t('configdetails.select_type')"
                   @change="timeSelectorTypeChange"
@@ -341,7 +341,7 @@
             >
               <el-select
                 v-model="curConfig.config.controller"
-                size="mini"
+                size="small"
                 filterable
                 allow-create
                 clearable
@@ -380,7 +380,7 @@
               :label-width="formLabelWidth"
             >
               <el-input
-                size="mini"
+                size="small"
                 v-model="curConfig.config.controllerparameters"
                 autocomplete="off"
               ></el-input>
@@ -443,7 +443,7 @@
 
                   <el-row>
                     <el-select
-                      size="mini"
+                      size="small"
                       v-model="curConfig.timeSelectorType"
                       :placeholder="$t('configdetails.select_type')"
                       @change="timeSelectorTypeChange"
@@ -476,7 +476,7 @@
                   <el-col :span="6">
                     <el-form-item :label="$t('configdetails.database_type')" :label-width="formLabelWidth">
                       <el-select
-                        size="mini"
+                        size="small"
                         v-model="curConfig.config.databaseType"
                         :placeholder="$t('configdetails.select_db_type')"
                         style="width: 100%;"
@@ -492,13 +492,13 @@
 
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.database')" :label-width="formLabelWidth">
-                    <el-input   size="mini" v-model="curConfig.config.database" :placeholder="$t('configdetails.database_name_placeholder')" autocomplete="off"></el-input>
+                    <el-input   size="small" v-model="curConfig.config.database" :placeholder="$t('configdetails.database_name_placeholder')" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>        
                 
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.index_table')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.index" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 
@@ -512,14 +512,14 @@
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
-                    <el-input size="mini" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
                   </el-form-item>
                   <el-form-item
                     :label="$t('configdetails.pkey')"
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'pgsql-generic-table')"
                   >
-                    <el-input size="mini" v-model="curConfig.config.pkey" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.pkey" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -528,7 +528,7 @@
                     :label-width="formLabelWidth"
                     v-if="curConfig.mapChecked"
                   >
-                    <el-input size="mini" v-model="curConfig.config.mapfield" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.mapfield" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -536,17 +536,17 @@
               <el-row>
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.sort')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.sort_column" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.sort_column" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.order')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.sort_order" :placeholder="$t('configdetails.order_placeholder')" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.sort_order" :placeholder="$t('configdetails.order_placeholder')" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col> 
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.time_field')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                        
@@ -557,7 +557,7 @@
                   <el-form-item :label="$t('configdetails.sql')" :label-width="formLabelWidth">
                     <el-input
                       :placeholder="$t('configdetails.sql_placeholder')"
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.sql"
                       autocomplete="off"
                     ></el-input>
@@ -569,7 +569,7 @@
                   <el-form-item :label="$t('configdetails.editor')" :label-width="formLabelWidth">
                     <el-input
                       :placeholder="$t('configdetails.editor_placeholder')"
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.editorComponent"
                       autocomplete="off"
                     ></el-input>
@@ -581,7 +581,7 @@
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
-                    <el-input size="mini" v-model="curConfig.config.orderField" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.orderField" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -599,7 +599,7 @@
                   <el-form-item :label="$t('configdetails.export')" :label-width="formLabelWidth">
                     <el-input
                       :placeholder="$t('configdetails.export_placeholder')"
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.exportColumns"
                       autocomplete="off"
                     ></el-input>
@@ -608,7 +608,7 @@
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.write_privilege')" :label-width="formLabelWidth">
                     <!-- <el-input
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.writeprivileges"
                       autocomplete="off"
                     ></el-input> -->
@@ -620,7 +620,7 @@
                       allow-create
                       ref="writePrivileges"
                       :placeholder="$t('configdetails.write_privilege_placeholder')"
-                      size="mini"
+                      size="small"
                       style="width:100%;"
                     >
                       <el-option
@@ -635,7 +635,7 @@
               </el-row>
               <el-row>
                 <el-col :span="4">
-                  <el-button size="mini" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
+                  <el-button size="small" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
                 </el-col>
                 <el-col :span="20">
                   <!-- Header dialog -->
@@ -649,14 +649,14 @@
                       <el-row :gutter="20">
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.field')" :label-width="formLabelWidth">
-                            <el-input size="mini" v-model="currentHeader.field" autocomplete="off"></el-input>
+                            <el-input size="small" v-model="currentHeader.field" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row :gutter="20">
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.title')" :label-width="formLabelWidth">
-                            <el-input size="mini" v-model="currentHeader.title" autocomplete="off"></el-input>
+                            <el-input size="small" v-model="currentHeader.title" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -664,7 +664,7 @@
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.type')" :label-width="formLabelWidth">
                             <el-select
-                              size="mini"
+                              size="small"
                               v-model="currentHeader.type"
                               :placeholder="$t('configdetails.select_type')"
                             >
@@ -682,7 +682,7 @@
                       >
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.format')" :label-width="formLabelWidth">
-                            <el-input size="mini" v-model="currentHeader.format" autocomplete="off"></el-input>
+                            <el-input size="small" v-model="currentHeader.format" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -706,13 +706,13 @@
                     <el-table-column prop="title" :label="$t('configdetails.action')">
                       <template #default="scope2">
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           @click="handleEditHeader(scope2.$index, scope2.row)"
                           icon="el-icon-edit"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="danger"
                           @click="handleDeleteHeader(scope2.$index, scope2.row)"
@@ -720,7 +720,7 @@
                         ></el-button>
 
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveHeader(scope2.$index, scope2.row,false)"
@@ -728,7 +728,7 @@
                           v-if="scope2.$index<curConfig.config.headercolumns.length-1"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveHeader(scope2.$index, scope2.row,true)"
@@ -844,7 +844,7 @@
             <div>
               <el-row>
                 <el-col :span="4">
-                  <el-button size="mini" @click="handleAddQueryFilterField()">{{ $t('cfg.add_field') }}</el-button>
+                  <el-button size="small" @click="handleAddQueryFilterField()">{{ $t('cfg.add_field') }}</el-button>
                 </el-col>
                 <el-col :span="20">
                   <QueryFilterEditor
@@ -867,13 +867,13 @@
                     <el-table-column prop="title" label="Action">
                       <template #default="scope2">
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           @click="handleEditQueryFilterField(scope2.$index, scope2.row)"
                           icon="el-icon-edit"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="danger"
                           @click="handleDeleteQueryFilter(scope2.$index, scope2.row)"
@@ -881,7 +881,7 @@
                         ></el-button>
 
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveQueryFilter(scope2.$index, scope2.row,false)"
@@ -889,7 +889,7 @@
                           v-if="scope2.$index<curConfig.config.queryfilters.length-1"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveQueryFilter(scope2.$index, scope2.row,true)"

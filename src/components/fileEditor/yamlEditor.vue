@@ -16,8 +16,8 @@
         <el-col :span="12" style="text-align:left;">
           <h1 style=" color:white;">{{fileName}}</h1></el-col>
         <el-col :span="12" style="text-align:right;">
-          <el-button :disabled="loading || !fileHasChanged" type="primary" size="mini" @click="save">{{this.$t("buttons.save")}}</el-button>
-          <el-button plain size="mini" @click="closeDialog">{{this.$t("buttons.quit")}}</el-button>
+          <el-button :disabled="loading || !fileHasChanged" type="primary" size="small" @click="save">{{this.$t("buttons.save")}}</el-button>
+          <el-button plain size="small" @click="closeDialog">{{this.$t("buttons.quit")}}</el-button>
         </el-col>
       </el-row>
     </span></template>

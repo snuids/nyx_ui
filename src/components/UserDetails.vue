@@ -18,7 +18,7 @@
             <el-form-item :label="this.$t('user.id_email')" :label-width="formLabelWidth" prop="_id">
               <el-input
                 :disabled="!newRec.isadd"
-                size="mini"
+                size="small"
                 v-model="newRec._id"
                 autocomplete="off"
               ></el-input>
@@ -26,7 +26,7 @@
           </el-row>
           <el-row>
             <el-form-item :label="this.$t('user.login')" :label-width="formLabelWidth" prop="_source.login">
-              <el-input size="mini" v-model="newRec._source.login" autocomplete="off"></el-input>
+              <el-input size="small" v-model="newRec._source.login" autocomplete="off"></el-input>
             </el-form-item>
           </el-row>
           <el-row>
@@ -36,26 +36,26 @@
                 :label-width="formLabelWidth"
                 prop="_source.firstname"
               >
-                <el-input size="mini" v-model="newRec._source.firstname" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec._source.firstname" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item :label="this.$t('user.lastname')" :label-width="formLabelWidth" prop="_source.lastname">
-                <el-input size="mini" v-model="newRec._source.lastname" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec._source.lastname" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item :label="this.$t('user.phone')" :label-width="formLabelWidth" prop="_source.phone">
-                <el-input size="mini" v-model="newRec._source.phone" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec._source.phone" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" style="text-align:left;">
               <el-form-item :label="this.$t('user.mfa')" :label-width="formLabelWidth" prop="doublePhase">
                 <el-switch
                   @change="MFAChanged()"
-                  size="mini"
+                  size="small"
                   v-model="newRec._source.doublePhase"
                   autocomplete="off"
                 ></el-switch>
@@ -67,7 +67,7 @@
               <el-form-item :label="this.$t('user.language')" :label-width="formLabelWidth" prop="_source.language">
                 <el-select
                   style="width:210px;"
-                  size="mini"
+                  size="small"
                   v-model="newRec._source.language"
                   :placeholder="$t('ui.select_language')"
                 >
@@ -83,7 +83,7 @@
             <el-col :span="12">
               <el-form-item label :label-width="formLabelWidth">
                 <el-button
-                  size="mini"
+                  size="small"
                   @click="handleResetPassword()"
                   class="addbutton"
                   type="danger"
@@ -98,7 +98,7 @@
           <el-row style="padding-left:30px;">
             
             <el-transfer
-              size="mini"
+              size="small"
               style="text-align:left;"
               filterable
               v-model="newRec._source.privileges"
@@ -115,7 +115,7 @@
           <el-row style="padding-left:30px;">
             
             <el-transfer
-              size="mini"
+              size="small"
               style="text-align:left;"
               filterable
               v-model="newRec._source.filters"

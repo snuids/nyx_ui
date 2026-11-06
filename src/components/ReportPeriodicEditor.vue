@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item :label="$t('scheduler.title')" :label-width="formLabelWidth" prop="title">
-                <el-input size="mini" v-model="record._source.title" autocomplete="off"></el-input>
+                <el-input size="small" v-model="record._source.title" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -14,7 +14,7 @@
             <el-col :span="12">
               <el-form-item :label="$t('report.report')" :label-width="formLabelWidth" align="left">
                 <el-select
-                  size="mini"
+                  size="small"
                   @change="reportChange"
                   v-model="record._source.report"
                   placeholder="Select"
@@ -31,7 +31,7 @@
             <el-col :span="12">
               <el-form-item :label="$t('scheduler.type')" :label-width="formLabelWidth" align="left">
                 <el-select
-                  size="mini"
+                  size="small"
                   v-model="record._source.trigger.type"
                   placeholder="Select"
                   @change="typeChanged"
@@ -46,7 +46,7 @@
             <el-col :span="12">
               <el-form-item :label="$t('scheduler.time')" :label-width="formLabelWidth" align="left">
                 <el-time-select
-                  size="mini"
+                  size="small"
                   v-model="record._source.trigger.time"
                   :picker-options="{
                     start: '00:00',
@@ -59,7 +59,7 @@
             </el-col>
             <!-- <el-col :span="10">
               <el-form-item label="Icon" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="record._source.icon" autocomplete="off"></el-input>
+                <el-input size="small" v-model="record._source.icon" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>-->
             <el-col :span="2">
@@ -71,7 +71,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item :label="$t('scheduler.path')" :label-width="formLabelWidth">
-                <el-input size="mini" :placeholder="$t('rep.path_hint')" v-model="record._source.path" autocomplete="off"></el-input>
+                <el-input size="small" :placeholder="$t('rep.path_hint')" v-model="record._source.path" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,17 +107,17 @@
           <el-row v-for="param in report.parameters" :key="param.name">
             <el-col :span="16" v-if="param.type == 'text'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input>
+                <el-input size="small" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="16" v-if="param.type == 'number'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                <el-input-number size="mini" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input-number>
+                <el-input-number size="small" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input-number>
               </el-form-item>
             </el-col>
             <el-col :span="12" v-if="param.type == 'combo'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                <el-select size="mini" v-model="param.value" :placeholder="$t('cfg.select_type')" @change="paramsChanged()">
+                <el-select size="small" v-model="param.value" :placeholder="$t('cfg.select_type')" @change="paramsChanged()">
                   <el-option
                     v-for="item in param.combos.split(',')"
                     :key="item"
@@ -129,7 +129,7 @@
             </el-col>
             <el-col :span="12" v-if="param.type == 'escombo'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                <el-select size="mini" v-model="param.value" :placeholder="$t('cfg.select_type')" @change="paramsChanged()">
+                <el-select size="small" v-model="param.value" :placeholder="$t('cfg.select_type')" @change="paramsChanged()">
                   <el-option
                     v-for="item in param.valuelist"
                     :key="item"
@@ -141,12 +141,12 @@
             </el-col>
             <el-col :span="12" v-if="param.type == 'date'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                 <el-input size="mini" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input>
+                 <el-input size="small" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" v-if="param.type == 'interval'">
               <el-form-item :label="param.title" :label-width="formLabelWidth">
-                 <el-input size="mini" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input>
+                 <el-input size="small" v-model="param.value" autocomplete="off" @change="paramsChanged()"></el-input>
               </el-form-item>
             </el-col>
 
@@ -160,12 +160,12 @@
           <el-row>
             <el-col :span="6">
               <el-form-item :label="$t('scheduler.number_of_days')" :label-width="formLabelWidth">
-                <el-input-number :min="1" size="mini" v-model="resetdays" autocomplete="off"></el-input-number>
+                <el-input-number :min="1" size="small" v-model="resetdays" autocomplete="off"></el-input-number>
               </el-form-item>
             </el-col>
             <el-col :span="8" align="left">
               <el-form-item label="" :label-width="formLabelWidth">
-                <el-button size="mini" type="danger" plain @click="resetTask(record)">Reset</el-button>
+                <el-button size="small" type="danger" plain @click="resetTask(record)">Reset</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -177,7 +177,7 @@
                   type="datetime"
                   :placeholder="$t('rep.select_datetime')">
                 </el-date-picker>
-                <!-- <el-input size="mini" v-model="record._source.nextRun" autocomplete="off"></el-input> -->
+                <!-- <el-input size="small" v-model="record._source.nextRun" autocomplete="off"></el-input> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -210,7 +210,7 @@
                   @change="usersMailListToChanged"
                   ref="maillingListTo"
                   :placeholder="$t('reportgenerator.choose_users')"
-                  size="mini"
+                  size="small"
                   style="width:100%;"
                 >
                   <el-option
@@ -234,7 +234,7 @@
                   @change="usersMailListCcChanged"
                   ref="maillingListCc"
                   :placeholder="$t('reportgenerator.choose_users')"
-                  size="mini"
+                  size="small"
                   style="width:100%;"
                 >
                   <el-option
@@ -258,7 +258,7 @@
                   @change="usersMailListCciChanged"
                   ref="maillingListCci"
                   :placeholder="$t('reportgenerator.choose_users')"
-                  size="mini"
+                  size="small"
                   style="width:100%;"
                 >
                   <el-option
@@ -273,7 +273,7 @@
             <el-row>
               <el-col :span="16">
                 <el-form-item :label="$t('reportgenerator.add_mail')" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="mailToAdd" autocomplete="off"></el-input>
+                  <el-input size="small" v-model="mailToAdd" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6" style="text-align:right;">
@@ -281,7 +281,7 @@
                   :disabled="!mailToAdd.includes(['@'])"
                   plain
                   @click="addMail()"
-                  size="mini"
+                  size="small"
                 >Add</el-button>
               </el-col>
             </el-row>
@@ -294,7 +294,7 @@
         <el-form>
           <el-row>
             <el-form-item :label="$t('scheduler.subject')" :label-width="formLabelWidth">
-              <el-input size="mini" v-model="record._source.mailSubject" autocomplete="off"></el-input>
+              <el-input size="small" v-model="record._source.mailSubject" autocomplete="off"></el-input>
             </el-form-item>
           </el-row>
 
@@ -302,7 +302,7 @@
             <el-form-item :label="$t('scheduler.attachment')" :label-width="formLabelWidth">
               <el-input
                 placeholder="MyFile-${DATE:%d%B%Y}"
-                size="mini"
+                size="small"
                 v-model="record._source.attachmentName"
                 autocomplete="off"
               ></el-input>

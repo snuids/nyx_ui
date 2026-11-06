@@ -3,7 +3,7 @@
     <div :id="id" style="width: 100%;"></div>
     <el-button
       circle
-      size="mini"
+      size="small"
       @click="prepareVega()"
       class="regreshbutton"
       type="primary"

@@ -38,7 +38,7 @@
             @change="selectFieldsToFilterChanged"
             ref="fieldsToFilter"
             :placeholder="$t('cfg.field_to_filter')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -72,7 +72,7 @@
                 <tr v-for="(item, index) in currentConfig.config.queryfilters" :key="index">
                   <td>{{item.field}}</td>
                   <td>
-                    <el-button @click="configureQueryFilter(item)" size="mini">{{ $t('cfg.configure') }}</el-button>
+                    <el-button @click="configureQueryFilter(item)" size="small">{{ $t('cfg.configure') }}</el-button>
                   </td>
 
                   <td>
@@ -82,7 +82,7 @@
               </draggable>
             </table>
             <div style="width:100%;text-align:center;margin-top:10px;">
-              <el-button @click="addGlobalFilter()" size="mini" v-if="fieldsToFilter.indexOf('Global_Filter')<0">{{ $t('cfg.add_global_filter') }}</el-button>  
+              <el-button @click="addGlobalFilter()" size="small" v-if="fieldsToFilter.indexOf('Global_Filter')<0">{{ $t('cfg.add_global_filter') }}</el-button>  
             </div>                        
           </el-card>
           
@@ -100,7 +100,7 @@
                     ref="label"
                     :placeholder="$t('cfg.label_displayed')"
                     v-model="filterFieldToConfigure.title"
-                    size="mini"
+                    size="small"
                   ></el-input>
                 </el-row>
               </el-col>
@@ -113,7 +113,7 @@
                     ref="default"
                     :placeholder="$t('cfg.default_value')"
                     v-model="filterFieldToConfigure.default"
-                    size="mini"
+                    size="small"
                   ></el-input>
                 </el-row>
                 
@@ -126,7 +126,7 @@
                 </el-row>
                 <el-row>
                   <el-select
-                    size="mini"
+                    size="small"
                     v-model="filterFieldToConfigure.type"
                     :placeholder="$t('cfg.select_type')"
                   >
@@ -191,7 +191,7 @@
                     ref="default"
                     placeholder="Query index"
                     v-model="filterFieldToConfigure.index"
-                    size="mini"
+                    size="small"
                   ></el-input>                
               </el-col>
               <el-col :span="1">   
@@ -202,7 +202,7 @@
                     ref="default"
                     placeholder="Query column"
                     v-model="filterFieldToConfigure.column"
-                    size="mini"
+                    size="small"
                   ></el-input>                
               </el-col>
               </el-row> -->

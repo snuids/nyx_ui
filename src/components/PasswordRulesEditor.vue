@@ -5,7 +5,7 @@
       <el-row style="text-align:left;">
         <el-button
           @click="savePasswordRules()"
-          size="mini"
+          size="small"
           :disabled="!passwordRulesModelModified"
           type="danger"
         >{{ $t('ui.save_rules') }}</el-button>
@@ -45,7 +45,7 @@
               </el-row>
               <el-row>
                 <el-input-number
-                  size="mini"
+                  size="small"
                   v-model="passwordRulesModel.minUpper"
                   :step="1"
                   :min="0"
@@ -78,7 +78,7 @@
               </el-row>
               <el-row>
                 <el-input-number
-                  size="mini"
+                  size="small"
                   v-model="passwordRulesModel.minNumber"
                   :step="1"
                   :min="0"
@@ -111,7 +111,7 @@
               </el-row>
               <el-row>
                 <el-input-number
-                  size="mini"
+                  size="small"
                   v-model="passwordRulesModel.minSpecial"
                   :step="1"
                   :min="0"
@@ -134,7 +134,7 @@
         size="small"
       >
         <el-form-item :label="$t('ui.try_password')" prop="testPwd" style="padding-bottom:20px;">
-          <el-input v-model="testPwdForm.testPwd" clearable size="mini" style="padding-bottom:5px;"></el-input>
+          <el-input v-model="testPwdForm.testPwd" clearable size="small" style="padding-bottom:5px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('testPwdForm')">Test</el-button>

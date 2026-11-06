@@ -61,7 +61,7 @@
     <el-row>
       <el-col :span="24">
         <el-table
-          size="mini"
+          size="small"
           :data="tableData"
           style="width: 100%"
           highlight-current-row
@@ -81,7 +81,7 @@
               <div v-if="header.type=='select'">
                 <el-select
                   @change="selectChanged(scope.row, header)"
-                  size="mini"
+                  size="small"
                   v-model="scope.row._source[header.field.replace('_source.', '')]"
                   placeholder="Select"
                 >
@@ -119,7 +119,7 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="duplicateRecord()"
                     type="primary"
                     icon="el-icon-copy-document"
@@ -134,7 +134,7 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="addRecord()"
                     type="primary"
                     icon="el-icon-plus"
@@ -149,7 +149,7 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="refreshData()"
                     class="regreshbutton"
                     plain
@@ -160,14 +160,14 @@
             </template>
             <template #default="scope" v-if="config.config.index && config.config.index.length>0">
               <el-button
-                size="mini"
+                size="small"
                 plain
                 icon="el-icon-setting"
                 @click="handleView(scope.$index, scope.row)"
               ></el-button>
               <el-button
                 v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
-                size="mini"
+                size="small"
                 type="danger"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.$index, scope.row)"

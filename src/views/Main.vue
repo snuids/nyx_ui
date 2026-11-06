@@ -37,7 +37,7 @@
                         <el-form-item :label="$t('time.last')">
                           <el-input-number
                             :min="1"
-                            size="mini"
+                            size="small"
                             v-model="relativeTimeValue"
                             autocomplete="off"
                             @change="relativeTimeClosed"
@@ -48,7 +48,7 @@
                         <el-form-item >
                         <el-select
                           style="width:97%"
-                          size="mini"
+                          size="small"
                           v-model="relativeTimeType"
                           :placeholder="$t('ui.select_value')"
                           @change="relativeTimeClosed"
@@ -63,7 +63,7 @@
                     </el-row>
                   </el-form>
                   <template #reference><el-button
-                    size="mini"
+                    size="small"
                    
                     style="margin-right:5px;">{{$t('time.last')}} {{relativeTimeValue}} {{relativeTimeType}}</el-button></template>
                 </el-popover>
@@ -77,7 +77,7 @@
                   :picker-options="rangePickerOptions"
                   v-model="timerange"
                   v-on:change="timeRangeChanged"
-                  size="mini"
+                  size="small"
                   type="datetimerange"
                   range-separator="To"
                   :start-placeholder="$t('reportgenerator.start_date')"
@@ -92,7 +92,7 @@
                 style="margin-bottom:3px;"
                 @change="timeModeChanged"
                 v-if="$store.getters.activeApp.timeSelectorChecked"
-                size="mini"
+                size="small"
                 v-model="timeType"
               >
                 <el-radio-button label="absolute">{{$t('time.absolute')}}</el-radio-button>
@@ -109,7 +109,7 @@
                 v-on:change="dayChanged"
                 :picker-options="{firstDayOfWeek:1}"
                 type="date"
-                size="mini"
+                size="small"
                 :placeholder="$t('reportgenerator.pick_day')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -124,7 +124,7 @@
                 v-on:change="weekChanged"
                 :picker-options="{firstDayOfWeek:1}"
                 type="week"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.pick_week')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -137,7 +137,7 @@
                 v-model="monthPicker"
                 v-on:change="monthChanged"
                 type="month"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.pick_month')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -150,7 +150,7 @@
                 v-model="yearPicker"
                 v-on:change="yearChanged"
                 type="year"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.pick_year')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;

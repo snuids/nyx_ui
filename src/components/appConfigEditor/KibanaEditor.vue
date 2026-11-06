@@ -6,19 +6,19 @@
         <el-row>
           <el-col :span="8">
             <el-form-item :label="$t('cfg.use_short_url')" :label-width="formLabelWidth">
-              <el-switch size="mini" v-model="currentConfig.config.useShortUrl" autocomplete="off"></el-switch>
+              <el-switch size="small" v-model="currentConfig.config.useShortUrl" autocomplete="off"></el-switch>
             </el-form-item>
           </el-col>
           
           <el-col :span="8">
             <el-form-item :label="$t('cfg.hidden_query')" :label-width="formLabelWidth">
-              <el-input :disabled="currentConfig.config.useShortUrl" size="mini" v-model="currentConfig.config.hiddenQuery" autocomplete="off"></el-input>
+              <el-input :disabled="currentConfig.config.useShortUrl" size="small" v-model="currentConfig.config.hiddenQuery" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item :label="$t('cfg.filter_column')" :label-width="formLabelWidth">
-              <el-input :disabled="currentConfig.config.useShortUrl" size="mini" v-model="currentConfig.config.filtercolumn" autocomplete="off"></el-input>
+              <el-input :disabled="currentConfig.config.useShortUrl" size="small" v-model="currentConfig.config.filtercolumn" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -27,7 +27,7 @@
           <el-col :span="8" style="text-align: left;">
             <el-form-item :label="$t('cfg.dashboard')" :label-width="formLabelWidth">
               <el-select
-                size="mini"
+                size="small"
                 @change="kibanaDashboardSelected"
                 v-model="currentConfig.config.kibanaId"
                 :placeholder="$t('cfg.select')"
@@ -48,7 +48,7 @@
             <el-form-item :label-width="formLabelWidth">
               <el-button
                 :disabled="currentConfig.config.kibanaId==null||dashboards.length==0"
-                size="mini"
+                size="small"
                 type="danger"
                 @click="openInKibana()"
                 style="width:100%"
@@ -63,7 +63,7 @@
               prop="config.kibanaTime"
             >
               <el-input
-                size="mini"
+                size="small"
                 @blur="kibanaTimeChange"
                 v-model="currentConfig.config.kibanaTime"
               ></el-input>
@@ -109,7 +109,7 @@
 
               <el-row>
                 <el-select
-                  size="mini"
+                  size="small"
                   v-model="currentConfig.timeSelectorType"
                   :placeholder="$t('cfg.select_type')"
                   @change="timeSelectorTypeChange"
@@ -139,7 +139,7 @@
             <el-row>
               <el-select
                 :disabled="!currentConfig.timeRefresh"
-                size="mini"
+                size="small"
                 v-model="currentConfig.timeRefreshValue"
                 :placeholder="$t('cfg.refresh_interval')"
                 @change="timeRefreshSelectChange"

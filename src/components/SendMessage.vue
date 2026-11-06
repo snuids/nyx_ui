@@ -19,7 +19,7 @@
                 :placeholder="this.$t('generic.pleaseinput')"
                 v-model="destination"
                 label="destination"
-                size="mini"
+                size="small"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -31,7 +31,7 @@
           <el-button
             style="float: right;"
             type="primary"
-            size="mini"
+            size="small"
             @click="sendMessage()"
             :disabled="message.length==0 || destination.length==0"
           >{{$t('sendmessage.send_message')}}</el-button>

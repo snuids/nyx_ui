@@ -5,7 +5,7 @@
     <!-- <h1>Grafana {{ computedUrl }}</h1> -->
     <div v-if="config.downloadChecked" :style="toolbarStyle">
       <el-button
-        size="mini"
+        size="small"
         icon="el-icon-download"
         :loading="downloadLoading"
         :disabled="!dashboardUid"

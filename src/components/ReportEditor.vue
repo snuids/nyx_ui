@@ -7,19 +7,19 @@
             <el-col :span="14">
               
               <el-form-item :label="$t('cfg.title')" :label-width="formLabelWidth" prop="title">
-                <el-input size="mini" v-model="newRec.title" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.title" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
               <el-form-item :label="$t('cfg.icon')" :label-width="formLabelWidth"  prop="icon">
-                <IconPicker v-model="newRec.icon" size="mini" :icon-preview="true" :preview-scale="2.2" />
+                <IconPicker v-model="newRec.icon" size="small" :icon-preview="true" :preview-scale="2.2" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
               <el-form-item :label="$t('rep.description')" :label-width="formLabelWidth"  prop="description">
-                <el-input size="mini" v-model="newRec.description" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.description" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -102,7 +102,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item :label="$t('report.output')" :label-width="formLabelWidth">
-                <!--<el-input size="mini" v-model="newRec.output" autocomplete="off"></el-input>-->
+                <!--<el-input size="small" v-model="newRec.output" autocomplete="off"></el-input>-->
                 <div style="display:">
                   <el-tag
                     :key="tag"
@@ -116,7 +116,7 @@
                     v-if="inputVisible"
                     v-model="inputValue"
                     ref="saveTagInput"
-                    size="mini"
+                    size="small"
                     @keyup.enter="handleInputConfirm"
                     @blur="handleInputConfirm"
                   ></el-input>
@@ -132,7 +132,7 @@
             <el-col :span="8">
               <!-- <el-form-item label="Type" :label-width="formLabelWidth">
                 <el-select
-                  size="mini"
+                  size="small"
                   v-model="newRec.reportType"
                   placeholder="Please select a type"
                 >
@@ -150,7 +150,7 @@
                 :label="$t('rep.jdbc_driver')"
                 :label-width="formLabelWidth"                
               >
-                <el-input size="mini" v-model="newRec.jdbc_driver" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.jdbc_driver" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -158,7 +158,7 @@
                 :label="$t('rep.jdbc_url')"
                 :label-width="formLabelWidth"                
               >
-                <el-input size="mini" v-model="newRec.jdbc_url" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.jdbc_url" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -168,7 +168,7 @@
                 :label="$t('rep.login')"
                 :label-width="formLabelWidth"                
               >
-                <el-input size="mini" v-model="newRec.jdbc_login" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.jdbc_login" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -176,7 +176,7 @@
                 :label="$t('rep.password')"
                 :label-width="formLabelWidth"                
               >
-                <el-input type="password" size="mini" v-model="newRec.jdbc_password" autocomplete="off"></el-input>
+                <el-input type="password" size="small" v-model="newRec.jdbc_password" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -188,7 +188,7 @@
                 :label-width="formLabelWidth"
               >
                 <el-select
-                  size="mini"
+                  size="small"
                   v-model="newRec.datasource"
                   :placeholder="$t('rep.select_datasource')"
                   filterable
@@ -211,21 +211,21 @@
                 :label-width="formLabelWidth"
                 v-show="newRec.reportType==undefined || newRec.reportType=='python'"
               >
-                <el-input size="mini" v-model="newRec.exec" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.exec" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item
                 :label="$t('rep.jasper_path')"
                 :label-width="formLabelWidth"
                 v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'"
               >
-                <el-input size="mini" v-model="newRec.jasper" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.jasper" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item
                 :label="$t('rep.notebook_path')"
                 :label-width="formLabelWidth"
                 v-show="newRec.reportType=='notebook' || newRec.reportType=='notebook_doc'"
               >
-                <el-input size="mini" v-model="newRec.notebook" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec.notebook" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'">
@@ -237,7 +237,7 @@
                 :on-success="successUpload"
                 
                 accept=".jrxml"
-                size="mini"
+                size="small"
                 style="height:30px"
               >              
                 <div class="el-upload__text">
@@ -257,7 +257,7 @@
           <el-row v-for="(param, index) in newRec.parameters" :key="index">
             <el-col :span="5">
               <el-form-item :label="$t('rep.parameter')+' '+(index+1)" :label-width="formLabelWidth">
-                <el-input size="mini" v-model="param.title" :placeholder="$t('cfg.title')" autocomplete="off"></el-input>
+                <el-input size="small" v-model="param.title" :placeholder="$t('cfg.title')" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="5">
@@ -266,7 +266,7 @@
                   v-model="param.type"
                   @change="param.value=null"
                   :placeholder="$t('cfg.select')"
-                  size="mini"
+                  size="small"
                 >
                   <el-option
                     v-for="item in options"
@@ -282,7 +282,7 @@
                 <el-input
                   v-if="param.type=='number'"
                   type="number"
-                  size="mini"
+                  size="small"
                   v-model="param.value"
                   placeholder="0"
                   autocomplete="off"
@@ -290,7 +290,7 @@
                 <el-input
                   v-if="param.type=='text'"
                   type="text"
-                  size="mini"
+                  size="small"
                   v-model="param.value"
                   placeholder="text"
                   autocomplete="off"
@@ -298,7 +298,7 @@
                 <el-input
                   v-if="param.type=='date'"
                   type="text"
-                  size="mini"
+                  size="small"
                   v-model="param.value"
                   placeholder="now-1d"
                   autocomplete="off"
@@ -306,7 +306,7 @@
                 <el-input
                   v-if="param.type=='combo'"
                   type="text"
-                  size="mini"
+                  size="small"
                   v-model="param.value"
                   placeholder="default"
                   autocomplete="off"
@@ -314,7 +314,7 @@
                 <el-input
                   v-if="param.type=='combo'"
                   type="text"
-                  size="mini"
+                  size="small"
                   v-model="param.combos"
                   :placeholder="$t('rep.items_comma')"
                   autocomplete="off"
@@ -323,7 +323,7 @@
                 <el-input
                   v-if="param.type=='interval'"
                   type="text"
-                  size="mini"
+                  size="small"
                   v-model="param.value"
                   placeholder="now-1d:now"
                   autocomplete="off"
@@ -334,14 +334,14 @@
                   
                   v-if="param.type=='escombo'"
                   type="text"
-                  size="mini"
+                  size="small"
                   v-model="param.escomboindex"
                   :placeholder="$t('rep.index_selected')"
                   autocomplete="off"
                 ></el-input>
                 </el-col>
                 <el-col :span="8">
-                <el-button round @click="applyIndex(param.escomboindex)" type="primary" size="mini">{{ $t('rep.apply') }}
+                <el-button round @click="applyIndex(param.escomboindex)" type="primary" size="small">{{ $t('rep.apply') }}
                 
 
                 </el-button>
@@ -353,7 +353,7 @@
                   v-if="param.type=='escombo'"
                   v-model="param.escombokey"
                   :placeholder="$t('cfg.select')"
-                  size="mini"
+                  size="small"
                 >
                   <el-option
                     v-for="item in fieldOptions"
@@ -367,7 +367,7 @@
                 <el-row v-if="param.type=='escombo'">
                   <el-col>
                     <el-form-item :label="$t('rep.use_timestamp')" :label-width="formLabelWidth2">
-                      <el-switch size="mini" v-model="param.usetimestamp"></el-switch>
+                      <el-switch size="small" v-model="param.usetimestamp"></el-switch>
                     </el-form-item>
                   </el-col>
                   <el-col>
@@ -375,7 +375,7 @@
                   v-if="param.usetimestamp"
                   v-model="param.timestampfield"
                   :placeholder="$t('cfg.select')"
-                  size="mini"
+                  size="small"
                 >
                   <el-option
                     v-for="item in fieldOptionsDate"
@@ -389,7 +389,7 @@
                 <el-row v-if="param.type=='escombo'">
                   <el-col>
                     <el-form-item :label="$t('rep.use_boolean')" :label-width="formLabelWidth2">
-                      <el-switch size="mini" v-model="param.useboolean"></el-switch>
+                      <el-switch size="small" v-model="param.useboolean"></el-switch>
                     </el-form-item>
                   </el-col>
                   <el-col>
@@ -397,7 +397,7 @@
                   v-if="param.useboolean"
                   v-model="param.booleanfield"
                   :placeholder="$t('cfg.select')"
-                  size="mini"
+                  size="small"
                 >
                   <el-option
                     v-for="item in fieldOptionsBool"
@@ -412,13 +412,13 @@
             </el-col>
             <el-col :span="4">
               <el-form-item :label="$t('rep.hidden')" :label-width="formLabelWidth">
-                <el-switch size="mini" v-model="param.hidden"></el-switch>
+                <el-switch size="small" v-model="param.hidden"></el-switch>
               </el-form-item>
             </el-col>
             <el-col :span="2">
               <el-form-item label :label-width="'30px'">
                 <el-button
-                  size="mini"
+                  size="small"
                   @click="deleteParameter(param)"
                   type="danger"
                   icon="el-icon-delete"
@@ -431,7 +431,7 @@
 
           <el-row type="flex" justify="space-around" style="margin-bottom:30px">
             <el-col :span="12">
-              <el-button round @click="addParameter()" type="primary" size="mini">{{ $t('rep.add_parameter') }}</el-button>
+              <el-button round @click="addParameter()" type="primary" size="small">{{ $t('rep.add_parameter') }}</el-button>
             </el-col>
           </el-row>
         </el-tab-pane>
@@ -464,7 +464,7 @@
                   style="min-width: 112px;"
                   icon="el-icon-notebook-2"
                   @click="openTabCode()"
-                  size="mini"
+                  size="small"
                   v-if="!isAdd && (newRec.reportType=='notebook' || newRec.reportType=='notebook_doc')"
                 >{{$t('generic.edit_code')}}</el-button>
 

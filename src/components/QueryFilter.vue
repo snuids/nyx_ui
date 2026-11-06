@@ -12,7 +12,7 @@
         <el-select
           v-if="queryfilter.type == 'selecter'"
           filterable
-          size="mini"
+          size="small"
           v-model="queryfilter.selected"
           :placeholder="$t('cfg.select_type')"
           :clearable="queryfilter.selected != '*'"
@@ -29,7 +29,7 @@
         <el-select
           v-if="queryfilter.type == 'queryselecter'"
           filterable
-          size="mini"
+          size="small"
           v-model="queryfilter.selected"
           :placeholder="$t('cfg.select_type')"
           :clearable="queryfilter.selected != '*'"
@@ -46,7 +46,7 @@
         <el-input
           @change="refresh()"
           clearable
-          size="mini"
+          size="small"
           style="width:170px"
           v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict' || queryfilter.type == 'globaltext'"
           :placeholder="$t('generic.pleaseinput')"
@@ -55,7 +55,7 @@
       </el-col>
     </div>
     <div class="refresh-button" v-if="config.type != 'kibana'">
-      <!-- <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button> -->
+      <!-- <el-button @click="refresh()" style="width:90%;" size="small" type="primary">refresh</el-button> -->
       <el-tooltip
         class="item"
         effect="light"
@@ -65,7 +65,7 @@
       >
         <el-button
           circle
-          size="mini"
+          size="small"
           @click="refresh()"
           class="regreshbutton"
           plain
@@ -85,12 +85,12 @@
               :type="format.type"
               :key="format.value"
               round
-              size="mini"
+              size="small"
               @click="downloadSelection(format.value)"
             >{{format.label}}</el-button>
           </el-row>
         </el-col>
-        <template #reference><el-button round type="default" icon="el-icon-download" size="mini"></el-button></template>
+        <template #reference><el-button round type="default" icon="el-icon-download" size="small"></el-button></template>
       </el-popover>
     </div>
   </el-row>

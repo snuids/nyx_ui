@@ -1,7 +1,9 @@
 <template>
   <div style="position:relative;overflow: hidden;">
     <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" v-model="dialogVisible" width="65%">
-      <el-tabs v-model="tabName" @tab-click="handleClick">
+      <!-- `handleClick` n'a jamais existe dans methods : l'attribut ne faisait rien et Vue 3
+           signale un gestionnaire invalide. -->
+      <el-tabs v-model="tabName">
         <el-tab-pane :label="$t('processlist.tab_general')" name="first">
           <el-table
             size="small"
@@ -68,7 +70,7 @@
         <el-row :gutter="10">
           <el-col :span="6"> 
             <el-form-item :label="$t('processlist.filter')" :label-width="formLabelWidth">
-              <el-input size="mini" v-model="filter" autocomplete="off"></el-input>
+              <el-input size="small" v-model="filter" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">

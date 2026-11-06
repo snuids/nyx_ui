@@ -33,7 +33,7 @@
                 :disabled="locEditMode=='edit'"
                 v-model="newRec._source.type"
                 ref="type"
-                size="mini"
+                size="small"
                 placeholder="Mode"
               >
                 <el-option
@@ -47,7 +47,7 @@
             <el-col :span="5" style="padding-right:10px;">
               <el-autocomplete
                 :disabled="locEditMode=='edit'"
-                size="mini"
+                size="small"
                 class="inline-input"
                 ref="runner"
                 v-model="newRec._source.runner"
@@ -59,7 +59,7 @@
             <el-col :span="5" style="padding-right:10px;">
               <el-autocomplete
                 :disabled="locEditMode=='edit'"
-                size="mini"
+                size="small"
                 ref="notebook"
                 class="inline-input"
                 v-model="newRec._source.file"
@@ -70,7 +70,7 @@
             <el-col :span="5" style="padding-right:10px;">
               <el-input
                 :disabled="locEditMode=='edit'"
-                size="mini"
+                size="small"
                 ref="function"
                 placeholder="Function"
                 v-model="newRec._source.orgfunction"
@@ -81,7 +81,7 @@
                 style="min-width: 112px;"
                 icon="el-icon-notebook-2"
                 @click="openTabCode()"
-                size="mini"
+                size="small"
                 v-if="locEditMode=='edit'"
               >{{$t('generic.edit_code')}}</el-button>
               <!-- <el-popconfirm
@@ -96,7 +96,7 @@
                 v-if="locEditMode!='edit'"
                 :loading="createLoading"
                 @click="createFunction()"
-                size="mini"
+                size="small"
                 type="primary"
                 :disabled="goBtnDisabled"
               >{{ $t('ui.create_function') }}</el-button>
@@ -124,7 +124,7 @@
               <el-input
                 style="max-width:80px;"
                 readonly
-                size="mini"
+                size="small"
                 ref="function"
                 v-model="newRec._source.runs"
               ></el-input>
@@ -133,7 +133,7 @@
               <el-input
                 style="max-width:80px;"
                 readonly
-                size="mini"
+                size="small"
                 ref="function"
                 v-model="newRec._source.errors"
               ></el-input>
@@ -142,7 +142,7 @@
               <el-input
                 style="max-width:80px;"
                 readonly
-                size="mini"
+                size="small"
                 ref="function"
                 v-model="newRec._source.crashed"
               ></el-input>
@@ -158,7 +158,7 @@
                 :loading="resetStatsLoading"
                 @click="resetStats()"
                 type="warning"
-                size="mini"
+                size="small"
               >{{ $t('ui.reset_stats') }}</el-button>
             </el-col>
           </el-row>
@@ -182,7 +182,7 @@
                 :fetch-suggestions="searchLastRun"
                 :placeholder="$t('ui.select_run')"
                 @select="handleSelectRun"
-                size="mini"
+                size="small"
                 clearable
               >
                 <template #default="{ item }">
@@ -207,7 +207,7 @@
               <el-input
                 v-if="selectedRun"
                 readonly
-                size="mini"
+                size="small"
                 ref="return"
                 v-model="selectedRun.return"
               ></el-input>
@@ -218,7 +218,7 @@
                 style="min-width: 112px;"
                 icon="el-icon-download"
                 @click="openTabInput"
-                size="mini"
+                size="small"
               >Input</el-button>
             </el-col> -->
           </el-row>
@@ -235,7 +235,7 @@
                 <el-form-item label="File" :label-width="formLabelWidth">
                   <el-input
                     :disabled="true"
-                    size="mini"
+                    size="small"
                     v-model="newRec._source.file"
                     autocomplete="off"
                   ></el-input>
@@ -245,7 +245,7 @@
                 <el-form-item label="Function" :label-width="formLabelWidth">
                   <el-input
                     :disabled="true"
-                    size="mini"
+                    size="small"
                     v-model="newRec._source.orgfunction"
                     autocomplete="off"
                   ></el-input>
@@ -257,7 +257,7 @@
                 <el-form-item label="Topics" :label-width="formLabelWidth">
                   <el-input
                     :disabled="true"
-                    size="mini"
+                    size="small"
                     v-model="newRec._source.topics"
                     autocomplete="off"
                   ></el-input>

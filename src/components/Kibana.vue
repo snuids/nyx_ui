@@ -25,7 +25,7 @@
           <el-card style="width:300px; text-align:center; margin-top:10px;" shadow="never">
             <el-table
               :data="browsersData"
-              size="mini"
+              size="small"
               style="">
               <el-table-column
                 prop="name"

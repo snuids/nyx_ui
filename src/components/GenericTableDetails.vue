@@ -22,7 +22,7 @@
                   v-if="typeof field.value == 'string'"
                 >
                   <el-input
-                    size="mini"
+                    size="small"
                     v-model="field.value"
                     autocomplete="off"
                     @blur="valueChanged(field)"
@@ -31,7 +31,7 @@
                 <el-input-number
                   v-if="typeof field.value == 'number'"
                   @change="valueChanged(field)"
-                  size="mini"
+                  size="small"
                   v-model="field.value"
                   autocomplete="off"
                 >{{field.key}}</el-input-number>

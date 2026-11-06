@@ -10,7 +10,7 @@
             </el-row>
             <el-row>
               <el-input
-                size="mini"
+                size="small"
                 v-model="currentConfig.config.formtitle"
                 ref="formtitle"
                 autocomplete="off"
@@ -22,7 +22,7 @@
               <el-button type="text">{{ $t('cfg.mode') }}</el-button>
             </el-row>
             <el-row>
-              <el-radio-group v-model="currentConfig.config.formmode" size="mini" ref="mode">
+              <el-radio-group v-model="currentConfig.config.formmode" size="small" ref="mode">
                 <el-radio-button label="table">{{ $t('cfg.table') }}</el-radio-button>
                 <el-radio-button label="message">{{ $t('cfg.message') }}</el-radio-button>
               </el-radio-group>
@@ -34,7 +34,7 @@
             </el-row>
             <el-row>
               <el-input
-                size="mini"
+                size="small"
                 v-model="currentConfig.config.index"
                 ref="index"
                 autocomplete="off"
@@ -47,7 +47,7 @@
             </el-row>
             <el-row>
               <el-input
-                size="mini"
+                size="small"
                 placeholder="/queue/QUEUE_NAME or /topic/TOPIC_NAME"
                 v-model="currentConfig.config.destination"
                 ref="index"
@@ -64,7 +64,7 @@
           <el-card shadow="never" style="padding-bottom: 20px;">
 
           <el-col :span="4">
-            <el-button size="mini" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
+            <el-button size="small" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
           </el-col>
           <el-col :span="20">
             <FormFieldEditor
@@ -86,13 +86,13 @@
               <el-table-column prop="title" label="Action">
                 <template #default="scope2">
                   <el-button
-                    size="mini"
+                    size="small"
                     circle
                     @click="handleEditField(scope2.$index, scope2.row)"
                     icon="el-icon-edit"
                   ></el-button>
                   <el-button
-                    size="mini"
+                    size="small"
                     circle
                     type="danger"
                     @click="handleDeleteField(scope2.$index, scope2.row)"
@@ -100,7 +100,7 @@
                   ></el-button>
 
                   <el-button
-                    size="mini"
+                    size="small"
                     circle
                     type="primary"
                     @click="handleMoveField(scope2.$index, scope2.row,false)"
@@ -108,7 +108,7 @@
                     v-if="scope2.$index<currentConfig.config.headercolumns.length-1"
                   ></el-button>
                   <el-button
-                    size="mini"
+                    size="small"
                     circle
                     type="primary"
                     @click="handleMoveField(scope2.$index, scope2.row,true)"

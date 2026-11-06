@@ -25,7 +25,7 @@
               v-else-if="item.type =='datetime'"
             >
               <el-date-picker
-                size="mini"
+                size="small"
                 v-model="item.value"
                 type="datetime"
                 :placeholder="$t('ui.pick_datetime')"

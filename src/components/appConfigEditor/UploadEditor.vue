@@ -6,19 +6,19 @@
           <el-row>
                 <el-col :span="12">
                 <el-form-item :label="$t('cfg.queue')" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="currentConfig.config.queue" autocomplete="off"></el-input>
+                  <el-input size="small" v-model="currentConfig.config.queue" autocomplete="off"></el-input>
                 </el-form-item>
                 </el-col>
                 <el-col :span="12">                  
                 <el-form-item :label="$t('cfg.file_types')" :label-width="formLabelWidth">
-                  <el-input size="mini" placeholder=".docx,.doc or nothing for all types" v-model="currentConfig.config.filetypes" autocomplete="off"></el-input>
+                  <el-input size="small" placeholder=".docx,.doc or nothing for all types" v-model="currentConfig.config.filetypes" autocomplete="off"></el-input>
                 </el-form-item>                              
                 </el-col>
               </el-row>
 
               <el-row>
               <el-form-item :label="$t('cfg.tip')" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="currentConfig.config.tip" autocomplete="off"></el-input>
+                  <el-input size="small" v-model="currentConfig.config.tip" autocomplete="off"></el-input>
                 </el-form-item>
               </el-row>        
       </el-form>

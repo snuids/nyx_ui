@@ -10,7 +10,7 @@
       <el-card shadow="never" style="margin-bottom:10px" body-style="padding:10px">
       <el-form-item :label="$t('changepassword.oldpass')" prop="oldpassword">
         <el-input
-          size="mini"
+          size="small"
           type="password"
           name="password"
           autocomplete="none"
@@ -21,10 +21,10 @@
       </el-card>
       <el-card shadow="never"  body-style="padding:10px">
       <el-form-item class="formitem" :label="$t('changepassword.newpass')" prop="newpassword1">
-        <el-input  size="mini" type="password" autocomplete="none" v-model="cpform.newpassword1" show-password/>
+        <el-input  size="small" type="password" autocomplete="none" v-model="cpform.newpassword1" show-password/>
       </el-form-item>
       <el-form-item class="formitem" :label="$t('changepassword.repeatpass')" prop="newpassword2">
-        <el-input size="mini" type="password" autocomplete="none" v-model="cpform.newpassword2" show-password/>
+        <el-input size="small" type="password" autocomplete="none" v-model="cpform.newpassword2" show-password/>
 
       </el-form-item>
       </el-card>

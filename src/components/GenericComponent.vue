@@ -82,6 +82,7 @@
 
 
 <script>
+import { paneNameOf } from "@/utils/tabs";
 import { registerComponent } from '@/utils/vue3shim'
 
 // import generictable from "@/components/GenericTable";
@@ -211,7 +212,11 @@ const myExport = {
   },
   methods: {
     handleTabClick: function(tab) {
-      var path = "/main/" + tab.name
+      // Element Plus passe un TabsPaneContext : le nom est dans paneName, pas dans name (undefined).
+      const name = paneNameOf(tab)
+      if (!name) return
+
+      var path = "/main/" + name
 
       if(path != this.$route.path)
         this.$router.push(path);

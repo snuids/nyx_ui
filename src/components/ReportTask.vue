@@ -95,7 +95,7 @@
     </el-dialog>
 
     <el-table
-      size="mini"
+      size="small"
       :data="tableData.filter(data => !search || data._source.creds.user.id.toLowerCase().includes(search.toLowerCase()) ||   data._source.report.title.toLowerCase().includes(search.toLowerCase() ))"
       :default-sort="{prop: '_source.treatment.creation', order: 'descending'}"
       style="width: 100%"
@@ -170,9 +170,9 @@
               :key="scope.row._source.id+item.title+item.name"
             >
               &nbsp;
-              <el-tag size="mini">{{item.title}}:{{item.value}}</el-tag>
+              <el-tag size="small">{{item.title}}:{{item.value}}</el-tag>
             </div>
-            <template #reference><el-button size="mini">{{scope.row._source.report.parameters.length}}</el-button></template>
+            <template #reference><el-button size="small">{{scope.row._source.report.parameters.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
@@ -188,7 +188,7 @@
           >
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-              size="mini"
+              size="small"
               icon="el-icon-document"
               @click="openLogs(scope.$index, scope.row)"
               plain
@@ -197,7 +197,7 @@
           <el-tooltip class="item" effect="dark" :content="$t('report.regenerate')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-              size="mini"
+              size="small"
               icon="el-icon-refresh-right"
               @click="regenerateReport(scope.$index, scope.row)"
               plain
@@ -208,11 +208,11 @@
       <el-table-column prop="_source.downloads.length" align="right">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
         <template #header #default="_scope">
-          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
+          <el-input v-model="search" size="small" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
         <template #default="scope">
           <el-button
-            size="mini"
+            size="small"
             round
             style="width:45px; text-align:center; padding:7px 0px;"
             :type="getButtonType(item.extension)"

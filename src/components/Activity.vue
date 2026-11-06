@@ -6,7 +6,7 @@
     <el-card shadow="never" body-style="padding:8px 12px;">
       <el-row :gutter="8" type="flex" align="middle">
         <el-col :span="9">
-          <el-radio-group v-model="preset" size="mini" @change="onPresetChange">
+          <el-radio-group v-model="preset" size="small" @change="onPresetChange">
             <el-radio-button label="1h">1h</el-radio-button>
             <el-radio-button label="24h">24h</el-radio-button>
             <el-radio-button label="7d">7d</el-radio-button>
@@ -17,7 +17,7 @@
           <el-date-picker
             v-model="customRange"
             type="datetimerange"
-            size="mini"
+            size="small"
             :start-placeholder="$t('activity.start')"
             :end-placeholder="$t('activity.end')"
             :clearable="true"
@@ -26,10 +26,10 @@
           ></el-date-picker>
         </el-col>
         <el-col :span="6" style="text-align:right;white-space:nowrap;">
-          <el-button size="mini" icon="el-icon-refresh" :loading="loading" @click="load()">
+          <el-button size="small" icon="el-icon-refresh" :loading="loading" @click="load()">
             {{ $t('activity.refresh') }}
           </el-button>
-          <el-button size="mini" icon="el-icon-download" :loading="exporting" @click="exportFile()">
+          <el-button size="small" icon="el-icon-download" :loading="exporting" @click="exportFile()">
             CSV
           </el-button>
         </el-col>
@@ -39,7 +39,7 @@
         <el-col :span="7">
           <el-input
             v-model="filters.user"
-            size="mini"
+            size="small"
             clearable
             prefix-icon="el-icon-user"
             :placeholder="$t('activity.filter_user')"
@@ -49,7 +49,7 @@
         <el-col :span="7">
           <el-input
             v-model="filters.path"
-            size="mini"
+            size="small"
             clearable
             prefix-icon="el-icon-search"
             :placeholder="$t('activity.filter_path')"
@@ -89,7 +89,7 @@
       <el-col :span="12">
         <el-card shadow="never" body-style="padding:6px 10px;">
           <div class="panel-title">{{ $t('activity.top_endpoints') }}</div>
-          <el-table :data="topEndpoints" size="mini" :show-header="true" max-height="240">
+          <el-table :data="topEndpoints" size="small" :show-header="true" max-height="240">
             <el-table-column prop="key" :label="$t('activity.col_path')" show-overflow-tooltip>
               <template #default="scope">
                 <div class="bar-row">
@@ -109,21 +109,21 @@
           <div class="panel-title">{{ $t('activity.errors_and_users') }}</div>
           <el-tabs v-model="breakdownTab" style="margin-top:-6px;">
             <el-tab-pane :label="$t('activity.tab_errors')" name="errors">
-              <el-table :data="errorBuckets" size="mini" max-height="200">
+              <el-table :data="errorBuckets" size="small" max-height="200">
                 <el-table-column prop="key" :label="$t('activity.col_error')" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="count" :label="$t('activity.col_calls')" width="80" align="right"></el-table-column>
               </el-table>
               <div v-if="errorBuckets.length === 0" class="empty">{{ $t('activity.no_data') }}</div>
             </el-tab-pane>
             <el-tab-pane :label="$t('activity.tab_users')" name="users">
-              <el-table :data="userBuckets" size="mini" max-height="200">
+              <el-table :data="userBuckets" size="small" max-height="200">
                 <el-table-column prop="key" :label="$t('activity.col_user')" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="count" :label="$t('activity.col_calls')" width="80" align="right"></el-table-column>
               </el-table>
               <div v-if="userBuckets.length === 0" class="empty">{{ $t('activity.no_data') }}</div>
             </el-tab-pane>
             <el-tab-pane :label="$t('activity.tab_methods')" name="methods">
-              <el-table :data="methodBuckets" size="mini" max-height="200">
+              <el-table :data="methodBuckets" size="small" max-height="200">
                 <el-table-column prop="key" :label="$t('activity.col_method')" width="110"></el-table-column>
                 <el-table-column prop="count" :label="$t('activity.col_calls')" align="right"></el-table-column>
               </el-table>
@@ -143,7 +143,7 @@
           {{ total }} {{ $t('activity.calls') }} · {{ tookMs }} ms · {{ index }}
         </span>
       </div>
-      <el-table :data="records" size="mini" border max-height="520" stripe>
+      <el-table :data="records" size="small" border max-height="520" stripe>
         <el-table-column :label="$t('activity.col_time')" width="150">
           <template #default="scope">{{ formatTime(scope.row) }}</template>
         </el-table-column>
@@ -152,7 +152,7 @@
         </el-table-column>
         <el-table-column :label="$t('activity.col_method')" width="90">
           <template #default="scope">
-            <el-tag size="mini" :type="methodTag(scope.row.method)">{{ scope.row.method }}</el-tag>
+            <el-tag size="small" :type="methodTag(scope.row.method)">{{ scope.row.method }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column :label="$t('activity.col_path')" min-width="260" show-overflow-tooltip>
@@ -163,7 +163,7 @@
         </el-table-column>
         <el-table-column :label="$t('activity.col_error')" min-width="180" show-overflow-tooltip>
           <template #default="scope">
-            <el-tag v-if="scope.row.error" size="mini" type="danger">{{ scope.row.error }}</el-tag>
+            <el-tag v-if="scope.row.error" size="small" type="danger">{{ scope.row.error }}</el-tag>
             <span v-else class="ok">ok</span>
           </template>
         </el-table-column>

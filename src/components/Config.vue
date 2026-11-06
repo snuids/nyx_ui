@@ -10,7 +10,7 @@
       v-on:dialogclose="dialogClosed()"
     ></ConfigDetails>
     <el-table
-      size="mini"
+      size="small"
       :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase()))))"
       :default-sort="{prop: '_source.title', order: 'descending'}"
       style="width: 100%"
@@ -31,13 +31,13 @@
             :title="$t('config.privileges')"
             width="200"
             trigger="hover"
-            size="mini"
+            size="small"
           >
             <span :key="item" v-for="item in scope.row._source.privileges">
               &nbsp;
-              <el-tag size="mini">{{item}}</el-tag>
+              <el-tag size="small">{{item}}</el-tag>
             </span>
-            <template #reference><el-button size="mini">{{scope.row._source.privileges.length}}</el-button></template>
+            <template #reference><el-button size="small">{{scope.row._source.privileges.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
@@ -54,7 +54,7 @@
             >
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="duplicate()"
                 class="dupbutton"
                 type="primary"
@@ -64,7 +64,7 @@
             <el-tooltip class="item" effect="light" :content="$t('config.add')" placement="bottom">
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="handleAddApp()"
                 class="addbutton"
                 type="primary"
@@ -74,7 +74,7 @@
             <el-tooltip class="item" effect="light" :content="$t('config.reload')" placement="bottom-start">
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="reloadConfig()"
                 class="regreshbutton"
                 plain
@@ -82,7 +82,7 @@
               ></el-button>
             </el-tooltip>
           </div>
-          <el-input v-model="search" size="mini" :placeholder="$t('config.type_to_search')" class="searchfield" />
+          <el-input v-model="search" size="small" :placeholder="$t('config.type_to_search')" class="searchfield" />
         </template>
         <template #default="scope">
           <v-icon
@@ -92,13 +92,13 @@
             style="margin-bottom:-3px;"
           />&nbsp;&nbsp;
           <el-button
-            size="mini"
+            size="small"
             icon="el-icon-setting"
             plain
             @click="handleEdit(scope.$index, scope.row)"
           ></el-button>
           <el-button
-            size="mini"
+            size="small"
             type="danger"
             icon="el-icon-delete"
             plain

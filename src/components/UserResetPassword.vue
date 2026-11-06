@@ -36,7 +36,7 @@
       </el-row>
       <el-row>
         <el-form-item :label="$t('changepassword.notify_by_mail')" prop="sendMail">
-          <el-switch size="mini" v-model="sendMail"></el-switch>
+          <el-switch size="small" v-model="sendMail"></el-switch>
         </el-form-item>
       </el-row>
     </el-form>

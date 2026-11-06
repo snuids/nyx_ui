@@ -55,7 +55,7 @@
       <el-table :default-sort="sortProperty"
         ref="filesTable"
         :data="tableData" 
-        size="mini"
+        size="small"
         
         @row-dblclick="rowDoubleClick" 
         @row-click="rowClick" 
