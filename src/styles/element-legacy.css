@@ -15,7 +15,10 @@
  * les dialogues plus grands et differents de la version precedente.
  */
 body {
-  font-family: 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Pile exacte d'Element UI 2 (`base.css`) : c'est elle que recevaient les elements teleportes
+     dans la version precedente. */
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    Arial, sans-serif;
   font-size: 14px;
   color: #2c3e50;
 }
