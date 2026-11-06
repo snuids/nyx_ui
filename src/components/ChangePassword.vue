@@ -1,7 +1,7 @@
-<template #items>
+<template>
   <el-dialog
     :title="$t('logout.change_pass')"
-    :visible="visible"
+    v-model="visible"
     width="50%"
     :before-close="closeDialog"
     class="change-pwd-dlg"

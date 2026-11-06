@@ -1,4 +1,4 @@
-<template #items>
+<template>
   <div class="upload">
     <h2></h2>
     <div style="text-align:center;width:100%">

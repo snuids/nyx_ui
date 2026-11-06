@@ -1,4 +1,4 @@
-<template #items>
+<template>
   <div style="width: 100%;">
     <div :id="id" style="width: 100%;"></div>
     <el-button

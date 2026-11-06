@@ -145,6 +145,27 @@ largeur de 54 px, titre blanc de 18 px, croix blanche, corps à 30/20 px.
 Vérifié hors de l'application, avec une page de harnais chargeant la feuille compilée et `ui_css` :
 en-tête à 0 px des bords, 520 px de large comme la fenêtre, fond `rgb(64,158,255)`.
 
+## Sept composants ne rendaient rien, et les mesures de l'en-tête
+
+Le codemod avait transformé `<template slot="items">` en `<template #items>` **à la racine** de sept
+composants (Form, Kibana, Grafana, External, Upload, Vega, ChangePassword). Un bloc de template qui
+porte un `v-slot` n'est rendu par personne : ces écrans étaient vides, sans erreur. Les racines sont
+nettoyées et `tests/template-root.spec.js` refuse désormais un `<template>` racine avec slot.
+
+`ChangePassword` utilisait `:visible="visible"`, propriété qui n'existe plus : le dialogue ne
+s'ouvrait jamais. C'est `v-model="visible"`.
+
+Enfin, pour l'en-tête et les dialogues, la comparaison a été faite **contre la vraie référence** :
+deux pages de harnais, l'une chargeant Element UI 2.15.14 et `ui_css` (la production), l'autre la
+feuille compilée de la branche. Mesures identiques après correction :
+
+| mesure | production | branche |
+|---|---|---|
+| boutons ronds de l'en-tête | 39 x 40, à 9 px du haut | 40 x 40, à 9 px |
+| bande de titre | 54 px, titre à 20 px du bord | 54 px, titre à 20 px |
+| croix de fermeture | 16 px, à 20/20 | 24 px, à 20/20 |
+| boutons d'applications | 39 x 40 | 40 x 40 |
+
 ## À savoir (hors migration)
 
 - `master` porte la version **3.31.19** alors que la production tourne en **3.31.21** : les deux

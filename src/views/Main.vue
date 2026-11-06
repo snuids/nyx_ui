@@ -718,8 +718,12 @@ body {
 /* L'en-tete centre ses enfants par `line-height: 60px`. Les boutons d'Element Plus sont en
    `inline-flex`, donc alignes sur la ligne de base : le bouton rond de droite descendait par
    rapport au reste. */
+/* Element UI 2 posait le bouton rond a 9 px du haut de l'en-tete de 60 px ; Element Plus, avec sa
+   bordure de 1 px, le pose a 11 px. Les deux pixels se voient. */
 .el-header .el-button {
   vertical-align: middle;
+  position: relative;
+  top: -2px;
 }
 
 .el-header .el-button.is-circle {
@@ -753,9 +757,13 @@ body {
   overflow: hidden;
 }
 
+/* Element UI 2 : bande de 54 px, titre a gauche, croix de 16 px dans le coin. Element Plus centre
+   (il herite du `text-align: center` de #app), reserve 32 px a droite pour une croix de 48 px, et
+   laisse donc beaucoup de vide en haut — c'est ce qui se voyait. */
 .el-dialog__header {
   background-color: #409eff !important;
-  padding: 20px 20px 10px;
+  padding: 20px 40px 10px 20px;
+  text-align: left;
 }
 
 .el-dialog__title {
@@ -765,10 +773,15 @@ body {
 }
 
 .el-dialog__headerbtn {
-  top: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
+  top: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  font-size: 16px;
 }
 
 .el-dialog__body {

@@ -86,4 +86,22 @@ export default {
 .menuicon {
   margin-bottom: -3px;
 }
+
+/* Element UI 2 donnait a ces boutons 39 x 40 px (un carre, a la bordure pres). Avec des icones SVG
+   de largeurs variables, ils s'etirent en rectangles : on fixe la boite et on centre le contenu. */
+#app-popover .el-button,
+.el-popover .el-button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app-popover .el-button svg,
+.el-popover .el-button svg {
+  width: 24px;
+  height: 24px;
+}
 </style>

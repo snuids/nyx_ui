@@ -1,4 +1,4 @@
-<template #items>
+<template>
   <!--div v-bind:style="styleContainerComputed" -->
   <div>
     <iframe

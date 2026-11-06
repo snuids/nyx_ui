@@ -1,4 +1,4 @@
-<template #items>
+<template>
   <div>
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
