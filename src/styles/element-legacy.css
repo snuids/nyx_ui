@@ -7,6 +7,19 @@
  * sélecteurs et des boutons : la fixer ici rétablit les hauteurs d'origine sans toucher aux 62
  * composants.
  */
+/*
+ * Element UI 2 posait la typographie sur `body` (`base.css`) : 14 px, Helvetica Neue puis Arial.
+ * Element Plus ne touche pas au `body`. Tout ce qui est **teleporte** — dialogues
+ * (`append-to-body`), infobulles, menus deroulants, boites de confirmation — sort de `#app` et
+ * heritait donc du corps du navigateur : 16 px et une police a empattements. C'est ce qui rendait
+ * les dialogues plus grands et differents de la version precedente.
+ */
+body {
+  font-family: 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
 :root {
   --el-component-size: 36px;
   --el-component-size-large: 40px;
