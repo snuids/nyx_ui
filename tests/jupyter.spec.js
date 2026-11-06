@@ -33,6 +33,18 @@ describe('tokenFromUrl', () => {
     expect(tokenFromUrl(null)).toBe('')
     expect(tokenFromUrl('')).toBe('')
     expect(tokenFromUrl(undefined)).toBe('')
+    expect(tokenFromUrl(42)).toBe('')
+    expect(tokenFromUrl('http://[::1/jupylab?token=x')).toBe('')
+  })
+
+  it('resolves a relative URL against the page origin', () => {
+    // The configuration stores "/jupylab/lab?token=…": without the origin there is no pathname.
+    global.window = { location: { origin: 'https://console.example' } }
+    try {
+      expect(tokenFromUrl('/jupylab/lab?token=from-origin')).toBe('from-origin')
+    } finally {
+      delete global.window
+    }
   })
 })
 
@@ -50,6 +62,8 @@ describe('jupyterLabToken', () => {
     const menus = [
       { submenus: [{ apps: [{ type: 'external', config: {} }] }] },
       { submenus: [{ apps: [{ type: 'external' }] }] },
+      { submenus: [{ apps: [{ type: 'external', config: { url: 42 } }] }] },
+      { submenus: [{ apps: [null] }] },
       null,
     ]
     expect(jupyterLabToken(menus)).toBe('')
