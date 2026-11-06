@@ -162,7 +162,7 @@
             </el-row>
             <el-row v-if="filterFieldToConfigure.type == 'selecter'">
                <editor
-                v-model="selecterOptions"
+                v-model:value="selecterOptions"
                 @init="editorInit"
                 lang="text"
                 theme="chrome"

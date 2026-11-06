@@ -29,7 +29,7 @@
                 v-if="sqlQuery"
                 :key="editorKey"
                 ref="aceEditorComponent"
-                v-model="sqlQuery"
+                v-model:value="sqlQuery"
                 id="sqlEditor"
                 @init="editorInit"
                 lang="sql"

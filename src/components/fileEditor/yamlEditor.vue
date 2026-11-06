@@ -23,7 +23,7 @@
     </span></template>
       <editor
         v-loading="loading"
-        v-model="localFile"
+        v-model:value="localFile"
         id="test"
         @init="editorInit"
         lang="yaml"

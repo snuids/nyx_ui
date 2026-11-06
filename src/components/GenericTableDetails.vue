@@ -47,7 +47,7 @@
         v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
       >
         <editor
-          v-model="strOrgRec"
+          v-model:value="strOrgRec"
           id="test"
           @init="editorInitRO"
           lang="yaml"
@@ -63,7 +63,7 @@
         v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
       >
         <editor
-          v-model="strNewRec"
+          v-model:value="strNewRec"
           id="test"
           @init="editorInit"
           lang="yaml"

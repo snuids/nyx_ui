@@ -908,7 +908,7 @@
         <el-tab-pane :label="$t('generictable.new')" key="New" name="New" v-if="!isAdd">
           <el-card>
             <editor
-              v-model="strNewRec"
+              v-model:value="strNewRec"
               id="test"
               @init="editorInit"
               lang="yaml"
