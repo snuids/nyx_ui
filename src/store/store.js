@@ -354,17 +354,27 @@ export default new Vuex.Store({
       
     },    
     logout(state) {
-      state.wsObject.check_alive=false;
-      stopSocket(state.wsObject);
+      if (state.wsObject) {
+        state.wsObject.check_alive = false;
+        stopSocket(state.wsObject);
+      }
 
-      var url =
-        state.apiurl +
-        "cred/logout?token=" +
-        state.creds.token;
-
-      axios
-        .get(url)
-        .catch(() => { /* intentional no-op */ });
+      // The token stays valid for 24 h in Redis: deleting it server-side is what makes the session
+      // unusable, and the stored copy has to go too — otherwise a reload restores a session whose
+      // credentials no longer work, and a silent failure below would leave the token alive.
+      var token = (state.creds && state.creds.token) || "";
+      if (token) {
+        axios
+          .get(state.apiurl + "cred/logout?token=" + encodeURIComponent(token))
+          .catch((error) => console.warn("logout: the token was not revoked", error));
+      }
+      try {
+        if (typeof window !== "undefined" && window.localStorage) {
+          window.localStorage.removeItem("authResponse");
+        }
+      } catch (e) {
+        /* storage refused: nothing to purge */
+      }
     },
     changeContainerSize(state, payload) {
       state.containerSize = payload.data;
