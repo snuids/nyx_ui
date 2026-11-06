@@ -119,9 +119,20 @@ produit aucune erreur — Vue le traite comme un composant inconnu, affiche le c
 comportement de repli/dépli, et la barre de gauche cesse de s'ouvrir. `text-color` a également
 disparu au profit d'une variable CSS (`--el-menu-text-color`).
 
-Plutôt que de corriger ce seul nom, `tests/element-tags.spec.js` lit les 62 composants du projet et
-vérifie que **chaque balise `el-*` utilisée est réellement exportée par Element Plus**. C'est le
-garde-fou contre les autres renommages de la même famille, et il aurait signalé celui-ci.
+Le même renommage casse les **styles** : les règles de `Main.vue` visaient `.el-submenu__title` et
+`.el-submenu .el-menu-item` (40 px de haut), qui ne correspondent plus rien — les entrées reprenaient
+donc les 56 px par défaut, d'où une barre de gauche beaucoup plus haute. Les règles sont dupliquées
+pour `.el-sub-menu__title` et `.el-sub-menu .el-menu-item`.
+
+Et l'en-tête centre ses enfants par `line-height: 60px` alors que les boutons Element Plus sont en
+`inline-flex` (donc posés sur la ligne de base) et dimensionnés par `--el-component-size` : le bouton
+rond de droite descendait et rétrécissait (36 px au lieu de 40). Il est réaligné et remis à 40 px.
+
+Deux tests couvrent désormais cette famille de pannes, car elle ne produit aucune erreur :
+`tests/element-tags.spec.js` vérifie que **chaque balise `el-*` utilisée est réellement exportée par
+Element Plus**, et `tests/element-classes.spec.js` que **chaque classe `el-*` citée dans nos styles
+existe dans sa feuille CSS**. Ce second audit ne trouve plus que quatre classes, toutes assumées
+(le nom de classe propre au projet et les anciens sélecteurs conservés).
 
 ## À savoir (hors migration)
 

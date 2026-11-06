@@ -691,21 +691,45 @@ body {
   width: 100%;
 }
 
-.el-submenu__title {
+/* Element Plus a renomme `.el-submenu` en `.el-sub-menu` : sans ces selecteurs, les hauteurs de
+   40 px definies ici ne s'appliquaient plus et les entrees reprenaient les 56 px par defaut, ce qui
+   faisait une barre de gauche beaucoup plus haute qu'avant. Les anciens selecteurs sont conserves,
+   ils ne genent pas. */
+.el-submenu__title,
+.el-sub-menu__title {
   height: 40px !important;
   line-height: 40px !important;
   font-weight: bold;
 }
 
-.el-submenu .el-menu-item {
+.el-submenu .el-menu-item,
+.el-sub-menu .el-menu-item {
   height: 40px !important;
   line-height: 40px !important;
   padding: 0 45px;
   min-width: 200px;
 }
 
-.aside .el-submenu .el-menu-item {
+.aside .el-submenu .el-menu-item,
+.aside .el-sub-menu .el-menu-item {
   min-width: 0;
+}
+
+/* L'en-tete centre ses enfants par `line-height: 60px`. Les boutons d'Element Plus sont en
+   `inline-flex`, donc alignes sur la ligne de base : le bouton rond de droite descendait par
+   rapport au reste. */
+.el-header .el-button {
+  vertical-align: middle;
+}
+
+.el-header .el-button.is-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Element UI 2 : bouton rond de 40 px. Element Plus le dimensionne avec
+     --el-component-size (36 px ici), d'ou un bouton plus petit que dans l'en-tete. */
+  width: 40px;
+  height: 40px;
 }
 
 .menuiconaside {
