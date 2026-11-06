@@ -134,6 +134,17 @@ Element Plus**, et `tests/element-classes.spec.js` que **chaque classe `el-*` ci
 existe dans sa feuille CSS**. Ce second audit ne trouve plus que quatre classes, toutes assumées
 (le nom de classe propre au projet et les anciens sélecteurs conservés).
 
+## Fenêtres modales : un modèle de boîte différent
+
+Element UI 2 appliquait le rembourrage à `__header` et `__body` ; Element Plus le met sur
+`.el-dialog` lui-même (16 px). Conséquence : l'en-tête bleu (`api/v1/ui_css`) ne touchait plus les
+bords de la fenêtre — il flottait à l'intérieur, sans les coins arrondis, sur une bande de 40 px, et
+la croix de fermeture restait noire. Le modèle de boîte d'Element UI 2 est rétabli : bande pleine
+largeur de 54 px, titre blanc de 18 px, croix blanche, corps à 30/20 px.
+
+Vérifié hors de l'application, avec une page de harnais chargeant la feuille compilée et `ui_css` :
+en-tête à 0 px des bords, 520 px de large comme la fenêtre, fond `rgb(64,158,255)`.
+
 ## À savoir (hors migration)
 
 - `master` porte la version **3.31.19** alors que la production tourne en **3.31.21** : les deux

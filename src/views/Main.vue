@@ -743,8 +743,42 @@ body {
   overflow: hidden !important;
 }
 
+/* Element Plus met le rembourrage sur `.el-dialog` (16 px), alors qu'Element UI 2 le mettait sur
+   `__header` et `__body`. L'en-tete bleu ne touchait donc plus les bords de la fenetre : il
+   flottait a l'interieur, sans les coins arrondis, et la croix de fermeture devenait noire. On
+   retablit le modele de boite d'Element UI 2. */
+.el-dialog {
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.el-dialog__header {
+  background-color: #409eff !important;
+  padding: 20px 20px 10px;
+}
+
 .el-dialog__title {
   color: white !important;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.el-dialog__headerbtn {
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+}
+
+.el-dialog__body {
+  padding: 30px 20px;
+  color: #606266;
+  font-size: 14px;
+}
+
+.el-dialog__footer {
+  padding: 10px 20px 20px;
 }
 
 .el-dialog__headerbtn .el-dialog__close {
