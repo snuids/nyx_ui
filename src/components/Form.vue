@@ -1,4 +1,4 @@
-<template slot="items">
+<template #items>
   <div>
     <h2 class="form_title">{{computeTranslatedText(config.config.formtitle,$store.getters.creds.user.language)}}</h2>
     <div style="text-align:left;width:100%">
@@ -73,11 +73,8 @@
   
 <script>
 import moment from "moment";
-import Vue from "vue";
 import {computeTranslatedText} from '../globalfunctions'
 
-import VueGeolocation from "vue-browser-geolocation";
-Vue.use(VueGeolocation);
 
 export default {
   name: "Form",

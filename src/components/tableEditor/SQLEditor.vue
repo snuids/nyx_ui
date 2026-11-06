@@ -2,7 +2,7 @@
   <el-dialog
     width="80%"
     :title="title"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="sql-editor"
@@ -44,18 +44,19 @@
       </el-form>
     </el-card>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="closeDialog">Cancel</el-button>
       <el-button
         type="primary"
         :disabled="!hasChanged"
         @click="saveRecord()"
       >Save</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 
 <script>
+import { VAceEditor } from "vue3-ace-editor";
 export default {
   name: "SQLEditor",
   data: () => ({
@@ -70,9 +71,7 @@ export default {
     aceEditor: null, // Store ace editor instance
     editorKey: 0 // Key to force re-render
   }),
-  components: {
-    editor: require("vue2-ace-editor")
-  },
+  components: { editor: VAceEditor },
   computed: {
     hasChanged: function() {
       return this.sqlQuery !== this.originalQuery || this.description !== this.originalDescription;
@@ -144,17 +143,17 @@ export default {
     };
     document.addEventListener("keydown", this.keyListener.bind(this));
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     if (this.keyListener) {
       document.removeEventListener("keydown", this.keyListener);
     }
   },
   methods: {
     editorInit: function(editor) {
-      require("brace/ext/language_tools");
-      require("brace/mode/sql");
-      require("brace/theme/chrome");
-      require("brace/snippets/sql");
+      require("ace-builds/src-noconflict/ext-language_tools");
+      require("ace-builds/src-noconflict/mode-sql");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/sql");
       editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,

@@ -2,7 +2,7 @@
   <el-dialog
     width="90%"
     :title="$t('generictable.modifyrecord')"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
   >
@@ -61,7 +61,7 @@
         </el-form>
       </el-tab-pane>
     </el-tabs>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
       <el-button
         v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
@@ -69,7 +69,7 @@
         :disabled="!recchanged"
         @click="saveRecord()"
       >{{this.$t("buttons.confirm")}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

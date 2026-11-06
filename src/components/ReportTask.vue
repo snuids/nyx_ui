@@ -3,7 +3,7 @@
   <div>
     <el-dialog
       :title="$t('report.logs_viewer')"
-      :visible.sync="LogViewerVisible"
+      v-model="LogViewerVisible"
       :before-close="closeDialog"
       width="80%"
     >
@@ -25,7 +25,7 @@
 
     <el-dialog
       :title="$t('rep.pdf_viewer')"
-      :visible.sync="pdfDialogVisible"
+      v-model="pdfDialogVisible"
       :before-close="closePdfDialog"
       width="90%"
       top="5vh"
@@ -37,15 +37,15 @@
           style="width: 100%; height: 100%; border: none;"
         ></iframe>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <template #footer><span class="dialog-footer">
         <el-button @click="closePdfDialog">{{ $t('buttons.cancel') || 'Close' }}</el-button>
         <el-button type="primary" @click="openPdfInNewTab">{{ $t('generic.open_in_new_tab') || 'Open in New Tab' }}</el-button>
-      </span>
+      </span></template>
     </el-dialog>
 
     <el-dialog
       :title="$t('reporttask.excel_viewer')"
-      :visible.sync="xlsxDialogVisible"
+      v-model="xlsxDialogVisible"
       :before-close="closeXlsxDialog"
       width="90%"
       top="5vh"
@@ -88,10 +88,10 @@
           <p>{{ $t('reporttask.loading_excel') }}</p>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <template #footer><span class="dialog-footer">
         <el-button @click="closeXlsxDialog">{{ $t('buttons.cancel') || 'Close' }}</el-button>
         <el-button type="primary" @click="openXlsxInNewTab">{{ $t('generic.download') || 'Download' }}</el-button>
-      </span>
+      </span></template>
     </el-dialog>
 
     <el-table
@@ -102,13 +102,13 @@
       highlight-current-row
     >
       <el-table-column width="60">
-        <template slot-scope="scope">
+        <template #default="scope">
           <v-icon :name="scope.row._source.report.icon" scale="2" />
         </template>
       </el-table-column>
 
       <el-table-column width="60" :label="$t('generic.status')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <v-icon
             name="spinner"
             spin
@@ -138,26 +138,26 @@
       </el-table-column>
 
       <el-table-column sortable prop="_source.treatment.creation" :label="$t('generic.creation')">
-        <template slot-scope="scope">
-          <div>{{scope.row._source.treatment.creation | formatDate}}</div>
+        <template #default="scope">
+          <div>{{ $filters.formatDate(scope.row._source.treatment.creation) }}</div>
           <span
             v-if="scope.row._source.treatment.duration"
-          >Duration {{scope.row._source.treatment.duration | numeral('0.[0]')}} s</span>
+          >Duration {{ $numeral(scope.row._source.treatment.duration, '0.[0]') }} s</span>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('report.report')" prop="_source.report.title" sortable>
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="font-weight:bolder">{{computeTranslatedText(scope.row._source.report.title,$store.getters.creds.user.language)}}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('generic.user')" prop="_source.creds.user.id" sortable>
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="font-weight:bolder">{{scope.row._source.creds.user.id}}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('generic.parameters')" prop="_source.report.parameters.length">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="scope.row._source.report.parameters?true:false"
             placement="left-start"
@@ -172,13 +172,13 @@
               &nbsp;
               <el-tag size="mini">{{item.title}}:{{item.value}}</el-tag>
             </div>
-            <el-button size="mini" slot="reference">{{scope.row._source.report.parameters.length}}</el-button>
+            <template #reference><el-button size="mini">{{scope.row._source.report.parameters.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
 
       <el-table-column align="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tooltip
             class="item"
             effect="dark"
@@ -207,10 +207,10 @@
       </el-table-column>
       <el-table-column prop="_source.downloads.length" align="right">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header #default="_scope">
           <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button
             size="mini"
             round
@@ -227,6 +227,7 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import Vue from "vue";
 import moment from "moment";
@@ -235,7 +236,7 @@ import logviewer from "@/components/LogViewer";
 import {computeTranslatedText} from '../globalfunctions'
 import * as XLSX from 'xlsx';
 
-Vue.component("LogViewer", logviewer);
+registerComponent("LogViewer", logviewer);
 
 export default {
   name: "ReportTask",
@@ -608,7 +609,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     clearInterval(this.timer);
   }
 };

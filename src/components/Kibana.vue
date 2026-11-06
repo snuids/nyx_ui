@@ -1,4 +1,4 @@
-<template slot="items">
+<template #items>
   <div>
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
@@ -59,9 +59,6 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
-import Vue from "vue";
-import browserDetect from "vue-browser-detect-plugin";
-Vue.use(browserDetect);
 
 export default {
   name: "Kibana",
@@ -514,7 +511,7 @@ export default {
     //   this.createUrl();
     // });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING KIBANA:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");

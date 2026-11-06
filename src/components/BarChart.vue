@@ -569,7 +569,7 @@ export default {
       this.prepareData();
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING MAP:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");

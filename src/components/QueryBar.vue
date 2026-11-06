@@ -9,15 +9,14 @@
         v-model="query"
         @change="refresh()"
       >
-        <i slot="prefix" class="prefix-icon el-input__icon el-icon-arrow-right"></i>
-        <el-popover
-          slot="suffix"
+        <template #prefix><i class="prefix-icon el-input__icon el-icon-arrow-right"></i></template>
+        <template #suffix><el-popover
+         
           placement="bottom-start"
           width="150"
           trigger="hover"
           v-if="config && config.downloadChecked"
-          :open-delay="1000"
-        >
+          :open-delay="1000">
           <el-col>
             <el-row class="popover-title">
               <span>{{this.$t('querybar.download')}}</span>
@@ -40,7 +39,7 @@
             slot="reference"
             size="medium"
           ></el-button>
-        </el-popover>
+        </el-popover></template>
       </el-input>
     </div>
     <div class="refresh-button" v-if="config.type !='kibana' ">

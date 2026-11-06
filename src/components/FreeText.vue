@@ -22,7 +22,7 @@ export default {
   created: function() {},
 
   mounted: function() {},
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     clearInterval(this.timer);
   }
 };

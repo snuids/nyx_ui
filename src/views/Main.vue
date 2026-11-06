@@ -62,11 +62,10 @@
                       </el-col>
                     </el-row>
                   </el-form>
-                  <el-button
+                  <template #reference><el-button
                     size="mini"
-                    slot="reference"
-                    style="margin-right:5px;"
-                  >{{$t('time.last')}} {{relativeTimeValue}} {{relativeTimeType}}</el-button>
+                   
+                    style="margin-right:5px;">{{$t('time.last')}} {{relativeTimeValue}} {{relativeTimeType}}</el-button></template>
                 </el-popover>
               </div>
               <div 
@@ -181,7 +180,7 @@
                     :key="menu.category"
                     :index="menu.category"
                   >
-                    <template slot="title">
+                    <template #title>
                       <!--<i class="el-icon-location"></i>-->
                       <span>{{menu.loc_category}}</span>
                     </template>
@@ -219,6 +218,7 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import logout from "@/components/Logout";
 import apps from "@/components/Apps";
@@ -227,9 +227,9 @@ import Vue from "vue";
 import moment from "moment";
 import _ from "lodash";
 
-Vue.component("Logout", logout);
-Vue.component("Apps", apps);
-Vue.component("ChangePassword", changepassword);
+registerComponent("Logout", logout);
+registerComponent("Apps", apps);
+registerComponent("ChangePassword", changepassword);
 
 // @ is an alias to /src
 export default {
@@ -656,7 +656,7 @@ export default {
       });
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     this.$globalbus.$off("charttimerangeupdated");
     this.$globalbus.$off("forcetime");
     window.removeEventListener("resize", this.resizeListener);

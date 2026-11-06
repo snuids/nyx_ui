@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="60%" :title="computeTranslatedText(record.title,$store.getters.creds.user.language)" :visible.sync="visible" :before-close="closeDialog">
+  <el-dialog width="60%" :title="computeTranslatedText(record.title,$store.getters.creds.user.language)" v-model="visible" :before-close="closeDialog">
     <el-form :model="record" v-if="visible">
       <el-row v-for="param in filteredParameters" :key="param.name">
         <el-col :span="24" v-if="param.type == 'text'">
@@ -162,11 +162,11 @@
       </el-row>
     </el-form>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <!--<v-icon :name="record.icon" scale="1"/>-->
       <el-button @click="closeDialog()">{{ $t('reportgenerator.cancel') }}</el-button>
       <el-button type="primary" @click="generateReport()">{{ $t('reportgenerator.generate') }}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

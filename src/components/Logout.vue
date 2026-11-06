@@ -6,7 +6,7 @@
           style="width:16px;height:16px;font-size:14px;"
         >{{$store.getters.creds.user.firstname[0]}}</div>
       </el-button>
-      <el-dropdown-menu slot="dropdown">
+      <template #dropdown><el-dropdown-menu>
         <el-dropdown-item command="info">
           <v-icon class="menuicon" name="info-circle" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.info") }}
@@ -23,7 +23,7 @@
           <v-icon class="menuicon" name="external-link-alt" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.logout") }}
         </el-dropdown-item>
-      </el-dropdown-menu>
+      </el-dropdown-menu></template>
     </el-dropdown>
   </span>
 </template>

@@ -2,7 +2,7 @@
   <el-dialog
     width="80%"
     :title="title"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="lambda-editor"
@@ -185,9 +185,9 @@
                 size="mini"
                 clearable
               >
-                <template slot-scope="{ item }">
+                <template #default="{ item }">
                   <div class="value">
-                    <span style="font-weight:bold;">{{ item.time | formatTS2}} -&nbsp;</span>
+                    <span style="font-weight:bold;">{{ $filters.formatTS2(item.time) }} -&nbsp;</span>
                     <span>({{item.duration}}ms)</span>
                     <i
                       v-if="item.crashed"
@@ -284,9 +284,9 @@
       </el-tab-pane>
     </el-tabs>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.quit")}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

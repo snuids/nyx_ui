@@ -17,30 +17,30 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column width="80">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="text-align:center; margin-top:3px;">
             <v-icon :name="scope.row._source.icon" v-if="scope.row._source.icon" scale="1.5" />
           </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.report')" prop="_source.title" sortable width="300">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="font-weight:bolder">{{scope.row._source.title}}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.next_run')" prop="_source.nextRun" sortable>
-        <template slot-scope="scope">
-          <div>{{scope.row._source.nextRun | formatDate}}</div>
+        <template #default="scope">
+          <div>{{ $filters.formatDate(scope.row._source.nextRun) }}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.type')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div>{{scope.row._source.trigger.type}}</div>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('report.days')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <template v-if="scope.row._source.trigger.type=='daily'">
             <span v-for="item in scope.row._source.trigger.days" :key="item">
               &nbsp;
@@ -57,14 +57,14 @@
       </el-table-column>
 
       <el-table-column :label="$t('report.time')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div>{{scope.row._source.trigger.time}}</div>
         </template>
       </el-table-column>
 
       <el-table-column align="right" width="220">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header #default="_scope">
           <div>
             <el-tooltip
               v-if="currentRow"
@@ -103,7 +103,7 @@
           </div>
           <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tooltip class="item" effect="dark" :content="$t('generic.edit')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
@@ -131,12 +131,13 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import reportperiodiceditor from "@/components/ReportPeriodicEditor";
 import Vue from "vue";
 import moment from "moment";
 
-Vue.component("ReportPeriodicEditor", reportperiodiceditor);
+registerComponent("ReportPeriodicEditor", reportperiodiceditor);
 
 export default {
   name: "ReportPeriodic",
@@ -271,7 +272,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 

@@ -1,4 +1,4 @@
-<template slot="items">
+<template #items>
   <div class="upload">
     <h2></h2>
     <div style="text-align:center;width:100%">
@@ -17,9 +17,9 @@
           {{$t("upload.drop_file_here")}}
           <em>{{$t("upload.click_to_upload")}}</em>
         </div>
-        <div class="el-upload__tip" slot="tip">
+        <template #tip><div class="el-upload__tip">
           <h2>{{computeTranslatedText(config.config.tip,$store.getters.creds.user.language)}}</h2>
-        </div>
+        </div></template>
         <span v-if="accept != undefined & accept != ''">          
         ({{accept}})
         </span>

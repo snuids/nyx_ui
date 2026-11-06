@@ -20,7 +20,7 @@
     </span>
 
     <el-card class="file-system-card" :body-style="{ padding: '0px' }" shadow="never" :style="'height:'+ containerHeight" :key="config.rec_id">
-      <div slot="header" class="clearfix">
+      <template #header><div class="clearfix">
     <!-- <h1>{{config}}</h1> -->
     <!-- <p>{{tableData.length}}/{{numberOfItems}}/{{allData.length}}</p> -->
         <el-row style="height:28px;" flex>
@@ -50,7 +50,7 @@
             </el-row>
           </el-col>
         </el-row>
-      </div>
+      </div></template>
 
       <el-table :default-sort="sortProperty"
         ref="filesTable"
@@ -66,7 +66,7 @@
         :empty-text="$t('ui.folder_empty')">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="name" label="Name" sortable>
-          <template slot-scope="scope">
+          <template #default="scope">
             <span class="icon-items">
               <v-icon v-if="scope.row.type=='dir'" name="regular/folder" scale="1.3" />
               <v-icon v-else-if="scope.row.type=='file' && ['png', 'jpg'].indexOf(scope.row.extension.toLowerCase())>-1" name="regular/image" scale="1.3" />
@@ -82,21 +82,21 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('ui.last_modified')" sortable prop="modification_time" width="150">
-          <template slot-scope="scope"><span class="noselect" >{{scope.row.modification_time | formatTS}}</span> </template>
+          <template #default="scope"><span class="noselect" >{{ $filters.formatTS(scope.row.modification_time) }}</span> </template>
         </el-table-column>
         <el-table-column prop="size" sortable :label="$t('ui.file_size')" width="150">
-          <template slot-scope="scope"><span  class="noselect" v-if="scope.row.type=='file'">{{scope.row.size | prettyBytes}}</span></template>
+          <template #default="scope"><span  class="noselect" v-if="scope.row.type=='file'">{{ $filters.prettyBytes(scope.row.size) }}</span></template>
         </el-table-column>
 
-         <infinite-loading
+         <template #append><infinite-loading
          :identifier="infiniteId"
-          slot="append"
+         
           @infinite="loadMore"
           spinner="spiral"
           force-use-infinite-wrapper=".el-table__body-wrapper">
-            <div slot="no-more"></div>
+            <template #no-more><div></div></template>
 
-        </infinite-loading>
+        </infinite-loading></template>
         
       </el-table>
       
@@ -456,7 +456,7 @@ export default {
     this.listDir();
     this.rootRouterPath = this.$route.path;
   },
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 

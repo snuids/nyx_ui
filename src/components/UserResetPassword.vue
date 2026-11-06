@@ -2,7 +2,7 @@
   <el-dialog
     width="400px"
     :title="$t('changepassword.newpass')"
-    :visible.sync="visible"
+    v-model="visible"
     :before-close="closeDialog"
     class="user-reset-password-dialog"
     append-to-body

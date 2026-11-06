@@ -60,7 +60,7 @@
               autocomplete="off"
               v-model="newPassword.second"
               show-password
-              v-on:keyup.enter.native="submitNewPassword()"
+              v-on:keyup.enter="submitNewPassword()"
             />
           </el-form-item>
           <el-button
@@ -93,7 +93,7 @@
           <el-form-item label>
             <el-input
               :placeholder="$t('ui.enter_password')"
-              v-on:keyup.enter.native="validateUser()"
+              v-on:keyup.enter="validateUser()"
               type="password"
               name="password"
               autocomplete="none"

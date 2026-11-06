@@ -20,18 +20,18 @@
       <el-table-column prop="_source.firstname" :label="$t('user.firstname')" sortable width="180"></el-table-column>
       <el-table-column prop="_source.lastname" :label="$t('user.lastname')" sortable width="180"></el-table-column>
       <el-table-column :label="$t('generic.privileges')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover placement="left-start" :title="$t('generic.privileges')" width="200" trigger="hover">
             <span :key="item" v-for="item in scope.row._source.privileges">
               &nbsp;
               <el-tag size="mini">{{item}}</el-tag>
             </span>
-            <el-button size="mini" slot="reference">{{scope.row._source.privileges.length}}</el-button>
+            <template #reference><el-button size="mini">{{scope.row._source.privileges.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column :label="$t('generic.filters')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="scope.row._source.filters?true:false"
             placement="left-start"
@@ -43,13 +43,13 @@
               &nbsp;
               <el-tag size="mini">{{item}}</el-tag>
             </span>
-            <el-button size="mini" slot="reference">{{scope.row._source.filters.length}}</el-button>
+            <template #reference><el-button size="mini">{{scope.row._source.filters.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column align="right" width="250">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header #default="_scope">
           <div>
             <el-button
               size="mini"
@@ -63,7 +63,7 @@
           </div>
           <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button
             size="mini"
             type="primary"
@@ -84,11 +84,12 @@
   </div>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import Vue from "vue";
 
 import userdetails from "@/components/UserDetails";
-Vue.component("UserDetails", userdetails);
+registerComponent("UserDetails", userdetails);
 
 export default {
   data() {

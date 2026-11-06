@@ -29,20 +29,20 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column width="40">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="text-align:center;">
             <v-icon :name="scope.row._source.icon" scale="1.5" />
           </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.report')" prop="_id" sortable>
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="font-weight:bolder">{{computeTranslatedText(scope.row._source.title,$store.getters.creds.user.language)}}</div>
           <span>{{computeTranslatedText(scope.row._source.description,$store.getters.creds.user.language)}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.output')" width="180">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span v-for="item in scope.row._source.output" :key="item">
             &nbsp;
             <el-tag size="mini" type="info">{{item}}</el-tag>
@@ -55,7 +55,7 @@
         v-if="$store.getters.creds.hasPrivilege('reporteditor')"
         width="120"
       >
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="(scope.row._source.privileges?true:false) && (scope.row._source.privileges.length>0)"
             placement="left-start"
@@ -69,7 +69,7 @@
               <el-tag size="mini">{{item}}</el-tag>
             </span>
 
-            <el-button size="mini" slot="reference">{{scope.row._source.privileges.length}}</el-button>
+            <template #reference><el-button size="mini">{{scope.row._source.privileges.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
@@ -79,7 +79,7 @@
         v-if="$store.getters.creds.hasPrivilege('reporteditor')"
         width="120"
       >
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="(scope.row._source.parameters?true:false) && (scope.row._source.parameters.length>0)"
             placement="left-start"
@@ -92,14 +92,14 @@
               &nbsp;
               <el-tag size="mini">{{item.title}}/{{item.type}}</el-tag>
             </span>
-            <el-button size="mini" slot="reference">{{scope.row._source.parameters.length}}</el-button>
+            <template #reference><el-button size="mini">{{scope.row._source.parameters.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
 
       <el-table-column align="right" width="300">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header #default="_scope">
           <div>
             <el-tooltip
               v-if="currentRow"
@@ -138,7 +138,7 @@
           </div>
           <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tooltip class="item" effect="dark" :content="$t('generic.generate')" placement="bottom-start">
             <el-button
               size="mini"
@@ -173,12 +173,13 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import reporteditor from "@/components/ReportEditor";
 import reportgenerator from "@/components/ReportGenerator";
 import Vue from "vue";
-Vue.component("ReportEditor", reporteditor);
-Vue.component("ReportGenerator", reportgenerator);
+registerComponent("ReportEditor", reporteditor);
+registerComponent("ReportGenerator", reportgenerator);
 import {computeTranslatedText} from '../globalfunctions'
 
 export default {
@@ -348,7 +349,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 

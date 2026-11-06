@@ -24,7 +24,7 @@
             :label="$t('generic.severity')"
             prop="severity" 
           >
-            <template slot-scope="scope">
+            <template #default="scope">
               
               <el-tag size="mini" v-if="scope.row.severity.toLowerCase()=='error'" type="danger" effect="dark">{{scope.row.severity}}</el-tag>
               <el-tag size="mini" v-else-if="scope.row.severity.toLowerCase()=='warning'" type="warning" effect="dark">{{scope.row.severity}}</el-tag>
@@ -37,7 +37,7 @@
             label="Message"
             prop="message"
             >
-            <template slot-scope="scope">              
+            <template #default="scope">              
               <span style="{ color:black;white-space: pre-wrap !important;}">{{scope.row.message}}</span>
             </template>   
                       
@@ -51,7 +51,7 @@
             width="170"
             >
             
-             <template slot="header" slot-scope="_scope">
+             <template #header #default="_scope">
               <el-input
                 v-model="search"                
                 size="mini"
@@ -65,7 +65,7 @@
             label="Message"
             prop="message"
             header-align="right">
-            <template slot="header" slot-scope="scope" style="text-align:right">
+            <template #header #default="scope" style="text-align:right">
               <el-input
                 v-model="search"
                 style="width:50%"
@@ -75,7 +75,7 @@
             </template>
           </el-table-column-->
           <!-- <el-table-column v-if="logObj"  align="right">
-            <template slot="header" slot-scope="scope">
+            <template #header #default="scope">
               <el-input
                 v-model="search"
                 size="mini"

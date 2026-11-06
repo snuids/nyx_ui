@@ -17,9 +17,9 @@
       </el-row>
     </el-form>
 
-    <el-button circle type="primary" slot="reference">
+    <template #reference><el-button circle type="primary">
       <i class="el-icon-menu"></i>
-    </el-button>
+    </el-button></template>
   </el-popover>
 </template>
   

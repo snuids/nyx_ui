@@ -4,7 +4,6 @@
     <l-map :zoom="zoom" :center="center" :options="{scrollWheelZoom:false}">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       
-      <v-marker-cluster :options="{showCoverageOnHover:false}">
       <l-marker
         v-for="item in markers"
         :key="item.id"
@@ -13,29 +12,26 @@
         @click="markerClicked(item)"
       >
       </l-marker>
-      </v-marker-cluster>
     </l-map>
    
   </div>
 </template>
 
 <script>
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 
 import 'leaflet-fa-markers/L.Icon.FontAwesome.css'
-import 'leaflet-fa-markers/L.Icon.FontAwesome.js'
-
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-
 
 import L from "leaflet";
+// `leaflet-fa-markers` n'est pas un module : il lit un global `L`. Il est donc charge par require()
+// apres l'avoir pose, et non par un import (qui s'executerait avant, les imports etant hisses).
+window.L = L;
+require('leaflet-fa-markers/L.Icon.FontAwesome.js');
 delete L.Icon.Default.prototype._getIconUrl;
 import _ from "lodash";
 
-import Vue2LeafletMarkercluster from 'vue2-leaflet-markercluster'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
@@ -67,7 +63,6 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    'v-marker-cluster': Vue2LeafletMarkercluster
   },
   props: {
     config: {
@@ -212,7 +207,7 @@ export default {
     });
     console.log("===============  MAP END MOUNTED:");
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING MAP:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");

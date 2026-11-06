@@ -91,7 +91,7 @@
           <div class="panel-title">{{ $t('activity.top_endpoints') }}</div>
           <el-table :data="topEndpoints" size="mini" :show-header="true" max-height="240">
             <el-table-column prop="key" :label="$t('activity.col_path')" show-overflow-tooltip>
-              <template slot-scope="scope">
+              <template #default="scope">
                 <div class="bar-row">
                   <span class="bar" :style="{ width: scope.row.pct + '%' }"></span>
                   <span class="bar-text">{{ scope.row.key }}</span>
@@ -145,24 +145,24 @@
       </div>
       <el-table :data="records" size="mini" border max-height="520" stripe>
         <el-table-column :label="$t('activity.col_time')" width="150">
-          <template slot-scope="scope">{{ formatTime(scope.row) }}</template>
+          <template #default="scope">{{ formatTime(scope.row) }}</template>
         </el-table-column>
         <el-table-column :label="$t('activity.col_user')" width="130" show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.user }}</template>
+          <template #default="scope">{{ scope.row.user }}</template>
         </el-table-column>
         <el-table-column :label="$t('activity.col_method')" width="90">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-tag size="mini" :type="methodTag(scope.row.method)">{{ scope.row.method }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column :label="$t('activity.col_path')" min-width="260" show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.url }}</template>
+          <template #default="scope">{{ scope.row.url }}</template>
         </el-table-column>
         <el-table-column :label="$t('activity.col_ms')" width="90" align="right" sortable prop="timespan">
-          <template slot-scope="scope">{{ scope.row.timespan }}</template>
+          <template #default="scope">{{ scope.row.timespan }}</template>
         </el-table-column>
         <el-table-column :label="$t('activity.col_error')" min-width="180" show-overflow-tooltip>
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-tag v-if="scope.row.error" size="mini" type="danger">{{ scope.row.error }}</el-tag>
             <span v-else class="ok">ok</span>
           </template>
@@ -306,7 +306,7 @@ export default {
   mounted() {
     this.resolveKeywordFields().then(() => this.load());
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.stopAutoRefresh();
   },
   methods: {

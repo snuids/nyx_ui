@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="80%" :title="$t('scheduler.edit_scheduler')" :visible.sync="visible" :before-close="closeDialog">
+  <el-dialog width="80%" :title="$t('scheduler.edit_scheduler')" v-model="visible" :before-close="closeDialog">
     <el-tabs v-model="activeName">
       <el-tab-pane :label="$t('scheduler.scheduler')" name="scheduler">
         <el-form :model="record._source" v-if="visible" :rules="rules" ref="record">
@@ -322,11 +322,11 @@
         </el-form>
       </el-tab-pane>
     </el-tabs>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <!--<v-icon :name="record.icon" scale="1"/>-->
       <el-button @click="closeDialog()">{{$t('buttons.cancel')}}</el-button>
       <el-button type="primary" @click="updatePeriodicReport()" :disabled="!modified && !paramValueChanged">{{$t('buttons.update')}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

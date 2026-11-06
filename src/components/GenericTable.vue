@@ -47,7 +47,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        v-model:current-page="currentPage"
         :page-sizes="[100, 200, 300, 400, 500]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -78,7 +78,7 @@
             
           >
             <!-- show-overflow-tooltip -->
-            <template slot-scope="scope">
+            <template #default="scope">
               <span v-if="header.type=='select'">
                 <el-select
                   @change="selectChanged(scope.row, header)"
@@ -96,7 +96,7 @@
               </span>
               <span
                 v-else-if="(header.type=='long' || header.type=='double') && header.format != null && header.format.length > 0"
-              >{{computeRec(scope.row,header.field) | numeral(header.format)}}</span>
+              >{{ $numeral(computeRec(scope.row,header.field), header.format) }}</span>
               <span v-else-if="header.type=='boolean'">
                 <el-switch
                   v-model="scope.row._source[header.field.replace('_source.', '')]"
@@ -128,7 +128,7 @@
             </template>
           </el-table-column>
           <el-table-column label="Actions" align="right" width="150px;">
-            <template slot="header" slot-scope="_scope">
+            <template #header #default="_scope">
               <div>
                 <el-tooltip
                   v-if="config.config.index.indexOf('*')==-1 && currentRow && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
@@ -181,7 +181,7 @@
                 </el-tooltip>
               </div>
             </template>
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button
                 size="mini"
                 plain
@@ -204,6 +204,7 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import moment from "moment";
 import Vue from "vue";
@@ -227,11 +228,11 @@ req.keys().forEach(filename => {
 });
 //console.log("B=========================> DYNAMIC COMPONENTS");
 
-Vue.component("Map", map);
-Vue.component("BarChart", barchart);
-Vue.component("QueryBar", querybar);
-Vue.component("GenericTableDetails", generictabledetails);
-Vue.component("QueryFilter", queryfilter);
+registerComponent("Map", map);
+registerComponent("BarChart", barchart);
+registerComponent("QueryBar", querybar);
+registerComponent("GenericTableDetails", generictabledetails);
+registerComponent("QueryFilter", queryfilter);
 
 
 export default {
@@ -1048,7 +1049,7 @@ export default {
       else console.log("Ignoring time change.");
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING: timerangechanged");
     this.$globalbus.$off("timerangechanged");
 

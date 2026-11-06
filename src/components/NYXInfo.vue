@@ -5,7 +5,7 @@
       <el-col :span="12">
         <el-row>
           <el-card shadow="never" v-if="activeMQ && activeMQ[0] && activeMQ[0]._source">
-            <div slot="header" class="clearfix">
+            <template #header><div class="clearfix">
               <b>{{ $t('nyxinfo.active_mq') }}</b>
               -
               {{ $t('nyxinfo.version') }}
@@ -13,7 +13,7 @@
               -
               {{ $t('nyxinfo.connections') }}
               <b>{{activeMQ[0]._source.currentconnectionscount}}</b>
-            </div>
+            </div></template>
             <el-row>
               <el-col :span="8" style="text-align:center">
                 <el-progress
@@ -56,9 +56,9 @@
         </el-row>
         <el-row>
           <el-card shadow="never" v-if="loads && loads[0] && loads[0]._source">
-            <div slot="header" class="clearfix">
+            <template #header><div class="clearfix">
               <b>{{ $t('nyxinfo.load') }}</b>
-            </div>
+            </div></template>
             <el-row>
               <el-col :span="8" style="text-align:center">
                 <el-progress
@@ -104,9 +104,9 @@
       <el-col :span="6">
         <el-row>
           <el-card shadow="never" v-if="elastalert">
-            <div slot="header" class="clearfix" v-on:click="switch_to('elastalert')">
+            <template #header><div class="clearfix" v-on:click="switch_to('elastalert')">
               <b>{{ $t('nyxinfo.elastalert_24h') }}</b>
-            </div>
+            </div></template>
             <div
               class="background-alert"
               :style="'background-color:'+(elastalert.total==0?'#13CE66':'#FF4949')"
@@ -120,9 +120,9 @@
         </el-row>
         <el-row>
           <el-card shadow="never" v-if="logstash">
-            <div slot="header" class="clearfix" v-on:click="switch_to('logstash')">
+            <template #header><div class="clearfix" v-on:click="switch_to('logstash')">
               <b>{{ $t('nyxinfo.logstash_24h') }}</b>
-            </div>
+            </div></template>
             <div
               class="background-alert"
               :style="'background-color:'+(logstash.total==0?'#13CE66':'#FF4949')"
@@ -139,9 +139,9 @@
       <el-col :span="6">
         <el-row>
           <el-card shadow="never" v-if="docker_status && docker_status.records">
-            <div slot="header" class="clearfix" v-on:click="switch_to('containers')">
+            <template #header><div class="clearfix" v-on:click="switch_to('containers')">
               <b>{{ $t('nyxinfo.containers_stopped') }}</b>
-            </div>
+            </div></template>
 
             <div
               class="background-alert"
@@ -156,9 +156,9 @@
         </el-row>
         <el-row>
           <el-card shadow="never" v-if="lambdas && lambdas.aggs">
-            <div slot="header" class="clearfix" v-on:click="switch_to('lambdas')">
+            <template #header><div class="clearfix" v-on:click="switch_to('lambdas')">
               <b>{{ $t('nyxinfo.lambdas_24h') }}</b>
-            </div>
+            </div></template>
             <div
               class="background-alert"
               :style="'background-color:'+(lambdas.aggs['1'].value==0?'#13CE66':'#FF4949')"
@@ -179,12 +179,12 @@
           shadow="never"
           v-if="WebSocketServer && WebSocketServer[0] && WebSocketServer[0]._source"
         >
-          <div slot="header" class="clearfix" v-on:click="switch_to('users config')">
+          <template #header><div class="clearfix" v-on:click="switch_to('users config')">
             <b>{{ $t('nyxinfo.users') }}</b> - {{ $t('nyxinfo.connected') }}
             <b>{{WebSocketServer[0]._source.clients[0].clients}}</b>
             - {{ $t('nyxinfo.uniques') }}
             <b>{{Array.from(new Set(WebSocketServer[0]._source.clients[0].logins)).length}}</b>
-          </div>
+          </div></template>
           <div class="text item" v-on:click="switch_to('users config')">
             <div
               v-for="(item, index) in Array.from(new Set(WebSocketServer[0]._source.clients[0].logins))"
@@ -195,9 +195,9 @@
       </el-col>
       <el-col :span="12">
         <el-card shadow="never" v-if="nodes">
-          <div slot="header" class="clearfix">
+          <template #header><div class="clearfix">
             <b>{{ $t('nyxinfo.es_nodes') }}</b>
-          </div>
+          </div></template>
           <el-table :data="nodes" style="width: 100%">
             <el-table-column prop="node" :label="$t('nyxinfo.node')"></el-table-column>
             <el-table-column prop="disk_indices" :label="$t('nyxinfo.indices')"></el-table-column>
@@ -587,7 +587,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     if(this.refAutoRefresh != null)
       clearInterval(this.refAutoRefresh)
   }

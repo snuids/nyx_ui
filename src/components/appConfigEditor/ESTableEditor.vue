@@ -40,13 +40,13 @@
       <el-row>
         <el-table :data="esMapping" size="mini" style="width: 100%">
           <el-table-column label="id" prop="id">
-            <template slot="header" slot-scope="_scope">
+            <template #header #default="_scope">
               <p
                 v-bind:class="{ 'text-success': succesIndexPatternDefinition }"
                 v-html="helpMessage"
               ></p>
             </template>
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button
                 style="padding: 0px;color: #606266;"
                 @click="setIndex(scope.row.id)"
@@ -593,6 +593,7 @@
   </div>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 //import axios from "axios";
 import Vue from "vue";
 import axios from "axios";
@@ -600,8 +601,8 @@ import _ from "lodash";
 
 import userquerieseditor from "@/components/appConfigEditor/UserQueriesEditor";
 import linkeditor from "@/components/appConfigEditor/LinkEditor";
-Vue.component("UserQueriesEditor", userquerieseditor);
-Vue.component("LinkEditor", linkeditor);
+registerComponent("UserQueriesEditor", userquerieseditor);
+registerComponent("LinkEditor", linkeditor);
 
 export default {
   field: "ESTableEditor",

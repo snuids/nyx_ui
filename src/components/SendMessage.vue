@@ -2,9 +2,9 @@
   <!--MAIN DIALOG -->
   <div style="text-align:left">
     <el-card class="maincard">
-      <div slot="header" class="clearfix">
+      <template #header><div class="clearfix">
         <h3>{{$t('sendmessage.send_message')}}</h3>
-      </div>
+      </div></template>
       <el-form label-width="120px">
         <el-row>
           <el-col :span="8">
@@ -88,7 +88,7 @@ export default {
   created: function() {},
 
   mounted: function() {},
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 

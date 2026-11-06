@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="80%" :title="title" :visible.sync="visible" :before-close="closeDialog">
+  <el-dialog width="80%" :title="title" v-model="visible" :before-close="closeDialog">
     <el-form v-if="visible" :model="newRec" :rules="rules" ref="newRec">
       <el-tabs v-model="activeName">
         <el-tab-pane :label="$t('configdetails.tab_main')" name="main">
@@ -117,7 +117,7 @@
                     v-model="inputValue"
                     ref="saveTagInput"
                     size="mini"
-                    @keyup.enter.native="handleInputConfirm"
+                    @keyup.enter="handleInputConfirm"
                     @blur="handleInputConfirm"
                   ></el-input>
                   <el-button v-else class="button-new-tag" size="small" @click="showInput">+ Output</el-button>
@@ -457,7 +457,7 @@
       </el-tabs>
     </el-form>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-row type="flex" class="row-bg" justify="space-between">
       <el-col>
         <el-button
@@ -482,7 +482,7 @@
         >{{this.$t("generic.create")}}</el-button>      
       </el-col>
       </el-row>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

@@ -1,4 +1,4 @@
-<template slot="items">
+<template #items>
   <div style="width: 100%;">
     <div :id="id" style="width: 100%;"></div>
     <el-button
@@ -163,7 +163,7 @@ export default {
     });
     this.prepareVega();
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING VEGA:");
     this.$globalbus.$off("timerangechanged");
   }

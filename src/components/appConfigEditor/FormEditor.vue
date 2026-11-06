@@ -84,7 +84,7 @@
               <el-table-column prop="type" label="Type"></el-table-column>
               <el-table-column prop="default" label="Default"></el-table-column>
               <el-table-column prop="title" label="Action">
-                <template slot-scope="scope2">
+                <template #default="scope2">
                   <el-button
                     size="mini"
                     circle
@@ -126,11 +126,12 @@
   </div>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import Vue from "vue";
 // import _ from "lodash";
 
 import formfieldeditor from "@/components/appConfigEditor/FormFieldEditor";
-Vue.component("FormFieldEditor", formfieldeditor);
+registerComponent("FormFieldEditor", formfieldeditor);
 
 export default {
   field: "FormEditor",

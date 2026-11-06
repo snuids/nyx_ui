@@ -9,11 +9,10 @@
           @input="handleInput"
           autocomplete="off"
         >
-          <el-button 
-            slot="append" 
+          <template #append><el-button 
+            
             icon="el-icon-search" 
-            @click="dialogVisible = true"
-          ></el-button>
+            @click="dialogVisible = true"></el-button></template>
         </el-input>
       </el-col>
       <el-col :span="6" v-if="iconPreview">
@@ -26,7 +25,7 @@
     <!-- Icon Picker Dialog -->
     <el-dialog
       :title="$t('iconpicker.title')"
-      :visible.sync="dialogVisible"
+      v-model="dialogVisible"
       width="70%"
       append-to-body
       class="icon-picker-dialog"
@@ -76,7 +75,7 @@
         <el-pagination
           v-if="filteredIcons.length > pageSize"
           @current-change="handlePageChange"
-          :current-page.sync="currentPage"
+          v-model:current-page="currentPage"
           :page-size="pageSize"
           layout="prev, pager, next, total"
           :total="filteredIcons.length"
@@ -84,10 +83,10 @@
         ></el-pagination>
       </div>
 
-      <span slot="footer" class="dialog-footer">
+      <template #footer><span class="dialog-footer">
         <el-button @click="dialogVisible = false" size="small">{{ $t('iconpicker.cancel') }}</el-button>
         <el-button type="primary" @click="confirmSelection" size="small">{{ $t('iconpicker.confirm') }}</el-button>
-      </span>
+      </span></template>
     </el-dialog>
   </div>
 </template>

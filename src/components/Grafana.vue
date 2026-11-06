@@ -1,4 +1,4 @@
-<template slot="items">
+<template #items>
   <!--div v-bind:style="styleContainerComputed" -->
   
   <div>
@@ -366,7 +366,7 @@ export default {
       this.createUrl();
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING GRAFANA:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");

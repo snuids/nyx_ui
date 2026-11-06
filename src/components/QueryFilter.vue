@@ -90,7 +90,7 @@
             >{{format.label}}</el-button>
           </el-row>
         </el-col>
-        <el-button slot="reference" round type="default" icon="el-icon-download" size="mini"></el-button>
+        <template #reference><el-button round type="default" icon="el-icon-download" size="mini"></el-button></template>
       </el-popover>
     </div>
   </el-row>

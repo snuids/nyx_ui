@@ -2,7 +2,7 @@
   <el-dialog
     width="75%"
     :title="title"
-    :visible.sync="visible"
+    v-model="visible"
     :before-close="closeDialog"
     append-to-body
   >
@@ -93,7 +93,7 @@
               v-model="inputValue"
               ref="saveTagInput"
               size="mini"
-              @keyup.enter.native="handleInputConfirm"
+              @keyup.enter="handleInputConfirm"
               @blur="handleInputConfirm"
             ></el-input>
             <el-button v-else class="button-new-tag" size="small" @click="showInput">+ Output</el-button>
@@ -101,9 +101,9 @@
         </el-col>
       </el-row>
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button type="primary" @click="closeDialog()">{{ $t('cfg.close') }}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

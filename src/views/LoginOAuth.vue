@@ -41,7 +41,7 @@
           <el-form-item label>
             <el-input
               placeholder="Password"
-              v-on:keyup.enter.native="validateUser()"
+              v-on:keyup.enter="validateUser()"
               type="password"
               name="password"
               autocomplete="none"

@@ -149,7 +149,7 @@ export default {
       }
     });
   },
-  beforeDestroy () {
+  beforeUnmount () {
     if( this.wsInterval!=null)
       clearInterval(this.wsInterval)
     

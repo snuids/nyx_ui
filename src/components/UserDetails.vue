@@ -3,7 +3,7 @@
     width="700px"
     :title="this.$t('user.user_form')"
     :before-close="closeDialog"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     class="dialog-user"
   >
     <UserResetPassword
@@ -131,20 +131,21 @@
       </el-collapse>
     </el-form>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
       <el-button type="primary" :disabled="recModified()" @click="submitForm('newRec')">{{this.$t("buttons.submit")}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import userresetpassword from "@/components/UserResetPassword";
 import Vue from "vue";
 import axios from "axios";
 import { i18n } from "../i18n-setup";
 
-Vue.component("UserResetPassword", userresetpassword);
+registerComponent("UserResetPassword", userresetpassword);
 
 export default {
   name: "UserDetails",

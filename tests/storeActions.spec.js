@@ -22,7 +22,7 @@ const { axiosMock } = vi.hoisted(() => ({
 
 vi.mock('axios', () => ({ default: axiosMock }))
 
-import Vue from 'vue'
+import { globalBus } from '@/utils/bus'
 import moment from 'moment'
 import store from '@/store/store.js'
 import packageJson from '../package.json'
@@ -98,7 +98,7 @@ beforeEach(() => {
   FakeSocket.instances = []
   global.WebSocket = FakeSocket
   global.window = { location: { href: 'https://nyx.example/main' } }
-  Vue.prototype.$globalbus = { $emit: vi.fn() }
+  globalBus.$emit = vi.fn()
 })
 
 afterEach(() => {
@@ -173,7 +173,7 @@ describe('check_websocket', () => {
     const before = moment()
     FakeSocket.instances[0].fire('message', { data: JSON.stringify({ type: 'message', data: 'hi' }) })
 
-    expect(Vue.prototype.$globalbus.$emit).toHaveBeenCalledWith('messagereceived', 'hi')
+    expect(globalBus.$emit).toHaveBeenCalledWith('messagereceived', 'hi')
     expect(moment(store.state.wsObject.last_lifesign).isSameOrAfter(before)).toBe(true)
   })
 
@@ -181,7 +181,7 @@ describe('check_websocket', () => {
     store.state.wsObject.check_alive = true
     store.dispatch('check_websocket')
     FakeSocket.instances[0].fire('message', { data: JSON.stringify({ type: 'ping' }) })
-    expect(Vue.prototype.$globalbus.$emit).not.toHaveBeenCalled()
+    expect(globalBus.$emit).not.toHaveBeenCalled()
   })
 
   it('drops the socket on error so the next call reconnects', () => {
@@ -265,13 +265,13 @@ describe('changeApp', () => {
       filteredmenus: menus(app('YUL', 'id1', { timeDefault: '24h' })),
     })
     store.commit('changeApp', { data: 'id1' })
-    expect(Vue.prototype.$globalbus.$emit).toHaveBeenCalledWith('forcetime', '24h')
+    expect(globalBus.$emit).toHaveBeenCalledWith('forcetime', '24h')
   })
 
   it('does not force a time range when the application declares none', () => {
     store.replaceState({ ...freshState(), filteredmenus: menus(app('YUL', 'id1', { timeDefault: '' })) })
     store.commit('changeApp', { data: 'id1' })
-    expect(Vue.prototype.$globalbus.$emit).not.toHaveBeenCalled()
+    expect(globalBus.$emit).not.toHaveBeenCalled()
   })
 
   it('throws on an unknown rec_id instead of navigating away', () => {

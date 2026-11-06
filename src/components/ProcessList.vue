@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative;overflow: hidden;">
-    <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" :visible.sync="dialogVisible" width="65%">
+    <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" v-model="dialogVisible" width="65%">
       <el-tabs v-model="tabName" @tab-click="handleClick">
         <el-tab-pane :label="$t('processlist.tab_general')" name="first">
           <el-table
@@ -58,9 +58,9 @@
         </el-tab-pane>
       </el-tabs>
       
-      <span slot="footer" class="dialog-footer">
+      <template #footer><span class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">{{ $t('processlist.close') }}</el-button>
-      </span>
+      </span></template>
     </el-dialog>
 
     <div>
@@ -405,7 +405,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     clearInterval(this.timer);
   }
 };

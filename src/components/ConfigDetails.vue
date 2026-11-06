@@ -2,7 +2,7 @@
   <el-dialog
     width="90%"
     :title="isAdd?$t('configdetails.create_application'):$t('configdetails.modify_application')"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     append-to-body
@@ -641,7 +641,7 @@
                   <!-- Header dialog -->
                   <el-dialog
                     :title="$t('configdetails.columns')"
-                    :visible.sync="dialogHeaderVisible"
+                    v-model="dialogHeaderVisible"
                     width="30%"
                     append-to-body
                   >
@@ -687,9 +687,9 @@
                         </el-col>
                       </el-row>
                     </el-form>
-                    <span slot="footer" class="dialog-footer">
+                    <template #footer><span class="dialog-footer">
                       <el-button type="primary" @click="dialogHeaderVisible = false">{{ $t('configdetails.close') }}</el-button>
-                    </span>
+                    </span></template>
                   </el-dialog>
 
                   <el-table
@@ -704,7 +704,7 @@
                     <el-table-column prop="type" :label="$t('configdetails.type')"></el-table-column>
                     <el-table-column prop="format" :label="$t('configdetails.format')"></el-table-column>
                     <el-table-column prop="title" :label="$t('configdetails.action')">
-                      <template slot-scope="scope2">
+                      <template #default="scope2">
                         <el-button
                           size="mini"
                           circle
@@ -865,7 +865,7 @@
                     <el-table-column prop="type" label="Type"></el-table-column>
                     <el-table-column prop="default" label="Default"></el-table-column>
                     <el-table-column prop="title" label="Action">
-                      <template slot-scope="scope2">
+                      <template #default="scope2">
                         <el-button
                           size="mini"
                           circle
@@ -922,17 +922,19 @@
         </el-tab-pane>
       </el-tabs>
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose');">{{ $t('configdetails.cancel') }}</el-button>
       <el-button
         :disabled="(JSON.stringify(curConfig)==JSON.stringify(orgConfig._source)) && (strNewRec==strOrgRec)"
         type="primary"
         @click="saveRecord()"
       >{{ $t('configdetails.confirm') }}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
+import { VAceEditor } from "vue3-ace-editor";
 import freetextdetails from "@/components/FreeTextDetails";
 import iconpicker from "@/components/IconPicker";
 
@@ -951,16 +953,16 @@ import Vue from "vue";
 import rison from "rison";
 import YAML from "js-yaml";
 
-Vue.component("FreeTextDetails", freetextdetails);
-Vue.component("IconPicker", iconpicker);
+registerComponent("FreeTextDetails", freetextdetails);
+registerComponent("IconPicker", iconpicker);
 
-Vue.component("QueryFilterEditor", queryfiltereditor);
-Vue.component("ESTableEditor", estableeditor);
-Vue.component("FormEditor", formeditor);
-Vue.component("KibanaEditor", kibanaeditor);
-Vue.component("GrafanaEditor", grafanaeditor);
-Vue.component("UploadEditor", uploadeditor);
-Vue.component("FileSystemEditor", filesystemeditor);
+registerComponent("QueryFilterEditor", queryfiltereditor);
+registerComponent("ESTableEditor", estableeditor);
+registerComponent("FormEditor", formeditor);
+registerComponent("KibanaEditor", kibanaeditor);
+registerComponent("GrafanaEditor", grafanaeditor);
+registerComponent("UploadEditor", uploadeditor);
+registerComponent("FileSystemEditor", filesystemeditor);
 
 
 function transformObject(obj) {
@@ -993,7 +995,7 @@ export default {
     );
   },
   components: {
-    editor: require("vue2-ace-editor")
+    editor: VAceEditor
   },
   computed: {
     curConfigIn: function() {
@@ -1105,25 +1107,25 @@ export default {
       cb(results);
     },
     editorInitRO: function(editor) {
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
 
       editor.setReadOnly(true);
     },
     editorInit: function() {
       // eslint-disable-line
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
     handleMoveHeader(index, row, down) {
       this.curConfig.config.headercolumns.splice(index, 1);

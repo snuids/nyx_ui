@@ -44,7 +44,7 @@ export default {
     // In case a previous view had locked the document scrolling.
     document.body.classList.add("nyx-privacy");
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.body.classList.remove("nyx-privacy");
   },
   async created() {

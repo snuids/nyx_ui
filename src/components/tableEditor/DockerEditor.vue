@@ -2,7 +2,7 @@
   <el-dialog
     width="40%"
     :title="title"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="sr-report-exception-editor"

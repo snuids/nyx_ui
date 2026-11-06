@@ -2,7 +2,7 @@
   <el-dialog
     width="400px"
     :title="title"
-    :visible.sync="visible"
+    v-model="visible"
     :before-close="closeDialog"
     append-to-body
     id="item-editor"

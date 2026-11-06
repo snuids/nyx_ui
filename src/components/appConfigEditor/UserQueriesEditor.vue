@@ -155,7 +155,7 @@
                         <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value </i></el-row>
                         
                         
-                        <el-button slot="reference" type="text" icon="el-icon-info" style="margin-left:15px;"></el-button>
+                        <template #reference><el-button type="text" icon="el-icon-info" style="margin-left:15px;"></el-button></template>
                       </el-popover>
                 </el-row>
               </el-col>
@@ -215,6 +215,7 @@
   </el-col>
 </template>
 <script>
+import { VAceEditor } from "vue3-ace-editor";
 import _ from "lodash";
 
 export default {
@@ -249,9 +250,7 @@ export default {
       }
     );
   },
-  components: {
-    editor: require("vue2-ace-editor")
-  },
+  components: { editor: VAceEditor },
   computed: {
     curConfigIn: function() {
       return this.currentConfig;
@@ -412,13 +411,13 @@ export default {
     },
     editorInit: function() {
       // eslint-disable-line
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
   }
 };

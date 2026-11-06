@@ -1,74 +1,69 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import Vuex from 'vuex'
 import router from './router/router'
 import store from './store/store'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import locale_en from 'element-ui/lib/locale/lang/en.js'
-import 'vue-awesome/icons';
-import Icon from 'vue-awesome/components/Icon';
-import VueI18n from 'vue-i18n'
-import 'element-ui/lib/theme-chalk/reset.css'
-import {i18n} from  './i18n-setup'
-import {filters} from '@/utils/filters'
-import {getUrlVars, resolveLanguage} from '@/utils/language'
-import {apiOverride} from '@/utils/devOverrides'
-import ElementLocale from 'element-ui/lib/locale'
-import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import draggable from "vuedraggable";
-import InfiniteLoading from 'vue-infinite-loading';
-
-
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+// Variables CSS du theme sombre : la bascule se fait ensuite en posant `data-theme="dark"` sur
+// <html>, sans bibliotheque supplementaire.
+import 'element-plus/theme-chalk/dark/css-vars.css'
+import draggable from 'vuedraggable'
+import InfiniteLoading from 'vue3-infinite-loading'
+import numeral from 'numeral'
+import { i18n, elementLocale } from './i18n-setup'
+import VIcon from './components/VIcon.vue'
+import { filters } from '@/utils/filters'
+import { getUrlVars, resolveLanguage } from '@/utils/language'
+import { apiOverride } from '@/utils/devOverrides'
+import { globalBus, localBus } from '@/utils/bus'
+import { browserDetect } from '@/utils/browser'
+import { geolocation } from '@/utils/geolocation'
+import { flushRegistrations } from '@/utils/vue3shim'
 import '../theme/index.css'
 
+const vars = getUrlVars(window.location.href)
 
+// Resolve the UI language on startup so a page reload keeps the user's language.
+// Priority: URL parameter (language/lang/locale) > persisted logged-in user language > 'en'.
+let storage = {}
+try {
+  storage = window.localStorage
+} catch (e) { /* storage refused */ }
 
+i18n.global.locale = resolveLanguage(vars, storage)
 
-Vue.component('v-icon', Icon)
-Vue.component("draggable", draggable);
+const app = createApp(App)
 
-Vue.use(ElementUI, {locale:locale_en})
-Vue.use(Vuex);
-Vue.use(VueI18n) 
-Vue.use(vueNumeralFilterInstaller);
-Vue.use(InfiniteLoading, { /* options */ });
+// `vue-awesome`, `vue-browser-detect-plugin` and `vue-browser-geolocation` have no Vue 3 release;
+// VIcon and the two small objects replace them, with the same call surface.
+app.component('v-icon', VIcon)
+app.component('draggable', draggable)
+app.component('infinite-loading', InfiniteLoading)
 
+app.use(store)
+app.use(router)
+app.use(i18n)
+app.use(ElementPlus, { locale: elementLocale(i18n.global.locale) })
 
-
-Vue.config.productionTip = false
-Vue.prototype.$globalbus = new Vue();
-Vue.prototype.$localbus = new Vue();
-
-// The filters themselves live in src/utils/filters.js, where they are testable.
-Object.keys(filters).forEach(name => Vue.filter(name, filters[name]))
-
-const vars = getUrlVars(window.location.href);
+app.config.globalProperties.$globalbus = globalBus
+app.config.globalProperties.$localbus = localBus
+app.config.globalProperties.$browserDetect = browserDetect
+app.config.globalProperties.$geolocation = geolocation
+// Vue 3 removed template filters: `x | formatDate` became `$filters.formatDate(x)` (migration
+// codemod). `$numeral` replaces the `numeral` filter of vue-numeral-filter.
+app.config.globalProperties.$filters = filters
+app.config.globalProperties.$numeral = (value, format) => numeral(value).format(format)
 
 // `?api=` is a development convenience: the block is compiled out of a production bundle, so the
 // console can only talk to the API it was built for. See src/utils/devOverrides.js.
 if (process.env.NODE_ENV !== 'production') {
-  const apiUrlOverride = apiOverride(window.location.href);
+  const apiUrlOverride = apiOverride(window.location.href)
   if (apiUrlOverride) {
-    store.state.apiurl = apiUrlOverride;
+    store.state.apiurl = apiUrlOverride
   }
 }
 
-// Resolve the UI language on startup so a page reload keeps the user's language.
-// Priority: URL parameter (language/lang/locale) > persisted logged-in user language > 'en'.
-let storage = {};
-try {
-  storage = window.localStorage;
-} catch (e) { /* storage refused */ }
+// The 53 `Vue.component(...)` calls made at import time are replayed here, before mount.
+flushRegistrations(app)
 
-i18n.locale = resolveLanguage(vars, storage);
-
-ElementLocale.i18n((key, value) => i18n.t(key, value))
-
-new Vue({
-  i18n,
-  router,
-  store:store,
-  render: h => h(App)
-}).$mount('#app')
-
+app.mount('#app')

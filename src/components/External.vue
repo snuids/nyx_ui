@@ -1,4 +1,4 @@
-<template slot="items">
+<template #items>
   <!--div v-bind:style="styleContainerComputed" -->
   <div>
     <iframe
@@ -138,7 +138,7 @@ export default {
       this.createUrl();
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING EXTERNAL:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");
