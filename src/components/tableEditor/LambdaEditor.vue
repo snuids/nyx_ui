@@ -293,6 +293,7 @@
 <script>
 
 import axios from "axios";
+import { jupyterLabToken, withJupyterLabToken } from "@/utils/jupyter";
 
 export default {
   name: "lambdaEditor",
@@ -484,44 +485,12 @@ export default {
       };
     },
     getJupyterLabToken() {
-      const menus = this.$store.getters.menus || [];
-
-      for (const menu of menus) {
-        for (const submenu of menu.submenus || []) {
-          for (const app of submenu.apps || []) {
-            if (
-              app.type !== "external" ||
-              !app.config ||
-              typeof app.config.url !== "string"
-            ) {
-              continue;
-            }
-
-            try {
-              const url = new URL(app.config.url, window.location.origin);
-              if (!/\/jupylab(?:\/|$)/i.test(url.pathname)) continue;
-
-              const token = url.searchParams.get("token");
-              if (token) return token;
-            } catch (error) {
-              console.warn("Unable to parse external JupyterLab URL", error);
-            }
-          }
-        }
-      }
-
-      return "";
+      // Shared with the report editor: the token is part of the `jupylab` external application
+      // declared in nyx_app, carried by the menus. See utils/jupyter.js.
+      return jupyterLabToken(this.$store.getters.menus);
     },
     addJupyterLabToken(url) {
-      const token = this.getJupyterLabToken();
-      if (!token) return url;
-
-      return (
-        url +
-        (url.includes("?") ? "&" : "?") +
-        "token=" +
-        encodeURIComponent(token)
-      );
+      return withJupyterLabToken(url, this.getJupyterLabToken());
     },
     openTabCode: function() {
       window.open(

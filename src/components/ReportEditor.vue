@@ -490,6 +490,7 @@
 import axios from "axios";
 import IconPicker from "@/components/IconPicker";
 import { i18n } from "../i18n-setup";
+import { jupyterLabToken, withJupyterLabToken } from "@/utils/jupyter";
 
 export default {
   name: "ReportEditor",
@@ -828,13 +829,16 @@ export default {
       this.changed = true;
     },
     openTabCode: function() {
-      
-      // window.open(
-      //   "./ipython/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
-      // );
-      window.open(
-        "./jupylab/lab/workspaces/auto-f/tree/notebooks/reports/notebooks/" +this.newRec.notebook .replace("./","")+".ipynb"        
-      );
+      if (!this.newRec.notebook) {
+        return;
+      }
+      // The notebook link needs the JupyterLab token, exactly like the lambda editor: without
+      // it, JupyterLab answers with its own login page. See utils/jupyter.js.
+      const url =
+        "./jupylab/lab/workspaces/auto-f/tree/notebooks/reports/notebooks/" +
+        this.newRec.notebook.replace("./", "") +
+        ".ipynb";
+      window.open(withJupyterLabToken(url, jupyterLabToken(this.$store.getters.menus)));
     },
     loadPrivileges: function() {
       var data = [];
