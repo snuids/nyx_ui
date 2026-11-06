@@ -34,13 +34,19 @@ export default {
   props: {
     name: { type: String, required: true },
     scale: { type: [String, Number], default: 1 },
+    // vue-awesome prenait une prop `color`. Sans elle, la couleur passee par les appelants
+    // (`<v-icon :color="...">` dans les colonnes « format: icon ») etait perdue et les icones
+    // sortaient en noir la ou la version precedente les affichait en vert.
+    color: { type: String, default: '' },
   },
   computed: {
     icon() {
       return resolveIcon(this.name, library.definitions)
     },
     style() {
-      return { fontSize: (Number(this.scale) || 1) + 'em' }
+      const style = { fontSize: (Number(this.scale) || 1) + 'em' }
+      if (this.color) style.color = this.color
+      return style
     },
   },
 }

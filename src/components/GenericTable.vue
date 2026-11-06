@@ -21,18 +21,21 @@
       ></GenericTableDetails>
     </span>
 
-    <el-row v-if="config.queryBarChecked">
+    <!-- Un `div` et non un `el-row` : en Element Plus `el-row` est un conteneur flex, donc le
+         bandeau qu'il contient se reduisait a la largeur de son contenu (337 px au lieu de 890 sur
+         l'ecran Docker) au lieu de prendre toute la largeur comme avec Element UI 2. -->
+    <div v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
-    </el-row>
+    </div>
 
-    <el-row v-if="config.queryFilterChecked">
+    <div v-if="config.queryFilterChecked">
       <QueryFilter
         @queryfilterchanged="queryFilterChanged"
         @downloadasked="downloadAsked"
         :config="config"
         v-on:queryfilter_changed="queryfilterchanged"
       ></QueryFilter>
-    </el-row>
+    </div>
     <el-row v-if="config.mapChecked">
       <el-col style="padding-right:6px;">
         <Map :config="config" :tableData="mapTableData" v-on:mapclicked="mapClicked"></Map>

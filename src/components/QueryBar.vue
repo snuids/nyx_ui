@@ -139,6 +139,19 @@ export default {
 </script>
 
 <style>
+/* Element UI 2 rendait `el-row` en `display: block`, et ce bandeau repose sur des `float`
+   (`input-bar` a gauche, `refresh-button` a droite). Element Plus rend `el-row` en flex : les deux
+   blocs devenaient des elements flex et la barre de recherche tombait a 145 px au lieu de 890. */
+.query-bar {
+  display: block;
+}
+
+.query-bar::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
 .query-bar .input-bar {
   width: -webkit-calc(100% - 135px);
   width: -moz-calc(100% - 135px);
@@ -165,7 +178,14 @@ export default {
   padding: 0px !important;
 }
 
-.search-dl-bt i {
+/* Element UI 2 dessinait cette icone avec une police de 18 px ; Element Plus la rend avec un
+   composant `el-icon`, dont la taille vaut `1em` du bouton — et un bouton `small` fait 12 px, d'ou
+   une icone minuscule (12 px au lieu de 18). On fixe la taille sur le bouton lui-meme. */
+.search-dl-bt {
+  font-size: 18px;
+}
+
+.search-dl-bt .el-icon {
   font-size: 18px;
 }
 

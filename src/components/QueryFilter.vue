@@ -390,6 +390,39 @@ export default {
 </script>
 
 <style>
+/* Meme cause que dans `QueryBar` : `el-row` est un conteneur flex en Element Plus, donc les `float`
+   du bandeau et de ses boutons ne s'appliquent plus et tout se replie en colonne. On rétablit le
+   comportement d'Element UI 2 (bloc + clearfix) sur la racine du composant seulement. */
+.query-filter {
+  display: block;
+}
+
+.query-filter::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Les `el-col` d'Element Plus sont des elements flex (`flex: 0 0 33.33%`) : dans un conteneur flex
+   ils s'alignent cote a cote, comme les colonnes flottantes d'Element UI 2. */
+.query-filter .select-bar-container {
+  display: flex;
+  align-items: center;
+}
+
+.query-filter .select-bar-container > .el-col {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* Le libelle reste en ligne devant le champ ; le selecteur occupe la place restante de la colonne
+   (en production il mesurait 197 px pour une colonne de 286). */
+.query-filter .select-bar-container .el-select {
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
 .query-filter .select-bar-container {
   width: -webkit-calc(100% - 205px);
   width: -moz-calc(100% - 205px);
