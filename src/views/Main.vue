@@ -718,12 +718,37 @@ body {
 /* L'en-tete centre ses enfants par `line-height: 60px`. Les boutons d'Element Plus sont en
    `inline-flex`, donc alignes sur la ligne de base : le bouton rond de droite descendait par
    rapport au reste. */
-/* Element UI 2 posait le bouton rond a 9 px du haut de l'en-tete de 60 px ; Element Plus, avec sa
-   bordure de 1 px, le pose a 11 px. Les deux pixels se voient. */
-.el-header .el-button {
+/* Element UI 2 centrait les boutons de l'en-tete par la ligne (`line-height: 60px`). Element Plus
+   utilise des boites `inline-flex`, qui se posent sur la ligne de base : elles descendaient de 2 px,
+   et le bouton de l'avatar, lui, sortait de l'en-tete (-2 px) parce que son `.el-dropdown` ne faisait
+   que 40 px de haut.
+   La rangee devient donc un conteneur flex : chaque colonne centre verticalement son contenu, et la
+   derniere est alignee a droite. Plus de decalage a la main. */
+.el-header .el-row {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.el-header .el-row > .el-col {
+  display: flex;
+  align-items: center;
+}
+
+.el-header .el-row > .el-col:last-child {
+  justify-content: flex-end;
+}
+
+/* Le declencheur du menu de compte est enveloppe dans un <span> : la ligne de 60 px du span place le
+   `el-dropdown` en haut, d'ou un bouton d'avatar colle au bord superieur. `vertical-align: middle`
+   le recentre dans la ligne, comme le faisait Element UI 2. */
+.el-header .el-dropdown {
   vertical-align: middle;
-  position: relative;
-  top: -2px;
+}
+
+/* Sans cela, la colonne flex comprime le bouton rond (31 x 40 au lieu de 40 x 40). */
+.el-header .el-button {
+  flex-shrink: 0;
 }
 
 .el-header .el-button.is-circle {
@@ -792,6 +817,41 @@ body {
 
 .el-dialog__footer {
   padding: 10px 20px 20px;
+}
+
+/* Meme ecart pour les boites de confirmation ($alert / $confirm / $prompt) : Element Plus met un
+   rembourrage de 12 px autour de la boite et aucun en haut de l'en-tete, si bien que le titre
+   demarrait 12 px plus bas que dans Element UI 2. */
+.el-message-box {
+  padding: 0 0 10px;
+  border-radius: 4px;
+}
+
+.el-message-box__header {
+  padding: 15px 15px 10px;
+}
+
+.el-message-box__title {
+  font-size: 18px;
+  line-height: 24px;
+  color: #303133;
+}
+
+.el-message-box__headerbtn {
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+}
+
+.el-message-box__content {
+  padding: 10px 15px;
+  color: #606266;
+  font-size: 14px;
+}
+
+.el-message-box__btns {
+  padding: 5px 15px 0;
 }
 
 .el-dialog__headerbtn .el-dialog__close {
