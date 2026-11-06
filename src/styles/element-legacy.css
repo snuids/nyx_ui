@@ -23,6 +23,40 @@ body {
   color: #2c3e50;
 }
 
+/*
+ * Element UI 2 embarquait un reset typographique (`base.css`) qu'Element Plus n'a pas repris :
+ * titre h1 a 20 px en gris #606266, sans graisse et sans marge. Sans lui, le titre « Step 2 of 2 »
+ * des editeurs d'application sortait en 28 px gras noir (les valeurs par defaut du navigateur).
+ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #606266;
+  font-weight: inherit;
+  margin: 0;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+h4,
+h5,
+h6 {
+  font-size: 14px;
+}
+
 :root {
   --el-component-size: 36px;
   --el-component-size-large: 40px;
@@ -47,19 +81,37 @@ body {
   min-width: 0;
 }
 
+/* Un `el-card` enfant direct d'un `el-row` se reduisait a la largeur de son contenu : `el-row` est un
+ * conteneur flex, donc la carte devenait un element flex de la largeur de son texte. Les cartes de
+ * description des editeurs d'application (« Displays a collection stored in elastic search. »)
+ * s'affichaient dans un timbre-poste de 240 px, avec une barre de defilement interne. */
+.el-row > .el-card {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Les cartes de description (`.transition-box`) placent une icone dans un `el-col` de 4 et le texte
+ * dans un `el-col` de 20, a l'interieur du `el-card__body`. Element UI 2 faisait flotter ces
+ * colonnes ; celles d'Element Plus ne s'alignent que dans un conteneur flex, donc l'icone passait
+ * au-dessus du texte et la carte debordait (barre de defilement interne). */
+.transition-box > .el-card > .el-card__body {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 20px;
+}
+
 /* Pied de dialogue : boutons de 40 px comme Element UI 2 (Element Plus les rend a 32 px). */
 .el-dialog__footer .el-button {
   min-height: 40px;
   padding: 12px 23px;
 }
 
-/* Element UI 2 centrait le titre du dialogue ; Element Plus l'aligne a gauche. */
-.el-dialog__header {
-  padding: 20px 20px 10px;
-}
-
-.el-dialog__title {
-  display: block;
+/* En production, seule la fenetre « User Form » centre son titre et ses boutons (Element UI 2 lui
+   applique `el-dialog--center`) ; les fenetres de configuration gardent le titre a gauche. Une regle
+   globale centrait tout, y compris « Modify Application », qui doit rester aligne a gauche. */
+.dialog-user .el-dialog__header,
+.dialog-user .el-dialog__title {
   text-align: center;
 }
 

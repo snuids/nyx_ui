@@ -210,56 +210,59 @@
                 v-model="currentConfig.config.headercolumns"
                 tag="tbody"
                 handle=".handle"
+                item-key="field"
               >
-                <tr v-for="(item, index) in currentConfig.config.headercolumns" :key="index">
-                  <td>{{item.field}}</td>
-                  <td>
-                    <el-input
-                      class="display-name-input"
-                      ref="author"
-                      :placeholder="$t('cfg.name')"
-                      v-model="item.title"
-                      size="small"
-                    ></el-input>
-                  </td>
-                  <td>{{item.type}}</td>
-                  <td style="width:200px;">
-                    <el-input
-                      v-if="item.type=='date' || item.type=='timestamp'"
-                      class="display-name-input"
-                      ref="author"
-                      placeholder="eg. DD/MM/YYYY HH:mm"
-                      v-model="item.format"
-                      size="small"
-                    ></el-input>
-                    <el-input
-                      v-else-if="item.type=='long' || item.type=='double'"
-                      class="display-name-input"
-                      ref="author"
-                      placeholder="Numeral.js format"
-                      v-model="item.format"
-                      size="small"
-                    ></el-input>
-                    <el-select
-                      v-else-if="item.type=='keyword' || item.type=='text'"
-                      v-model="item.format"
-                      filterable
-                      :placeholder="$t('cfg.default')"
-                      size="small"
-                      style="width:100%;"
-                    >
-                      <el-option :label="$t('cfg.default')" value="default"></el-option>
-                      <el-option :label="$t('cfg.icon')" value="icon"></el-option>
-                      <el-option :label="$t('cfg.link')" value="link"></el-option>
-                    </el-select>
-                  </td>
-                  <td>
-                    <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="small">{{ $t('cfg.configure') }}</el-button>
-                  </td>
-                  <td>
-                    <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
-                  </td>
-                </tr>
+                <template #item="{ element: item, index }">
+                  <tr>
+                    <td>{{item.field}}</td>
+                    <td>
+                      <el-input
+                        class="display-name-input"
+                        ref="author"
+                        :placeholder="$t('cfg.name')"
+                        v-model="item.title"
+                        size="small"
+                      ></el-input>
+                    </td>
+                    <td>{{item.type}}</td>
+                    <td style="width:200px;">
+                      <el-input
+                        v-if="item.type=='date' || item.type=='timestamp'"
+                        class="display-name-input"
+                        ref="author"
+                        placeholder="eg. DD/MM/YYYY HH:mm"
+                        v-model="item.format"
+                        size="small"
+                      ></el-input>
+                      <el-input
+                        v-else-if="item.type=='long' || item.type=='double'"
+                        class="display-name-input"
+                        ref="author"
+                        placeholder="Numeral.js format"
+                        v-model="item.format"
+                        size="small"
+                      ></el-input>
+                      <el-select
+                        v-else-if="item.type=='keyword' || item.type=='text'"
+                        v-model="item.format"
+                        filterable
+                        :placeholder="$t('cfg.default')"
+                        size="small"
+                        style="width:100%;"
+                      >
+                        <el-option :label="$t('cfg.default')" value="default"></el-option>
+                        <el-option :label="$t('cfg.icon')" value="icon"></el-option>
+                        <el-option :label="$t('cfg.link')" value="link"></el-option>
+                      </el-select>
+                    </td>
+                    <td>
+                      <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="small">{{ $t('cfg.configure') }}</el-button>
+                    </td>
+                    <td>
+                      <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
+                    </td>
+                  </tr>
+                </template>
               </draggable>
             </table>
           </el-card>
@@ -390,25 +393,25 @@
                     v-model="currentConfig.config.tableFieldsToDownload"
                     tag="tbody"
                     handle=".handle"
-                  >
-                    <tr
-                      v-for="(item, index) in currentConfig.config.tableFieldsToDownload"
-                      :key="index"
-                    >
-                      <td>{{item.field}}</td>
-                      <td>
-                        <el-input
-                          class="display-name-input"
-                          ref="author2"
-                          :placeholder="$t('cfg.name')"
-                          v-model="item.title"
-                          size="small"
-                        ></el-input>
-                      </td>
-                      <td>
-                        <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
-                      </td>
-                    </tr>
+                    item-key="field"
+              >
+                    <template #item="{ element: item, index }">
+                      <tr>
+                        <td>{{item.field}}</td>
+                        <td>
+                          <el-input
+                            class="display-name-input"
+                            ref="author2"
+                            :placeholder="$t('cfg.name')"
+                            v-model="item.title"
+                            size="small"
+                          ></el-input>
+                        </td>
+                        <td>
+                          <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
+                        </td>
+                      </tr>
+                    </template>
                   </draggable>
                 </table>
               </el-card>

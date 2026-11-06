@@ -68,17 +68,20 @@
                 v-model="currentConfig.config.queryfilters"
                 tag="tbody"
                 handle=".handle"
+                item-key="field"
               >
-                <tr v-for="(item, index) in currentConfig.config.queryfilters" :key="index">
-                  <td>{{item.field}}</td>
-                  <td>
-                    <el-button @click="configureQueryFilter(item)" size="small">{{ $t('cfg.configure') }}</el-button>
-                  </td>
+                <template #item="{ element: item, index }">
+                  <tr>
+                    <td>{{item.field}}</td>
+                    <td>
+                      <el-button @click="configureQueryFilter(item)" size="small">{{ $t('cfg.configure') }}</el-button>
+                    </td>
 
-                  <td>
-                    <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
-                  </td>
-                </tr>
+                    <td>
+                      <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
+                    </td>
+                  </tr>
+                </template>
               </draggable>
             </table>
             <div style="width:100%;text-align:center;margin-top:10px;">

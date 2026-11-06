@@ -794,7 +794,10 @@ body {
    laisse donc beaucoup de vide en haut — c'est ce qui se voyait. */
 .el-overlay .el-dialog__header {
   background-color: #409eff !important;
-  padding: 20px 40px 10px 20px;
+  /* Element UI 2 : 20 px des deux cotes ; la croix de fermeture est positionnee en absolu, elle
+     n'a pas besoin que le titre lui laisse de la place. Les 40 px de droite vus en production
+     venaient d'Element Plus, qui reserve la place de sa croix de 48 px. */
+  padding: 20px 20px 10px;
   text-align: left;
 }
 
