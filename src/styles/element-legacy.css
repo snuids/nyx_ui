@@ -35,3 +35,54 @@ body {
 .el-form-item__content .el-textarea {
   width: 100%;
 }
+
+/* Element UI 2 : un `el-form-item` occupait toute la largeur disponible. Element Plus le rend
+ * `display: flex`, donc place dans un `el-row` (lui aussi flex) il se retrecit a la largeur de son
+ * contenu : dans la fenetre « User Form », le champ Login mesurait 164 px au lieu de 540, et la
+ * fenetre debordait de 280 px en hauteur. */
+.el-row > .el-form-item,
+.el-col > .el-form-item {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Pied de dialogue : boutons de 40 px comme Element UI 2 (Element Plus les rend a 32 px). */
+.el-dialog__footer .el-button {
+  min-height: 40px;
+  padding: 12px 23px;
+}
+
+/* Element UI 2 centrait le titre du dialogue ; Element Plus l'aligne a gauche. */
+.el-dialog__header {
+  padding: 20px 20px 10px;
+}
+
+.el-dialog__title {
+  display: block;
+  text-align: center;
+}
+
+/* Element UI 2 affichait les deux panneaux d'un `<el-transfer>` cote a cote. En Element Plus les
+ * panneaux sont des `inline-block` separes par un bloc de boutons : des que la largeur manque de
+ * quelques pixels ils passent a la ligne, et la fenetre gagne 290 px de hauteur (visible dans
+ * « User Form », section Privileges). */
+.el-transfer {
+  display: flex;
+  align-items: flex-start;
+}
+
+.el-transfer__buttons {
+  flex: 0 0 auto;
+}
+
+.el-transfer-panel {
+  flex: 0 0 250px;
+}
+
+/* La croix de fermeture d'Element UI 2 est un glyphe de 16 px, celle d'Element Plus un SVG de 24. */
+.el-dialog__headerbtn .el-dialog__close {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
