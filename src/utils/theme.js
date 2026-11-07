@@ -93,3 +93,30 @@ export function watchAutoTheme(getPreference, onChange) {
     window.removeEventListener("focus", refresh);
   };
 }
+
+/** The snapshot the console keeps of the last login (`Main.vue` restores the session from it). */
+export const SESSION_STORAGE_KEY = "authResponse";
+
+/**
+ * Keep the saved preference in the session snapshot as well.
+ *
+ * A reload restores the session from `authResponse`, written at login time — that is, before the
+ * theme was chosen. Without this touch, clearing the local copy and reloading replays the old theme
+ * even though the account carries the new one. Returns true when the snapshot was updated.
+ */
+export function rememberInSession(preference, storage) {
+  const store = storageOf(storage);
+  if (!store) return false;
+  try {
+    const raw = store.getItem(SESSION_STORAGE_KEY);
+    if (!raw) return false;
+    const stored = JSON.parse(raw);
+    const user = stored && stored.data && stored.data.cred && stored.data.cred.user;
+    if (!user) return false;
+    user.theme = preference;
+    store.setItem(SESSION_STORAGE_KEY, JSON.stringify(stored));
+    return true;
+  } catch (e) {
+    return false; // unreadable snapshot or refused storage: the account copy remains the truth
+  }
+}
