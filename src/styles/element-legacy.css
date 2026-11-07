@@ -63,6 +63,26 @@ h6 {
   --el-component-size-small: 24px;
 }
 
+/*
+ * Element UI 2 rendait `el-input` en `inline-block` ; Element Plus en fait un **bloc flex**. Dans les
+ * en-tetes de tableau — un conteneur de boutons suivi d'un champ de recherche — le champ passait donc
+ * a la ligne, sous le bouton « + » au lieu de rester a cote.
+ */
+.el-input {
+  display: inline-flex;
+}
+
+/*
+ * La feuille de theme d'Element UI 2, retiree parce qu'elle ecrasait Element Plus, contenait aussi
+ * des regles de **mise en page** utiles, dont celle-ci : dans un en-tete de tableau, un bloc est en
+ * ligne. Sans elle, le champ de recherche d'un en-tete passait sous les boutons « + » et « refresh »
+ * au lieu de rester a cote (verifie sur l'ecran Configuration).
+ */
+.el-table th div,
+.el-table th > .cell {
+  display: inline-block;
+}
+
 /* Les champs prennent toute la largeur de leur conteneur, comme avec Element UI 2. */
 .el-form-item__content .el-input,
 .el-form-item__content .el-select,
