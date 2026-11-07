@@ -193,7 +193,7 @@ flex qui écrasait les bandeaux et les cartes, `el-input` en bloc (champ sous le
 **Divergences assumées avec la production** (à reporter en prod si souhaité) :
 - colonne d'actions du rapport périodique : 260 px au lieu de 220 (le champ de recherche ne passe
   plus sous les boutons) ;
-- bouton de téléchargement **à droite** du champ de recherche, et non dans son bord droit ;
+- ~~bouton de téléchargement à droite du champ~~ — revenu dans le champ le 2026-11-07 (voir plus bas) ;
 - 10 px / 32 px d'espacement dans le bandeau de filtres.
 
 Les autres écarts constatés étaient déjà présents en production et n'ont pas été modifiés : combobox
@@ -277,3 +277,21 @@ style en ligne retiré de `Main.vue`.
 Reste : le champ de dates mesure 420 px au lieu de 400 (le séparateur « To » est un bloc flex de
 50 px dans Element Plus, 29 px en production) ; tout le bloc est aligné à droite, l'écart ne se voit
 que sur le bord gauche du champ.
+
+## Barre de requête : le bouton de téléchargement est revenu dans le champ (2026-11-07)
+
+Sur `Docker › Containers` (`#/main/id_21834322`), le bouton de téléchargement était posé **à côté**
+du champ, dans les 37 px qui le séparent du bouton « Refresh » : il flottait entre les deux. En
+production il est dans le champ, à 5 px de son bord droit.
+
+| mesure | production | branche avant | branche après |
+|---|---|---|---|
+| champ de requête | [213, 118, 913, 28] | [213, 118, 887, 28] | **[213, 118, 913, 28]** |
+| bouton de téléchargement | [1101, 118, 20, 28] | à l'extérieur, [1117, 118, 24, 28] | **[1101, 118, 20, 28]** |
+| distance au bord droit | 5 px | — | **5 px** |
+
+Le bouton est replacé dans le `slot suffix` du champ (comme dans le code d'origine) ; il faut
+`.query-bar .query-input .el-input__wrapper { padding: 0 5px 0 15px }` — trois classes, car la règle
+globale `.el-input--small .el-input__wrapper` est compilée plus loin et l'emporterait à spécificité
+égale — sinon le suffixe hérite des 15 px de rembourrage (icône à 15 px du bord) et le champ grandit
+de 2 px. Le popover `.xlsx` / `.csv` s'ouvre toujours au survol.
