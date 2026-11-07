@@ -22,6 +22,14 @@ export const messages = {
         info: 'Info',
         privacy: 'Privacy'
       },
+      theme: {
+        appearance: 'Appearance',
+        light: 'Light',
+        dark: 'Dark',
+        auto: 'Auto (by hour)',
+        saved: 'Theme preference saved.',
+        not_saved: 'The theme is applied here, but could not be saved on your account.'
+      },
       scheduler: {
         edit_scheduler: 'Edit Scheduler',
         scheduler: 'Scheduler',

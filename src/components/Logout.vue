@@ -19,6 +19,21 @@
           <v-icon class="menuicon" name="shield-alt" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.privacy") }}
         </el-dropdown-item>
+        <!-- Apparence : trois choix, celui en cours coche. Le theme suit le compte (champ `theme`
+             du document utilisateur), donc le choix survit a un autre navigateur. -->
+        <el-dropdown-item divided disabled class="theme-heading">
+          {{ $t("theme.appearance") }}
+        </el-dropdown-item>
+        <el-dropdown-item
+          v-for="option in themes"
+          :key="option.value"
+          :command="'theme:' + option.value"
+          :class="{ 'theme-active': theme === option.value }"
+        >
+          <el-icon class="menuicon"><component :is="option.icon" /></el-icon>
+          &nbsp;&nbsp;{{ option.label }}
+          <el-icon v-if="theme === option.value" class="theme-check"><component :is="$icons.Check" /></el-icon>
+        </el-dropdown-item>
         <el-dropdown-item divided command="logout">
           <v-icon class="menuicon" name="external-link-alt" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.logout") }}
@@ -29,10 +44,30 @@
 </template>
   
 <script>
+import axios from "axios";
+import { THEMES, applyTheme, readStoredTheme, storeTheme } from "@/utils/theme";
+
 export default {
   name: "Logout",
-  data: () => ({}),
+  data: () => ({
+    // Le theme en cours, pour la coche du menu. `readStoredTheme` lit la copie locale, ecrite au
+    // boot et a chaque choix ; a defaut, le compte fournit la valeur (voir la mutation `login`).
+    theme: readStoredTheme() || "auto"
+  }),
   props: {},
+  computed: {
+    themes() {
+      return THEMES.map((value) => ({
+        value,
+        label: this.$t("theme." + value),
+        icon: {
+          light: this.$icons.Sunny,
+          dark: this.$icons.Moon,
+          auto: this.$icons.Clock
+        }[value]
+      }));
+    }
+  },
   created: function() {},
   methods: {
     handleCommand(e) {
@@ -41,7 +76,40 @@ export default {
       else if (e == "password") {
         //this.password();
         this.$emit("changepassword");
+      } else if (typeof e === "string" && e.indexOf("theme:") === 0) {
+        this.setTheme(e.slice("theme:".length));
       } else this.logout();
+    },
+    // Applique tout de suite, puis enregistre sur le compte. Un echec d'enregistrement est dit a
+    // l'utilisateur : le theme tient localement, mais l'annoncer comme sauve garde serait faux.
+    setTheme(preference) {
+      this.theme = preference;
+      applyTheme(preference);
+      storeTheme(preference);
+      const creds = this.$store.getters.creds || {};
+      const token = creds.token;
+      if (!token) return;
+      const url = this.$store.state.apiurl + "cred/preferences?token=" + encodeURIComponent(token);
+      axios
+        .post(url, { theme: preference })
+        .then((response) => {
+          if (response.data && response.data.error) throw new Error(response.data.error);
+          this.$notify({
+            title: this.$t("notifications.message"),
+            message: this.$t("theme.saved"),
+            type: "success",
+            position: "bottom-right"
+          });
+        })
+        .catch((error) => {
+          console.warn("theme: the preference was not saved on the account", error);
+          this.$notify({
+            title: this.$t("notifications.message"),
+            message: this.$t("theme.not_saved"),
+            type: "warning",
+            position: "bottom-right"
+          });
+        });
     },
     info() {
       this.$alert(
@@ -88,5 +156,27 @@ export default {
 <style>
 .menuicon {
   margin-bottom: -3px;
+}
+
+/* L'en-tete « Apparence » est un element desactive : il ne doit pas reagir au survol comme une
+   commande. */
+.el-dropdown-menu__item.theme-heading {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+  cursor: default;
+  padding-bottom: 2px;
+}
+
+.el-dropdown-menu__item.theme-heading:hover {
+  background-color: transparent;
+  color: inherit;
+}
+
+/* La coche du choix en cours. `.el-dropdown-menu__item` est deja un flex : `margin-left: auto` la
+   pousse a droite sans deborder du menu (un `float: right` la faisait sortir de la zone cliquable). */
+.theme-check {
+  margin-left: auto;
 }
 </style>

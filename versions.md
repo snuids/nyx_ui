@@ -1,5 +1,13 @@
 # Version History
 
+## V3.6.0 07/Nov/2026
+* **Light, dark, or automatic.** A third block in the avatar menu (`Logout.vue`): *Appearance* — Light, Dark, Auto (by hour). The choice applies at once, without a reload, and the tick marks the current one
+* *Auto* darkens from 20:00 and lightens at 07:00, and re-reads the clock every ten minutes and when the tab comes back, so a console left open all day follows the evening instead of staying white
+* **The preference follows the account.** It is written on the user document (`theme`, next to `language` and `privileges`) through the new `POST /cred/preferences` — so another browser, another machine, the same theme. `localStorage` keeps a copy so a reload paints the right theme before the session restores, without a white flash; the account value takes over as soon as the login returns
+* A save that fails is said: the theme still holds locally, but the notification says it was not saved on the account rather than claiming success
+* The dark theme itself: `styles/dark.css` repaints what the console paints by hand — page background, header (whitened by the API's `ui_css` with an `!important`), left menu, module cards, dialogs, and the table headers that `Main.vue` forces to **black** text (`html.dark .el-table th > .cell`), which was the least readable part of the first attempt. Element Plus supplies the rest through its own `html.dark` variables
+* `tests/theme.spec.js`: 17 tests — the hour boundaries (19:59 / 20:00 / 06:59 / 07:00), an unknown value falling back to auto, a storage that refuses reads and writes, the DOM attributes, and the auto watch (tick, focus, unsubscribe). `theme.js` at 100 % statements and branches
+
 ## V3.5.3 07/Nov/2026
 * **The map draws again.** A map whose editor left the zoom and the centre empty (they are optional) opened on a grey background with no marker: Leaflet throws `Invalid LatLng object` on `L.latLng(undefined, undefined)`, and a `zoom` of `undefined` leaves the tile layer with no view to compute. The component now defaults to zoom 2 and a null island, and — when the editor imposes no centre — frames itself on its markers (`fitBounds`, or `setView(13)` for a single point). Measured on `/main/id_33529269`: **15 tiles loaded, 12 markers visible**, the view spanning Belgium
 * One marker per position: the example index returns 1000 documents over a dozen positions, and stacking 1000 icons on one point froze the browser tab (the page stopped answering, DOM probes timed out). The cap is 500 and duplicates are collapsed; the popup still opens the document behind the first one

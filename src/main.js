@@ -9,6 +9,8 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 // Dimensions d'Element UI 2 (36 px) que le gabarit suppose : voir le fichier.
 import './styles/element-legacy.css'
+// Reprise du bandeau, du menu et des cartes pour le theme sombre (cle `html.dark`).
+import './styles/dark.css'
 import draggable from 'vuedraggable'
 import InfiniteLoading from 'vue3-infinite-loading'
 import numeral from 'numeral'
@@ -17,6 +19,7 @@ import { i18n, elementLocale } from './i18n-setup'
 import VIcon from './components/VIcon.vue'
 import { filters } from '@/utils/filters'
 import { getUrlVars, resolveLanguage } from '@/utils/language'
+import { applyTheme, readStoredTheme, watchAutoTheme } from '@/utils/theme'
 import { apiOverride } from '@/utils/devOverrides'
 import { globalBus, localBus } from '@/utils/bus'
 import { browserDetect } from '@/utils/browser'
@@ -36,6 +39,12 @@ try {
 } catch (e) { /* storage refused */ }
 
 i18n.global.locale = resolveLanguage(vars, storage)
+
+// Theme avant le montage : sans cela, la page s'affiche en clair le temps que la session se
+// restaure, puis bascule — un flash blanc a chaque rechargement. Le choix enregistre sur le compte
+// (champ `theme` du document utilisateur) prend le dessus des que la session est restauree.
+applyTheme(readStoredTheme(storage) || "auto")
+watchAutoTheme(() => readStoredTheme(storage) || "auto")
 
 const app = createApp(App)
 
