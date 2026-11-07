@@ -1,5 +1,10 @@
 # Version History
 
+## V3.5.1 07/Nov/2026
+* **Maps can be built from two fields.** The ES Table editor's map used a single `geo_point` field; it now also offers a **latitude field** and a **longitude field**, chosen from the index's numeric (or keyword) fields, for indices that keep the two coordinates apart. When both are set they take precedence over the geo field, and the map query asks for exactly those fields
+* The coordinate resolution moved to `src/utils/mapCoords.js` with its tests: two fields, a `geo_point` object, a `"lat,lon"` string, and the case that used to draw a marker at 0,0 in the Gulf of Guinea — a document missing one of the two values now produces no marker at all. **5 new tests, 205 total**
+* The map switch is no longer disabled on an index without a `geo_point`, since two fields are enough
+
 ## V3.5.0 07/Nov/2026
 * The console's versioning starts its own line: **3.5.0**, then the third digit only (3.5.1, 3.5.2, …) for every fix and feature. The Vue 2 console keeps its own tags on branch `v2`
 * Fixes the header's month selector, which sat at the bottom of a white box taller than the header itself: the header centres its content with `line-height: 60px`, the field inherited it, and Element Plus's inner wrapper stretched to 58 px inside a 28 px control. The wrapper goes back to `inline-flex` with a normal line height — measured after the fix: control 28 px, text at 18 px from the top, centred with the 40 px round buttons
