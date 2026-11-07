@@ -22,6 +22,14 @@ export const messages = {
         info:'Info',
         privacy:'Privacy'
       },
+      theme: {
+        appearance: 'Weergave',
+        light: 'Licht',
+        dark: 'Donker',
+        auto: 'Auto (volgens het uur)',
+        saved: 'Themavoorkeur opgeslagen.',
+        not_saved: 'Het thema is hier toegepast, maar kon niet op uw account worden opgeslagen.'
+      },
       scheduler: {
         edit_scheduler:'Planner bewerken',
         scheduler:'Planner',

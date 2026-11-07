@@ -6,6 +6,7 @@ import packageJson from '../../package.json';
 
 import { extractURLParts } from "../globalfunctions";
 import { globalBus } from "../utils/bus";
+import { applyTheme, storeTheme } from "../utils/theme";
 
 
 function computeAutoTime(minutes) {
@@ -242,6 +243,12 @@ export default createStore({
       state.initialized = false;
       state.menuOpen = true;
       state.creds = payload.data.cred;
+      // Le theme enregistre sur le compte fait foi : il est applique des la restauration de la
+      // session et recopie localement, pour que le prochain chargement peigne juste avant le login.
+      if (state.creds.user && state.creds.user.theme) {
+        applyTheme(state.creds.user.theme);
+        storeTheme(state.creds.user.theme);
+      }
       state.creds.hasPrivilege = function (inPrivilege) {
 
         if (_.includes(state.creds.user.privileges, "admin"))

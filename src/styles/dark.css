@@ -1,0 +1,181 @@
+/**
+ * The console's own chrome, repainted for the dark theme.
+ *
+ * Element Plus already ships its dark variables under `html.dark` (imported in `main.js`), so the
+ * form controls, tables, dialogs and popovers follow on their own. What stays light is what the
+ * console paints itself: the page background, the header (whitened by the API's `ui_css` with an
+ * `!important`), the left menu, and the few components with a hard-coded `#fff` — the module cards,
+ * the cards of the landing page, the report viewer's cells. Those overrides live here, all keyed on
+ * `html.dark`, so nothing changes while the theme is light.
+ *
+ * The `!important` flags are not laziness: `ui_css` styles `.el-header` with one, and a rule of the
+ * same weight would lose the cascade depending on the order the two sheets happen to be injected.
+ */
+
+html.dark {
+  /* Une palette explicite plutot que les gris d'Element Plus : le fond de page, le bandeau et le
+     menu doivent se distinguer les uns des autres, ce que `--el-bg-color` seul ne fait pas. */
+  --nyx-surface: #1f2430;
+  --nyx-surface-raised: #262c3a;
+  --nyx-surface-sunken: #161a23;
+  --nyx-border: #333b4d;
+  --nyx-text: #dfe4ed;
+  --nyx-text-muted: #9aa4b5;
+}
+
+html.dark body {
+  background-color: var(--nyx-surface-sunken);
+  color: var(--nyx-text);
+}
+
+/* --- Bandeau ---------------------------------------------------------------
+   `ui_css` (servi par l'API) force un fond blanc avec `!important`. */
+html.dark .el-header {
+  background-color: var(--nyx-surface) !important;
+  border-bottom: 1px solid var(--nyx-border) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* --- Menu lateral ---------------------------------------------------------
+   `Main.vue` pose `--el-menu-text-color: #666` en style inline, d'ou le `!important`. */
+html.dark .aside {
+  background-color: var(--nyx-surface);
+  border-right: 1px solid var(--nyx-border);
+}
+
+html.dark .el-menu {
+  background-color: var(--nyx-surface);
+  --el-menu-text-color: var(--nyx-text) !important;
+  --el-menu-hover-bg-color: var(--nyx-surface-raised);
+  --el-menu-active-color: var(--el-color-primary);
+}
+
+html.dark .el-menu .el-sub-menu__title,
+html.dark .el-menu .el-menu-item {
+  color: var(--nyx-text) !important;
+}
+
+html.dark .el-menu .el-menu-item.is-active {
+  color: var(--el-color-primary) !important;
+}
+
+/* --- Cartes de modules (Overview) ----------------------------------------
+   `ProcessList.vue` les peint en blanc avec une bordure grise. */
+html.dark .process_ok {
+  background-color: var(--nyx-surface-raised);
+  border-color: var(--nyx-border);
+  color: var(--nyx-text);
+}
+
+html.dark .process_ok:hover {
+  background-color: #2f3646;
+}
+
+html.dark .process_ko {
+  background-color: #3a1f22;
+  border-color: #c4565c;
+  color: var(--nyx-text);
+}
+
+html.dark .process_ko:hover {
+  background-color: #4a262a;
+}
+
+html.dark .process_title_ok {
+  background-color: var(--nyx-surface-raised);
+  color: var(--nyx-text);
+  border-bottom-color: var(--nyx-border);
+}
+
+/* --- Dialoques -----------------------------------------------------------
+   La bande de titre reste bleue (c'est la marque), mais le corps reprend le texte clair. */
+html.dark .el-overlay .el-dialog {
+  background-color: var(--nyx-surface);
+}
+
+html.dark .el-overlay .el-dialog__body {
+  color: var(--nyx-text);
+}
+
+html.dark .el-dialog__footer {
+  background-color: var(--nyx-surface);
+}
+
+/* --- Tableaux et cartes --------------------------------------------------- */
+html.dark .el-table {
+  --el-table-bg-color: var(--nyx-surface);
+  --el-table-tr-bg-color: var(--nyx-surface);
+  --el-table-header-bg-color: #2b3344;
+  --el-table-border-color: var(--nyx-border);
+  --el-table-text-color: var(--nyx-text);
+  --el-table-header-text-color: var(--nyx-text);
+  --el-table-row-hover-bg-color: var(--nyx-surface-raised);
+}
+
+/* `Main.vue` force le texte des en-tetes de colonne en **noir** (`.el-table th > .cell`). Sur le
+   fond sombre des en-tetes, un noir sur gris bleute est illisible — c'est le defaut le plus
+   visible du theme. Le `!important` est necessaire : cette regle-la n'en porte pas, mais elle est
+   chargee apres Element Plus et gagne a poids egal selon l'ordre des feuilles. */
+html.dark .el-table th > .cell,
+html.dark .el-table th.el-table__cell > .cell,
+html.dark .el-table thead th {
+  color: var(--nyx-text) !important;
+}
+
+html.dark .el-table th.el-table__cell {
+  background-color: #2b3344;
+}
+
+html.dark .el-table td.el-table__cell,
+html.dark .el-table .cell {
+  color: var(--nyx-text);
+}
+
+/* Les bandes du tableau alterne et les cases fixes gardent leur fond clair sinon. */
+html.dark .el-table tr,
+html.dark .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: var(--nyx-surface);
+}
+
+html.dark .el-table__fixed,
+html.dark .el-table__fixed-right,
+html.dark .el-table__fixed-header-wrapper {
+  background-color: var(--nyx-surface);
+}
+
+/* Textes peints en noir par les composants eux-memes. */
+html.dark .form_title,
+html.dark .file-system-card .el-breadcrumb__inner {
+  color: var(--nyx-text);
+}
+
+html.dark .query-input input {
+  color: var(--nyx-text) !important;
+}
+
+html.dark .icon-item {
+  background-color: var(--nyx-surface-raised);
+  border-color: var(--nyx-border);
+}
+
+html.dark .icon-item:hover {
+  background-color: #2f3646;
+}
+
+
+html.dark .el-card {
+  background-color: var(--nyx-surface);
+  border-color: var(--nyx-border);
+  color: var(--nyx-text);
+}
+
+/* --- Page d'accueil et petits textes ------------------------------------- */
+html.dark .el-main,
+html.dark .el-container {
+  background-color: var(--nyx-surface-sunken);
+  color: var(--nyx-text);
+}
+
+html.dark a {
+  color: #79b8ff;
+}

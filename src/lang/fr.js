@@ -319,6 +319,14 @@ export const messages = {
         vega_spec_placeholder:"Spécification Vega",
         db_type_postgresql:"PostgreSQL"
       },
+      theme: {
+        appearance: 'Apparence',
+        light: 'Clair',
+        dark: 'Sombre',
+        auto: "Auto (selon l'heure)",
+        saved: 'Préférence de thème enregistrée.',
+        not_saved: "Le thème est appliqué ici, mais n'a pas pu être enregistré sur votre compte."
+      },
       iconpicker:{
         title:"Sélecteur d'icônes",
         search_placeholder:"Rechercher des icônes...",
