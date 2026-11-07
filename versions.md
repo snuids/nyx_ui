@@ -1,5 +1,10 @@
 # Version History
 
+## V3.5.3 07/Nov/2026
+* **The map draws again.** A map whose editor left the zoom and the centre empty (they are optional) opened on a grey background with no marker: Leaflet throws `Invalid LatLng object` on `L.latLng(undefined, undefined)`, and a `zoom` of `undefined` leaves the tile layer with no view to compute. The component now defaults to zoom 2 and a null island, and — when the editor imposes no centre — frames itself on its markers (`fitBounds`, or `setView(13)` for a single point). Measured on `/main/id_33529269`: **15 tiles loaded, 12 markers visible**, the view spanning Belgium
+* One marker per position: the example index returns 1000 documents over a dozen positions, and stacking 1000 icons on one point froze the browser tab (the page stopped answering, DOM probes timed out). The cap is 500 and duplicates are collapsed; the popup still opens the document behind the first one
+* **The module cards are back.** `.process_ok` and its `:hover` had been deleted as dead CSS — the class is built by `:class="'process_' + dat.css_class"`, so it appears in no template and the healthy modules' cards lost their size, border and background (`Overview`, `/main/id_19934403`: 13 cards at 284 × 124, white, 2 px border)
+
 ## V3.5.2 07/Nov/2026
 * The map of the previous release came with a CI gate that failed: the coverage floor is **96 % of branches**, and a new file has to bring branch coverage with it, not just lines — `mapCoords` was at 77.8 % of branches. Two cases were missing (a field name that contains dots, and a geo value that is neither an object nor a string); the file is now at 97 % and the suite green. **7 tests, 207 total**
 * `storeActions.spec.js` no longer bets on a millisecond: the "2h" threshold case used `3 × 1440` minutes, exactly the top of the band, and `new Date()` is read a moment after the start — the case passed on the pull request and failed on the merge ten seconds later. It now uses a value inside the band
