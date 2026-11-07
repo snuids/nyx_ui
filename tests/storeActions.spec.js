@@ -446,7 +446,10 @@ describe('refreshTimeRange, day and week', () => {
 describe('computeAutoTime thresholds, through setTimeRange', () => {
   const cases = [
     [3 * 60, '5m'],
-    [3 * 1440, '2h'],
+    // 3 * 1440 is exactly the top of the "2h" band: `new Date()` is taken a moment after the start, so
+    // the elapsed time lands just above the boundary and the case flipped to "4h" on CI. A value inside
+    // the band tests the threshold without betting on a millisecond.
+    [3 * 1440 - 5, '2h'],
     [60 * 1440, '1d'],
     [200 * 1440, '20d'],
   ]

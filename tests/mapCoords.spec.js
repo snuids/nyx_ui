@@ -33,4 +33,20 @@ describe('map coordinates', () => {
     expect(resolveLatLng({ p: '47.4' }, { mapfield: 'p' })).toBeNull()
     expect(resolveLatLng({}, {})).toBeNull()
   })
+
+  it('reads a field name that contains dots, or nothing when the path breaks', () => {
+    // a mapping field is a path, but a document may also carry the dotted key literally
+    expect(resolveLatLng({ 'a.lat': 1, 'a.lon': 2 },
+      { maplatfield: 'a.lat', maplonfield: 'a.lon' })).toEqual([1, 2])
+    // the path runs into null halfway: no coordinates, not a crash
+    expect(resolveLatLng({ a: null }, { maplatfield: 'a.lat', maplonfield: 'a.lon' })).toBeNull()
+    // no document at all
+    expect(resolveLatLng(null, { maplatfield: 'a.lat', maplonfield: 'a.lon' })).toBeNull()
+  })
+
+  it('ignores a geo field that holds neither an object, a string nor a full pair', () => {
+    expect(resolveLatLng({ p: 42 }, { mapfield: 'p' })).toBeNull()
+    expect(resolveLatLng({ p: '47.4,' }, { mapfield: 'p' })).toBeNull()
+    expect(resolveLatLng({ other: 1 }, { mapfield: 'p' })).toBeNull()
+  })
 })

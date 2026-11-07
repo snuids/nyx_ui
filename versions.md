@@ -1,5 +1,9 @@
 # Version History
 
+## V3.5.2 07/Nov/2026
+* The map of the previous release came with a CI gate that failed: the coverage floor is **96 % of branches**, and a new file has to bring branch coverage with it, not just lines — `mapCoords` was at 77.8 % of branches. Two cases were missing (a field name that contains dots, and a geo value that is neither an object nor a string); the file is now at 97 % and the suite green. **7 tests, 207 total**
+* `storeActions.spec.js` no longer bets on a millisecond: the "2h" threshold case used `3 × 1440` minutes, exactly the top of the band, and `new Date()` is read a moment after the start — the case passed on the pull request and failed on the merge ten seconds later. It now uses a value inside the band
+
 ## V3.5.1 07/Nov/2026
 * **Maps can be built from two fields.** The ES Table editor's map used a single `geo_point` field; it now also offers a **latitude field** and a **longitude field**, chosen from the index's numeric (or keyword) fields, for indices that keep the two coordinates apart. When both are set they take precedence over the geo field, and the map query asks for exactly those fields
 * The coordinate resolution moved to `src/utils/mapCoords.js` with its tests: two fields, a `geo_point` object, a `"lat,lon"` string, and the case that used to draw a marker at 0,0 in the Gulf of Guinea — a document missing one of the two values now produces no marker at all. **5 new tests, 205 total**
