@@ -82,15 +82,19 @@ export default defineConfig({
       ],
       reporter: ['text', 'json-summary'],
       thresholds: {
-        // Whole `src`: what it is today (statements 23.2 %, branches 85.5 %, functions 48.7 %,
-        // lines 23.2 %). Low by construction — most of the 63 single-file components are still
-        // untested. The point of the number is to fall if the suite loses a file, not to flatter.
-        // It also *falls* when a new file is measured and only partly covered: as long as whole
-        // files come into the assiette, read the per-glob numbers below, not this one.
-        statements: 23,
-        branches: 85,
-        functions: 48,
-        lines: 23,
+        // Whole `src`: statements 33.9 %, branches 83.9 %, functions 44.3 %, lines 33.9 %.
+        // Low by construction — most of the 63 single-file components are still untested. The point
+        // of the number is to fall if the suite loses a file, not to flatter.
+        //
+        // It moves in *both* directions as screens enter the assiette: mounting `Map`, `Activity`
+        // and `LambdaEditor` took statements from 23.3 % to 33.9 % (components 17.2 % -> 29.0 %)
+        // while pulling branches and functions down (85.8 -> 83.9 and 49.0 -> 44.3), because the
+        // parts of those screens the tests do not exercise are now measured. Read the per-glob
+        // numbers below for the quality of the suite; this one is the tripwire.
+        statements: 33,
+        branches: 83,
+        functions: 44,
+        lines: 33,
         // Logic and store: held closely, as before.
         'src/**/*.js': {
           statements: 97,
