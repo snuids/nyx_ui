@@ -72,12 +72,17 @@
               size="small"
               max-height="65vh"
             >
+              <!-- `min-width`, not `width`: with a fixed width the columns keep 150 px and the table
+                   frame stretches to the dialog's width, so a sheet with three columns shows 450 px
+                   of cells inside a 1100 px border — the columns and the table look offset. A
+                   minimum lets the columns share the available width, and a wide sheet still
+                   scrolls horizontally at 150 px per column. -->
               <el-table-column
                 v-for="(col, index) in sheet.columns"
                 :key="index"
                 :prop="col"
                 :label="col"
-                width="150"
+                min-width="150"
               >
               </el-table-column>
             </el-table>

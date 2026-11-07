@@ -94,7 +94,15 @@
 <script>
 export default {
   name: "IconPicker",
+  // Vue 3 binds `v-model` to `modelValue` / `update:modelValue`; the call sites written for Vue 2
+  // pass `value` and listen to `input`. Both are accepted and both are emitted: with only the old
+  // pair, the field opened empty and a chosen icon never reached the record — silently.
+  emits: ["update:modelValue", "input", "change"],
   props: {
+    modelValue: {
+      type: String,
+      default: undefined
+    },
     value: {
       type: String,
       default: ""
@@ -123,7 +131,7 @@ export default {
       categoryFilter: "all",
       currentPage: 1,
       pageSize: 48,
-      selectedIcon: this.value,
+      selectedIcon: this.modelValue !== undefined ? this.modelValue : this.value,
       // All available icons from vue-awesome
       allIcons: [
         "ad", "address-book", "address-card", "adjust", "air-freshener", "align-center", 
@@ -480,6 +488,9 @@ export default {
     }
   },
   watch: {
+    modelValue(newVal) {
+      this.selectedIcon = newVal;
+    },
     value(newVal) {
       this.selectedIcon = newVal;
     },
@@ -491,16 +502,19 @@ export default {
     }
   },
   methods: {
-    handleInput(value) {
+    emitValue(value) {
+      this.$emit("update:modelValue", value);
       this.$emit("input", value);
       this.$emit("change", value);
+    },
+    handleInput(value) {
+      this.emitValue(value);
     },
     selectIcon(icon) {
       this.selectedIcon = icon;
     },
     confirmSelection() {
-      this.$emit("input", this.selectedIcon);
-      this.$emit("change", this.selectedIcon);
+      this.emitValue(this.selectedIcon);
       this.dialogVisible = false;
     },
     handlePageChange(page) {

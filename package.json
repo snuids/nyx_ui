@@ -23,6 +23,7 @@
     "axios": "^1.8.3",
     "core-js": "^3.49.0",
     "detect-browser": "^5.3.0",
+    "dompurify": "^3.4.17",
     "element-plus": "^2.14.8",
     "js-yaml": "^3.13.1",
     "leaflet": "^1.6.0",
