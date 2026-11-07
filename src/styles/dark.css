@@ -173,21 +173,128 @@ html.dark .barchart_drawrect {
   stroke: var(--nyx-border);
 }
 
-html.dark .barchart_tick {
-  fill: var(--nyx-text-muted);
-}
-
-html.dark .barchart_title_none {
+html.dark .barchart .barchart_tick,
+html.dark .barchart .barchart_axis,
+html.dark .barchart .barchart_title {
+  /* Le texte courant, pas le gris attenue : sur le fond sombre les etiquettes d'axes etaient
+     lisibles « a peine », ce que l'utilisateur a signale deux fois. */
   fill: var(--nyx-text);
 }
 
-html.dark .barchart_details {
-  fill: var(--nyx-text);
+html.dark .barchart .barchart_details {
+  fill: #79b8ff;
 }
 
 html.dark .barchart_selectrect {
   fill: #2f3646;
   stroke: var(--nyx-border);
+}
+
+/* --- Activite (Activity.vue) ---------------------------------------------
+   Les barres des « top endpoints » sont un fond bleu tres clair ecrit dans un `<style scoped>` : le
+   texte du chemin, lui, prend la couleur claire du theme, donc un chemin clair sur une barre claire.
+   Les libelles gris sont aussi releves : #909399 sur le fond sombre se lit mal. */
+html.dark .bar {
+  background: rgba(64, 158, 255, 0.22);
+  border-left-color: #409eff;
+}
+
+html.dark .bar-text {
+  color: var(--nyx-text);
+}
+
+html.dark .kpi-label,
+html.dark .kpi-sub,
+html.dark .panel-title,
+html.dark .empty,
+html.dark .panel-meta {
+  color: var(--nyx-text-muted);
+}
+
+html.dark .kpi-value {
+  /* Le neutre vient de `var(--nyx-text)` cote composant ; le rouge et le vert restent semantiques. */
+  color: var(--nyx-text);
+}
+
+/* --- Editeur de code ACE --------------------------------------------------
+   `vue3-ace-editor` lit son `theme` une seule fois, au montage, et `ace.edit` retombe silencieusement
+   sur `ace-tm` (blanc) quand le module de theme n'est pas encore charge : le selecteur du composant
+   ne suffisait donc pas. Ces regles repeignent l'editeur quel que soit le theme ACE applique. */
+html.dark .ace_editor,
+html.dark .ace_editor .ace_scroller,
+html.dark .ace_editor .ace_content {
+  background-color: var(--nyx-surface) !important;
+  color: var(--nyx-text) !important;
+}
+
+html.dark .ace_editor .ace_gutter {
+  background-color: var(--nyx-surface-sunken) !important;
+  color: var(--nyx-text-muted) !important;
+  border-right: 1px solid var(--nyx-border);
+}
+
+html.dark .ace_editor .ace_gutter-active-line,
+html.dark .ace_editor .ace_marker-layer .ace_active-line {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+html.dark .ace_editor .ace_marker-layer .ace_selection {
+  background: rgba(64, 158, 255, 0.35) !important;
+}
+
+html.dark .ace_editor .ace_cursor {
+  color: var(--nyx-text) !important;
+}
+
+html.dark .ace_editor .ace_print-margin {
+  background: var(--nyx-border) !important;
+}
+
+html.dark .ace_editor .ace_scrollbar {
+  background: var(--nyx-surface);
+}
+
+/* Coloration syntaxique. Le theme ACE reste `ace-tm` sur ce build (le module de theme n'est pas
+   resolvable tel quel) : sa palette est faite pour un fond blanc — bleu `#0000ff` sur fond sombre.
+   Ces regles la remplacent pour les classes de jetons courantes. */
+html.dark .ace_editor .ace_keyword,
+html.dark .ace_editor .ace_meta {
+  color: #c792ea !important;
+}
+
+html.dark .ace_editor .ace_string {
+  color: #c3e88d !important;
+}
+
+html.dark .ace_editor .ace_comment {
+  color: #6b7686 !important;
+  font-style: italic;
+}
+
+html.dark .ace_editor .ace_constant,
+html.dark .ace_editor .ace_numeric {
+  color: #f78c6c !important;
+}
+
+html.dark .ace_editor .ace_support,
+html.dark .ace_editor .ace_function {
+  color: #82aaff !important;
+}
+
+html.dark .ace_editor .ace_entity,
+html.dark .ace_editor .ace_type {
+  color: #ffcb6b !important;
+}
+
+html.dark .ace_editor .ace_variable,
+html.dark .ace_editor .ace_identifier,
+html.dark .ace_editor .ace_paren {
+  color: var(--nyx-text) !important;
+}
+
+html.dark .ace_editor .ace_punctuation,
+html.dark .ace_editor .ace_operator {
+  color: var(--nyx-text-muted) !important;
 }
 
 /* --- Cartes de description de l'editeur d'application ---------------------

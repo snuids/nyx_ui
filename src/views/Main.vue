@@ -78,7 +78,7 @@
                   v-on:change="timeRangeChanged"
                   size="small"
                   type="datetimerange"
-                  range-separator="To"
+                  :range-separator="$t('time.to')"
                   :start-placeholder="$t('reportgenerator.start_date')"
                   :end-placeholder="$t('reportgenerator.end_date')"
                   align="center"

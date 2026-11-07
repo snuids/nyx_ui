@@ -127,6 +127,7 @@ export const messages = {
         send_message:'Send Message'
       }
       ,time:{
+        to: 'to',
           absolute:"Absolute",
           relative:"Relative",
           last:'Last',

@@ -51,7 +51,7 @@
           id="test"
           @init="editorInitRO"
           lang="yaml"
-          theme="chrome"
+          :theme="aceTheme"
           style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
         ></editor>
         <div>&nbsp;</div>
@@ -67,7 +67,7 @@
           id="test"
           @init="editorInit"
           lang="yaml"
-          theme="chrome"
+          :theme="aceTheme"
           style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
         ></editor>
         <div>&nbsp;</div>
@@ -88,8 +88,10 @@
 <script>
 import { VAceEditor } from "vue3-ace-editor";
 import YAML from "js-yaml";
+import aceThemeMixin from "@/mixins/aceTheme";
 
 export default {
+  mixins: [aceThemeMixin],
   name: "GenericTableDetails",
   data: () => ({
     dialogFormVisible: false,
@@ -182,6 +184,7 @@ export default {
       require("ace-builds/src-noconflict/mode-javascript"); //language
       require("ace-builds/src-noconflict/mode-less");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/javascript"); //snippet
 
       editor.setReadOnly(true);
@@ -194,6 +197,7 @@ export default {
       require("ace-builds/src-noconflict/mode-javascript"); //language
       require("ace-builds/src-noconflict/mode-less");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
     valueChanged: function(item) {
