@@ -1,5 +1,17 @@
 # Version History
 
+## V3.0.0 07/Nov/2026
+* **The console is now Vue 3 + Element Plus.** Same screens, same data, same API: the port replaces the framework (Vue 2.7 → 3.5, Element UI 2 → Element Plus 2, vue-router 4, vuex 4, vue-i18n 9 with `legacy: true`), the libraries with no Vue 3 release (`vue-awesome`, `vue2-ace-editor`, `vue2-leaflet`, `vue-draggable`, `tiptap` 1) by local components, and the build tool stays `@vue/cli-service` 5
+* The look of production is restored rather than re-invented: Element UI 2's 36 px components, 40 px menu entries and 54 px dialog band, its typography on `body` and its heading reset, the dialog and message-box box models — each measured against the old build before being written (`src/styles/element-legacy.css`, `src/views/Main.vue`)
+* The Vue 2 console stays available: it is kept on the `v2` branch and served under `/nyxv2/`, so both interfaces can be compared on the same data while the port is judged
+* Fixed after the port went live: free text rendered as HTML again (through DOMPurify), Vega modules (a reactive spec is refused by `structuredClone`), the icon field of the app editor (`v-model` vs `value`/`input`), radio spacing, the Excel preview's columns (`min-width`), the time-selector type now sits beside its switch, and each Vega chart has its own container
+* Tests: 200 cases (Vitest), plus the guard suites that catch the silent failures of this migration (unknown `el-*` tags, renamed classes, a slot on a template root, a global rule for a component the file does not render)
+* Known and deliberate: the free-text and Excel-preview fixes above deviate from the old build; `el-radio label` and `el-config-provider` (language) are still to be migrated
+
+## V3.31.22 07/Nov/2026
+* The build takes its public path from `VUE_APP_PUBLIC_PATH` (`publicPath` in `vue.config.js`, `ARG PUBLIC_PATH` in the Dockerfile) and the file server mounts that prefix (`BASE_PATH` in `app.js`). The default is still the root, so the release image is unchanged; the point is to serve the same tree under a sub-path — the console moves to `/nyxv2/` while the Vue 3 build takes the root
+* Nothing else changes: same asset URLs at the root, same behaviour, no code touched outside the three build/serve entry points
+
 ## V3.31.19 04/Nov/2026
 * The privacy notice states the two retentions the platform actually enforces: report execution logs and the reports produced are kept **ninety days**, deleted by a scheduled task, in the four languages (the notice stopped at the account, the seven days of call logs and the thirty days of backups). "Last updated" moves to 4 November 2026 in each language
 
