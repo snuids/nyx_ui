@@ -18,6 +18,11 @@
 import vegaEmbed from "vega-embed";
 import moment from "moment";
 
+// One id per chart, from a counter: Vue 3 has no `_uid`, so `"chart" + this._uid` produced the same
+// `chartundefined` for every module. Two Vega apps on one page (the `Vega` / `Vega2` tabs) then
+// shared a div and the second chart drew over the first.
+let chartCounter = 0;
+
 export default {
   name: "Vega",
 
@@ -156,7 +161,7 @@ export default {
     }
   },
   created: function() {
-    this.id = "chart" + this._uid;
+    this.id = "chart" + ++chartCounter;
   },
   mounted: function() {
     console.log("===============  REGISTERING VEGA:");
