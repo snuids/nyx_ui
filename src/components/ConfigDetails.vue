@@ -709,7 +709,7 @@
                           size="small"
                           circle
                           @click="handleEditHeader(scope2.$index, scope2.row)"
-                          :icon="$icons.Edit"
+                          :icon="$icons.EditPen"
                         ></el-button>
                         <el-button
                           size="small"
@@ -870,7 +870,7 @@
                           size="small"
                           circle
                           @click="handleEditQueryFilterField(scope2.$index, scope2.row)"
-                          :icon="$icons.Edit"
+                          :icon="$icons.EditPen"
                         ></el-button>
                         <el-button
                           size="small"

@@ -68,7 +68,7 @@
             size="small"
             type="primary"
             plain
-            :icon="$icons.Edit"
+            :icon="$icons.EditPen"
             @click="handleView(scope.$index, scope.row)"
           ></el-button>
           <el-button

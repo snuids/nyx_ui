@@ -89,7 +89,7 @@
                     size="small"
                     circle
                     @click="handleEditField(scope2.$index, scope2.row)"
-                    :icon="$icons.Edit"
+                    :icon="$icons.EditPen"
                   ></el-button>
                   <el-button
                     size="small"

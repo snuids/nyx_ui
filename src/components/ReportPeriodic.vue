@@ -111,7 +111,7 @@
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
-              :icon="$icons.Edit"
+              :icon="$icons.EditPen"
               @click="editScheduler(scope.$index, scope.row)"
               circle
             ></el-button>

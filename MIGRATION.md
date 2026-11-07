@@ -235,6 +235,10 @@ thème emportait avec elle, ou tailles que `size="small"` a décalées après la
    d'un `el-form-item` n'a plus de hauteur de ligne en Element Plus (il est `flex`), donc les lignes
    faisaient 32 px au lieu de 41.
 
+Enfin, la colonne d'actions montrait un **crayon dans un carré** (`$icons.Edit`, l'icône `Edit`
+d'Element Plus) là où la production dessine le crayon seul d'`el-icon-edit` : les cinq boutons
+d'édition passent à `$icons.EditPen`.
+
 Ce qui reste différent, mesuré et non corrigé :
 
 - **ligne d'en-tête 54 px au lieu de 59** : Element UI 2 obtenait 48 px de contenu (ligne de 40 px
