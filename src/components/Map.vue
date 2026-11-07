@@ -19,6 +19,7 @@
 
 <script>
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet';
+import { resolveLatLng } from '@/utils/mapCoords';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 
@@ -122,13 +123,9 @@ export default {
         nofmarkers+=1;
         var record=this.tableData[rec]._source;
         
-        var resorg=_.get(record,this.config.config.mapfield);
-        
-        var res=resorg;
-        if ((res!=null)&&(res.lat !=null))
-        {          
-          res=[res.lat,res.lon];
-        }
+        // Coordonnees du document : deux champs (lat / lon) ou un geo_point — la resolution vit dans
+        // `utils/mapCoords.js`, avec ses tests (un document sans coordonnee ne produit pas de marqueur).
+        var res = resolveLatLng(record, this.config.config);
 
         var color="green";
         if (has_colorfunction)

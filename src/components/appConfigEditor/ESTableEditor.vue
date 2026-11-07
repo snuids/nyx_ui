@@ -425,7 +425,7 @@
           <el-card shadow="never">
             <el-row>
               <el-switch 
-              :disabled="isEmpty(geoFields)"
+              :disabled="isEmpty(geoFields) && isEmpty(latLonFields)"
               v-model="currentConfig.mapChecked" :active-text="$t('cfg.map')"></el-switch>
             </el-row>
             <el-row v-if="currentConfig.mapChecked" style="margin-top: 15px;">
@@ -488,6 +488,56 @@
                   v-model="currentConfig.config.maplong"
                   autocomplete="off"
                 ></el-input-number>
+              </el-col>
+            </el-row>
+
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="24">
+                <small>{{ $t('cfg.map_two_fields') }}</small>
+              </el-col>
+            </el-row>
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="12">
+                <el-button @click="setFocus('latfield')" type="text">{{ $t('cfg.lat_field') }}</el-button>
+              </el-col>
+              <el-col :span="12">
+                <el-button @click="setFocus('lonfield')" type="text">{{ $t('cfg.lon_field') }}</el-button>
+              </el-col>
+            </el-row>
+            <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
+              <el-col :span="12">
+                <el-select
+                  v-model="currentConfig.config.maplatfield"
+                  :placeholder="$t('cfg.select')"
+                  size="small"
+                  ref="latfield"
+                  clearable
+                  style="width:90%;"
+                >
+                  <el-option
+                    v-for="item in latLonFields"
+                    :key="'lat-' + item.field"
+                    :label="item.field"
+                    :value="item.field"
+                  ></el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="12">
+                <el-select
+                  v-model="currentConfig.config.maplonfield"
+                  :placeholder="$t('cfg.select')"
+                  size="small"
+                  ref="lonfield"
+                  clearable
+                  style="width:90%;"
+                >
+                  <el-option
+                    v-for="item in latLonFields"
+                    :key="'lon-' + item.field"
+                    :label="item.field"
+                    :value="item.field"
+                  ></el-option>
+                </el-select>
               </el-col>
             </el-row>
 
@@ -696,6 +746,17 @@ export default {
     },
     allFieldsFilter() {
       return Object.assign({}, ...Object.keys(this.allFields).map(k => ({[k]: {'field': k}})));
+    },
+    // Champs candidats pour une latitude / une longitude, quand l'index ne porte pas de `geo_point`
+    // (deux champs numeriques, ou deux textes qui contiennent la coordonnee). On retombe sur tous les
+    // champs si le mapping n'en declare aucun du bon type, pour ne jamais proposer une liste vide.
+    latLonFields() {
+      const numeric = ["long", "integer", "short", "byte", "double", "float",
+                       "half_float", "scaled_float", "unsigned_long", "keyword"];
+      const fields = this.allFields || {};
+      let names = Object.keys(fields).filter(k => numeric.indexOf(fields[k].type) >= 0);
+      if (names.length == 0) names = Object.keys(fields);
+      return names.sort().map(name => ({ field: name }));
     },
   },
   watch: {

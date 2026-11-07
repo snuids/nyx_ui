@@ -965,7 +965,15 @@ export default {
       {
         query2=JSON.parse(JSON.stringify(query));
         query2.size=1000;
-        query2._source=[this.config.config.mapfield];
+        // Les deux champs du plan (lat / lon) doivent être demandés explicitement : une requête qui ne
+        // ramene que `mapfield` laisse le plan vide quand l'index n'a pas de geo_point.
+        var mapCfg = this.config.config;
+        query2._source=[];
+        if (mapCfg.maplatfield && mapCfg.maplonfield) {
+          query2._source=[mapCfg.maplatfield, mapCfg.maplonfield];
+        } else if (mapCfg.mapfield) {
+          query2._source=[mapCfg.mapfield];
+        }
 
         if (this.config.config.functionfields!=null && this.config.config.functionfields!='')
         {
@@ -974,6 +982,11 @@ export default {
           {
             query2._source.push(fields[field]);
           }
+        }
+
+        if (query2._source.length == 0) {
+          // Aucun champ de plan configure : on laisse Elasticsearch renvoyer le document entier.
+          delete query2._source;
         }
 
 
