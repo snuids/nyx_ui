@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.5 07/Nov/2026
+* **The lambda log takes the full width.** The viewer sat in an `el-row`, which Element Plus renders as a flex container: the log card shrank to the width of its content — 672 px in a 767 px pane, measured on `Lambdas` (`id_29242399`). A `div` with `width: 100%` and `min-width: 0` restores the full width and lets it shrink with the window instead of pushing a scrollbar
+* **Long log lines wrap.** The message cell carried `style="{ color:black;white-space: pre-wrap !important;}"` — Vue 2 markup left in an attribute, which the browser discards as invalid CSS: neither the colour nor the wrap applied, so a JSON line widened the table. It is a `.log-message` class now (`pre-wrap` + `overflow-wrap: anywhere`)
+* The *Edit code* button of that dialog loses its `min-width: 112px`, which — with the four field columns of the same row — pushed the row past the available width and put a horizontal scrollbar under the dialog
+
 ## V3.6.4 07/Nov/2026
 * **Grafana follows the theme.** The dashboards are embedded in an iframe and keep their own theme: in the dark console the panel stayed white. `createUrl` now appends `theme=light|dark`, which Grafana reads from the URL (verified on the 13.2.4 instance: the same dashboard goes from `rgb(251,251,251)` to `rgb(17,18,23)`, text `rgb(204,204,220)`). All 17 Grafana applications follow without being edited
 * The switch is live: `Grafana.vue` listens to `nyx:theme` and recomputes the iframe's `src`, so passing from Dark to Light restyles the panel without a reload (measured: `&theme=dark` → `&theme=light`, background back to `rgb(251,251,251)`)

@@ -78,7 +78,6 @@
             </el-col>
             <el-col :span="4" style="text-align:right;">
               <el-button
-                style="min-width: 112px;"
                 :icon="$icons.Notebook"
                 @click="openTabCode()"
                 size="small"
@@ -221,9 +220,11 @@
             </el-col> -->
           </el-row>
         </el-card>
-        <el-row v-if="selectedRun">
+        <!-- Un `div`, pas un `el-row` : en Element Plus `el-row` est un conteneur flex, et la carte
+             des logs s'y reduisait a la largeur de son contenu (672 px dans une fenetre de 767). -->
+        <div v-if="selectedRun" class="lambda-log">
           <LogViewer :logObj="logObj"></LogViewer>
-        </el-row>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="Info" name="info">
         <el-form v-model="newRec._source">
@@ -838,5 +839,15 @@ export default {
 <style >
 .lambda-editor .el-divider--horizontal {
   margin: 24px 0px 10px 0 !important;
+}
+</style>
+
+<style>
+/* La carte des logs prend toute la largeur du dialogue, et `min-width: 0` la laisse se reduire
+   quand la fenetre se retrecit au lieu de pousser une barre de defilement horizontale. */
+.lambda-log,
+.lambda-log > .el-card {
+  width: 100%;
+  min-width: 0;
 }
 </style>
