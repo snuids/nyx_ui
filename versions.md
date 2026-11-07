@@ -1,5 +1,9 @@
 # Version History
 
+## V3.5.0 07/Nov/2026
+* The console's versioning starts its own line: **3.5.0**, then the third digit only (3.5.1, 3.5.2, …) for every fix and feature. The Vue 2 console keeps its own tags on branch `v2`
+* Fixes the header's month selector, which sat at the bottom of a white box taller than the header itself: the header centres its content with `line-height: 60px`, the field inherited it, and Element Plus's inner wrapper stretched to 58 px inside a 28 px control. The wrapper goes back to `inline-flex` with a normal line height — measured after the fix: control 28 px, text at 18 px from the top, centred with the 40 px round buttons
+
 ## V3.0.0 07/Nov/2026
 * **The console is now Vue 3 + Element Plus.** Same screens, same data, same API: the port replaces the framework (Vue 2.7 → 3.5, Element UI 2 → Element Plus 2, vue-router 4, vuex 4, vue-i18n 9 with `legacy: true`), the libraries with no Vue 3 release (`vue-awesome`, `vue2-ace-editor`, `vue2-leaflet`, `vue-draggable`, `tiptap` 1) by local components, and the build tool stays `@vue/cli-service` 5
 * The look of production is restored rather than re-invented: Element UI 2's 36 px components, 40 px menu entries and 54 px dialog band, its typography on `body` and its heading reset, the dialog and message-box box models — each measured against the old build before being written (`src/styles/element-legacy.css`, `src/views/Main.vue`)

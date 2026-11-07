@@ -832,6 +832,18 @@ body {
   padding: 10px 20px 20px;
 }
 
+/* L'en-tete centre ses elements par `line-height: 60px`, et un champ y herite cette hauteur de ligne :
+   le wrapper interne d'Element Plus s'etire alors a 58 px dans un controleur de 28 px, si bien que le
+   texte se pose en bas d'une boite blanche plus haute que l'en-tete. Le selecteur de mois le montrait
+   le plus nettement (un seul champ, large, avec de l'air au-dessus du texte). Deux valeurs rendent au
+   champ sa hauteur : le wrapper redevient le flex qu'Element Plus declare, et sa ligne redevient normale. */
+.el-header .el-date-editor .el-input__wrapper {
+  display: inline-flex;
+  align-items: center;
+  line-height: normal;
+  height: 26px;
+}
+
 /* Meme ecart pour les boites de confirmation ($alert / $confirm / $prompt) : Element Plus met un
    rembourrage de 12 px autour de la boite et aucun en haut de l'en-tete, si bien que le titre
    demarrait 12 px plus bas que dans Element UI 2. */
