@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.4 07/Nov/2026
+* **Grafana follows the theme.** The dashboards are embedded in an iframe and keep their own theme: in the dark console the panel stayed white. `createUrl` now appends `theme=light|dark`, which Grafana reads from the URL (verified on the 13.2.4 instance: the same dashboard goes from `rgb(251,251,251)` to `rgb(17,18,23)`, text `rgb(204,204,220)`). All 17 Grafana applications follow without being edited
+* The switch is live: `Grafana.vue` listens to `nyx:theme` and recomputes the iframe's `src`, so passing from Dark to Light restyles the panel without a reload (measured: `&theme=dark` → `&theme=light`, background back to `rgb(251,251,251)`)
+* An application that pins its own theme in *Extra parameters* keeps it — the per-app choice is an explicit decision, the console-wide one is a default. `src/utils/grafanaTheme.js` holds the rule and is tested (7 tests)
+* *Extra parameters* are now appended whether or not the time selector is on: the field was silently ignored when the dashboard had a time selector, which would have made a per-app `theme=` impossible on most of them
+
 ## V3.6.3 07/Nov/2026
 * **The SVG chart's axes are readable.** In `BarChart.vue` the x labels had a class, but the three y labels (maximum, zero, the rotated *documents*) and the title had **none**: they took the browser's default black, so on the dark background only the abscissa was dimly visible and the ordinate not at all. The root `<svg>` gains a `barchart` class, the y labels a `barchart_axis` class, both painted from `dark.css` in the console's text colour
 * **The Activity app**: the path column of *top endpoints* is drawn over a very light blue bar while the text takes the theme's light colour — a light path on a light bar. The bar becomes a translucent blue in dark, and the four KPI counters stop being hard-coded `#303133`: the neutral value is now `var(--nyx-text, #303133)`, so the red and the green stay semantic and the neutral reads on both themes
