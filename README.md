@@ -93,6 +93,35 @@ Rest API swagger
 npm run build
 ```
 
+### Tests
+
+```
+npm test              # suite complete (logique + ecrans)
+npm run test:coverage # idem, avec le rapport de couverture
+```
+
+Deux environnements cohabitent dans la meme suite : `node` pour les modules de logique et le
+store, `jsdom` pour les ecrans montes (le fichier de test le declare en tete :
+`// @vitest-environment jsdom`). Les composants Element Plus, le routeur memoire, l'i18n et les
+globals de `src/main.js` sont fournis par `tests/helpers/mount-view.js`.
+
+La couverture porte sur tout `src` (javascript et `.vue`). Les seuils de `vitest.config.mjs` sont
+par glob : 97/96/94/97 sur le javascript de logique, 85/80/50/85 sur `src/views`, 13/68/23/13 sur
+`src/components` et un seuil global bas qui sert surtout a reperer un fichier de test perdu.
+
+Etat au 7 novembre 2026 : **352 tests**, **23,2 %** des instructions de `src` (20 970). Par zone :
+
+| zone | statements | fichiers testes |
+|---|---|---|
+| `src` javascript (logique, store, routeur) | 99,1 % | tous |
+| `src/views` | 87,2 % | Login 95,9 · Main 80,8 · Privacy 100 · App.vue 65,6 |
+| `src/components` | 13,2 % | GenericComponent 97,7 · QueryBar 98,4 · User 96,3 · QueryFilter 88,9 · GenericTable 74,9 · LandingPage 100 |
+
+Les composants non testes tirent le chiffre global vers le bas : c'est la mesure honnete, pas une
+regression. Prochaines cibles par taille et par risque : `GenericTableDetails` (edition d'un
+enregistrement), `ReportGenerator` / `ReportTask`, `ConfigDetails` (constructeur d'applications),
+`NYXInfo`, `PGGenericTable`.
+
 ### Extending the UI
 
 To add a new specific controller:

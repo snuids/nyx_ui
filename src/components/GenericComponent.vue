@@ -227,7 +227,10 @@ const myExport = {
     
     this.selectedTab=this.$store.getters.activeApp.rec_id
 
-    this.$globalbus.$on("reportgenerated", () => {
+    // Les gestionnaires sont gardes sur l'instance : `$off(type)` sans gestionnaire (mitt) retire
+    // *tous* les abonnes du type, y compris celui d'`App.vue` qui affiche les notifications
+    // globales. Il faut donc pouvoir retirer les deux siens, et eux seuls.
+    this.onReportGenerated = () => {
       for (var i in this.$store.getters.currentSubCategory.apps) {
         var app = this.$store.getters.currentSubCategory.apps[i];
         if (app.config.controller == "ReportTask") {
@@ -235,29 +238,33 @@ const myExport = {
           break;
         }
       }
-    });
+    };
+    this.$globalbus.$on("reportgenerated", this.onReportGenerated);
 
     console.log("===============  REGISTERING: messagereceived");
-    this.$globalbus.$on("messagereceived", payLoad => {
+    this.onMessageReceived = payLoad => {
       console.log("GLOBALBUS/GENERICCOMPONENT/MESSAGERECEIVED");
-      
+
       // Handle nested data structure from websocket
       const data = payLoad.data || payLoad;
-      
+
       // Global notifications are handled by App.vue
       // Only emit local messages here
       if(data.notif_type != "global") {
         this.$localbus.$emit("localmessagereceived", data);
       }
-    });  
+    };
+    this.$globalbus.$on("messagereceived", this.onMessageReceived);
 
     window.dispatchEvent(new Event("resize"));
   },
-  destroyed: function() {
+  // `destroyed` est un hook Vue 2 : en Vue 3 il n'est jamais appele, et les deux ecouteurs du bus
+  // restaient branches a chaque changement d'application (fuite silencieuse, doubles emissions).
+  beforeUnmount: function() {
     console.log("===============  UN REGISTERING REport Generated:");
-    this.$globalbus.$off("reportgenerated");
+    this.$globalbus.$off("reportgenerated", this.onReportGenerated);
     console.log("===============  UN REGISTERING messagereceived:");
-    this.$globalbus.$off("messagereceived");
+    this.$globalbus.$off("messagereceived", this.onMessageReceived);
   },
 };
 

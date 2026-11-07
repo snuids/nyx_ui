@@ -160,6 +160,12 @@ export default {
 
         var valq = this.queryFilterCopy[queryind].selected;
 
+        // Une valeur numerique (montant, annee, code) n'a pas d'`indexOf` : sans cette conversion,
+        // un filtre dont la valeur par defaut est un nombre levait un TypeError et l'ecran ne
+        // filtrait plus du tout.
+        if (valq !== undefined && valq !== null) valq = String(valq);
+
+
         if (this.queryFilterCopy[queryind].type == "globaltext") {
           if (valq == undefined || valq == "") valq = "*";
           else valq = "###" + valq;
