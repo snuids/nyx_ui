@@ -252,3 +252,28 @@ Ce qui reste différent, mesuré et non corrigé :
 
 Contrôle de non-régression : `Reports › Periodic` (mêmes colonnes, mêmes 59 px de ligne, seul l'écart
 déjà assumé de la colonne d'actions à 260 px), 197 tests verts, application rendue sans erreur.
+
+## Sélecteur de temps de l'en-tête (2026-11-07)
+
+Sur `Modules › Calls` (`#/main/id_21206339`), le champ date/heure et les boutons **Absolute /
+Relative** n'étaient ni à la même hauteur ni de la même taille : champ 28 px à 16-18 px du haut,
+groupe radio 22 px six pixels plus bas. Mesure de la production, même écran, même fenêtre : champ
+[586, 17, 400, 28], groupe [994, 17, 164, 28].
+
+| mesure | production | branche avant | branche après |
+|---|---|---|---|
+| champ date/heure | 28 px à y = 17 | 28 px à y = 16 | **28 px à y = 17** |
+| groupe Absolute/Relative | 28 px à y = 17 | 22 px à y = 22 | **28 px à y = 17** |
+| bouton « Last 4 h » (mode relatif) | 28 px | 26 px | **28 px à y = 17** |
+
+Trois causes : les boutons radio `small` (ex-`mini`) perdent 6 px (`padding: 5px 11px` d'Element
+Plus contre `7px 15px` d'Element UI 2) ; `el-radio-group` s'aligne sur la ligne de base, donc un
+groupe plus court descend sous le champ ; et le champ portait un `style="top:1px"` hérité
+d'Element UI 2, qui décalait sa peinture d'un pixel de plus que son voisin. Règles ajoutées :
+`.el-radio-button--small .el-radio-button__inner { padding: 7px 15px; height: 28px }`,
+`.time-selector-row .el-radio-group { vertical-align: middle; position: relative; top: 1px }`, et le
+style en ligne retiré de `Main.vue`.
+
+Reste : le champ de dates mesure 420 px au lieu de 400 (le séparateur « To » est un bloc flex de
+50 px dans Element Plus, 29 px en production) ; tout le bloc est aligné à droite, l'écart ne se voit
+que sur le bord gauche du champ.

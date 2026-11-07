@@ -73,7 +73,6 @@
               >
 
                 <el-date-picker
-                  style="top:1px;"
                   :picker-options="rangePickerOptions"
                   v-model="timerange"
                   v-on:change="timeRangeChanged"

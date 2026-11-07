@@ -226,6 +226,29 @@ h6 {
   align-items: center;
 }
 
+/*
+ * Boutons radio « small » (ex-`mini`) : Element UI 2 en faisait des boutons de 28 px avec 7 px / 15 px
+ * de padding ; Element Plus en fait 22 px (5 px / 11 px). Dans l'en-tete, le groupe Absolute/Relative
+ * faisait donc 6 px de moins que le selecteur de dates et descendait sous lui.
+ */
+.el-radio-button--small .el-radio-button__inner {
+  padding: 7px 15px;
+  height: 28px;
+}
+
+/*
+ * Selecteur de temps de l'en-tete : le groupe radio s'aligne sur la ligne de base, donc ses boutons
+ * de 28 px restaient 1 px au-dessus du champ (16 contre 17, mesure sur « Modules > Calls »). Le
+ * champ portait par ailleurs un `style="top:1px"` herite d'Element UI 2, retire de `Main.vue` :
+ * avec `vertical-align: middle` et 1 px de decalage, le champ, le bouton « Last 4 h » et le groupe
+ * Absolute/Relative sont tous a 17 px du haut pour 28 px de haut, comme en production.
+ */
+.time-selector-row .el-radio-group {
+  vertical-align: middle;
+  position: relative;
+  top: 1px;
+}
+
 /* En production, seule la fenetre « User Form » centre son titre et ses boutons (Element UI 2 lui
    applique `el-dialog--center`) ; les fenetres de configuration gardent le titre a gauche. Une regle
    globale centrait tout, y compris « Modify Application », qui doit rester aligne a gauche. */
