@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.1 07/Nov/2026
+* The theme now survives a reload that has no local copy: the session snapshot (`authResponse`, written at login time) is touched when a preference is saved, so clearing `localStorage.nyx_theme` and reloading no longer replays the previous theme. Verified: save Dark → clear the local copy → reload → still dark, and the copy is rewritten
+* `rememberInSession()` in `theme.js` (with its tests) rather than in the component: an unreadable or hostile storage answers false instead of throwing, three new tests
+* Note for the release itself: `v3.6.0` already existed on Docker Hub from the Vue 2 line (amd64 only, image built long before), so a `docker pull` right after the merge served that **old** console while the version string still read 3.6.0. Check `docker image inspect … --format '{{.Created}}'` after the pull, not just the tag
+
 ## V3.6.0 07/Nov/2026
 * **Light, dark, or automatic.** A third block in the avatar menu (`Logout.vue`): *Appearance* — Light, Dark, Auto (by hour). The choice applies at once, without a reload, and the tick marks the current one
 * *Auto* darkens from 20:00 and lightens at 07:00, and re-reads the clock every ten minutes and when the tab comes back, so a console left open all day follows the evening instead of staying white

@@ -45,7 +45,7 @@
   
 <script>
 import axios from "axios";
-import { THEMES, applyTheme, readStoredTheme, storeTheme } from "@/utils/theme";
+import { THEMES, applyTheme, readStoredTheme, rememberInSession, storeTheme } from "@/utils/theme";
 
 export default {
   name: "Logout",
@@ -94,6 +94,7 @@ export default {
         .post(url, { theme: preference })
         .then((response) => {
           if (response.data && response.data.error) throw new Error(response.data.error);
+          rememberInSession(preference);
           this.$notify({
             title: this.$t("notifications.message"),
             message: this.$t("theme.saved"),

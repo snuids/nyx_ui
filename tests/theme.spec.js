@@ -6,6 +6,7 @@ import {
   THEME_STORAGE_KEY,
   applyTheme,
   readStoredTheme,
+  rememberInSession,
   resolveTheme,
   storeTheme,
   watchAutoTheme,
@@ -213,5 +214,34 @@ describe('auto theme watch', () => {
     const stop = watchAutoTheme(() => undefined)
     expect(() => listeners.focus()).not.toThrow()
     stop()
+  })
+})
+
+describe('session snapshot', () => {
+  function snapshot(theme) {
+    return JSON.stringify({ data: { cred: { token: 't', user: { login: 'a@b.c', theme } }, menus: [] } })
+  }
+
+  it('writes the preference into the restored-session copy', () => {
+    const storage = memoryStorage({ authResponse: snapshot('light') })
+    expect(rememberInSession('dark', storage)).toBe(true)
+    const stored = JSON.parse(storage.values.authResponse)
+    expect(stored.data.cred.user.theme).toBe('dark')
+    expect(stored.data.cred.token).toBe('t', 'le reste du snapshot ne bouge pas')
+  })
+
+  it('answers false when there is nothing to update', () => {
+    expect(rememberInSession('dark', memoryStorage({}))).toBe(false)
+    expect(rememberInSession('dark', memoryStorage({ authResponse: '{not json' }))).toBe(false)
+    expect(rememberInSession('dark', memoryStorage({ authResponse: '{"data":{}}' }))).toBe(false)
+    expect(rememberInSession('dark', memoryStorage({ authResponse: '{"data":{"cred":{}}}' }))).toBe(false)
+  })
+
+  it('survives a storage that refuses the write', () => {
+    const hostile = {
+      getItem: () => snapshot('light'),
+      setItem: () => { throw new Error('denied') },
+    }
+    expect(rememberInSession('dark', hostile)).toBe(false)
   })
 })
