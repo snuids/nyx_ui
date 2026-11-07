@@ -1,6 +1,8 @@
 <template>
+  <!-- 700 px laissait deux colonnes de 180 px pour les champs et deux listes de privileges
+       collees au bord droit. `min()` garde la fenetre utilisable sur un ecran etroit. -->
   <el-dialog
-    width="700px"
+    width="min(1040px, 94vw)"
     :title="this.$t('user.user_form')"
     :before-close="closeDialog"
     v-model="dialogFormVisible"
@@ -332,7 +334,19 @@ export default {
 };
 </script>
 <style>
+/* `el-row` est un conteneur flex : le `<el-transfer>` y devient un element flex dimensionne sur
+   son contenu, et les deux listes se reduisaient a 200 px chacune. Il prend toute la largeur. */
+.dialog-user .el-transfer {
+  width: 100%;
+}
+
 .dialog-user .el-transfer-panel {
-  width: 250px;
+  /* Deux listes de 250 px dans une boite de 660 : les descriptions de privileges etaient
+     tronquees et les deux listes touchaient le bord. Le panneau est un element flex
+     (`element-legacy.css` lui donne `flex: 0 0 250px` pour qu'il reste a cote du second), donc
+     c'est la base flex qu'il faut elargir — `width` seul ne fait rien ici.
+     Deux panneaux de 300 + les 162 px de boutons tiennent dans les 970 px du dialogue ; `0 1`
+     (et non `0 0`) les laisse se reduire plutot que deborder sur une fenetre plus etroite. */
+  flex: 0 1 300px;
 }
 </style>
