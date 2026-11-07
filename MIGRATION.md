@@ -173,3 +173,29 @@ feuille compilée de la branche. Mesures identiques après correction :
 - `.eslintrc.js` n'a pas été adapté à `eslint-plugin-vue` 9 / Vue 3 (le build ne lance pas ESLint,
   `lintOnSave: false`).
 - `npm install` exige `--allow-remote=root` : la dépendance `xlsx` est une URL vers cdn.sheetjs.com.
+
+## État au 2026-11-06 (fin de session)
+
+**Déploiement de comparaison** : branche `feat/vue3-element-plus`, dernier commit `f2714cf`.
+Image `snuids/nyx_ui:v4.0.0-nyxv3`, construite sur `energy` avec `--build-arg PUBLIC_PATH=/nyxv3/`,
+servie sous **https://energy.marmar.ovh/nyxv3/** par le service `nyx_ui_v3` du compose de production
+(`BASE_PATH=/nyxv3/`) et deux routes nginx (`/nyxv3/`, `/nyxv3/api/`). La racine reste en 3.31.21.
+
+**Tests** : 197, dont des garde-fous statiques qui ont chacun évité une régression réelle —
+`template-slots`, `template-root`, `i18n-instance` (`i18n.t` interdit), `draggable-item`,
+`global-properties` (tout `this.$xxx` doit être déclaré dans `main.js`), `vicon-color`.
+
+**Corrigé pendant les essais comparatifs** (chaque point = un commit) : `i18n.t` dans `data()`
+(fenêtres qui ne s'ouvraient pas), `<draggable>` sans slot `#item` (onglet Table vide), `el-row` en
+flex qui écrasait les bandeaux et les cartes, `el-input` en bloc (champ sous les boutons),
+`el-col` sans `span` (pied de dialogue), `$getLocation` absent, taille des icônes, popovers.
+
+**Divergences assumées avec la production** (à reporter en prod si souhaité) :
+- colonne d'actions du rapport périodique : 260 px au lieu de 220 (le champ de recherche ne passe
+  plus sous les boutons) ;
+- bouton de téléchargement **à droite** du champ de recherche, et non dans son bord droit ;
+- 10 px / 32 px d'espacement dans le bandeau de filtres.
+
+Les autres écarts constatés étaient déjà présents en production et n'ont pas été modifiés : combobox
+« Time Selector » vide, rapport périodique qui empile son champ sous les boutons quand une ligne est
+sélectionnée.
