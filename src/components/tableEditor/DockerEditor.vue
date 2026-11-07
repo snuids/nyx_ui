@@ -15,31 +15,36 @@
 
       <el-row>
         <el-col :span="24">
-          <el-button @click="setFocus('type')" type="text">Action</el-button>
+          <el-button @click="setFocus('type')" type="primary" link class="docker-action-label">Action</el-button>
         </el-col>
       </el-row>      
-      
+
+      <!-- Une seule ligne pour le selecteur et le bouton : en Element Plus `el-select` prend 100 %
+           de la largeur, donc « Send » tombait sous le selecteur (il tenait a cote en Element UI 2).
+           Le select occupe la place restante, le bouton garde la sienne. -->
       <el-row>
         <el-col :span="24">
-          <el-select                
-                v-model="action"
-                ref="type"
-                size="small"
-                placeholder="Mode"
-              >
-                <el-option
-                  v-for="item in actions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-              &nbsp;
-              <el-button          
-                @click="sendMessage"
-                type="danger"
-                size="small"
-              >Send</el-button>
+          <div class="docker-action-row">
+            <el-select
+                  v-model="action"
+                  ref="type"
+                  size="small"
+                  placeholder="Mode"
+                  class="docker-action-select"
+                >
+                  <el-option
+                    v-for="item in actions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+                <el-button          
+                  @click="sendMessage"
+                  type="danger"
+                  size="small"
+                >Send</el-button>
+          </div>
         </el-col>
                   
       </el-row> 
@@ -138,4 +143,24 @@ export default {
 </script>
 
 <style >
+/* Le libelle du champ : un bouton (il place le focus sur le selecteur), pas un titre. */
+.docker-action-label {
+  padding: 0;
+  height: auto;
+  vertical-align: baseline;
+}
+
+/* Selecteur et bouton sur la meme ligne : `el-select` fait 100 % de large par defaut en
+   Element Plus, d'ou le `flex: 1` qui lui laisse la place restante et le `min-width: 0` qui
+   l'autorise a retrecir au lieu de pousser le bouton a la ligne. */
+.docker-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.docker-action-select {
+  flex: 1;
+  min-width: 0;
+}
 </style>
