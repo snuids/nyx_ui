@@ -414,12 +414,22 @@ export default {
 </script>
 
 <style>
-/* The module cards used to be rendered inside an `el-radio` used as a clickable container, and this
-   block reset the radio to make room for a 120 px card. The cards are gone (no `el-radio`, no
-   `.process_ok` in the template any more) but the rules stayed — and this `<style>` is NOT scoped,
-   so `.el-radio { margin-right: 0 }` reached every radio of the console and glued the report
-   editor's five options together. Removed; the spacing now comes from Element Plus's own 30 px, and
-   `.el-radio-group .el-radio` in `styles/element-legacy.css` keeps it explicit. */
+/* Les cartes de modules sont construites par `:class="'process_' + dat.css_class"` : le nom de la
+   classe n'apparait donc nulle part en clair dans le template, et une regle `.process_ok` retiree
+   comme « morte » casse l'affichage des modules sains sans rien casser au build (c'est arrive). Les
+   deux variantes se gardent ensemble. */
+.process_ok {
+  width: 280px;
+  height: 120px;
+  background-color: #fff;
+  border: solid 2px #aaa;
+  position: relative;
+  color: black;
+}
+
+.process_ok:hover {
+  background-color: #eee;
+}
 
 .process_ko {
   width: 280px;

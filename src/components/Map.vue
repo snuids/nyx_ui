@@ -1,7 +1,7 @@
 <template>
   <div style="height: 600px;width:100%;">
     
-    <l-map :zoom="zoom" :center="center" :options="{scrollWheelZoom:false}">
+    <l-map ref="mapRef" :zoom="zoom" :center="center" :options="{scrollWheelZoom:false}">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       
       <l-marker
@@ -58,7 +58,9 @@ export default {
     attribution:
       '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
     marker: L.latLng(47.41322, -1.219482),
-    markers: []
+    markers: [],
+    // vrai quand l'editeur impose un centre : le plan ne se recadre alors pas sur ses marqueurs
+    explicitCenter: false
   }),
   components: {
     LMap,
@@ -95,6 +97,9 @@ export default {
       var newmarkers=[];
       var icons={};
       var nofmarkers=0;
+      // Un marqueur par position : l'index d'exemple renvoie 1000 documents sur trois positions, et
+      // empiler 1000 icones au meme point bloquait le navigateur sans rien montrer de plus.
+      var seen={};
       
       var transparency=0;
       if (this.config.config.transparency != undefined)
@@ -118,7 +123,7 @@ export default {
 
       for(var rec in this.tableData)
       {
-        if(nofmarkers>1000)
+        if(nofmarkers>500)
           break;
         nofmarkers+=1;
         var record=this.tableData[rec]._source;
@@ -126,6 +131,12 @@ export default {
         // Coordonnees du document : deux champs (lat / lon) ou un geo_point — la resolution vit dans
         // `utils/mapCoords.js`, avec ses tests (un document sans coordonnee ne produit pas de marqueur).
         var res = resolveLatLng(record, this.config.config);
+
+        if (res != null) {
+          var positionKey = Array.isArray(res) ? res.join(",") : String(res);
+          if (seen[positionKey]) continue;
+          seen[positionKey] = true;
+        }
 
         var color="green";
         if (has_colorfunction)
@@ -178,16 +189,36 @@ export default {
       }
       //console.log(icons);
       this.markers = newmarkers;
+      // Le plan se cadre sur ses marqueurs quand aucun centre n'a ete choisi dans l'editeur : sans
+      // cela, la carte s'ouvre sur un point arbitraire et les marqueurs sont hors champ (ou, quand le
+      // zoom et le centre sont absents, aucune tuile n'est calculee du tout).
+      this.$nextTick(() => { this.fitToMarkers(); });
       console.log("END PREPARE DATA....");
+    },
+    // Centre le plan sur les marqueurs, sauf si l'editeur impose deja un centre (`maplat`/`maplong`).
+    fitToMarkers: function() {
+      if (this.explicitCenter || !this.markers || this.markers.length == 0) return;
+      var map = this.$refs.mapRef && this.$refs.mapRef.leafletObject;
+      if (!map) return;
+      var points = this.markers.map(function(m) { return m.latlng; });
+      if (points.length == 1) {
+        map.setView(points[0], 13);
+      } else {
+        map.fitBounds(L.latLngBounds(points), { padding: [20, 20] });
+      }
     }
   },
   created: function() {
     console.log("===============  MAP CREATED:");
-    this.zoom = this.config.config.mapzoom;
-    this.center = L.latLng(
-      this.config.config.maplat,
-      this.config.config.maplong,
-    );
+    // Un zoom ou un centre absent (champ vide dans l'editeur) ne doit pas casser la carte : Leaflet
+    // leve « Invalid LatLng object » sur `L.latLng(undefined, undefined)`, et un zoom `undefined`
+    // laisse la couche de tuiles sans vue a calculer — d'ou un fond gris et aucun marqueur.
+    var conf = this.config.config || {};
+    this.explicitCenter =
+      conf.maplat !== undefined && conf.maplat !== null &&
+      conf.maplong !== undefined && conf.maplong !== null;
+    this.zoom = conf.mapzoom ? conf.mapzoom : 2;
+    this.center = this.explicitCenter ? L.latLng(conf.maplat, conf.maplong) : L.latLng(0, 0);
     console.log("===============  MAP END CREATED:");
   },
 
@@ -199,14 +230,17 @@ export default {
 
     console.log("===============  MAP MOUNTED2:");
     
-    this.$globalbus.$on("timerangechanged", () => {
-      console.log("GLOBALBUS/MAPTIMERANGE/");      
-    });
+    // `mitt` retire un ecouteur par reference : sans la garder, `$off` n'en retire aucun et chaque
+    // visite empile un rendu supplementaire.
+    this.timerangeHandler = () => {
+      console.log("GLOBALBUS/MAPTIMERANGE/");
+    };
+    this.$globalbus.$on("timerangechanged", this.timerangeHandler);
     console.log("===============  MAP END MOUNTED:");
   },
   beforeUnmount: function() {
     console.log("===============  UNREGISTERING MAP:");
-    this.$globalbus.$off("timerangechanged");
+    this.$globalbus.$off("timerangechanged", this.timerangeHandler);
     this.$globalbus.$off("kibanaactivated");
   }
 };
