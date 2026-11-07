@@ -163,6 +163,49 @@ html.dark .icon-item:hover {
 }
 
 
+/* --- Graphiques SVG maison (BarChart) -------------------------------------
+   Le SVG est peint par des classes de `BarChart.vue` : le fond, les barres et les etiquettes y sont
+   ecrits en clair, et un `html.dark` suffit a les reprendre. Les marques gardent la teinte bleue de
+   la marque, seuls les fonds et les textes changent. */
+html.dark .barchart_background,
+html.dark .barchart_drawrect {
+  fill: var(--nyx-surface);
+  stroke: var(--nyx-border);
+}
+
+html.dark .barchart_tick {
+  fill: var(--nyx-text-muted);
+}
+
+html.dark .barchart_title_none {
+  fill: var(--nyx-text);
+}
+
+html.dark .barchart_details {
+  fill: var(--nyx-text);
+}
+
+html.dark .barchart_selectrect {
+  fill: #2f3646;
+  stroke: var(--nyx-border);
+}
+
+/* --- Cartes de description de l'editeur d'application ---------------------
+   Elles portent un fond **en style inline** (`rgb(236,245,255)` bleute, `rgb(255,245,236)` creme) :
+   le texte herite de la couleur claire du theme et devient illisible sur ces fonds. Une regle
+   `!important` est la seule facon de reprendre un style inline. */
+html.dark .transition-box > .el-card,
+html.dark .transition-box .el-card,
+html.dark .desc-card .el-card {
+  background-color: var(--nyx-surface-raised) !important;
+  color: var(--nyx-text) !important;
+  border-color: var(--nyx-border) !important;
+}
+
+html.dark .controller-help {
+  color: var(--nyx-text-muted);
+}
+
 html.dark .el-card {
   background-color: var(--nyx-surface);
   border-color: var(--nyx-border);

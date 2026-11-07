@@ -1,5 +1,13 @@
 # Version History
 
+## V3.6.2 07/Nov/2026
+* **The charts follow the theme.** Vega draws on a canvas, so no stylesheet could reach it: the applications' specs leave `config` empty, which means Vega's default theme — black labels and titles, invisible on the dark page. `src/utils/chartTheme.js` repaints the **chrome** (axis, legend, title, text, transparent background) and leaves the marks alone, since their colours carry the meaning the author chose; a key written in the spec still wins. Verified on `/main/id_24434251`: axis labels light, bars untouched
+* The hand-drawn SVG chart (`BarChart.vue`) gets the same treatment in CSS — its background, ticks and selection rectangle are classes, so `html.dark` rules suffice. Bars keep the brand blue
+* A `nyx:theme` event on `document`, dispatched by `applyTheme`, lets a chart redraw itself when the choice changes; `Vega.vue` listens and re-embeds, and drops the listener on unmount
+* **The description cards of the application editor and of the report editor are readable in dark.** They carry an inline `background-color:rgb(236,245,255)` (and one cream `rgb(255,245,236)`), so the light text landed on a light card — only an `!important` rule can override an inline style. The report editor's three rows without `.transition-box` now carry a `desc-card` class so the same rule reaches them
+* **The report editor's footer holds on one line**: two `el-col :span="24"` cannot share a row, so *Edit code* sat above *Cancel/Confirm*. Left column 12 (edit), right column 12 (cancel/confirm), both at the same y — measured 147 / 920 / 1021 px on one line
+* `tests/chartTheme.spec.js` (4 tests: marks untouched, explicit keys win, no config, no mutation) and 4 more on `theme.js` (`currentTheme`, the event's detail, a document without event support). 234 tests, gate green
+
 ## V3.6.1 07/Nov/2026
 * The theme now survives a reload that has no local copy: the session snapshot (`authResponse`, written at login time) is touched when a preference is saved, so clearing `localStorage.nyx_theme` and reloading no longer replays the previous theme. Verified: save Dark → clear the local copy → reload → still dark, and the copy is rewritten
 * `rememberInSession()` in `theme.js` (with its tests) rather than in the component: an unreadable or hostile storage answers false instead of throwing, three new tests

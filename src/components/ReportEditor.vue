@@ -37,7 +37,7 @@
             </el-col>            
            </el-row >
 
-            <el-row v-if="newRec.reportType=='python'" class="transition-box" style="text-align:left;">     
+            <el-row v-if="newRec.reportType=='python'" class="transition-box desc-card" style="text-align:left;">     
               <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
               <el-col :span="4" style="text-align:right;padding-right:20px">
                 <v-icon name="code" scale="2.2" />
@@ -48,7 +48,7 @@
               </el-col>
               </el-card>
             </el-row>
-          <el-row v-if="newRec.reportType=='notebook_doc'" class="transition-box" style="text-align:left">     
+          <el-row v-if="newRec.reportType=='notebook_doc'" class="transition-box desc-card" style="text-align:left">     
             <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
               <v-icon name="regular/file-word" scale="2.2" />
@@ -61,7 +61,7 @@
             </el-card>
           </el-row>
           
-          <el-row v-if="newRec.reportType=='notebook'" style="text-align:left">     
+          <el-row v-if="newRec.reportType=='notebook'" class="desc-card" style="text-align:left">     
             <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
               <v-icon name="regular/file-excel" scale="2.2" />
@@ -72,7 +72,7 @@
             </el-col>
             </el-card>
           </el-row>
-          <el-row v-if="newRec.reportType=='jasper'" style="text-align:left">     
+          <el-row v-if="newRec.reportType=='jasper'" class="desc-card" style="text-align:left">     
             <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
               <v-icon name="regular/file-pdf" scale="2.2" />
@@ -83,7 +83,7 @@
             </el-col>
             </el-card>
           </el-row>
-          <el-row v-if="newRec.reportType=='jasper_jdbc'" style="text-align:left">     
+          <el-row v-if="newRec.reportType=='jasper_jdbc'" class="desc-card" style="text-align:left">     
             <el-card shadow="never"  style="height:90px;background-color:rgb(236, 245, 255);">       
             <el-col :span="4" style="text-align:right;padding-right:20px">
               <v-icon name="regular/file-pdf" scale="2.2" />
@@ -458,12 +458,12 @@
     </el-form>
 
     <template #footer><span class="dialog-footer">
-      <!-- En Element UI 2, un `el-col` sans `span` vaut `span="24"` : les deux colonnes de ce pied
-           s'empilaient, et « Editer le code » occupait sa propre ligne au-dessus de Annuler/Valider.
-           Element Plus laisse les colonnes se partager la ligne : le bouton se retrouvait colle a
-           Annuler. On rend la largeur explicite pour retrouver la disposition d'origine. -->
-      <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col :span="24">
+      <!-- Deux colonnes de `span="24"` ne peuvent pas cohabiter : Element Plus les empilait, donc
+           « Editer le code » occupait sa propre ligne au-dessus (ou en dessous) de Annuler/Valider.
+           Un pied de dialogue se lit sur une ligne : l'action secondaire a gauche, les deux boutons
+           de sortie a droite. -->
+      <el-row type="flex" class="row-bg" justify="space-between" align="middle">
+      <el-col :span="12" style="text-align: left;">
         <el-button
                   style="min-width: 112px;"
                   :icon="$icons.Notebook"
@@ -473,7 +473,7 @@
                 >{{$t('generic.edit_code')}}</el-button>
 
       </el-col>
-      <el-col :span="24">
+      <el-col :span="12" style="text-align: right;">
         <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
         <el-button  v-if="!isAdd"
           type="primary"
