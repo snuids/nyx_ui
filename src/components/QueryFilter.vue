@@ -414,6 +414,8 @@ export default {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  /* Un peu d'air entre le libelle et le selecteur : ils se touchaient dans le bandeau des lambdas. */
+  gap: 10px;
 }
 
 /* Le libelle reste en ligne devant le champ ; le selecteur occupe la place restante de la colonne
