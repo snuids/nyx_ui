@@ -1,5 +1,9 @@
 # Version History
 
+## V3.31.22 07/Nov/2026
+* The build takes its public path from `VUE_APP_PUBLIC_PATH` (`publicPath` in `vue.config.js`, `ARG PUBLIC_PATH` in the Dockerfile) and the file server mounts that prefix (`BASE_PATH` in `app.js`). The default is still the root, so the release image is unchanged; the point is to serve the same tree under a sub-path — the console moves to `/nyxv2/` while the Vue 3 build takes the root
+* Nothing else changes: same asset URLs at the root, same behaviour, no code touched outside the three build/serve entry points
+
 ## V3.31.19 04/Nov/2026
 * The privacy notice states the two retentions the platform actually enforces: report execution logs and the reports produced are kept **ninety days**, deleted by a scheduled task, in the four languages (the notice stopped at the account, the seven days of call logs and the thirty days of backups). "Last updated" moves to 4 November 2026 in each language
 
