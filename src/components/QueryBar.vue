@@ -183,6 +183,18 @@ export default {
    une icone minuscule (12 px au lieu de 18). On fixe la taille sur le bouton lui-meme. */
 .search-dl-bt {
   font-size: 18px;
+  /* En production l'icone est bleue et occupe toute la hauteur du champ, collee a 5 px du bord
+     droit ; ici elle restait grise, haute de 20 px et a 8 px du bord. */
+  --el-button-text-color: var(--el-color-primary);
+  --el-button-hover-text-color: var(--el-color-primary);
+  --el-button-hover-link-text-color: var(--el-color-primary);
+  color: var(--el-color-primary);
+  height: 100%;
+  min-height: 24px;
+  margin-right: 2px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
 }
 
 .search-dl-bt .el-icon {

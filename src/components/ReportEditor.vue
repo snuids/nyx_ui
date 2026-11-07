@@ -458,8 +458,12 @@
     </el-form>
 
     <template #footer><span class="dialog-footer">
+      <!-- En Element UI 2, un `el-col` sans `span` vaut `span="24"` : les deux colonnes de ce pied
+           s'empilaient, et « Editer le code » occupait sa propre ligne au-dessus de Annuler/Valider.
+           Element Plus laisse les colonnes se partager la ligne : le bouton se retrouvait colle a
+           Annuler. On rend la largeur explicite pour retrouver la disposition d'origine. -->
       <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col>
+      <el-col :span="24">
         <el-button
                   style="min-width: 112px;"
                   :icon="$icons.Notebook"
@@ -469,7 +473,7 @@
                 >{{$t('generic.edit_code')}}</el-button>
 
       </el-col>
-      <el-col>
+      <el-col :span="24">
         <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
         <el-button  v-if="!isAdd"
           type="primary"
