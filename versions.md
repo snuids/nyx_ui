@@ -1,5 +1,15 @@
 # Version History
 
+## V3.6.6 07/Nov/2026
+*No application change: tests only. The shipped bundle is byte-for-byte the 3.6.5 one.*
+* **Coverage of the screens that produced this week's regressions.** Four specs mount components that had none: `Map` (88,7 % des statements), `Activity` (88,2 %), `LambdaEditor` (74,9 %), `ReportEditor` (65,9 %). Overall statements go from **23,3 % to 33,9 %**, the component block from **17,2 % to 29,0 %**, with 36 new tests (394 in total)
+* `Map` — the two defects of the day are pinned: with no zoom and no centre configured the component falls back to zoom 2 / null island (Leaflet throws on `L.latLng(undefined, undefined)`, and a `zoom` of `undefined` leaves the tile layer with nothing to draw), it frames itself on its markers, keeps **one marker per position** (1 000 documents over a dozen positions froze the tab) and caps the loop
+* `Activity` — the counters' colours are asserted (neutral = `var(--nyx-text, #303133)`, errors red or green), the exact aggregation count and its fallback to capped buckets, the `top endpoints` percentages, the query (epoch millis on the configured time field, `onlyErrors`, export without aggs), and the API error being shown instead of an empty table
+* `LambdaEditor` — the log sits in a `div.lambda-log` (full width, not inside a flex `el-row`), long lines wrap, the *Edit code* button carries no `min-width`, the working copy does not touch the received record, the runner → file → function hierarchy comes from the index, and the notebook opens with the Jupyter token
+* `ReportEditor` — the footer holds two 12/12 columns (two `span="24"` cannot share a row) with *Edit code* on the left and *Cancel/Confirm* on the right, and the help cards all carry `.desc-card` (three of the five rows did not, which is why the dark theme missed them)
+* `tests/invalid-inline-style.spec.js` — a source guard on the whole family: a `style="{...}"` left over from Vue 2 in a template attribute is discarded by the browser, and that is how `LogViewer`'s log stopped wrapping without a single error
+* The whole-`src` thresholds move with the assiette (33 / 83 / 44 / 33) and say so in the config: statements rise, branches and functions fall because the untested parts of those screens are now measured. The per-glob floors are unchanged and remain the ones to read
+
 ## V3.6.5 07/Nov/2026
 * **The lambda log takes the full width.** The viewer sat in an `el-row`, which Element Plus renders as a flex container: the log card shrank to the width of its content — 672 px in a 767 px pane, measured on `Lambdas` (`id_29242399`). A `div` with `width: 100%` and `min-width: 0` restores the full width and lets it shrink with the window instead of pushing a scrollbar
 * **Long log lines wrap.** The message cell carried `style="{ color:black;white-space: pre-wrap !important;}"` — Vue 2 markup left in an attribute, which the browser discards as invalid CSS: neither the colour nor the wrap applied, so a JSON line widened the table. It is a `.log-message` class now (`pre-wrap` + `overflow-wrap: anywhere`)
