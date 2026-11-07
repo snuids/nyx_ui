@@ -83,6 +83,19 @@ h6 {
   display: inline-block;
 }
 
+/* En production, le bouton « recharger » et le champ de recherche d'un en-tete de tableau sont
+ * separes de 10 px (un espace de texte entre les deux blocs en ligne) ; sans marge, ils se touchent.
+ * Les boutons ronds de ces en-tetes font aussi 28 px (mini d'Element UI 2), pas 24. */
+.el-table th .searchfield {
+  margin-left: 10px;
+}
+
+.el-table th .el-button.is-circle {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
 /* Les champs prennent toute la largeur de leur conteneur, comme avec Element UI 2. */
 .el-form-item__content .el-input,
 .el-form-item__content .el-select,

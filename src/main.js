@@ -20,7 +20,7 @@ import { getUrlVars, resolveLanguage } from '@/utils/language'
 import { apiOverride } from '@/utils/devOverrides'
 import { globalBus, localBus } from '@/utils/bus'
 import { browserDetect } from '@/utils/browser'
-import { geolocation } from '@/utils/geolocation'
+import { geolocation, getLocation } from '@/utils/geolocation'
 import { flushRegistrations } from '@/utils/vue3shim'
 // `theme/index.css` etait le theme Element UI 2 compile (1 Mo, 4474 regles `.el-*`). Charge apres
 // Element Plus, il ecrasait ses composants : doubles bordures sur les champs, largeurs faussees.
@@ -54,6 +54,16 @@ app.config.globalProperties.$globalbus = globalBus
 app.config.globalProperties.$localbus = localBus
 app.config.globalProperties.$browserDetect = browserDetect
 app.config.globalProperties.$geolocation = geolocation
+// Nom expose par `vue-browser-geolocation` en Vue 2 : conserve pour les appels existants.
+app.config.globalProperties.$getLocation = getLocation
+// `vue-authenticate` (plugin Vue 2, absent de ce build) fournissait `$auth`. L'ecran de connexion
+// LinkedIn (`LoginOAuth.vue`) l'appelle encore : sans cet objet, le clic levait un TypeError opaque.
+// On expose un refus explicite a la place.
+app.config.globalProperties.$auth = {
+  authenticate(provider) {
+    return Promise.reject(new Error('OAuth sign-in is not available in this build (' + provider + ')'))
+  },
+}
 // Vue 3 removed template filters: `x | formatDate` became `$filters.formatDate(x)` (migration
 // codemod). `$numeral` replaces the `numeral` filter of vue-numeral-filter.
 // Element Plus n'a plus de police d'icones : ses icones sont des composants. Ils sont exposes ici
