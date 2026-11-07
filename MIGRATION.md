@@ -199,3 +199,52 @@ flex qui écrasait les bandeaux et les cartes, `el-input` en bloc (champ sous le
 Les autres écarts constatés étaient déjà présents en production et n'ont pas été modifiés : combobox
 « Time Selector » vide, rapport périodique qui empile son champ sous les boutons quand une ligne est
 sélectionnée.
+
+## Écran « Users Config » (comparé le 2026-11-07)
+
+Comparaison de `/#/main/id_28534460` avec `/nyxv3/#/main/id_28534460`, même compte, fenêtre
+1280 × 577, mêmes sélecteurs et `getBoundingClientRect` / `getComputedStyle` des deux côtés.
+
+| mesure | production (Element UI 2) | branche avant | branche après |
+|---|---|---|---|
+| hauteur de ligne du tableau | 41 px | 33 px | **41 px** |
+| padding vertical des cellules | 6 px | 4 px | **6 px** |
+| padding horizontal du `.cell` | 10 px | 8 px | **10 px** |
+| graisse de l'en-tête | 700 | 600 | **700** |
+| boutons d'action de la colonne | 44 × 28, padding 7/15 | 36 × 24, padding 5/11 | **44 × 28** |
+| bouton « + » de l'en-tête | 28 × 28 | 28 × 28 | 28 × 28 |
+| champ de recherche | 150 × 28, texte à 26 px du bord | 150 × 26, texte à 8 px | **150 × 28, texte à 26 px** |
+| ligne d'en-tête | 59 px | 42 px | 54 px |
+| colonnes Privileges / Filters | 102 / 101 px | 94 / 94 px | 94 / 94 px |
+| fenêtre « User Form » | 947 px | 918 px | 958 px |
+| ligne de formulaire du dialogue | 41 px | 32 px | 40 px |
+| boutons du pied de dialogue | 89 / 92 px | 95 / 98 px | **89 / 92 px** |
+
+Quatre causes, toutes dans `src/styles/element-legacy.css` (règles d'Element UI 2 que la feuille de
+thème emportait avec elle, ou tailles que `size="small"` a décalées après la conversion de `mini`) :
+
+1. **Cellules** : le « mini » d'Element UI 2 fait 6 px de padding vertical, un `.cell` à 10 px et un
+   en-tête en 700 ; le « small » d'Element Plus, 4 px, 8 px et 600. Les lignes faisaient 33 px.
+2. **Boutons et champs `size="small"`** (349 appels ex-`mini`) : Element Plus les rend à 24 px, avec
+   5/11 de padding ; il en faut 28 px et 7/15. `--el-component-size-small` passe à 28 px et le texte
+   d'un champ `small` reprend ses 15 px de retrait.
+3. **En-tête de tableau** : la largeur complète du `.cell` et le `nowrap` d'Element UI 2 manquaient
+   (le champ de recherche passait à la ligne, en-tête à 70 px) ; et le champ, aligné sur la ligne de
+   base, descendait sous le bouton « + » — centré, il reprend la position de production.
+4. **Dialogues** : le pied de dialogue gardait `12px 23px` (boutons 6 px trop larges) et le contenu
+   d'un `el-form-item` n'a plus de hauteur de ligne en Element Plus (il est `flex`), donc les lignes
+   faisaient 32 px au lieu de 41.
+
+Ce qui reste différent, mesuré et non corrigé :
+
+- **ligne d'en-tête 54 px au lieu de 59** : Element UI 2 obtenait 48 px de contenu (ligne de 40 px
+  plus la place du jambage) ; Element Plus n'a plus ce débord. Les contrôles sont aux mêmes
+  coordonnées (bouton à 81 px du haut contre 80, champ à 80 px) ;
+- **colonnes automatiques Privileges / Filters à 94 px au lieu de 102 / 101** : en production la
+  somme des colonnes (1063) dépasse la largeur du tableau (1048) ; Element Plus répartit la place
+  restante à égalité ;
+- **fenêtre « User Form » à 958 px au lieu de 947** : la section Privileges mesure 319 px contre 303,
+  le corps d'un panneau de `el-transfer` n'ayant plus les 246 px fixes d'Element UI 2.
+
+Contrôle de non-régression : `Reports › Periodic` (mêmes colonnes, mêmes 59 px de ligne, seul l'écart
+déjà assumé de la colonne d'actions à 260 px), 197 tests verts, application rendue sans erreur.

@@ -60,7 +60,15 @@ h6 {
 :root {
   --el-component-size: 36px;
   --el-component-size-large: 40px;
-  --el-component-size-small: 24px;
+  /* Element UI 2 « mini » = 28 px ; Element Plus « small » = 24 px. Tous les champs `size="small"`
+     (ex-`mini`) perdaient 4 px de haut, y compris le champ de recherche des en-tetes de tableau. */
+  --el-component-size-small: 28px;
+}
+
+/* ...et le texte d'un champ « small » commence a 15 px du bord, comme dans Element UI 2 (7 px
+   dans Element Plus). */
+.el-input--small .el-input__wrapper {
+  padding: 1px 15px;
 }
 
 /*
@@ -73,14 +81,65 @@ h6 {
 }
 
 /*
- * La feuille de theme d'Element UI 2, retiree parce qu'elle ecrasait Element Plus, contenait aussi
- * des regles de **mise en page** utiles, dont celle-ci : dans un en-tete de tableau, un bloc est en
- * ligne. Sans elle, le champ de recherche d'un en-tete passait sous les boutons « + » et « refresh »
- * au lieu de rester a cote (verifie sur l'ecran Configuration).
+ * En-tete de tableau. Element UI 2 portait des regles de mise en page que la feuille de theme
+ * emportait avec elle :
+ *  - le `div` qui precede le champ de recherche est en ligne et son bloc fait 40 px de haut : c'est
+ *    ce qui garde le bouton « + » et le champ cote a cote et donne a l'en-tete sa hauteur ;
+ *  - le `cell` d'un `th` occupe la largeur complete de la colonne (`width: 100%` en `border-box`)
+ *    et ne revient pas a la ligne.
+ * Le selecteur du `div` ne vise que les **enfants directs** du `cell` : applique a tous les `div`
+ * d'un `th`, il tombait aussi sur `.el-input` (un `div` en Element Plus) et lui imposait
+ * `inline-block` + `line-height: 40px`, ce qui portait le champ a 58 px de haut.
  */
-.el-table th div,
+.el-table th .cell > div:not(.el-input) {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
 .el-table th > .cell {
   display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+/* En Element Plus le champ est un `inline-flex` de 28 px : aligne sur la ligne de base, il
+ * descendait sous le bouton et poussait l'en-tete a 70 px. Centre, il reprend la place de la
+ * production (80 px du haut, 150 x 28). */
+
+/*
+ * Corps du tableau : le `size="small"` d'Element Plus (4 px de padding vertical, `cell` a 8 px) a
+ * remplace le « mini » d'Element UI 2 (6 px, `cell` a 10 px, en-tete en 700). Les lignes faisaient
+ * 33 px au lieu de 41 et les en-tetes n'etaient plus en gras.
+ */
+.el-table--small td.el-table__cell {
+  padding: 6px 0;
+}
+
+.el-table .cell {
+  padding: 0 10px;
+  line-height: 23px;
+}
+
+.el-table th.el-table__cell > .cell {
+  font-weight: 700;
+}
+
+/*
+ * Boutons « small » : Element UI 2 « mini » = 28 px de haut, padding 7 px / 15 px. Element Plus
+ * « small » = 24 px, 5 px / 11 px : les boutons d'action d'un tableau faisaient 36 x 24 au lieu de
+ * 44 x 28. (`mini` a disparu d'Element Plus, il a ete converti en `small` partout.)
+ */
+.el-button--small {
+  --el-button-size: 28px;
+  padding: 7px 15px;
 }
 
 /* En production, le bouton « recharger » et le champ de recherche d'un en-tete de tableau sont
@@ -88,6 +147,14 @@ h6 {
  * Les boutons ronds de ces en-tetes font aussi 28 px (mini d'Element UI 2), pas 24. */
 .el-table th .searchfield {
   margin-left: 10px;
+  /* Element UI 2 donnait 10 px de padding lateral au `div.el-input` de l'en-tete (la regle
+     ci-dessus) ; en Element Plus le champ est un bloc flex, donc le rembourrage se pose ici pour
+     que le texte commence au meme endroit (26 px du bord, wrapper de 130 px comme en production). */
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Aligne sur la ligne de base, ce champ de 28 px descendait sous le bouton « + » et portait
+     l'en-tete a 70 px ; centre, il reprend la position de la production (80 px du haut). */
+  vertical-align: middle;
 }
 
 .el-table th .el-button.is-circle {
@@ -137,10 +204,26 @@ h6 {
   padding: 10px 20px;
 }
 
-/* Pied de dialogue : boutons de 40 px comme Element UI 2 (Element Plus les rend a 32 px). */
+/* Pied de dialogue : boutons de 40 px comme Element UI 2 (Element Plus les rend a 32 px), avec le
+ * rembourrage d'origine — `12px 23px` elargissait chaque bouton de 6 px (Cancel 95 px au lieu de
+ * 89, mesure sur « User Form »). */
 .el-dialog__footer .el-button {
   min-height: 40px;
-  padding: 12px 23px;
+  padding: 12px 20px;
+}
+
+/* Element UI 2 fixait la hauteur de ligne d'un `el-form-item` a 40 px (label et contenu) ; Element
+ * Plus la laisse a 32 px, et surtout rend le contenu **flex** : `line-height` n'y cree aucune ligne,
+ * la hauteur retombait donc a celle du champ (28 px). Chaque ligne du dialogue « User Form » se
+ * tassait de 9 px et la fenetre mesurait 918 px contre 947 en production. On rend au contenu sa
+ * hauteur de ligne et on y centre le champ, comme la ligne de 40 px d'Element UI 2 le faisait. */
+.el-form-item__label {
+  line-height: 40px;
+}
+
+.el-dialog .el-form-item__content {
+  min-height: 40px;
+  align-items: center;
 }
 
 /* En production, seule la fenetre « User Form » centre son titre et ses boutons (Element UI 2 lui
