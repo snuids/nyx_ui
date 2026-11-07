@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.5",
-    "@vitest/coverage-v8": "^2.1.9",
+    "@vitest/coverage-v8": "^5.1.0",
     "@vue/cli-plugin-babel": "^5.0.9",
     "@vue/cli-plugin-eslint": "^5.0.9",
     "@vue/cli-service": "^5.0.9",
@@ -59,7 +59,7 @@
     "sass": "^1.77.8",
     "sass-loader": "^13.3.3",
     "style-loader": "^4.0.0",
-    "vitest": "^2.1.9",
+    "vitest": "^5.1.0",
     "vue-loader": "^17.4.2",
     "vue-template-compiler": "^2.7.16",
     "webpack": "5.107.2"
