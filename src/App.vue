@@ -1,20 +1,46 @@
 <template>
-  <div id="app" class="nyxapp">    
-    <router-view/>
-  </div>
+  <el-config-provider :locale="elementLocale($i18n.locale)">
+    <div id="app" class="nyxapp">    
+      <router-view/>
+    </div>
+  </el-config-provider>
 </template>
 
 <script>
 import axios from "axios";
 import _ from "lodash";
+import { elementLocale } from "./i18n-setup";
 /* eslint-disable */
 export default {
   name: "App",
+  // Element Plus etait installe une fois pour toutes avec la langue lue au demarrage
+  // (`app.use(ElementPlus, { locale })`) : le selecteur de date gardait donc la langue du boot, alors
+  // que les libelles de la console suivaient le compte des la connexion. Un utilisateur dont le
+  // navigateur se souvenait du grec voyait sa console en francais et son calendrier en grec.
+  // `el-config-provider` rend la langue des composants Element Plus reactive.
+  watch: {
+    "$i18n.locale": function(locale) {
+      this.rememberLanguage(locale);
+    },
+  },
   data: () => ({
     axiosInterceptor: null,
     wsInterval:null
   }),
   methods: {
+    // La langue d'Element Plus, pour `el-config-provider` : reactive, elle suit `$i18n.locale`.
+    elementLocale: elementLocale,
+    // Une langue choisie doit aussi se retenir et se dire au document, sinon le prochain demarrage
+    // repart d'une autre et le navigateur signale la mauvaise langue aux lecteurs d'ecran.
+    rememberLanguage(locale) {
+      if (!locale) return;
+      document.documentElement.lang = locale;
+      try {
+        localStorage.nyx_language = locale;
+      } catch (e) {
+        /* storage refused: the choice lives for this session only */
+      }
+    },
     enableInterceptor() {
         console.log('enable interceptors axios')
 

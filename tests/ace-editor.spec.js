@@ -55,4 +55,19 @@ describe('editeurs Ace', () => {
     }
     expect(fautifs).toEqual([])
   })
+
+  it('suit le theme de la console au lieu d une valeur figee', () => {
+    // `theme="chrome"` etait ecrit dans cinq fichiers : l'editeur restait blanc sur la console
+    // sombre. Le mixin porte la prop reelle, et resynchronise les editeurs deja montes.
+    const fautifs = []
+    for (const file of files) {
+      const source = readFileSync(file, 'utf8')
+      for (const block of editorBlocks(file)) {
+        if (/\btheme="chrome"/.test(block)) fautifs.push(`${file.replace(SRC, '')} : theme fige`)
+        if (!/:theme="aceTheme"/.test(block)) fautifs.push(`${file.replace(SRC, '')} : :theme="aceTheme" absent`)
+      }
+      if (!/mixins: \[aceThemeMixin\]/.test(source)) fautifs.push(`${file.replace(SRC, '')} : mixin absent`)
+    }
+    expect(fautifs).toEqual([])
+  })
 })

@@ -91,6 +91,7 @@ export const messages = {
       new:'Νέο'
     },
     time:{
+      to: 'έως',
       absolute:"Απόλυτα",
       relative:"Σχετικά",
       last:'Τελευταία(ες)',

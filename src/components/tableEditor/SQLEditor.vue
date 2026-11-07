@@ -33,7 +33,7 @@
                 id="sqlEditor"
                 @init="editorInit"
                 lang="sql"
-                theme="chrome"
+                :theme="aceTheme"
                 style="border: solid 1px #c0c4cc; height: 200px; width: 100%;"
               ></editor>
             </el-form-item>
@@ -55,7 +55,9 @@
 
 <script>
 import { VAceEditor } from "vue3-ace-editor";
+import aceThemeMixin from "@/mixins/aceTheme";
 export default {
+  mixins: [aceThemeMixin],
   name: "SQLEditor",
   data: () => ({
     dialogFormVisible: false,
@@ -151,6 +153,7 @@ export default {
       require("ace-builds/src-noconflict/ext-language_tools");
       require("ace-builds/src-noconflict/mode-sql");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/sql");
       editor.setOptions({
         enableBasicAutocompletion: true,

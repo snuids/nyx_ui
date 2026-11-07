@@ -127,6 +127,7 @@ export const messages = {
         send_message:'Bericht versturen'
       }
       ,time:{
+        to: 'tot',
           absolute:"Absoluut",
           relative:"Relatief",
           last:'Laatste',

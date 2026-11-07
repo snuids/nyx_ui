@@ -918,7 +918,7 @@
               id="test"
               @init="editorInit"
               lang="yaml"
-              theme="chrome"
+              :theme="aceTheme"
               style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
             ></editor>
             <div>&nbsp;</div>
@@ -956,6 +956,7 @@ import { CONTROLLER_PAGES, describeController, otherComponents } from "@/control
 import Vue from "vue";
 import rison from "rison";
 import YAML from "js-yaml";
+import aceThemeMixin from "@/mixins/aceTheme";
 
 registerComponent("FreeTextDetails", freetextdetails);
 registerComponent("IconPicker", iconpicker);
@@ -974,6 +975,7 @@ function transformObject(obj) {
 }
 
 export default {
+  mixins: [aceThemeMixin],
   name: "ConfigDetails",
   data() {
     return (
@@ -1117,6 +1119,7 @@ export default {
       require("ace-builds/src-noconflict/mode-javascript"); //language
       require("ace-builds/src-noconflict/mode-less");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/javascript"); //snippet
 
       editor.setReadOnly(true);
@@ -1129,6 +1132,7 @@ export default {
       require("ace-builds/src-noconflict/mode-javascript"); //language
       require("ace-builds/src-noconflict/mode-less");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
     handleMoveHeader(index, row, down) {

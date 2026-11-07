@@ -1,5 +1,5 @@
 <template>
-  <svg :viewBox="viewBox2" :width="containerWidth">
+  <svg class="barchart" :viewBox="viewBox2" :width="containerWidth">
     <defs>
       <!-- <clipPath id="mainrect"> -->
       <clipPath :id="cid">        
@@ -93,9 +93,9 @@
     <text :x="marginleft" y="15" class="barchart_title">{{description}}</text>
     <text x="410" y="15" class="barchart_details">{{selectedText}}</text>
 
-    <text :x="marginleft-10" :y="margintop+8" text-anchor="end">{{max}}</text>
-    <text :x="marginleft-10" :y="height-marginbottom" text-anchor="end">0</text>
-    <text :x="marginleft/2" :y="height/2" writing-mode="tb" text-anchor="middle">{{ $t('barchart.documents') }}</text>
+    <text class="barchart_axis" :x="marginleft-10" :y="margintop+8" text-anchor="end">{{max}}</text>
+    <text class="barchart_axis" :x="marginleft-10" :y="height-marginbottom" text-anchor="end">0</text>
+    <text class="barchart_axis" :x="marginleft/2" :y="height/2" writing-mode="tb" text-anchor="middle">{{ $t('barchart.documents') }}</text>
   </svg>
 </template>
 
@@ -608,6 +608,16 @@ export default {
   font: 13px sans-serif;
   fill: #606266;
   font-weight: 400;
+}
+/* Etiquettes de l'axe Y (maximum, zero, titre tourne) : elles n'avaient aucune classe et prenaient le
+   noir du navigateur — invisible sur le fond sombre. */
+.barchart_axis {
+  font: 13px sans-serif;
+  fill: #606266;
+}
+.barchart_title {
+  font: 14px sans-serif;
+  fill: #303133;
 }
 .barchart_title_none {
 }

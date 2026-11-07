@@ -274,7 +274,7 @@ export default {
           label: this.$t("activity.kpi_calls"),
           value: this.total,
           sub: this.$t("activity.kpi_calls_sub"),
-          color: "#303133"
+          color: "var(--nyx-text, #303133)"
         },
         {
           key: "errors",
@@ -288,14 +288,14 @@ export default {
           label: this.$t("activity.kpi_users"),
           value: this.activeUsers,
           sub: this.buckets.user.length ? this.buckets.user[0].key : "-",
-          color: "#303133"
+          color: "var(--nyx-text, #303133)"
         },
         {
           key: "latency",
           label: this.$t("activity.kpi_latency"),
           value: this.latencies.p95 + " ms",
           sub: "p50 " + this.latencies.p50 + " · p99 " + this.latencies.p99,
-          color: "#303133"
+          color: "var(--nyx-text, #303133)"
         }
       ];
     }

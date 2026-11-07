@@ -168,7 +168,7 @@
                 v-model:value="selecterOptions"
                 @init="editorInit"
                 lang="text"
-                theme="chrome"
+                :theme="aceTheme"
                 style="border: solid 1px #c0c4cc; height: 200px; width: 99%;"
               ></editor>
             </el-row>
@@ -218,8 +218,10 @@
 <script>
 import { VAceEditor } from "vue3-ace-editor";
 import _ from "lodash";
+import aceThemeMixin from "@/mixins/aceTheme";
 
 export default {
+  mixins: [aceThemeMixin],
   field: "UserQueries",
   data() {
     return (
@@ -418,6 +420,7 @@ export default {
       require("ace-builds/src-noconflict/mode-javascript"); //language
       require("ace-builds/src-noconflict/mode-less");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
   }

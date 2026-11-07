@@ -27,7 +27,7 @@
         id="test"
         @init="editorInit"
         lang="yaml"
-        theme="chrome"
+        :theme="aceTheme"
         :style="'border: solid 1px #c0c4cc; width: 99%; height: ' + ($store.getters.containerSize.height - 160) + 'px;'"
       ></editor>
       <div>
@@ -38,8 +38,10 @@
 <script>
 import { VAceEditor } from "vue3-ace-editor";
 import { i18n } from "../../i18n-setup";
+import aceThemeMixin from "@/mixins/aceTheme";
 
 export default {
+  mixins: [aceThemeMixin],
   name: "yamlEditor",
   data: () => ({
     dialogFormVisible: false,
@@ -121,6 +123,7 @@ export default {
       require("ace-builds/src-noconflict/mode-javascript"); //language
       require("ace-builds/src-noconflict/mode-less");
       require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/theme-tomorrow_night");
       require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
   }
