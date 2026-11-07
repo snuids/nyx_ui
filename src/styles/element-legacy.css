@@ -118,7 +118,10 @@ h6 {
  * conteneur flex, donc la carte devenait un element flex de la largeur de son texte. Les cartes de
  * description des editeurs d'application (« Displays a collection stored in elastic search. »)
  * s'affichaient dans un timbre-poste de 240 px, avec une barre de defilement interne. */
-.el-row > .el-card {
+/* Cible les seules cartes de description des editeurs (`.transition-box`) : appliquee a tout
+ * `el-row > .el-card`, cette regle ecrasait aussi les cartes de la page d'accueil (plan du site),
+ * qui s'affichaient empilees sur toute la largeur au lieu de tenir cote a cote en 126 px. */
+.transition-box > .el-card {
   flex: 1 1 auto;
   width: 100%;
   min-width: 0;

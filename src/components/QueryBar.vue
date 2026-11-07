@@ -10,39 +10,40 @@
         @change="refresh()"
       >
         <template #prefix><el-icon class="prefix-icon"><component :is="$icons.ArrowRight" /></el-icon></template>
-        <template #suffix><el-popover
-         
-          placement="bottom-start"
-          width="150"
-          trigger="hover"
-          v-if="config && config.downloadChecked"
-          :open-delay="1000">
-          <el-col>
-            <el-row class="popover-title">
-              <span>{{this.$t('querybar.download')}}</span>
-            </el-row>
-            <el-row class="button-dl">
-              <el-button
-                v-for="format in exportFormats"
-                :type="format.type"
-                :key="format.value"
-                round
-                size="small"
-                @click="downloadSelection(format.value)"
-              >{{format.label}}</el-button>
-            </el-row>
-          </el-col>
-          <!-- `slot="reference"` n'existe plus : la reference d'un popover est un slot nomme. -->
-          <template #reference>
-            <el-button
-              class="search-dl-bt"
-              link
-              :icon="$icons.Download"
-              size="small"
-            ></el-button>
-          </template>
-        </el-popover></template>
       </el-input>
+      <!-- Le bouton de telechargement est a droite du champ, pas dans son bord droit : dans le champ,
+           il se confondait avec la bordure et laissait un vide irregulier. -->
+      <el-popover
+        placement="bottom-start"
+        width="150"
+        trigger="hover"
+        v-if="config && config.downloadChecked"
+        :open-delay="1000"
+      >
+        <el-col>
+          <el-row class="popover-title">
+            <span>{{this.$t('querybar.download')}}</span>
+          </el-row>
+          <el-row class="button-dl">
+            <el-button
+              v-for="format in exportFormats"
+              :type="format.type"
+              :key="format.value"
+              round
+              size="small"
+              @click="downloadSelection(format.value)"
+            >{{format.label}}</el-button>
+          </el-row>
+        </el-col>
+        <template #reference>
+          <el-button
+            class="search-dl-bt"
+            link
+            :icon="$icons.Download"
+            size="small"
+          ></el-button>
+        </template>
+      </el-popover>
     </div>
     <div class="refresh-button" v-if="config.type !='kibana' ">
       <el-button @click="refresh()" style="width:90%;" size="small" type="primary">{{this.$t('generic.refresh')}}</el-button>
@@ -157,6 +158,15 @@ export default {
   width: -moz-calc(100% - 135px);
   width: calc(100% - 135px);
   float: left;
+  /* Champ puis bouton de telechargement, cote a cote. */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.query-bar .input-bar .query-input {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 
@@ -165,6 +175,14 @@ export default {
   width: -moz-calc(100% - 5px);
   width: calc(100% - 5px);
   float: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.query-bar .input-bar-with-kibana .query-input {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .query-bar .refresh-button {
@@ -189,12 +207,16 @@ export default {
   --el-button-hover-text-color: var(--el-color-primary);
   --el-button-hover-link-text-color: var(--el-color-primary);
   color: var(--el-color-primary);
-  height: 100%;
-  min-height: 24px;
-  margin-right: 2px;
-  padding: 0;
+  padding: 0 4px;
   display: inline-flex;
   align-items: center;
+}
+
+/* `.el-button.is-link` (deux classes) impose `height: auto` : il faut trois classes pour donner au
+   bouton la hauteur du champ et garder l'icone centree. */
+.el-button.search-dl-bt.is-link {
+  height: 26px;
+  min-height: 26px;
 }
 
 .search-dl-bt .el-icon {

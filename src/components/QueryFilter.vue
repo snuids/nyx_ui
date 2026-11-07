@@ -414,8 +414,17 @@ export default {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  box-sizing: border-box;
   /* Un peu d'air entre le libelle et le selecteur : ils se touchaient dans le bandeau des lambdas. */
   gap: 10px;
+  /* ... et entre le selecteur et le libelle de la colonne suivante : les colonnes de 286 px etaient
+     remplies de bout en bout, le selecteur touchait le libelle d'a cote. 32 px reproduisent l'espace
+     visible en production (selecteur de 197 px dans une colonne de 286). */
+  padding-right: 32px;
+}
+
+.query-filter .select-bar-container > .el-col:last-child {
+  padding-right: 0;
 }
 
 /* Le libelle reste en ligne devant le champ ; le selecteur occupe la place restante de la colonne
