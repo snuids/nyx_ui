@@ -30,13 +30,18 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
+import { currentTheme } from "@/utils/theme";
+import { withGrafanaTheme } from "@/utils/grafanaTheme";
 
 
 export default {
   name: "External",
   data: () => ({
     url: "",
-    downloadLoading: false
+    downloadLoading: false,
+    // Le theme en cours : reactive, pour que `computedUrl` recalcule l'URL de l'iframe quand on
+    // bascule clair/sombre (Grafana ne connait pas notre theme, il le lit dans l'URL).
+    themeName: currentTheme()
   }),
   props: {
     config: {
@@ -219,11 +224,16 @@ export default {
 
         if (this.config.timeSelectorChecked && timestring != null)
           url = url + timestring;
-        else if(this.config.config.extraParameters != null)
+
+        // `theme=light|dark` : sans lui, le panneau garde son propre theme dans une console sombre.
+        // Une application qui fixe `theme=` dans ses parametres libres garde son choix.
+        url = withGrafanaTheme(url, this.themeName, this.config.config.extraParameters);
+
+        if (this.config.config.extraParameters != null)
         {
-          url=url+"&"+this.config.config.extraParameters        
+          url=url+"&"+this.config.config.extraParameters
         }
-        
+
         return url
     },
     downloadData: function() {
@@ -365,11 +375,18 @@ export default {
       console.log("GLOBALBUS/KIBANATIMERANGE/");
       this.createUrl();
     });
+    // Grafana ne peut pas suivre notre theme autrement que par l'URL : on recalcule `computedUrl`
+    // (donc l'`src` de l'iframe) a chaque bascule clair/sombre.
+    this.themeHandler = () => {
+      this.themeName = currentTheme();
+    };
+    document.addEventListener("nyx:theme", this.themeHandler);
   },
   beforeUnmount: function() {
     console.log("===============  UNREGISTERING GRAFANA:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");
+    document.removeEventListener("nyx:theme", this.themeHandler);
   }
 };
 
