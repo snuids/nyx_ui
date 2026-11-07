@@ -103,24 +103,26 @@
                 ></el-switch>
               </el-row>
 
+              <!-- One line, selector to the right of the switch: stacked in two rows it read as a
+                   separate setting rather than the type of the time selector. -->
               <el-row>
-                <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
-              </el-row>
-
-              <el-row>
-                <el-select
-                  size="small"
-                  v-model="currentConfig.timeSelectorType"
-                  :placeholder="$t('cfg.select_type')"
-                  @change="timeSelectorTypeChange"
-                  :disabled="!currentConfig.timeSelectorChecked"
-                >
-                  <el-option :label="$t('cfg.free')" value="classic"></el-option>
-                  <el-option :label="$t('cfg.day')" value="day"></el-option>
-                  <el-option :label="$t('cfg.month')" value="month"></el-option>
-                  <el-option :label="$t('cfg.week')" value="week"></el-option>
-                  <el-option :label="$t('cfg.year')" value="year"></el-option>
-                </el-select>
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
+                  <el-select
+                    size="small"
+                    style="width:180px;"
+                    v-model="currentConfig.timeSelectorType"
+                    :placeholder="$t('cfg.select_type')"
+                    @change="timeSelectorTypeChange"
+                    :disabled="!currentConfig.timeSelectorChecked"
+                  >
+                    <el-option :label="$t('cfg.free')" value="classic"></el-option>
+                    <el-option :label="$t('cfg.day')" value="day"></el-option>
+                    <el-option :label="$t('cfg.month')" value="month"></el-option>
+                    <el-option :label="$t('cfg.week')" value="week"></el-option>
+                    <el-option :label="$t('cfg.year')" value="year"></el-option>
+                  </el-select>
+                </div>
               </el-row>
             </el-form-item>
           </el-col>

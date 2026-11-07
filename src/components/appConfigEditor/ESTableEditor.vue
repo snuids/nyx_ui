@@ -142,23 +142,26 @@
               <el-switch v-model="currentConfig.graphicChecked" :active-text="$t('cfg.time_line')"></el-switch>
             </el-row>
             <el-row>
-              <el-col style="width:150px; margin-top:4px;">
+              <!-- Two `el-col` without a `span` take the whole row in Element Plus (`flex: 0 0 100%`),
+                   whatever width the inline style asks for, so the type selector always wrapped under
+                   the switch. One flex line keeps it to its right, where it reads as part of the same
+                   setting — and `Day` was missing from this list while the other editors offer it. -->
+              <div style="display:flex; align-items:center; gap:16px;">
                 <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
-              </el-col>
-              <el-col style="width:200px">
                 <el-select
                   v-if="currentConfig.timeSelectorChecked"
-                  style="margin-left:20px;"
+                  style="width:180px;"
                   size="small"
                   v-model="currentConfig.timeSelectorType"
                   :placeholder="$t('cfg.select_type')"
                 >
                   <el-option :label="$t('cfg.free')" value="classic"></el-option>
+                  <el-option :label="$t('cfg.day')" value="day"></el-option>
                   <el-option :label="$t('cfg.month')" value="month"></el-option>
                   <el-option :label="$t('cfg.week')" value="week"></el-option>
                   <el-option :label="$t('cfg.year')" value="year"></el-option>
                 </el-select>
-              </el-col>
+              </div>
             </el-row>
           </el-card>
         </el-col>

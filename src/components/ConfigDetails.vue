@@ -269,23 +269,25 @@
                     <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
+                  <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
+                       reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
                   <el-row>
-                    <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
-                  </el-row>
-
-                  <el-row>
-                    <el-select
-                      size="small"
-                      v-model="curConfig.timeSelectorType"
-                      :placeholder="$t('configdetails.select_type')"
-                      @change="timeSelectorTypeChange"
-                    >
-                      <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
-                      <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
-                      <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
-                      <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
-                      <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
-                    </el-select>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                      <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
+                      <el-select
+                        size="small"
+                        style="width:180px;"
+                        v-model="curConfig.timeSelectorType"
+                        :placeholder="$t('configdetails.select_type')"
+                        @change="timeSelectorTypeChange"
+                      >
+                        <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                        <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                        <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                        <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                        <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
+                      </el-select>
+                    </div>
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -313,23 +315,25 @@
               :label-width="formLabelWidth"
             >
               <el-input size="small" v-model="curConfig.config.url" autocomplete="off"></el-input>
+              <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
+                   reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
               <el-row>
-                <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
-              </el-row>
-
-              <el-row>
-                <el-select
-                  size="small"
-                  v-model="curConfig.timeSelectorType"
-                  :placeholder="$t('configdetails.select_type')"
-                  @change="timeSelectorTypeChange"
-                >
-                  <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
-                  <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
-                  <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
-                  <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
-                  <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
-                </el-select>
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
+                  <el-select
+                    size="small"
+                    style="width:180px;"
+                    v-model="curConfig.timeSelectorType"
+                    :placeholder="$t('configdetails.select_type')"
+                    @change="timeSelectorTypeChange"
+                  >
+                    <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                    <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                    <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                    <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                    <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
+                  </el-select>
+                </div>
               </el-row>
             </el-form-item>
 
@@ -437,23 +441,25 @@
                     <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
+                  <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
+                       reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
                   <el-row>
-                    <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
-                  </el-row>
-
-                  <el-row>
-                    <el-select
-                      size="small"
-                      v-model="curConfig.timeSelectorType"
-                      :placeholder="$t('configdetails.select_type')"
-                      @change="timeSelectorTypeChange"
-                    >
-                      <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
-                      <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
-                      <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
-                      <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
-                      <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
-                    </el-select>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                      <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
+                      <el-select
+                        size="small"
+                        style="width:180px;"
+                        v-model="curConfig.timeSelectorType"
+                        :placeholder="$t('configdetails.select_type')"
+                        @change="timeSelectorTypeChange"
+                      >
+                        <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                        <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                        <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                        <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                        <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
+                      </el-select>
+                    </div>
                   </el-row>
                 </el-form-item>
               </el-col>
