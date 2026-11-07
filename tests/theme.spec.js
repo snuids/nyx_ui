@@ -5,6 +5,7 @@ import {
   THEMES,
   THEME_STORAGE_KEY,
   applyTheme,
+  currentTheme,
   readStoredTheme,
   rememberInSession,
   resolveTheme,
@@ -243,5 +244,64 @@ describe('session snapshot', () => {
       setItem: () => { throw new Error('denied') },
     }
     expect(rememberInSession('dark', hostile)).toBe(false)
+  })
+})
+
+describe('theme in force and its event', () => {
+  afterEach(() => { delete globalThis.document; delete globalThis.CustomEvent })
+
+  function fakeDocument(attributes) {
+    const seen = []
+    const doc = {
+      documentElement: {
+        classList: { toggle: () => {} },
+        style: {},
+        setAttribute: (name, value) => { attributes[name] = value },
+        getAttribute: (name) => (name in attributes ? attributes[name] : null),
+      },
+      dispatchEvent: (event) => { seen.push(event); return true },
+    }
+    return { doc, seen }
+  }
+
+  it('answers light without a document', () => {
+    expect(currentTheme()).toBe('light')
+  })
+
+  it('reads the theme from the document', () => {
+    const { doc } = fakeDocument({ 'data-theme': 'dark' })
+    globalThis.document = doc
+    expect(currentTheme()).toBe('dark')
+    globalThis.document = fakeDocument({ 'data-theme': 'light' }).doc
+    expect(currentTheme()).toBe('light')
+    globalThis.document = fakeDocument({}).doc
+    expect(currentTheme()).toBe('light')
+  })
+
+  it('announces the change so the charts can repaint', () => {
+    const attributes = {}
+    const { doc, seen } = fakeDocument(attributes)
+    globalThis.document = doc
+    // node has CustomEvent since 19; provide it for the runners that do not
+    if (typeof globalThis.CustomEvent === 'undefined') {
+      globalThis.CustomEvent = class { constructor(type, init) { this.type = type; this.detail = init && init.detail } }
+    }
+    applyTheme('auto', at(22))
+    expect(seen.length).toBe(1)
+    expect(seen[0].type).toBe('nyx:theme')
+    expect(seen[0].detail).toEqual({ theme: 'dark', preference: 'auto' })
+  })
+
+  it('survives a document without event support', () => {
+    const attributes = {}
+    globalThis.document = {
+      documentElement: {
+        classList: { toggle: () => {} },
+        style: {},
+        setAttribute: (name, value) => { attributes[name] = value },
+      },
+    }
+    expect(() => applyTheme('dark')).not.toThrow()
+    expect(attributes['data-theme']).toBe('dark')
   })
 })

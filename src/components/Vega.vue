@@ -17,6 +17,8 @@
 <script>
 import vegaEmbed from "vega-embed";
 import moment from "moment";
+import { currentTheme } from "@/utils/theme";
+import { darkChartConfig } from "@/utils/chartTheme";
 
 // One id per chart, from a counter: Vue 3 has no `_uid`, so `"chart" + this._uid` produced the same
 // `chartundefined` for every module. Two Vega apps on one page (the `Vega` / `Vega2` tabs) then
@@ -72,6 +74,12 @@ export default {
         // `structuredClone`, which throws `DataCloneError` on a Vue 3 reactive Proxy — that is what
         // left every Vega module blank while the console showed one rejection per chart.
         let spec = JSON.parse(this.configin.config.vegaSpec);
+
+        // Le spec est ecrit par l'auteur de l'application : il ne connait pas notre theme. On ne
+        // repeint que l'habillage (axes, legende, titres), les marques gardent leurs couleurs.
+        if (currentTheme() === "dark") {
+          spec.config = darkChartConfig(spec.config);
+        }
         
         // Calculate available width accounting for menu state
         const menuWidth = this.menuOpen ? 201 : 0; // Menu is 201px when open
@@ -172,11 +180,18 @@ export default {
       this.prepareVega();
     };
     this.$globalbus.$on("timerangechanged", this.timerangeHandler);
+    // Un changement de theme repeint l'habillage du graphique : il est dessine sur un canvas, aucune
+    // feuille de style ne peut le reprendre.
+    this.themeHandler = () => {
+      this.prepareVega();
+    };
+    document.addEventListener("nyx:theme", this.themeHandler);
     this.prepareVega();
   },
   beforeUnmount: function() {
     console.log("===============  UNREGISTERING VEGA:");
     this.$globalbus.$off("timerangechanged", this.timerangeHandler);
+    document.removeEventListener("nyx:theme", this.themeHandler);
   }
 };
 </script>
