@@ -818,8 +818,12 @@ body {
   font-size: 16px;
 }
 
+/* Element UI 2 mettait 30 px en haut du corps ; a l'usage l'ecart sous la bande de titre parait
+   trop grand (42 px mesures), surtout dans les fenetres qui commencent par une barre d'onglets.
+   20 px est un choix explicite de l'utilisateur : l'ecart passe a 32 px et le port differe ici de
+   la production precedente, volontairement. */
 .el-overlay .el-dialog__body {
-  padding: 30px 20px;
+  padding: 20px 20px;
   color: #606266;
   font-size: 14px;
 }
