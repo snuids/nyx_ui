@@ -9,6 +9,7 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/ci-tests.yml'
+      - '.github/scripts/**'
   push:
     branches:
       - master
@@ -16,6 +17,8 @@ on:
 
 permissions:
   contents: read
+  # the coverage summary is posted as a pull-request comment (same-repo branches only)
+  pull-requests: write
 
 concurrency:
   group: ui-tests-${{ github.ref }}
@@ -44,5 +47,53 @@ jobs:
       - name: Check the language files are aligned
         run: node scripts/check-lang-keys.mjs
 
+      # The reporters are spelled out here rather than inherited from vitest.config.mjs: the gate
+      # needs `json-summary` for the table below, and `html` for the artifact. `text` keeps the
+      # per-file table in the log, where a failing threshold is read.
       - name: Run the test suite with the coverage gate
-        run: npm run test:coverage
+        run: >-
+          npm run test:coverage --
+          --coverage.reporter=text
+          --coverage.reporter=json-summary
+          --coverage.reporter=html
+
+      # Always: even when the gate is red, the run page must show what the coverage was.
+      - name: Summarise the coverage
+        if: always()
+        run: node .github/scripts/coverage-summary.mjs
+
+      - name: Upload the coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # One comment, updated in place across pushes (hidden marker at the top), so a PR does not
+      # collect a wall of coverage tables. `continue-on-error`: a fork's token is read-only and
+      # this is a convenience, not a gate.
+      - name: Comment the coverage on the pull request
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            const marker = '<!-- nyx-ui-coverage -->'
+            let body = marker + '\n### Couverture\n\n> Rapport indisponible, voir le run.\n'
+            try {
+              body = marker + '\n' + fs.readFileSync('coverage/summary.md', 'utf8')
+            } catch (error) {
+              core.info('no coverage/summary.md: ' + error.message)
+            }
+            const { owner, repo } = context.repo
+            const issue_number = context.issue.number
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number })
+            const existing = comments.find((comment) => comment.body && comment.body.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body })
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body })
+            }
