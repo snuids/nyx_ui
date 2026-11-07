@@ -57,6 +57,17 @@ h6 {
   font-size: 14px;
 }
 
+/*
+ * Element Plus garde les 30 px d'Element UI 2 entre deux boutons radio (`.el-radio`), et ce sont eux
+ * qui espacaient les cinq types de rapport de l'editeur. Une regle `.el-radio { margin-right: 0 }`
+ * laissee dans le `<style>` non scope d'un composant les supprimait partout : les options se
+ * touchaient. La regle est retiree la-bas, et celle-ci rend l'ecart explicite pour qu'aucune autre
+ * regle orpheline ne puisse le reprendre.
+ */
+.el-radio-group .el-radio:not(:last-child) {
+  margin-right: 30px;
+}
+
 :root {
   --el-component-size: 36px;
   --el-component-size-large: 40px;

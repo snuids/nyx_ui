@@ -414,37 +414,13 @@ export default {
 </script>
 
 <style>
-/* Les cartes de modules sont placees DANS un `el-radio`, qui sert de conteneur cliquable. Element UI 2
-   le rendait en `inline-block`, sans hauteur ; Element Plus en fait un `inline-flex` de 32 px de
-   haut, aligne au centre : une carte de 120 px deborde, le titre est rogne et le contenu se decale.
-   On rend au radio son comportement de conteneur. */
-.el-radio {
-  display: inline-block;
-  height: auto;
-  align-items: initial;
-  white-space: normal;
-  margin-right: 0;
-  vertical-align: top;
-}
+/* The module cards used to be rendered inside an `el-radio` used as a clickable container, and this
+   block reset the radio to make room for a 120 px card. The cards are gone (no `el-radio`, no
+   `.process_ok` in the template any more) but the rules stayed — and this `<style>` is NOT scoped,
+   so `.el-radio { margin-right: 0 }` reached every radio of the console and glued the report
+   editor's five options together. Removed; the spacing now comes from Element Plus's own 30 px, and
+   `.el-radio-group .el-radio` in `styles/element-legacy.css` keeps it explicit. */
 
-.el-radio__label {
-  padding-left: 0;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-.process_ok {
-  width: 280px;
-  height: 120px;
-  background-color: #fff;
-  border: solid 2px #aaa;
-  position: relative;
-  color: black;
-}
-
-.process_ok:hover {
-  background-color: #eee;
-}
 .process_ko {
   width: 280px;
   height: 120px;

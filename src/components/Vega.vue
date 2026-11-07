@@ -63,43 +63,46 @@ export default {
       }
 
       try {
-        this.vegaSpec = JSON.parse(this.configin.config.vegaSpec);
+        // A local plain object, never a component data property: vega 6 clones the spec with
+        // `structuredClone`, which throws `DataCloneError` on a Vue 3 reactive Proxy — that is what
+        // left every Vega module blank while the console showed one rejection per chart.
+        let spec = JSON.parse(this.configin.config.vegaSpec);
         
         // Calculate available width accounting for menu state
         const menuWidth = this.menuOpen ? 201 : 0; // Menu is 201px when open
         const chartWidth = this.$store.getters.containerSize.width - menuWidth - 100;
         
         // Add autosize for responsiveness at the top level
-        this.vegaSpec.autosize = {
+        spec.autosize = {
           type: "fit",
           contains: "padding"
         };
         
         // Handle vertical concatenation
-        if (this.vegaSpec.vconcat != undefined) {
-          for (var i = 0; i < this.vegaSpec.vconcat.length; i++) {
-            this.vegaSpec.vconcat[i].width = chartWidth;
+        if (spec.vconcat != undefined) {
+          for (var i = 0; i < spec.vconcat.length; i++) {
+            spec.vconcat[i].width = chartWidth;
           }
         }
         
         // Handle horizontal concatenation
-        if (this.vegaSpec.hconcat != undefined) {
+        if (spec.hconcat != undefined) {
           // Divide width among horizontally concatenated charts
-          const individualWidth = Math.floor(chartWidth / this.vegaSpec.hconcat.length) - 20;
-          for (let i = 0; i < this.vegaSpec.hconcat.length; i++) {
-            this.vegaSpec.hconcat[i].width = individualWidth;
+          const individualWidth = Math.floor(chartWidth / spec.hconcat.length) - 20;
+          for (let i = 0; i < spec.hconcat.length; i++) {
+            spec.hconcat[i].width = individualWidth;
           }
         }
         
         // Set width for single charts (no concat)
-        if (!this.vegaSpec.vconcat && !this.vegaSpec.hconcat) {
-          this.vegaSpec.width = chartWidth;
+        if (!spec.vconcat && !spec.hconcat) {
+          spec.width = chartWidth;
         }
         
         if (
-          this.vegaSpec != undefined 
+          spec != undefined 
         ) {
-          var vegadata = JSON.stringify(this.vegaSpec);
+          var vegadata = JSON.stringify(spec);
 
           // Replace token parameter value with actual token from store
           vegadata = vegadata.replace(/token=([@A-Za-z0-9-]*)/g, 
@@ -119,7 +122,7 @@ export default {
             'end=' + endTimeAsUtc);
 
           // Parse back the modified data
-          this.vegaSpec = JSON.parse(vegadata);
+          spec = JSON.parse(vegadata);
 
           // this.vegaSpec.data.url = this.vegaSpec.data.url.replace(
           //   /@TOKEN@/g,
@@ -142,7 +145,7 @@ export default {
           // );
         }
 
-        vegaEmbed("#" + this.id, this.vegaSpec, {
+        vegaEmbed("#" + this.id, spec, {
           actions: true,
           renderer: "canvas"
         });
@@ -157,15 +160,18 @@ export default {
   },
   mounted: function() {
     console.log("===============  REGISTERING VEGA:");
-    this.$globalbus.$on("timerangechanged", () => {
+    // The handler is kept so `$off` can remove *this* listener: `mitt` removes by reference, and a
+    // call without one silently removes nothing — every revisit added a render on top of the old.
+    this.timerangeHandler = () => {
       console.log("GLOBALBUS/VEGATIMERANGE/");
       this.prepareVega();
-    });
+    };
+    this.$globalbus.$on("timerangechanged", this.timerangeHandler);
     this.prepareVega();
   },
   beforeUnmount: function() {
     console.log("===============  UNREGISTERING VEGA:");
-    this.$globalbus.$off("timerangechanged");
+    this.$globalbus.$off("timerangechanged", this.timerangeHandler);
   }
 };
 </script>
