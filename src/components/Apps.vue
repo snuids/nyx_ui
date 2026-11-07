@@ -1,5 +1,5 @@
 <template>
-  <el-popover v-if="apps.length>0" placement="bottom" width="350" trigger="click" id="app-popover">
+  <el-popover v-if="apps.length>0" placement="bottom" width="350" trigger="click" id="app-popover" popper-class="app-popover-panel">
     <el-form>
       <el-row v-for="(line,index) in moduloapps" :key="index">
         <el-col
@@ -91,8 +91,10 @@ export default {
    avec une icone de 40 px et le libelle SOUS le bouton. Les forcer a 40 x 40 laissait les cellules de
    90 px presque vides : c'est ce qui donnait l'impression de « trop de padding ». On rend au bouton
    sa taille naturelle et on fixe l'icone a 40 px. */
-#app-popover .el-button,
-.el-popover .el-button {
+/* Cible uniquement le panneau des applications : `.el-popover .el-button` touchait aussi les autres
+   infobulles, dont celle du telechargement, dont les boutons .xlsx/.csv passaient de 24 a 64 px. */
+.app-popover-panel .el-button,
+#app-popover .el-button {
   width: auto;
   height: auto;
   min-width: 72px;
@@ -103,8 +105,8 @@ export default {
   justify-content: center;
 }
 
-#app-popover .el-button .nyx-icon,
-.el-popover .el-button .nyx-icon {
+.app-popover-panel .el-button .nyx-icon,
+#app-popover .el-button .nyx-icon {
   height: 40px;
 }
 
