@@ -21,18 +21,21 @@
       ></GenericTableDetails>
     </span>
 
-    <el-row v-if="config.queryBarChecked">
+    <!-- Un `div` et non un `el-row` : en Element Plus `el-row` est un conteneur flex, donc le
+         bandeau qu'il contient se reduisait a la largeur de son contenu (337 px au lieu de 890 sur
+         l'ecran Docker) au lieu de prendre toute la largeur comme avec Element UI 2. -->
+    <div v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
-    </el-row>
+    </div>
 
-    <el-row v-if="config.queryFilterChecked">
+    <div v-if="config.queryFilterChecked">
       <QueryFilter
         @queryfilterchanged="queryFilterChanged"
         @downloadasked="downloadAsked"
         :config="config"
         v-on:queryfilter_changed="queryfilterchanged"
       ></QueryFilter>
-    </el-row>
+    </div>
     <el-row v-if="config.mapChecked">
       <el-col style="padding-right:6px;">
         <Map :config="config" :tableData="mapTableData" v-on:mapclicked="mapClicked"></Map>
@@ -47,7 +50,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        v-model:current-page="currentPage"
         :page-sizes="[100, 200, 300, 400, 500]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -57,7 +60,7 @@
     <el-row>
       <el-col :span="24">
         <el-table
-          size="mini"
+          size="small"
           :data="tableData"
           style="width: 100%"
           highlight-current-row
@@ -78,11 +81,11 @@
             
           >
             <!-- show-overflow-tooltip -->
-            <template slot-scope="scope">
+            <template #default="scope">
               <span v-if="header.type=='select'">
                 <el-select
                   @change="selectChanged(scope.row, header)"
-                  size="mini"
+                  size="small"
                   v-model="scope.row._source[header.field.replace('_source.', '')]"
                   placeholder="Select"
                 >
@@ -96,7 +99,7 @@
               </span>
               <span
                 v-else-if="(header.type=='long' || header.type=='double') && header.format != null && header.format.length > 0"
-              >{{computeRec(scope.row,header.field) | numeral(header.format)}}</span>
+              >{{ $numeral(computeRec(scope.row,header.field), header.format) }}</span>
               <span v-else-if="header.type=='boolean'">
                 <el-switch
                   v-model="scope.row._source[header.field.replace('_source.', '')]"
@@ -115,8 +118,8 @@
               <span v-else-if="header.format=='link'" class="link-cell">                
                 <el-button 
                   v-if="scope && computeRec(scope.row,header.field)" 
-                  size="mini"
-                  :icon="header.linkbuttonicon"
+                  size="small"
+                  :icon="buttonIcon(header.linkbuttonicon)"
                   :circle="header.linkbuttoncircle" 
                   :round="header.linkbuttonround" 
                   :plain="header.linkbuttonplain" 
@@ -128,7 +131,7 @@
             </template>
           </el-table-column>
           <el-table-column label="Actions" align="right" width="150px;">
-            <template slot="header" slot-scope="_scope">
+            <template #header>
               <div>
                 <el-tooltip
                   v-if="config.config.index.indexOf('*')==-1 && currentRow && $store.getters.creds.hasPrivilege(config.config.writeprivileges)"
@@ -140,10 +143,10 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="duplicateRecord()"
                     type="primary"
-                    icon="el-icon-copy-document"
+                    :icon="$icons.CopyDocument"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -156,10 +159,10 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="addRecord()"
                     type="primary"
-                    icon="el-icon-plus"
+                    :icon="$icons.Plus"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -172,27 +175,27 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="refreshData()"
                     class="regreshbutton"
                     plain
-                    icon="el-icon-refresh"
+                    :icon="$icons.Refresh"
                   ></el-button>
                 </el-tooltip>
               </div>
             </template>
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button
-                size="mini"
+                size="small"
                 plain
-                icon="el-icon-setting"
+                :icon="$icons.Setting"
                 @click="handleView(scope.$index, scope.row)"
               ></el-button>
               <el-button
                 v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
-                size="mini"
+                size="small"
                 type="danger"
-                icon="el-icon-delete"
+                :icon="$icons.Delete"
                 @click="handleDelete(scope.$index, scope.row)"
               ></el-button>
             </template>
@@ -204,6 +207,8 @@
 </template>
 
 <script>
+import { iconComponent } from "@/utils/icons";
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import moment from "moment";
 import Vue from "vue";
@@ -227,11 +232,11 @@ req.keys().forEach(filename => {
 });
 //console.log("B=========================> DYNAMIC COMPONENTS");
 
-Vue.component("Map", map);
-Vue.component("BarChart", barchart);
-Vue.component("QueryBar", querybar);
-Vue.component("GenericTableDetails", generictabledetails);
-Vue.component("QueryFilter", queryfilter);
+registerComponent("Map", map);
+registerComponent("BarChart", barchart);
+registerComponent("QueryBar", querybar);
+registerComponent("GenericTableDetails", generictabledetails);
+registerComponent("QueryFilter", queryfilter);
 
 
 export default {
@@ -347,6 +352,11 @@ export default {
     }
   },
   methods: {
+    // Les configurations enregistrees portent un nom d'icone Element UI 2 ("el-icon-download") :
+    // Element Plus attend un composant, donc on traduit ici.
+    buttonIcon: function(name) {
+      return iconComponent(name, this.$icons)
+    },
     sortChanged:function(e){
       //alert(JSON.stringify(e.column));
       
@@ -1048,7 +1058,7 @@ export default {
       else console.log("Ignoring time change.");
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING: timerangechanged");
     this.$globalbus.$off("timerangechanged");
 

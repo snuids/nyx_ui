@@ -1,7 +1,7 @@
-<template slot="items">
+<template>
   <el-dialog
     :title="$t('logout.change_pass')"
-    :visible="visible"
+    v-model="visible"
     width="50%"
     :before-close="closeDialog"
     class="change-pwd-dlg"
@@ -10,7 +10,7 @@
       <el-card shadow="never" style="margin-bottom:10px" body-style="padding:10px">
       <el-form-item :label="$t('changepassword.oldpass')" prop="oldpassword">
         <el-input
-          size="mini"
+          size="small"
           type="password"
           name="password"
           autocomplete="none"
@@ -21,23 +21,23 @@
       </el-card>
       <el-card shadow="never"  body-style="padding:10px">
       <el-form-item class="formitem" :label="$t('changepassword.newpass')" prop="newpassword1">
-        <el-input  size="mini" type="password" autocomplete="none" v-model="cpform.newpassword1" show-password/>
+        <el-input  size="small" type="password" autocomplete="none" v-model="cpform.newpassword1" show-password/>
       </el-form-item>
       <el-form-item class="formitem" :label="$t('changepassword.repeatpass')" prop="newpassword2">
-        <el-input size="mini" type="password" autocomplete="none" v-model="cpform.newpassword2" show-password/>
+        <el-input size="small" type="password" autocomplete="none" v-model="cpform.newpassword2" show-password/>
 
       </el-form-item>
       </el-card>
     </el-form>
     {{errorstr}}
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="closeDialog()">{{$t('buttons.cancel')}}</el-button>
       <el-button
         type="primary"
         :disabled="confirmButtonDisabled"
         @click="changePassword()"
       >{{$t('buttons.confirm')}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
   

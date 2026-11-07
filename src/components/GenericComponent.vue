@@ -82,6 +82,8 @@
 
 
 <script>
+import { paneNameOf } from "@/utils/tabs";
+import { registerComponent } from '@/utils/vue3shim'
 
 // import generictable from "@/components/GenericTable";
 // import pggenerictable from "@/components/PGGenericTable";
@@ -125,26 +127,26 @@ req.keys().forEach(filename => {
   dynamicComponents[name] = component
 })
 
-// Vue.component("GenericTable", generictable);
-// Vue.component("PGGenericTable", pggenerictable);
-// Vue.component("Kibana", kibana);
-// Vue.component("External", external);
-// Vue.component("Upload", upload);
-// Vue.component("User", user);
-// Vue.component("Config", config);
-// Vue.component("Map", map);
-// Vue.component("Form", form);
-// Vue.component("FreeText", freetext);
-// Vue.component("ReportList", ReportList);
-// Vue.component("ReportTask", reporttask);
-// Vue.component("ReportPeriodic", reportperiodic);
-// Vue.component("ProcessList", ProcessList);
-// Vue.component("FileSystem", FileSystem);
-// Vue.component("QueryFilter", queryfilter);
-// Vue.component("Vega", vega);
-// Vue.component("LandingPage", LandingPage);
-// Vue.component("NYXInfo", NYXInfo);
-// Vue.component("SendMessage", SendMessage);
+// registerComponent("GenericTable", generictable);
+// registerComponent("PGGenericTable", pggenerictable);
+// registerComponent("Kibana", kibana);
+// registerComponent("External", external);
+// registerComponent("Upload", upload);
+// registerComponent("User", user);
+// registerComponent("Config", config);
+// registerComponent("Map", map);
+// registerComponent("Form", form);
+// registerComponent("FreeText", freetext);
+// registerComponent("ReportList", ReportList);
+// registerComponent("ReportTask", reporttask);
+// registerComponent("ReportPeriodic", reportperiodic);
+// registerComponent("ProcessList", ProcessList);
+// registerComponent("FileSystem", FileSystem);
+// registerComponent("QueryFilter", queryfilter);
+// registerComponent("Vega", vega);
+// registerComponent("LandingPage", LandingPage);
+// registerComponent("NYXInfo", NYXInfo);
+// registerComponent("SendMessage", SendMessage);
 
 const myExport = {
 //export default {
@@ -210,7 +212,11 @@ const myExport = {
   },
   methods: {
     handleTabClick: function(tab) {
-      var path = "/main/" + tab.name
+      // Element Plus passe un TabsPaneContext : le nom est dans paneName, pas dans name (undefined).
+      const name = paneNameOf(tab)
+      if (!name) return
+
+      var path = "/main/" + name
 
       if(path != this.$route.path)
         this.$router.push(path);

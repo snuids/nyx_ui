@@ -1,14 +1,11 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import axios from "axios";
 import moment from 'moment';
 import _ from "lodash";
 import packageJson from '../../package.json';
 
 import { extractURLParts } from "../globalfunctions";
-
-Vue.use(Vuex);
-
+import { globalBus } from "../utils/bus";
 
 
 function computeAutoTime(minutes) {
@@ -48,7 +45,7 @@ function stopSocket(wsObject)
   }
 }
 
-export default new Vuex.Store({
+export default createStore({
   state: {
     apiurl: "api/v1/",
     apiVersion: "",
@@ -189,7 +186,7 @@ export default new Vuex.Store({
             //console.log(inmes);
             
             if(inmes.type=="message")
-              Vue.prototype.$globalbus.$emit("messagereceived",inmes.data);
+              globalBus.$emit("messagereceived",inmes.data);
           });
           context.getters.wsObject.socket=socket; 
           } catch (error) { // eslint-disable-line no-unused-vars
@@ -408,7 +405,7 @@ export default new Vuex.Store({
       state.activeApp = app
 
       if(app.timeDefault != null && app.timeDefault != '') {
-        Vue.prototype.$globalbus.$emit("forcetime",app.timeDefault);
+        globalBus.$emit("forcetime",app.timeDefault);
       }
     },
     // eslint-disable-next-line

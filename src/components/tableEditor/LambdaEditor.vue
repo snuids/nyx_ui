@@ -2,7 +2,7 @@
   <el-dialog
     width="80%"
     :title="title"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="lambda-editor"
@@ -33,7 +33,7 @@
                 :disabled="locEditMode=='edit'"
                 v-model="newRec._source.type"
                 ref="type"
-                size="mini"
+                size="small"
                 placeholder="Mode"
               >
                 <el-option
@@ -47,7 +47,7 @@
             <el-col :span="5" style="padding-right:10px;">
               <el-autocomplete
                 :disabled="locEditMode=='edit'"
-                size="mini"
+                size="small"
                 class="inline-input"
                 ref="runner"
                 v-model="newRec._source.runner"
@@ -59,7 +59,7 @@
             <el-col :span="5" style="padding-right:10px;">
               <el-autocomplete
                 :disabled="locEditMode=='edit'"
-                size="mini"
+                size="small"
                 ref="notebook"
                 class="inline-input"
                 v-model="newRec._source.file"
@@ -70,7 +70,7 @@
             <el-col :span="5" style="padding-right:10px;">
               <el-input
                 :disabled="locEditMode=='edit'"
-                size="mini"
+                size="small"
                 ref="function"
                 placeholder="Function"
                 v-model="newRec._source.orgfunction"
@@ -79,16 +79,16 @@
             <el-col :span="4" style="text-align:right;">
               <el-button
                 style="min-width: 112px;"
-                icon="el-icon-notebook-2"
+                :icon="$icons.Notebook"
                 @click="openTabCode()"
-                size="mini"
+                size="small"
                 v-if="locEditMode=='edit'"
               >{{$t('generic.edit_code')}}</el-button>
               <!-- <el-popconfirm
                 v-if="locEditMode!='edit'" 
                 confirmButtonText='GO!'
                 cancelButtonText='No, Thanks'
-                icon="el-icon-info"
+                :icon="$icons.InfoFilled"
                 iconColor="red"
                 :title="$t('ui.overwrite_file')"
               >-->
@@ -96,7 +96,7 @@
                 v-if="locEditMode!='edit'"
                 :loading="createLoading"
                 @click="createFunction()"
-                size="mini"
+                size="small"
                 type="primary"
                 :disabled="goBtnDisabled"
               >{{ $t('ui.create_function') }}</el-button>
@@ -124,7 +124,7 @@
               <el-input
                 style="max-width:80px;"
                 readonly
-                size="mini"
+                size="small"
                 ref="function"
                 v-model="newRec._source.runs"
               ></el-input>
@@ -133,7 +133,7 @@
               <el-input
                 style="max-width:80px;"
                 readonly
-                size="mini"
+                size="small"
                 ref="function"
                 v-model="newRec._source.errors"
               ></el-input>
@@ -142,7 +142,7 @@
               <el-input
                 style="max-width:80px;"
                 readonly
-                size="mini"
+                size="small"
                 ref="function"
                 v-model="newRec._source.crashed"
               ></el-input>
@@ -154,11 +154,11 @@
             <el-col :span="4" style="text-align:right;">
               <el-button
                 style="min-width: 112px;"
-                icon="el-icon-refresh-left"
+                :icon="$icons.RefreshLeft"
                 :loading="resetStatsLoading"
                 @click="resetStats()"
                 type="warning"
-                size="mini"
+                size="small"
               >{{ $t('ui.reset_stats') }}</el-button>
             </el-col>
           </el-row>
@@ -182,23 +182,21 @@
                 :fetch-suggestions="searchLastRun"
                 :placeholder="$t('ui.select_run')"
                 @select="handleSelectRun"
-                size="mini"
+                size="small"
                 clearable
               >
-                <template slot-scope="{ item }">
+                <template #default="{ item }">
                   <div class="value">
-                    <span style="font-weight:bold;">{{ item.time | formatTS2}} -&nbsp;</span>
+                    <span style="font-weight:bold;">{{ $filters.formatTS2(item.time) }} -&nbsp;</span>
                     <span>({{item.duration}}ms)</span>
-                    <i
+                    <el-icon
                       v-if="item.crashed"
                       style="color:red; float:right; margin-top:10px;"
-                      class="el-icon-close"
-                    ></i>
-                    <i
+                    ><component :is="$icons.CircleClose" /></el-icon>
+                    <el-icon
                       v-else
                       style="color:green; float:right; margin-top:10px;"
-                      class="el-icon-check"
-                    ></i>
+                    ><component :is="$icons.CircleCheck" /></el-icon>
                   </div>
                 </template>
               </el-autocomplete>
@@ -207,7 +205,7 @@
               <el-input
                 v-if="selectedRun"
                 readonly
-                size="mini"
+                size="small"
                 ref="return"
                 v-model="selectedRun.return"
               ></el-input>
@@ -216,9 +214,9 @@
               <el-button
                 v-if="selectedRun && selectedRun.inputuuid"
                 style="min-width: 112px;"
-                icon="el-icon-download"
+                :icon="$icons.Download"
                 @click="openTabInput"
-                size="mini"
+                size="small"
               >Input</el-button>
             </el-col> -->
           </el-row>
@@ -235,7 +233,7 @@
                 <el-form-item label="File" :label-width="formLabelWidth">
                   <el-input
                     :disabled="true"
-                    size="mini"
+                    size="small"
                     v-model="newRec._source.file"
                     autocomplete="off"
                   ></el-input>
@@ -245,7 +243,7 @@
                 <el-form-item label="Function" :label-width="formLabelWidth">
                   <el-input
                     :disabled="true"
-                    size="mini"
+                    size="small"
                     v-model="newRec._source.orgfunction"
                     autocomplete="off"
                   ></el-input>
@@ -257,7 +255,7 @@
                 <el-form-item label="Topics" :label-width="formLabelWidth">
                   <el-input
                     :disabled="true"
-                    size="mini"
+                    size="small"
                     v-model="newRec._source.topics"
                     autocomplete="off"
                   ></el-input>
@@ -284,9 +282,9 @@
       </el-tab-pane>
     </el-tabs>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.quit")}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

@@ -18,13 +18,14 @@ describe('i18n setup', () => {
   })
 
   it('starts in English and falls back on English', () => {
-    expect(i18n.locale).toBe('en')
-    expect(i18n.fallbackLocale).toBe('en')
+    // Vue 3 / vue-i18n 9: the instance is reachable through `.global`.
+    expect(i18n.global.locale).toBe('en')
+    expect(i18n.global.fallbackLocale).toBe('en')
   })
 
   it('merges the Element UI pack into every language', () => {
-    // these keys come from element-ui/lib/locale/lang/<lang>.js; a locale that lost them shows
-    // English widgets inside a translated page
+    // these keys come from the Element Plus locale files; a locale that lost them shows English
+    // widgets inside a translated page.
     for (const lang of LANGUAGES) {
       expect(localized_messages[lang].el, `${lang} has no Element UI pack`).toBeTypeOf('object')
       expect(localized_messages[lang].el.pagination, `${lang} has no pagination strings`).toBeTruthy()
@@ -38,6 +39,6 @@ describe('i18n setup', () => {
   })
 
   it('translates a known key through the instance', () => {
-    expect(i18n.t('generic.cancel')).toBe('Cancel')
+    expect(i18n.global.t('generic.cancel')).toBe('Cancel')
   })
 })

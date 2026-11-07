@@ -8,7 +8,7 @@
     ></ReportPeriodicEditor>
 
     <el-table
-      size="mini"
+      size="small"
       :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase())))
       )"
       :default-sort="{prop: '_source.title', order: 'ascending'}"
@@ -17,54 +17,57 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column width="80">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="text-align:center; margin-top:3px;">
             <v-icon :name="scope.row._source.icon" v-if="scope.row._source.icon" scale="1.5" />
           </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.report')" prop="_source.title" sortable width="300">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="font-weight:bolder">{{scope.row._source.title}}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.next_run')" prop="_source.nextRun" sortable>
-        <template slot-scope="scope">
-          <div>{{scope.row._source.nextRun | formatDate}}</div>
+        <template #default="scope">
+          <div>{{ $filters.formatDate(scope.row._source.nextRun) }}</div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.type')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div>{{scope.row._source.trigger.type}}</div>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('report.days')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <template v-if="scope.row._source.trigger.type=='daily'">
             <span v-for="item in scope.row._source.trigger.days" :key="item">
               &nbsp;
-              <el-tag size="mini" type="info">{{(item+1)}}</el-tag>
+              <el-tag size="small" type="info">{{(item+1)}}</el-tag>
             </span>
           </template>
           <template v-else-if="scope.row._source.trigger.type=='monthly'">
             <span v-for="item in scope.row._source.trigger.days" :key="item">
               &nbsp;
-              <el-tag size="mini" type="info">{{(item)}}</el-tag>
+              <el-tag size="small" type="info">{{(item)}}</el-tag>
             </span>
           </template>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('report.time')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div>{{scope.row._source.trigger.time}}</div>
         </template>
       </el-table-column>
 
-      <el-table-column align="right" width="220">
+      <!-- 260 px : avec une ligne selectionnee, l'en-tete porte deux boutons ronds (28 px) et le
+           champ de recherche (150 px, marge de 10) — 228 px de contenu, soit plus que les 196 px
+           utiles d'une colonne de 220 : le champ passait sous les boutons. -->
+      <el-table-column align="right" width="260">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header>
           <div>
             <el-tooltip
               v-if="currentRow"
@@ -75,12 +78,12 @@
             >
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="duplicate()"
                 class="dupbutton"
                 type="primary"
                 plain
-                icon="el-icon-copy-document"
+                :icon="$icons.CopyDocument"
               ></el-button>
             </el-tooltip>
             <el-tooltip
@@ -92,23 +95,23 @@
             >
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="addScheduler()"
                 class="addbutton"
                 type="primary"
                 plain
-                icon="el-icon-plus"
+                :icon="$icons.Plus"
               ></el-button>
             </el-tooltip>            
           </div>
-          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
+          <el-input v-model="search" size="small" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tooltip class="item" effect="dark" :content="$t('generic.edit')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-              size="mini"
-              icon="el-icon-edit"
+              size="small"
+              :icon="$icons.EditPen"
               @click="editScheduler(scope.$index, scope.row)"
               circle
             ></el-button>
@@ -116,9 +119,9 @@
           <el-tooltip class="item" effect="dark" :content="$t('generic.delete')" placement="bottom-end">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-              size="mini"
+              size="small"
               type="danger"
-              icon="el-icon-delete"
+              :icon="$icons.Delete"
               @click="askDeleteScheduler(scope.$index, scope.row)"
               circle
             ></el-button>
@@ -131,12 +134,13 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import reportperiodiceditor from "@/components/ReportPeriodicEditor";
 import Vue from "vue";
 import moment from "moment";
 
-Vue.component("ReportPeriodicEditor", reportperiodiceditor);
+registerComponent("ReportPeriodicEditor", reportperiodiceditor);
 
 export default {
   name: "ReportPeriodic",
@@ -271,7 +275,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 

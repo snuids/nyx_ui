@@ -1,20 +1,20 @@
 <template>
-  <el-dialog width="60%" :title="computeTranslatedText(record.title,$store.getters.creds.user.language)" :visible.sync="visible" :before-close="closeDialog">
+  <el-dialog width="60%" :title="computeTranslatedText(record.title,$store.getters.creds.user.language)" v-model="visible" :before-close="closeDialog">
     <el-form :model="record" v-if="visible">
       <el-row v-for="param in filteredParameters" :key="param.name">
         <el-col :span="24" v-if="param.type == 'text'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="param.value" autocomplete="off"></el-input>
+            <el-input size="small" v-model="param.value" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24" v-if="param.type == 'number'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-input-number size="mini" v-model="param.value" autocomplete="off"></el-input-number>
+            <el-input-number size="small" v-model="param.value" autocomplete="off"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="param.type == 'combo'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-select size="mini" v-model="param.value" :placeholder="$t('reportgenerator.select_type')">
+            <el-select size="small" v-model="param.value" :placeholder="$t('reportgenerator.select_type')">
               <el-option
                 v-for="item in param.combos.split(',')"
                 :key="item"
@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="12" v-if="param.type == 'escombo'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-select size="mini" v-model="param.value" :placeholder="$t('reportgenerator.select_type')">
+            <el-select size="small" v-model="param.value" :placeholder="$t('reportgenerator.select_type')">
               <el-option
                 v-for="item in param.valuelist"
                 :key="item"
@@ -38,13 +38,13 @@
         </el-col>
         <el-col :span="12" v-if="param.type == 'date'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
-            <el-date-picker size="mini" v-model="param.value" type="date" :placeholder="$t('reportgenerator.pick_day')"></el-date-picker>
+            <el-date-picker size="small" v-model="param.value" type="date" :placeholder="$t('reportgenerator.pick_day')"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12" v-if="param.type == 'interval'">
           <el-form-item :label="param.title" :label-width="formLabelWidth">
             <el-date-picker
-              size="mini"
+              size="small"
               :picker-options="rangePickerOptions"
               v-model="param.value"
               type="daterange"
@@ -73,7 +73,7 @@
             filterable
             ref="maillingListTo"
             :placeholder="$t('reportgenerator.choose_users')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -96,7 +96,7 @@
             filterable
             ref="maillingListCc"
             :placeholder="$t('reportgenerator.choose_users')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -119,7 +119,7 @@
             filterable
             ref="maillingListCci"
             :placeholder="$t('reportgenerator.choose_users')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -134,7 +134,7 @@
       <el-row>
         <el-col :span="16">
           <el-form-item :label="$t('reportgenerator.add_mail')" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="mailToAdd" autocomplete="off"></el-input>
+            <el-input size="small" v-model="mailToAdd" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6" style="text-align:right;">
@@ -142,31 +142,31 @@
             :disabled="!mailToAdd.includes('@')"
             plain
             @click="addMail()"
-            size="mini"
+            size="small"
           >{{ $t('reportgenerator.add') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item :label="$t('reportgenerator.subject')" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="emailSubject"></el-input>
+            <el-input size="small" v-model="emailSubject"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item :label="$t('reportgenerator.body')" :label-width="formLabelWidth">
-            <el-input size="mini" type="textarea" :rows="4" v-model="emailBody"></el-input>
+            <el-input size="small" type="textarea" :rows="4" v-model="emailBody"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <!--<v-icon :name="record.icon" scale="1"/>-->
       <el-button @click="closeDialog()">{{ $t('reportgenerator.cancel') }}</el-button>
       <el-button type="primary" @click="generateReport()">{{ $t('reportgenerator.generate') }}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

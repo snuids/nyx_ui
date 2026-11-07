@@ -1,0 +1,293 @@
+/*
+ * Element UI 2 avait des composants de 36 px (champs) et 40 px (boutons) ; Element Plus part de
+ * 32 px. Sans ce réglage, chaque champ du console rapetisse de 4 à 8 px et les rangées se
+ * décalent — c'est la première chose qui se voit en comparant les deux interfaces.
+ *
+ * `--el-component-size` est la variable qu'Element Plus consulte pour la hauteur des champs, des
+ * sélecteurs et des boutons : la fixer ici rétablit les hauteurs d'origine sans toucher aux 62
+ * composants.
+ */
+/*
+ * Element UI 2 posait la typographie sur `body` (`base.css`) : 14 px, Helvetica Neue puis Arial.
+ * Element Plus ne touche pas au `body`. Tout ce qui est **teleporte** — dialogues
+ * (`append-to-body`), infobulles, menus deroulants, boites de confirmation — sort de `#app` et
+ * heritait donc du corps du navigateur : 16 px et une police a empattements. C'est ce qui rendait
+ * les dialogues plus grands et differents de la version precedente.
+ */
+body {
+  /* Pile exacte d'Element UI 2 (`base.css`) : c'est elle que recevaient les elements teleportes
+     dans la version precedente. */
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    Arial, sans-serif;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+/*
+ * Element UI 2 embarquait un reset typographique (`base.css`) qu'Element Plus n'a pas repris :
+ * titre h1 a 20 px en gris #606266, sans graisse et sans marge. Sans lui, le titre « Step 2 of 2 »
+ * des editeurs d'application sortait en 28 px gras noir (les valeurs par defaut du navigateur).
+ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #606266;
+  font-weight: inherit;
+  margin: 0;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+h4,
+h5,
+h6 {
+  font-size: 14px;
+}
+
+/*
+ * Element Plus garde les 30 px d'Element UI 2 entre deux boutons radio (`.el-radio`), et ce sont eux
+ * qui espacaient les cinq types de rapport de l'editeur. Une regle `.el-radio { margin-right: 0 }`
+ * laissee dans le `<style>` non scope d'un composant les supprimait partout : les options se
+ * touchaient. La regle est retiree la-bas, et celle-ci rend l'ecart explicite pour qu'aucune autre
+ * regle orpheline ne puisse le reprendre.
+ */
+.el-radio-group .el-radio:not(:last-child) {
+  margin-right: 30px;
+}
+
+:root {
+  --el-component-size: 36px;
+  --el-component-size-large: 40px;
+  /* Element UI 2 « mini » = 28 px ; Element Plus « small » = 24 px. Tous les champs `size="small"`
+     (ex-`mini`) perdaient 4 px de haut, y compris le champ de recherche des en-tetes de tableau. */
+  --el-component-size-small: 28px;
+}
+
+/* ...et le texte d'un champ « small » commence a 15 px du bord, comme dans Element UI 2 (7 px
+   dans Element Plus). */
+.el-input--small .el-input__wrapper {
+  padding: 1px 15px;
+}
+
+/*
+ * Element UI 2 rendait `el-input` en `inline-block` ; Element Plus en fait un **bloc flex**. Dans les
+ * en-tetes de tableau — un conteneur de boutons suivi d'un champ de recherche — le champ passait donc
+ * a la ligne, sous le bouton « + » au lieu de rester a cote.
+ */
+.el-input {
+  display: inline-flex;
+}
+
+/*
+ * En-tete de tableau. Element UI 2 portait des regles de mise en page que la feuille de theme
+ * emportait avec elle :
+ *  - le `div` qui precede le champ de recherche est en ligne et son bloc fait 40 px de haut : c'est
+ *    ce qui garde le bouton « + » et le champ cote a cote et donne a l'en-tete sa hauteur ;
+ *  - le `cell` d'un `th` occupe la largeur complete de la colonne (`width: 100%` en `border-box`)
+ *    et ne revient pas a la ligne.
+ * Le selecteur du `div` ne vise que les **enfants directs** du `cell` : applique a tous les `div`
+ * d'un `th`, il tombait aussi sur `.el-input` (un `div` en Element Plus) et lui imposait
+ * `inline-block` + `line-height: 40px`, ce qui portait le champ a 58 px de haut.
+ */
+.el-table th .cell > div:not(.el-input) {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.el-table th > .cell {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+/* En Element Plus le champ est un `inline-flex` de 28 px : aligne sur la ligne de base, il
+ * descendait sous le bouton et poussait l'en-tete a 70 px. Centre, il reprend la place de la
+ * production (80 px du haut, 150 x 28). */
+
+/*
+ * Corps du tableau : le `size="small"` d'Element Plus (4 px de padding vertical, `cell` a 8 px) a
+ * remplace le « mini » d'Element UI 2 (6 px, `cell` a 10 px, en-tete en 700). Les lignes faisaient
+ * 33 px au lieu de 41 et les en-tetes n'etaient plus en gras.
+ */
+.el-table--small td.el-table__cell {
+  padding: 6px 0;
+}
+
+.el-table .cell {
+  padding: 0 10px;
+  line-height: 23px;
+}
+
+.el-table th.el-table__cell > .cell {
+  font-weight: 700;
+}
+
+/*
+ * Boutons « small » : Element UI 2 « mini » = 28 px de haut, padding 7 px / 15 px. Element Plus
+ * « small » = 24 px, 5 px / 11 px : les boutons d'action d'un tableau faisaient 36 x 24 au lieu de
+ * 44 x 28. (`mini` a disparu d'Element Plus, il a ete converti en `small` partout.)
+ */
+.el-button--small {
+  --el-button-size: 28px;
+  padding: 7px 15px;
+}
+
+/* En production, le bouton « recharger » et le champ de recherche d'un en-tete de tableau sont
+ * separes de 10 px (un espace de texte entre les deux blocs en ligne) ; sans marge, ils se touchent.
+ * Les boutons ronds de ces en-tetes font aussi 28 px (mini d'Element UI 2), pas 24. */
+.el-table th .searchfield {
+  margin-left: 10px;
+  /* Element UI 2 donnait 10 px de padding lateral au `div.el-input` de l'en-tete (la regle
+     ci-dessus) ; en Element Plus le champ est un bloc flex, donc le rembourrage se pose ici pour
+     que le texte commence au meme endroit (26 px du bord, wrapper de 130 px comme en production). */
+  padding-left: 10px;
+  padding-right: 10px;
+  /* Aligne sur la ligne de base, ce champ de 28 px descendait sous le bouton « + » et portait
+     l'en-tete a 70 px ; centre, il reprend la position de la production (80 px du haut). */
+  vertical-align: middle;
+}
+
+.el-table th .el-button.is-circle {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+/* Les champs prennent toute la largeur de leur conteneur, comme avec Element UI 2. */
+.el-form-item__content .el-input,
+.el-form-item__content .el-select,
+.el-form-item__content .el-textarea {
+  width: 100%;
+}
+
+/* Element UI 2 : un `el-form-item` occupait toute la largeur disponible. Element Plus le rend
+ * `display: flex`, donc place dans un `el-row` (lui aussi flex) il se retrecit a la largeur de son
+ * contenu : dans la fenetre « User Form », le champ Login mesurait 164 px au lieu de 540, et la
+ * fenetre debordait de 280 px en hauteur. */
+.el-row > .el-form-item,
+.el-col > .el-form-item {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Un `el-card` enfant direct d'un `el-row` se reduisait a la largeur de son contenu : `el-row` est un
+ * conteneur flex, donc la carte devenait un element flex de la largeur de son texte. Les cartes de
+ * description des editeurs d'application (« Displays a collection stored in elastic search. »)
+ * s'affichaient dans un timbre-poste de 240 px, avec une barre de defilement interne. */
+/* Cible les seules cartes de description des editeurs (`.transition-box`) : appliquee a tout
+ * `el-row > .el-card`, cette regle ecrasait aussi les cartes de la page d'accueil (plan du site),
+ * qui s'affichaient empilees sur toute la largeur au lieu de tenir cote a cote en 126 px. */
+.transition-box > .el-card {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Les cartes de description (`.transition-box`) placent une icone dans un `el-col` de 4 et le texte
+ * dans un `el-col` de 20, a l'interieur du `el-card__body`. Element UI 2 faisait flotter ces
+ * colonnes ; celles d'Element Plus ne s'alignent que dans un conteneur flex, donc l'icone passait
+ * au-dessus du texte et la carte debordait (barre de defilement interne). */
+.transition-box > .el-card > .el-card__body {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 20px;
+}
+
+/* Pied de dialogue : boutons de 40 px comme Element UI 2 (Element Plus les rend a 32 px), avec le
+ * rembourrage d'origine — `12px 23px` elargissait chaque bouton de 6 px (Cancel 95 px au lieu de
+ * 89, mesure sur « User Form »). */
+.el-dialog__footer .el-button {
+  min-height: 40px;
+  padding: 12px 20px;
+}
+
+/* Element UI 2 fixait la hauteur de ligne d'un `el-form-item` a 40 px (label et contenu) ; Element
+ * Plus la laisse a 32 px, et surtout rend le contenu **flex** : `line-height` n'y cree aucune ligne,
+ * la hauteur retombait donc a celle du champ (28 px). Chaque ligne du dialogue « User Form » se
+ * tassait de 9 px et la fenetre mesurait 918 px contre 947 en production. On rend au contenu sa
+ * hauteur de ligne et on y centre le champ, comme la ligne de 40 px d'Element UI 2 le faisait. */
+.el-form-item__label {
+  line-height: 40px;
+}
+
+.el-dialog .el-form-item__content {
+  min-height: 40px;
+  align-items: center;
+}
+
+/*
+ * Boutons radio « small » (ex-`mini`) : Element UI 2 en faisait des boutons de 28 px avec 7 px / 15 px
+ * de padding ; Element Plus en fait 22 px (5 px / 11 px). Dans l'en-tete, le groupe Absolute/Relative
+ * faisait donc 6 px de moins que le selecteur de dates et descendait sous lui.
+ */
+.el-radio-button--small .el-radio-button__inner {
+  padding: 7px 15px;
+  height: 28px;
+}
+
+/*
+ * Selecteur de temps de l'en-tete : le groupe radio s'aligne sur la ligne de base, donc ses boutons
+ * de 28 px restaient 1 px au-dessus du champ (16 contre 17, mesure sur « Modules > Calls »). Le
+ * champ portait par ailleurs un `style="top:1px"` herite d'Element UI 2, retire de `Main.vue` :
+ * avec `vertical-align: middle` et 1 px de decalage, le champ, le bouton « Last 4 h » et le groupe
+ * Absolute/Relative sont tous a 17 px du haut pour 28 px de haut, comme en production.
+ */
+.time-selector-row .el-radio-group {
+  vertical-align: middle;
+  position: relative;
+  top: 1px;
+}
+
+/* En production, seule la fenetre « User Form » centre son titre et ses boutons (Element UI 2 lui
+   applique `el-dialog--center`) ; les fenetres de configuration gardent le titre a gauche. Une regle
+   globale centrait tout, y compris « Modify Application », qui doit rester aligne a gauche. */
+.dialog-user .el-dialog__header,
+.dialog-user .el-dialog__title {
+  text-align: center;
+}
+
+/* Element UI 2 affichait les deux panneaux d'un `<el-transfer>` cote a cote. En Element Plus les
+ * panneaux sont des `inline-block` separes par un bloc de boutons : des que la largeur manque de
+ * quelques pixels ils passent a la ligne, et la fenetre gagne 290 px de hauteur (visible dans
+ * « User Form », section Privileges). */
+.el-transfer {
+  display: flex;
+  align-items: flex-start;
+}
+
+.el-transfer__buttons {
+  flex: 0 0 auto;
+}
+
+.el-transfer-panel {
+  flex: 0 0 250px;
+}
+
+/* La croix de fermeture d'Element UI 2 est un glyphe de 16 px, celle d'Element Plus un SVG de 24. */
+.el-dialog__headerbtn .el-dialog__close {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}

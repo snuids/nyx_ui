@@ -2,7 +2,7 @@
   <el-dialog
     width="90%"
     :title="isAdd?$t('configdetails.create_application'):$t('configdetails.modify_application')"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     append-to-body
@@ -20,7 +20,7 @@
                     :fetch-suggestions="categorySuggestion"
                     :placeholder="$t('configdetails.enter_category')"
                     @select="handleSelect"
-                    size="mini"
+                    size="small"
                     style="width:100%"
                   ></el-autocomplete>
                 </el-form-item>
@@ -33,14 +33,14 @@
                     :fetch-suggestions="subcategorySuggestion"
                     :placeholder="$t('configdetails.enter_subcategory')"
                     @select="handleSelect"
-                    size="mini"
+                    size="small"
                     style="width:100%"
                   ></el-autocomplete>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item :label="$t('configdetails.title')" :label-width="formLabelWidth">
-                  <el-input size="mini" v-model="curConfig.title" autocomplete="off"></el-input>
+                  <el-input size="small" v-model="curConfig.title" autocomplete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -48,7 +48,7 @@
               <el-col :span="8">
                 <el-form-item :label="$t('configdetails.type')" :label-width="formLabelWidth" style="text-align: left;">
                   <el-select
-                    size="mini"
+                    size="small"
                     @change="typeChanged"
                     v-model="curConfig.type"
                     :placeholder="$t('configdetails.select_type')"
@@ -73,7 +73,7 @@
                   <el-input-number
                     style="width:100%"
                     :min="1"
-                    size="mini"
+                    size="small"
                     v-model="curConfig.order"
                     autocomplete="off"
                   ></el-input-number>
@@ -81,7 +81,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item :label="$t('configdetails.icon')" :label-width="formLabelWidth">
-                  <IconPicker v-model="curConfig.icon" size="mini" :icon-preview="true" :preview-scale="2" />
+                  <IconPicker v-model="curConfig.icon" size="small" :icon-preview="true" :preview-scale="2" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -269,23 +269,25 @@
                     <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
+                  <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
+                       reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
                   <el-row>
-                    <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
-                  </el-row>
-
-                  <el-row>
-                    <el-select
-                      size="mini"
-                      v-model="curConfig.timeSelectorType"
-                      :placeholder="$t('configdetails.select_type')"
-                      @change="timeSelectorTypeChange"
-                    >
-                      <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
-                      <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
-                      <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
-                      <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
-                      <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
-                    </el-select>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                      <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
+                      <el-select
+                        size="small"
+                        style="width:180px;"
+                        v-model="curConfig.timeSelectorType"
+                        :placeholder="$t('configdetails.select_type')"
+                        @change="timeSelectorTypeChange"
+                      >
+                        <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                        <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                        <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                        <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                        <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
+                      </el-select>
+                    </div>
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -312,24 +314,26 @@
               :label="$t('configdetails.url')"
               :label-width="formLabelWidth"
             >
-              <el-input size="mini" v-model="curConfig.config.url" autocomplete="off"></el-input>
+              <el-input size="small" v-model="curConfig.config.url" autocomplete="off"></el-input>
+              <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
+                   reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
               <el-row>
-                <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
-              </el-row>
-
-              <el-row>
-                <el-select
-                  size="mini"
-                  v-model="curConfig.timeSelectorType"
-                  :placeholder="$t('configdetails.select_type')"
-                  @change="timeSelectorTypeChange"
-                >
-                  <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
-                  <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
-                  <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
-                  <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
-                  <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
-                </el-select>
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
+                  <el-select
+                    size="small"
+                    style="width:180px;"
+                    v-model="curConfig.timeSelectorType"
+                    :placeholder="$t('configdetails.select_type')"
+                    @change="timeSelectorTypeChange"
+                  >
+                    <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                    <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                    <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                    <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                    <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
+                  </el-select>
+                </div>
               </el-row>
             </el-form-item>
 
@@ -341,7 +345,7 @@
             >
               <el-select
                 v-model="curConfig.config.controller"
-                size="mini"
+                size="small"
                 filterable
                 allow-create
                 clearable
@@ -370,7 +374,7 @@
                 </el-option-group>
               </el-select>
               <div class="controller-help">
-                <i class="el-icon-info"></i>
+                <el-icon><component :is="$icons.InfoFilled" /></el-icon>
                 <span>{{ selectedControllerHelp }}</span>
               </div>
             </el-form-item>
@@ -380,7 +384,7 @@
               :label-width="formLabelWidth"
             >
               <el-input
-                size="mini"
+                size="small"
                 v-model="curConfig.config.controllerparameters"
                 autocomplete="off"
               ></el-input>
@@ -437,23 +441,25 @@
                     <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
+                  <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
+                       reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
                   <el-row>
-                    <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
-                  </el-row>
-
-                  <el-row>
-                    <el-select
-                      size="mini"
-                      v-model="curConfig.timeSelectorType"
-                      :placeholder="$t('configdetails.select_type')"
-                      @change="timeSelectorTypeChange"
-                    >
-                      <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
-                      <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
-                      <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
-                      <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
-                      <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
-                    </el-select>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                      <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
+                      <el-select
+                        size="small"
+                        style="width:180px;"
+                        v-model="curConfig.timeSelectorType"
+                        :placeholder="$t('configdetails.select_type')"
+                        @change="timeSelectorTypeChange"
+                      >
+                        <el-option :label="$t('configdetails.time_type_free')" value="classic"></el-option>
+                        <el-option :label="$t('configdetails.time_type_day')" value="day"></el-option>
+                        <el-option :label="$t('configdetails.time_type_month')" value="month"></el-option>
+                        <el-option :label="$t('configdetails.time_type_week')" value="week"></el-option>
+                        <el-option :label="$t('configdetails.time_type_year')" value="year"></el-option>
+                      </el-select>
+                    </div>
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -476,7 +482,7 @@
                   <el-col :span="6">
                     <el-form-item :label="$t('configdetails.database_type')" :label-width="formLabelWidth">
                       <el-select
-                        size="mini"
+                        size="small"
                         v-model="curConfig.config.databaseType"
                         :placeholder="$t('configdetails.select_db_type')"
                         style="width: 100%;"
@@ -492,13 +498,13 @@
 
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.database')" :label-width="formLabelWidth">
-                    <el-input   size="mini" v-model="curConfig.config.database" :placeholder="$t('configdetails.database_name_placeholder')" autocomplete="off"></el-input>
+                    <el-input   size="small" v-model="curConfig.config.database" :placeholder="$t('configdetails.database_name_placeholder')" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>        
                 
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.index_table')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.index" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.index" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 
@@ -512,14 +518,14 @@
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
-                    <el-input size="mini" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.doc_type" autocomplete="off"></el-input>
                   </el-form-item>
                   <el-form-item
                     :label="$t('configdetails.pkey')"
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'pgsql-generic-table')"
                   >
-                    <el-input size="mini" v-model="curConfig.config.pkey" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.pkey" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -528,7 +534,7 @@
                     :label-width="formLabelWidth"
                     v-if="curConfig.mapChecked"
                   >
-                    <el-input size="mini" v-model="curConfig.config.mapfield" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.mapfield" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -536,17 +542,17 @@
               <el-row>
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.sort')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.sort_column" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.sort_column" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.order')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.sort_order" :placeholder="$t('configdetails.order_placeholder')" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.sort_order" :placeholder="$t('configdetails.order_placeholder')" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col> 
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.time_field')" :label-width="formLabelWidth">
-                    <el-input size="mini" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.timefield" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                        
@@ -557,7 +563,7 @@
                   <el-form-item :label="$t('configdetails.sql')" :label-width="formLabelWidth">
                     <el-input
                       :placeholder="$t('configdetails.sql_placeholder')"
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.sql"
                       autocomplete="off"
                     ></el-input>
@@ -569,7 +575,7 @@
                   <el-form-item :label="$t('configdetails.editor')" :label-width="formLabelWidth">
                     <el-input
                       :placeholder="$t('configdetails.editor_placeholder')"
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.editorComponent"
                       autocomplete="off"
                     ></el-input>
@@ -581,7 +587,7 @@
                     :label-width="formLabelWidth"
                     v-if="(curConfig.type === 'generic-table')"
                   >
-                    <el-input size="mini" v-model="curConfig.config.orderField" autocomplete="off"></el-input>
+                    <el-input size="small" v-model="curConfig.config.orderField" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -599,7 +605,7 @@
                   <el-form-item :label="$t('configdetails.export')" :label-width="formLabelWidth">
                     <el-input
                       :placeholder="$t('configdetails.export_placeholder')"
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.exportColumns"
                       autocomplete="off"
                     ></el-input>
@@ -608,7 +614,7 @@
                 <el-col :span="6">
                   <el-form-item :label="$t('configdetails.write_privilege')" :label-width="formLabelWidth">
                     <!-- <el-input
-                      size="mini"
+                      size="small"
                       v-model="curConfig.config.writeprivileges"
                       autocomplete="off"
                     ></el-input> -->
@@ -620,7 +626,7 @@
                       allow-create
                       ref="writePrivileges"
                       :placeholder="$t('configdetails.write_privilege_placeholder')"
-                      size="mini"
+                      size="small"
                       style="width:100%;"
                     >
                       <el-option
@@ -635,13 +641,13 @@
               </el-row>
               <el-row>
                 <el-col :span="4">
-                  <el-button size="mini" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
+                  <el-button size="small" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
                 </el-col>
                 <el-col :span="20">
                   <!-- Header dialog -->
                   <el-dialog
                     :title="$t('configdetails.columns')"
-                    :visible.sync="dialogHeaderVisible"
+                    v-model="dialogHeaderVisible"
                     width="30%"
                     append-to-body
                   >
@@ -649,14 +655,14 @@
                       <el-row :gutter="20">
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.field')" :label-width="formLabelWidth">
-                            <el-input size="mini" v-model="currentHeader.field" autocomplete="off"></el-input>
+                            <el-input size="small" v-model="currentHeader.field" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
                       <el-row :gutter="20">
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.title')" :label-width="formLabelWidth">
-                            <el-input size="mini" v-model="currentHeader.title" autocomplete="off"></el-input>
+                            <el-input size="small" v-model="currentHeader.title" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -664,7 +670,7 @@
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.type')" :label-width="formLabelWidth">
                             <el-select
-                              size="mini"
+                              size="small"
                               v-model="currentHeader.type"
                               :placeholder="$t('configdetails.select_type')"
                             >
@@ -682,14 +688,14 @@
                       >
                         <el-col :span="20">
                           <el-form-item :label="$t('configdetails.format')" :label-width="formLabelWidth">
-                            <el-input size="mini" v-model="currentHeader.format" autocomplete="off"></el-input>
+                            <el-input size="small" v-model="currentHeader.format" autocomplete="off"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-row>
                     </el-form>
-                    <span slot="footer" class="dialog-footer">
+                    <template #footer><span class="dialog-footer">
                       <el-button type="primary" @click="dialogHeaderVisible = false">{{ $t('configdetails.close') }}</el-button>
-                    </span>
+                    </span></template>
                   </el-dialog>
 
                   <el-table
@@ -704,35 +710,35 @@
                     <el-table-column prop="type" :label="$t('configdetails.type')"></el-table-column>
                     <el-table-column prop="format" :label="$t('configdetails.format')"></el-table-column>
                     <el-table-column prop="title" :label="$t('configdetails.action')">
-                      <template slot-scope="scope2">
+                      <template #default="scope2">
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           @click="handleEditHeader(scope2.$index, scope2.row)"
-                          icon="el-icon-edit"
+                          :icon="$icons.EditPen"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="danger"
                           @click="handleDeleteHeader(scope2.$index, scope2.row)"
-                          icon="el-icon-delete"
+                          :icon="$icons.Delete"
                         ></el-button>
 
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveHeader(scope2.$index, scope2.row,false)"
-                          icon="el-icon-arrow-down"
+                          :icon="$icons.ArrowDown"
                           v-if="scope2.$index<curConfig.config.headercolumns.length-1"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveHeader(scope2.$index, scope2.row,true)"
-                          icon="el-icon-arrow-up"
+                          :icon="$icons.ArrowUp"
                           v-if="scope2.$index>0"
                         ></el-button>
                       </template>
@@ -844,7 +850,7 @@
             <div>
               <el-row>
                 <el-col :span="4">
-                  <el-button size="mini" @click="handleAddQueryFilterField()">{{ $t('cfg.add_field') }}</el-button>
+                  <el-button size="small" @click="handleAddQueryFilterField()">{{ $t('cfg.add_field') }}</el-button>
                 </el-col>
                 <el-col :span="20">
                   <QueryFilterEditor
@@ -865,35 +871,35 @@
                     <el-table-column prop="type" label="Type"></el-table-column>
                     <el-table-column prop="default" label="Default"></el-table-column>
                     <el-table-column prop="title" label="Action">
-                      <template slot-scope="scope2">
+                      <template #default="scope2">
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           @click="handleEditQueryFilterField(scope2.$index, scope2.row)"
-                          icon="el-icon-edit"
+                          :icon="$icons.EditPen"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="danger"
                           @click="handleDeleteQueryFilter(scope2.$index, scope2.row)"
-                          icon="el-icon-delete"
+                          :icon="$icons.Delete"
                         ></el-button>
 
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveQueryFilter(scope2.$index, scope2.row,false)"
-                          icon="el-icon-arrow-down"
+                          :icon="$icons.ArrowDown"
                           v-if="scope2.$index<curConfig.config.queryfilters.length-1"
                         ></el-button>
                         <el-button
-                          size="mini"
+                          size="small"
                           circle
                           type="primary"
                           @click="handleMoveQueryFilter(scope2.$index, scope2.row,true)"
-                          icon="el-icon-arrow-up"
+                          :icon="$icons.ArrowUp"
                           v-if="scope2.$index>0"
                         ></el-button>
                       </template>
@@ -908,31 +914,31 @@
         <el-tab-pane :label="$t('generictable.new')" key="New" name="New" v-if="!isAdd">
           <el-card>
             <editor
-              v-model="strNewRec"
+              v-model:value="strNewRec"
               id="test"
               @init="editorInit"
               lang="yaml"
               theme="chrome"
-              width="99%"
-              style="border: solid 1px #c0c4cc;"
-              height="600"
+              style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
             ></editor>
             <div>&nbsp;</div>
           </el-card>
         </el-tab-pane>
       </el-tabs>
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose');">{{ $t('configdetails.cancel') }}</el-button>
       <el-button
         :disabled="(JSON.stringify(curConfig)==JSON.stringify(orgConfig._source)) && (strNewRec==strOrgRec)"
         type="primary"
         @click="saveRecord()"
       >{{ $t('configdetails.confirm') }}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
+import { VAceEditor } from "vue3-ace-editor";
 import freetextdetails from "@/components/FreeTextDetails";
 import iconpicker from "@/components/IconPicker";
 
@@ -951,16 +957,16 @@ import Vue from "vue";
 import rison from "rison";
 import YAML from "js-yaml";
 
-Vue.component("FreeTextDetails", freetextdetails);
-Vue.component("IconPicker", iconpicker);
+registerComponent("FreeTextDetails", freetextdetails);
+registerComponent("IconPicker", iconpicker);
 
-Vue.component("QueryFilterEditor", queryfiltereditor);
-Vue.component("ESTableEditor", estableeditor);
-Vue.component("FormEditor", formeditor);
-Vue.component("KibanaEditor", kibanaeditor);
-Vue.component("GrafanaEditor", grafanaeditor);
-Vue.component("UploadEditor", uploadeditor);
-Vue.component("FileSystemEditor", filesystemeditor);
+registerComponent("QueryFilterEditor", queryfiltereditor);
+registerComponent("ESTableEditor", estableeditor);
+registerComponent("FormEditor", formeditor);
+registerComponent("KibanaEditor", kibanaeditor);
+registerComponent("GrafanaEditor", grafanaeditor);
+registerComponent("UploadEditor", uploadeditor);
+registerComponent("FileSystemEditor", filesystemeditor);
 
 
 function transformObject(obj) {
@@ -993,7 +999,7 @@ export default {
     );
   },
   components: {
-    editor: require("vue2-ace-editor")
+    editor: VAceEditor
   },
   computed: {
     curConfigIn: function() {
@@ -1105,25 +1111,25 @@ export default {
       cb(results);
     },
     editorInitRO: function(editor) {
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
 
       editor.setReadOnly(true);
     },
     editorInit: function() {
       // eslint-disable-line
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
     handleMoveHeader(index, row, down) {
       this.curConfig.config.headercolumns.splice(index, 1);

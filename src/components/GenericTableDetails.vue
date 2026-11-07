@@ -2,7 +2,7 @@
   <el-dialog
     width="80%"
     :title="$t('generictable.modifyrecord')"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="table-details"
@@ -22,7 +22,7 @@
                   v-if="typeof field.value == 'string'"
                 >
                   <el-input
-                    size="mini"
+                    size="small"
                     v-model="field.value"
                     autocomplete="off"
                     @blur="valueChanged(field)"
@@ -31,7 +31,7 @@
                 <el-input-number
                   v-if="typeof field.value == 'number'"
                   @change="valueChanged(field)"
-                  size="mini"
+                  size="small"
                   v-model="field.value"
                   autocomplete="off"
                 >{{field.key}}</el-input-number>
@@ -47,14 +47,12 @@
         v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
       >
         <editor
-          v-model="strOrgRec"
+          v-model:value="strOrgRec"
           id="test"
           @init="editorInitRO"
           lang="yaml"
           theme="chrome"
-          width="99%"
-          style="border: solid 1px #c0c4cc;"
-          height="600"
+          style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
         ></editor>
         <div>&nbsp;</div>
       </el-tab-pane>
@@ -65,19 +63,17 @@
         v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
       >
         <editor
-          v-model="strNewRec"
+          v-model:value="strNewRec"
           id="test"
           @init="editorInit"
           lang="yaml"
           theme="chrome"
-          width="99%"
-          style="border: solid 1px #c0c4cc;"
-          height="600"
+          style="border: solid 1px #c0c4cc; height: 600px; width: 99%;"
         ></editor>
         <div>&nbsp;</div>
       </el-tab-pane>
     </el-tabs>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
       <el-button
         v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
@@ -85,11 +81,12 @@
         :disabled="!recchanged"
         @click="saveRecord()"
       >{{this.$t("buttons.confirm")}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 
 <script>
+import { VAceEditor } from "vue3-ace-editor";
 import YAML from "js-yaml";
 
 export default {
@@ -158,9 +155,7 @@ export default {
   mounted: function() {
     this.prepareData();
   },
-  components: {
-    editor: require("vue2-ace-editor")
-  },
+  components: { editor: VAceEditor },
   methods: {
     closeDialog: function() {
       this.$emit("dialogclose");
@@ -181,25 +176,25 @@ export default {
       this.strOrgRec = YAML.safeDump(this.orgRec, 10);
     },
     editorInitRO: function(editor) {
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
 
       editor.setReadOnly(true);
     },
     editorInit: function() {
       // eslint-disable-line
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
     valueChanged: function(item) {
       this.newRec._source[item.key] = item.value;

@@ -2,7 +2,7 @@
   <el-dialog
     width="400px"
     :title="title"
-    :visible.sync="visible"
+    v-model="visible"
     :before-close="closeDialog"
     append-to-body
     id="item-editor"
@@ -14,7 +14,7 @@
   </el-row>
   <el-row>
     <el-input
-          size="mini"
+          size="small"
           ref="text"
           :placeholder="$t('cfg.text')"
           v-model="curItem.linktext"
@@ -25,7 +25,7 @@
   </el-row>
   <el-row>
     <el-input
-          size="mini"
+          size="small"
           ref="type"
           placeholder="primary / success / warning / danger / info / text"
           v-model="curItem.linkbuttontype"
@@ -36,7 +36,7 @@
   </el-row>
   <el-row>
     <el-input
-          size="mini"
+          size="small"
           ref="icon"
           placeholder="el-icon-..."
           v-model="curItem.linkbuttonicon"

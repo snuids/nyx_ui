@@ -1,4 +1,4 @@
-<template slot="items">
+<template>
   <div>
     <h2 class="form_title">{{computeTranslatedText(config.config.formtitle,$store.getters.creds.user.language)}}</h2>
     <div style="text-align:left;width:100%">
@@ -25,7 +25,7 @@
               v-else-if="item.type =='datetime'"
             >
               <el-date-picker
-                size="mini"
+                size="small"
                 v-model="item.value"
                 type="datetime"
                 :placeholder="$t('ui.pick_datetime')"
@@ -73,11 +73,8 @@
   
 <script>
 import moment from "moment";
-import Vue from "vue";
 import {computeTranslatedText} from '../globalfunctions'
 
-import VueGeolocation from "vue-browser-geolocation";
-Vue.use(VueGeolocation);
 
 export default {
   name: "Form",
@@ -156,6 +153,9 @@ export default {
           this.commitunderway = false;
         })
         .catch(error => {
+          // Sans cette remise a zero, le bouton restait bloque sur son spinner des que la
+          // geolocalisation etait refusee (ou indisponible) : l'utilisateur voyait « send plante ».
+          this.commitunderway = false;
           alert(error);
         });
     }

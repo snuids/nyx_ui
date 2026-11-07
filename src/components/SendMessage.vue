@@ -2,9 +2,9 @@
   <!--MAIN DIALOG -->
   <div style="text-align:left">
     <el-card class="maincard">
-      <div slot="header" class="clearfix">
+      <template #header><div class="clearfix">
         <h3>{{$t('sendmessage.send_message')}}</h3>
-      </div>
+      </div></template>
       <el-form label-width="120px">
         <el-row>
           <el-col :span="8">
@@ -19,7 +19,7 @@
                 :placeholder="this.$t('generic.pleaseinput')"
                 v-model="destination"
                 label="destination"
-                size="mini"
+                size="small"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -31,7 +31,7 @@
           <el-button
             style="float: right;"
             type="primary"
-            size="mini"
+            size="small"
             @click="sendMessage()"
             :disabled="message.length==0 || destination.length==0"
           >{{$t('sendmessage.send_message')}}</el-button>
@@ -88,7 +88,7 @@ export default {
   created: function() {},
 
   mounted: function() {},
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 

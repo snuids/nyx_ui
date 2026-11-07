@@ -12,7 +12,7 @@
         <el-select
           v-if="queryfilter.type == 'selecter'"
           filterable
-          size="mini"
+          size="small"
           v-model="queryfilter.selected"
           :placeholder="$t('cfg.select_type')"
           :clearable="queryfilter.selected != '*'"
@@ -29,7 +29,7 @@
         <el-select
           v-if="queryfilter.type == 'queryselecter'"
           filterable
-          size="mini"
+          size="small"
           v-model="queryfilter.selected"
           :placeholder="$t('cfg.select_type')"
           :clearable="queryfilter.selected != '*'"
@@ -46,7 +46,7 @@
         <el-input
           @change="refresh()"
           clearable
-          size="mini"
+          size="small"
           style="width:170px"
           v-if="queryfilter.type == 'text' || queryfilter.type == 'text_strict' || queryfilter.type == 'globaltext'"
           :placeholder="$t('generic.pleaseinput')"
@@ -55,7 +55,7 @@
       </el-col>
     </div>
     <div class="refresh-button" v-if="config.type != 'kibana'">
-      <!-- <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">refresh</el-button> -->
+      <!-- <el-button @click="refresh()" style="width:90%;" size="small" type="primary">refresh</el-button> -->
       <el-tooltip
         class="item"
         effect="light"
@@ -65,11 +65,11 @@
       >
         <el-button
           circle
-          size="mini"
+          size="small"
           @click="refresh()"
           class="regreshbutton"
           plain
-          icon="el-icon-refresh"
+          :icon="$icons.Refresh"
         ></el-button>
       </el-tooltip>
     </div>
@@ -85,12 +85,12 @@
               :type="format.type"
               :key="format.value"
               round
-              size="mini"
+              size="small"
               @click="downloadSelection(format.value)"
             >{{format.label}}</el-button>
           </el-row>
         </el-col>
-        <el-button slot="reference" round type="default" icon="el-icon-download" size="mini"></el-button>
+        <template #reference><el-button round type="default" :icon="$icons.Download" size="small"></el-button></template>
       </el-popover>
     </div>
   </el-row>
@@ -390,6 +390,50 @@ export default {
 </script>
 
 <style>
+/* Meme cause que dans `QueryBar` : `el-row` est un conteneur flex en Element Plus, donc les `float`
+   du bandeau et de ses boutons ne s'appliquent plus et tout se replie en colonne. On rétablit le
+   comportement d'Element UI 2 (bloc + clearfix) sur la racine du composant seulement. */
+.query-filter {
+  display: block;
+}
+
+.query-filter::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Les `el-col` d'Element Plus sont des elements flex (`flex: 0 0 33.33%`) : dans un conteneur flex
+   ils s'alignent cote a cote, comme les colonnes flottantes d'Element UI 2. */
+.query-filter .select-bar-container {
+  display: flex;
+  align-items: center;
+}
+
+.query-filter .select-bar-container > .el-col {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  /* Un peu d'air entre le libelle et le selecteur : ils se touchaient dans le bandeau des lambdas. */
+  gap: 10px;
+  /* ... et entre le selecteur et le libelle de la colonne suivante : les colonnes de 286 px etaient
+     remplies de bout en bout, le selecteur touchait le libelle d'a cote. 32 px reproduisent l'espace
+     visible en production (selecteur de 197 px dans une colonne de 286). */
+  padding-right: 32px;
+}
+
+.query-filter .select-bar-container > .el-col:last-child {
+  padding-right: 0;
+}
+
+/* Le libelle reste en ligne devant le champ ; le selecteur occupe la place restante de la colonne
+   (en production il mesurait 197 px pour une colonne de 286). */
+.query-filter .select-bar-container .el-select {
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
 .query-filter .select-bar-container {
   width: -webkit-calc(100% - 205px);
   width: -moz-calc(100% - 205px);

@@ -2,7 +2,7 @@
   <el-dialog
     width="75%"
     :title="title"
-    :visible.sync="visible"
+    v-model="visible"
     :before-close="closeDialog"
     append-to-body
   >
@@ -10,14 +10,14 @@
       <el-row :gutter="20">
         <el-col :span="20">
           <el-form-item :label="$t('cfg.field')" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="curField.field" autocomplete="off"></el-input>
+            <el-input size="small" v-model="curField.field" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="20">
           <el-form-item :label="$t('cfg.title')" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="curField.title" autocomplete="off"></el-input>
+            <el-input size="small" v-model="curField.title" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -25,7 +25,7 @@
         <el-col :span="10">
           <el-form-item :label="$t('cfg.type')" :label-width="formLabelWidth">
             <el-select
-              size="mini"
+              size="small"
               v-model="curField.type"
               :placeholder="$t('cfg.select_type')"
               @change="changeType"
@@ -45,7 +45,7 @@
             :label-width="formLabelWidth"
             v-if="selectedType && selectedType.subTypes"
           >
-            <el-select size="mini" v-model="curField.subType" :placeholder="$t('cfg.select_subtype')">
+            <el-select size="small" v-model="curField.subType" :placeholder="$t('cfg.select_subtype')">
               <el-option
                 v-for="(subType, index) in selectedType.subTypes"
                 :label="subType.label"
@@ -60,7 +60,7 @@
       <el-row :gutter="20" v-if="curField.type=='string' || curField.type=='number'">
         <el-col :span="20">
           <el-form-item :label="$t('cfg.default')" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="curField.default" autocomplete="off"></el-input>
+            <el-input size="small" v-model="curField.default" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -88,8 +88,8 @@
               v-if="inputVisible"
               v-model="inputValue"
               ref="saveTagInput"
-              size="mini"
-              @keyup.enter.native="handleInputConfirm"
+              size="small"
+              @keyup.enter="handleInputConfirm"
               @blur="handleInputConfirm"
             ></el-input>
             <el-button v-else class="button-new-tag" size="small" @click="showInput">+ Output</el-button>
@@ -106,7 +106,7 @@
       <el-row :gutter="20">
         <el-col :span="20">
           <el-form-item :label="$t('cfg.color')" :label-width="formLabelWidth">
-            <el-input size="mini" v-model="curField.color" autocomplete="off"></el-input>
+            <el-input size="small" v-model="curField.color" autocomplete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -118,9 +118,9 @@
         </el-col>
       </el-row>
     </el-form>
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button type="primary" @click="closeDialog()">OK</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 

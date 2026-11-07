@@ -9,11 +9,10 @@
           @input="handleInput"
           autocomplete="off"
         >
-          <el-button 
-            slot="append" 
-            icon="el-icon-search" 
-            @click="dialogVisible = true"
-          ></el-button>
+          <template #append><el-button 
+            
+            :icon="$icons.Search" 
+            @click="dialogVisible = true"></el-button></template>
         </el-input>
       </el-col>
       <el-col :span="6" v-if="iconPreview">
@@ -26,7 +25,7 @@
     <!-- Icon Picker Dialog -->
     <el-dialog
       :title="$t('iconpicker.title')"
-      :visible.sync="dialogVisible"
+      v-model="dialogVisible"
       width="70%"
       append-to-body
       class="icon-picker-dialog"
@@ -36,7 +35,7 @@
         <el-input
           v-model="searchQuery"
           :placeholder="$t('iconpicker.search_placeholder')"
-          prefix-icon="el-icon-search"
+          prefix-:icon="$icons.Search"
           size="small"
           clearable
           style="margin-bottom: 20px;"
@@ -76,7 +75,7 @@
         <el-pagination
           v-if="filteredIcons.length > pageSize"
           @current-change="handlePageChange"
-          :current-page.sync="currentPage"
+          v-model:current-page="currentPage"
           :page-size="pageSize"
           layout="prev, pager, next, total"
           :total="filteredIcons.length"
@@ -84,10 +83,10 @@
         ></el-pagination>
       </div>
 
-      <span slot="footer" class="dialog-footer">
+      <template #footer><span class="dialog-footer">
         <el-button @click="dialogVisible = false" size="small">{{ $t('iconpicker.cancel') }}</el-button>
         <el-button type="primary" @click="confirmSelection" size="small">{{ $t('iconpicker.confirm') }}</el-button>
-      </span>
+      </span></template>
     </el-dialog>
   </div>
 </template>
@@ -95,7 +94,15 @@
 <script>
 export default {
   name: "IconPicker",
+  // Vue 3 binds `v-model` to `modelValue` / `update:modelValue`; the call sites written for Vue 2
+  // pass `value` and listen to `input`. Both are accepted and both are emitted: with only the old
+  // pair, the field opened empty and a chosen icon never reached the record — silently.
+  emits: ["update:modelValue", "input", "change"],
   props: {
+    modelValue: {
+      type: String,
+      default: undefined
+    },
     value: {
       type: String,
       default: ""
@@ -124,7 +131,7 @@ export default {
       categoryFilter: "all",
       currentPage: 1,
       pageSize: 48,
-      selectedIcon: this.value,
+      selectedIcon: this.modelValue !== undefined ? this.modelValue : this.value,
       // All available icons from vue-awesome
       allIcons: [
         "ad", "address-book", "address-card", "adjust", "air-freshener", "align-center", 
@@ -481,6 +488,9 @@ export default {
     }
   },
   watch: {
+    modelValue(newVal) {
+      this.selectedIcon = newVal;
+    },
     value(newVal) {
       this.selectedIcon = newVal;
     },
@@ -492,16 +502,19 @@ export default {
     }
   },
   methods: {
-    handleInput(value) {
+    emitValue(value) {
+      this.$emit("update:modelValue", value);
       this.$emit("input", value);
       this.$emit("change", value);
+    },
+    handleInput(value) {
+      this.emitValue(value);
     },
     selectIcon(icon) {
       this.selectedIcon = icon;
     },
     confirmSelection() {
-      this.$emit("input", this.selectedIcon);
-      this.$emit("change", this.selectedIcon);
+      this.emitValue(this.selectedIcon);
       this.dialogVisible = false;
     },
     handlePageChange(page) {

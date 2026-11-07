@@ -5,46 +5,51 @@
       <el-input
         :placeholder="this.$t('querybar.default')"
         class="query-input"
-        size="mini"
+        size="small"
         v-model="query"
         @change="refresh()"
       >
-        <i slot="prefix" class="prefix-icon el-input__icon el-icon-arrow-right"></i>
-        <el-popover
-          slot="suffix"
-          placement="bottom-start"
-          width="150"
-          trigger="hover"
-          v-if="config && config.downloadChecked"
-          :open-delay="1000"
-        >
-          <el-col>
-            <el-row class="popover-title">
-              <span>{{this.$t('querybar.download')}}</span>
-            </el-row>
-            <el-row class="button-dl">
+        <template #prefix><el-icon class="prefix-icon"><component :is="$icons.ArrowRight" /></el-icon></template>
+        <!-- Le bouton de telechargement est dans le champ, colle a son bord droit comme en
+             production (20 x 28 px, a 5 px du bord), et non pose a cote : a cote, il flottait entre
+             le champ et le bouton « Refresh ». -->
+        <template #suffix>
+          <el-popover
+            placement="bottom-start"
+            width="150"
+            trigger="hover"
+            v-if="config && config.downloadChecked"
+            :open-delay="1000"
+          >
+            <el-col>
+              <el-row class="popover-title">
+                <span>{{this.$t('querybar.download')}}</span>
+              </el-row>
+              <el-row class="button-dl">
+                <el-button
+                  v-for="format in exportFormats"
+                  :type="format.type"
+                  :key="format.value"
+                  round
+                  size="small"
+                  @click="downloadSelection(format.value)"
+                >{{format.label}}</el-button>
+              </el-row>
+            </el-col>
+            <template #reference>
               <el-button
-                v-for="format in exportFormats"
-                :type="format.type"
-                :key="format.value"
-                round
-                size="mini"
-                @click="downloadSelection(format.value)"
-              >{{format.label}}</el-button>
-            </el-row>
-          </el-col>
-          <el-button
-            class="search-dl-bt"
-            type="text"
-            icon="el-icon-download"
-            slot="reference"
-            size="medium"
-          ></el-button>
-        </el-popover>
+                class="search-dl-bt"
+                link
+                :icon="$icons.Download"
+                size="small"
+              ></el-button>
+            </template>
+          </el-popover>
+        </template>
       </el-input>
     </div>
     <div class="refresh-button" v-if="config.type !='kibana' ">
-      <el-button @click="refresh()" style="width:90%;" size="mini" type="primary">{{this.$t('generic.refresh')}}</el-button>
+      <el-button @click="refresh()" style="width:90%;" size="small" type="primary">{{this.$t('generic.refresh')}}</el-button>
     </div>
   </el-row>
 </template>
@@ -138,11 +143,30 @@ export default {
 </script>
 
 <style>
+/* Element UI 2 rendait `el-row` en `display: block`, et ce bandeau repose sur des `float`
+   (`input-bar` a gauche, `refresh-button` a droite). Element Plus rend `el-row` en flex : les deux
+   blocs devenaient des elements flex et la barre de recherche tombait a 145 px au lieu de 890. */
+.query-bar {
+  display: block;
+}
+
+.query-bar::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
 .query-bar .input-bar {
   width: -webkit-calc(100% - 135px);
   width: -moz-calc(100% - 135px);
   width: calc(100% - 135px);
   float: left;
+}
+
+/* Le bouton de telechargement est revenu dans le champ (slot suffix) : le champ reprend toute la
+   largeur du bandeau, comme la production (913 px pour une barre de 1048). */
+.query-bar .input-bar .query-input {
+  width: 100%;
 }
 
 
@@ -153,19 +177,52 @@ export default {
   float: left;
 }
 
+.query-bar .input-bar-with-kibana .query-input {
+  width: 100%;
+}
+
 .query-bar .refresh-button {
   width: 130px;
   float: right;
 }
 
+/* Bouton de telechargement : 20 x 28 px, colle a 5 px du bord droit du champ, icone bleue de
+   14 px — les mesures de la production (bouton [1101,118,20,28] dans un champ finissant a 1126). */
 .search-dl-bt {
-  height: 100%;
-  margin-right: 1px;
-  padding: 0px !important;
+  --el-button-text-color: var(--el-color-primary);
+  --el-button-hover-text-color: var(--el-color-primary);
+  --el-button-hover-link-text-color: var(--el-color-primary);
+  color: var(--el-color-primary);
+  width: 20px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.search-dl-bt i {
-  font-size: 18px;
+/* `.el-button.is-link` (deux classes) impose `height: auto` : il faut trois classes pour donner au
+   bouton la hauteur du champ et garder l'icone centree. */
+.el-button.search-dl-bt.is-link {
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+}
+
+.search-dl-bt .el-icon {
+  font-size: 14px;
+}
+
+/* Le suffixe d'Element Plus se pose dans le rembourrage du champ : la production laisse 15 px a
+   gauche pour le texte mais 5 px a droite pour l'icone, et le champ reste haut de 28 px (avec 15 px
+   des deux cotes il mesurait 30 px et l'icone tombait a 15 px du bord). */
+/* Trois classes : la regle globale `.el-input--small .el-input__wrapper` (deux classes) est
+   ecrite plus loin dans la feuille compilee et l'emporterait a specificite egale. */
+.query-bar .query-input .el-input__wrapper {
+  padding: 0 5px 0 15px;
 }
 
 .query-input input::placeholder {

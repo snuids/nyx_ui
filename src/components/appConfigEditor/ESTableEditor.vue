@@ -24,9 +24,9 @@
             :disabled="!succesIndexPatternDefinition || currentConfig.config.index==''"
             plain
             :type="succesIndexPatternDefinition && currentConfig.config.index!=''?'primary': ''"
-            icon="el-icon-arrow-right"
+            :icon="$icons.ArrowRight"
             @click="goToStep(2)"
-            size="mini"
+            size="small"
           >{{ $t('cfg.next_step') }}</el-button>
         </el-col>
       </el-row>
@@ -38,15 +38,15 @@
       </el-row>
 
       <el-row>
-        <el-table :data="esMapping" size="mini" style="width: 100%">
+        <el-table :data="esMapping" size="small" style="width: 100%">
           <el-table-column label="id" prop="id">
-            <template slot="header" slot-scope="_scope">
+            <template #header>
               <p
                 v-bind:class="{ 'text-success': succesIndexPatternDefinition }"
                 v-html="helpMessage"
               ></p>
             </template>
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button
                 style="padding: 0px;color: #606266;"
                 @click="setIndex(scope.row.id)"
@@ -67,9 +67,9 @@
             :disabled="!succesIndexPatternDefinition || currentConfig.config.index==''"
             plain
             :type="succesIndexPatternDefinition && currentConfig.config.index!=''?'primary': ''"
-            icon="el-icon-arrow-left"
+            :icon="$icons.ArrowLeft"
             @click="goToStep(1)"
-            size="mini"
+            size="small"
           >{{ $t('cfg.back') }}</el-button>
         </el-col>
       </el-row>
@@ -100,7 +100,7 @@
           <el-select
             v-model="timefieldSelected"
             :placeholder="$t('cfg.select')"
-            size="mini"
+            size="small"
             ref="timeField"
             @change="timeFieldChanged()"
             style="width:100%;"
@@ -118,13 +118,13 @@
             :placeholder="$t('cfg.default_doc')"
             ref="docType"
             type="text"
-            size="mini"
+            size="small"
             autocomplete="off"
             v-model="currentConfig.config.doc_type"
           ></el-input>
         </el-col>
         <el-col :span="6">
-          <el-select size="mini" style="width:100%" v-model="currentConfig.autoRefreshTime" :placeholder="$t('cfg.select')">
+          <el-select size="small" style="width:100%" v-model="currentConfig.autoRefreshTime" :placeholder="$t('cfg.select')">
             <el-option
               v-for="item in timeRefreshOptions"
               :key="item.value"
@@ -142,23 +142,26 @@
               <el-switch v-model="currentConfig.graphicChecked" :active-text="$t('cfg.time_line')"></el-switch>
             </el-row>
             <el-row>
-              <el-col style="width:150px; margin-top:4px;">
+              <!-- Two `el-col` without a `span` take the whole row in Element Plus (`flex: 0 0 100%`),
+                   whatever width the inline style asks for, so the type selector always wrapped under
+                   the switch. One flex line keeps it to its right, where it reads as part of the same
+                   setting — and `Day` was missing from this list while the other editors offer it. -->
+              <div style="display:flex; align-items:center; gap:16px;">
                 <el-switch v-model="currentConfig.timeSelectorChecked" :active-text="$t('cfg.time_selector')"></el-switch>
-              </el-col>
-              <el-col style="width:200px">
                 <el-select
                   v-if="currentConfig.timeSelectorChecked"
-                  style="margin-left:20px;"
-                  size="mini"
+                  style="width:180px;"
+                  size="small"
                   v-model="currentConfig.timeSelectorType"
                   :placeholder="$t('cfg.select_type')"
                 >
                   <el-option :label="$t('cfg.free')" value="classic"></el-option>
+                  <el-option :label="$t('cfg.day')" value="day"></el-option>
                   <el-option :label="$t('cfg.month')" value="month"></el-option>
                   <el-option :label="$t('cfg.week')" value="week"></el-option>
                   <el-option :label="$t('cfg.year')" value="year"></el-option>
                 </el-select>
-              </el-col>
+              </div>
             </el-row>
           </el-card>
         </el-col>
@@ -176,7 +179,7 @@
             @change="selectFieldsToDisplayChanged"
             ref="fieldsToDisplay"
             :placeholder="$t('cfg.field_to_display')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -210,56 +213,59 @@
                 v-model="currentConfig.config.headercolumns"
                 tag="tbody"
                 handle=".handle"
+                item-key="field"
               >
-                <tr v-for="(item, index) in currentConfig.config.headercolumns" :key="index">
-                  <td>{{item.field}}</td>
-                  <td>
-                    <el-input
-                      class="display-name-input"
-                      ref="author"
-                      :placeholder="$t('cfg.name')"
-                      v-model="item.title"
-                      size="mini"
-                    ></el-input>
-                  </td>
-                  <td>{{item.type}}</td>
-                  <td style="width:200px;">
-                    <el-input
-                      v-if="item.type=='date' || item.type=='timestamp'"
-                      class="display-name-input"
-                      ref="author"
-                      placeholder="eg. DD/MM/YYYY HH:mm"
-                      v-model="item.format"
-                      size="mini"
-                    ></el-input>
-                    <el-input
-                      v-else-if="item.type=='long' || item.type=='double'"
-                      class="display-name-input"
-                      ref="author"
-                      placeholder="Numeral.js format"
-                      v-model="item.format"
-                      size="mini"
-                    ></el-input>
-                    <el-select
-                      v-else-if="item.type=='keyword' || item.type=='text'"
-                      v-model="item.format"
-                      filterable
-                      :placeholder="$t('cfg.default')"
-                      size="mini"
-                      style="width:100%;"
-                    >
-                      <el-option :label="$t('cfg.default')" value="default"></el-option>
-                      <el-option :label="$t('cfg.icon')" value="icon"></el-option>
-                      <el-option :label="$t('cfg.link')" value="link"></el-option>
-                    </el-select>
-                  </td>
-                  <td>
-                    <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="mini">{{ $t('cfg.configure') }}</el-button>
-                  </td>
-                  <td>
-                    <i class="el-icon-d-caret handle"></i>
-                  </td>
-                </tr>
+                <template #item="{ element: item, index }">
+                  <tr>
+                    <td>{{item.field}}</td>
+                    <td>
+                      <el-input
+                        class="display-name-input"
+                        ref="author"
+                        :placeholder="$t('cfg.name')"
+                        v-model="item.title"
+                        size="small"
+                      ></el-input>
+                    </td>
+                    <td>{{item.type}}</td>
+                    <td style="width:200px;">
+                      <el-input
+                        v-if="item.type=='date' || item.type=='timestamp'"
+                        class="display-name-input"
+                        ref="author"
+                        placeholder="eg. DD/MM/YYYY HH:mm"
+                        v-model="item.format"
+                        size="small"
+                      ></el-input>
+                      <el-input
+                        v-else-if="item.type=='long' || item.type=='double'"
+                        class="display-name-input"
+                        ref="author"
+                        placeholder="Numeral.js format"
+                        v-model="item.format"
+                        size="small"
+                      ></el-input>
+                      <el-select
+                        v-else-if="item.type=='keyword' || item.type=='text'"
+                        v-model="item.format"
+                        filterable
+                        :placeholder="$t('cfg.default')"
+                        size="small"
+                        style="width:100%;"
+                      >
+                        <el-option :label="$t('cfg.default')" value="default"></el-option>
+                        <el-option :label="$t('cfg.icon')" value="icon"></el-option>
+                        <el-option :label="$t('cfg.link')" value="link"></el-option>
+                      </el-select>
+                    </td>
+                    <td>
+                      <el-button @click="linkEditorVisible=true; selectedItem=item" v-if="item.format=='link'" size="small">{{ $t('cfg.configure') }}</el-button>
+                    </td>
+                    <td>
+                      <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
+                    </td>
+                  </tr>
+                </template>
               </draggable>
             </table>
           </el-card>
@@ -286,7 +292,7 @@
             clearable
             ref="order"
             :placeholder="$t('cfg.sort_field')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -302,7 +308,7 @@
             :placeholder="$t('cfg.filter_query')"
             ref="hiddenQuery"
             type="text"
-            size="mini"
+            size="small"
             autocomplete="off"
             v-model="currentConfig.config.hiddenQuery"
           ></el-input>
@@ -350,7 +356,7 @@
                 <el-button
                   @click="copyFieldsToDisplayToDownload()"
                   type="text"
-                  size="mini"
+                  size="small"
                   style="color: #606266;"
                 >{{ $t('cfg.copy_from_fields') }}</el-button>
               
@@ -363,7 +369,7 @@
                 @change="selectFieldsToDownloadChanged"
                 ref="fieldsToDownload"
                 :placeholder="$t('cfg.field_to_download')"
-                size="mini"
+                size="small"
                 style="width:100%;"
               >
                 <el-option
@@ -390,25 +396,25 @@
                     v-model="currentConfig.config.tableFieldsToDownload"
                     tag="tbody"
                     handle=".handle"
-                  >
-                    <tr
-                      v-for="(item, index) in currentConfig.config.tableFieldsToDownload"
-                      :key="index"
-                    >
-                      <td>{{item.field}}</td>
-                      <td>
-                        <el-input
-                          class="display-name-input"
-                          ref="author2"
-                          :placeholder="$t('cfg.name')"
-                          v-model="item.title"
-                          size="mini"
-                        ></el-input>
-                      </td>
-                      <td>
-                        <i class="el-icon-d-caret handle"></i>
-                      </td>
-                    </tr>
+                    item-key="field"
+              >
+                    <template #item="{ element: item, index }">
+                      <tr>
+                        <td>{{item.field}}</td>
+                        <td>
+                          <el-input
+                            class="display-name-input"
+                            ref="author2"
+                            :placeholder="$t('cfg.name')"
+                            v-model="item.title"
+                            size="small"
+                          ></el-input>
+                        </td>
+                        <td>
+                          <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
+                        </td>
+                      </tr>
+                    </template>
                   </draggable>
                 </table>
               </el-card>
@@ -435,7 +441,7 @@
                 <el-select
                   v-model="currentConfig.config.mapfield"
                   :placeholder="$t('cfg.select')"
-                  size="mini"
+                  size="small"
                   ref="geoField"
                   style="width:90%;"
                 >
@@ -451,7 +457,7 @@
                 <el-input-number
                   :min="1"
                   :max="20"
-                  size="mini"
+                  size="small"
                   ref="zoom"
                   v-model="currentConfig.config.mapzoom"
                   autocomplete="off"
@@ -469,7 +475,7 @@
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="12">
                 <el-input-number
-                  size="mini"
+                  size="small"
                   ref="lat"
                   v-model="currentConfig.config.maplat"
                   autocomplete="off"
@@ -477,7 +483,7 @@
               </el-col>
               <el-col :span="12">
                 <el-input-number
-                  size="mini"
+                  size="small"
                   ref="long"
                   v-model="currentConfig.config.maplong"
                   autocomplete="off"
@@ -504,7 +510,7 @@
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
                 <el-input
-                  size="mini"
+                  size="small"
                   ref:="colorfunc"
                   :placeholder="$t('cfg.fields_used_by_functions_hint')"
                   v-model="currentConfig.config.functionfields"
@@ -521,7 +527,7 @@
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
                 <el-input
-                  size="mini"
+                  size="small"
                   ref:="colorfunc"
                   v-model="currentConfig.config.colorfunction"
                   autocomplete="off"
@@ -538,7 +544,7 @@
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
                 <el-input
-                  size="mini"
+                  size="small"
                   ref:="iconfunc"
                   v-model="currentConfig.config.iconfunction"
                   autocomplete="off"
@@ -564,7 +570,7 @@
             :placeholder="$t('cfg.component_url')"
             ref="specificEditor"
             type="text"
-            size="mini"
+            size="small"
             autocomplete="off"
             v-model="currentConfig.config.editorComponent"
           ></el-input>
@@ -577,7 +583,7 @@
             allow-create
             ref="writePrivileges"
             :placeholder="$t('cfg.write_privileges_hint')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -593,6 +599,7 @@
   </div>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 //import axios from "axios";
 import Vue from "vue";
 import axios from "axios";
@@ -600,8 +607,8 @@ import _ from "lodash";
 
 import userquerieseditor from "@/components/appConfigEditor/UserQueriesEditor";
 import linkeditor from "@/components/appConfigEditor/LinkEditor";
-Vue.component("UserQueriesEditor", userquerieseditor);
-Vue.component("LinkEditor", linkeditor);
+registerComponent("UserQueriesEditor", userquerieseditor);
+registerComponent("LinkEditor", linkeditor);
 
 export default {
   field: "ESTableEditor",

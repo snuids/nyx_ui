@@ -8,9 +8,9 @@
         v-for="cat in $store.getters.filteredmenus" :key="cat.loc_category" style="margin:10px 10px 10px 0px; ">
         <!-- <el-col style="width:130px;">
         </el-col> -->
-        <div slot="header">
+        <template #header><div>
           <h2>{{cat.loc_category}}</h2>
-        </div>
+        </div></template>
         <el-row type="flex">
           <el-card 
             shadow="hover"

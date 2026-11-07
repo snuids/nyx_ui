@@ -2,7 +2,7 @@
   <el-dialog
     width="400px"
     :title="$t('changepassword.newpass')"
-    :visible.sync="visible"
+    v-model="visible"
     :before-close="closeDialog"
     class="user-reset-password-dialog"
     append-to-body
@@ -20,7 +20,7 @@
       </el-row>
       <el-row>
         <el-button
-          icon="el-icon-key"
+          :icon="$icons.Key"
           style="width:100%; margin-top:8px;"
           type
           @click="generateStrongPassword()"
@@ -36,7 +36,7 @@
       </el-row>
       <el-row>
         <el-form-item :label="$t('changepassword.notify_by_mail')" prop="sendMail">
-          <el-switch size="mini" v-model="sendMail"></el-switch>
+          <el-switch size="small" v-model="sendMail"></el-switch>
         </el-form-item>
       </el-row>
     </el-form>

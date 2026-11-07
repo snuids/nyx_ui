@@ -1,4 +1,4 @@
-<template slot="items">
+<template>
   <div class="upload">
     <h2></h2>
     <div style="text-align:center;width:100%">
@@ -12,14 +12,14 @@
         :on-success="successUpload"
         multiple
       >
-        <i class="el-icon-upload"></i>
+        <el-icon><component :is="$icons.Upload" /></el-icon>
         <div class="el-upload__text">
           {{$t("upload.drop_file_here")}}
           <em>{{$t("upload.click_to_upload")}}</em>
         </div>
-        <div class="el-upload__tip" slot="tip">
+        <template #tip><div class="el-upload__tip">
           <h2>{{computeTranslatedText(config.config.tip,$store.getters.creds.user.language)}}</h2>
-        </div>
+        </div></template>
         <span v-if="accept != undefined & accept != ''">          
         ({{accept}})
         </span>

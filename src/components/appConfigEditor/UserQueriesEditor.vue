@@ -38,7 +38,7 @@
             @change="selectFieldsToFilterChanged"
             ref="fieldsToFilter"
             :placeholder="$t('cfg.field_to_filter')"
-            size="mini"
+            size="small"
             style="width:100%;"
           >
             <el-option
@@ -68,21 +68,24 @@
                 v-model="currentConfig.config.queryfilters"
                 tag="tbody"
                 handle=".handle"
+                item-key="field"
               >
-                <tr v-for="(item, index) in currentConfig.config.queryfilters" :key="index">
-                  <td>{{item.field}}</td>
-                  <td>
-                    <el-button @click="configureQueryFilter(item)" size="mini">{{ $t('cfg.configure') }}</el-button>
-                  </td>
+                <template #item="{ element: item, index }">
+                  <tr>
+                    <td>{{item.field}}</td>
+                    <td>
+                      <el-button @click="configureQueryFilter(item)" size="small">{{ $t('cfg.configure') }}</el-button>
+                    </td>
 
-                  <td>
-                    <i class="el-icon-d-caret handle"></i>
-                  </td>
-                </tr>
+                    <td>
+                      <el-icon class="handle"><component :is="$icons.DCaret" /></el-icon>
+                    </td>
+                  </tr>
+                </template>
               </draggable>
             </table>
             <div style="width:100%;text-align:center;margin-top:10px;">
-              <el-button @click="addGlobalFilter()" size="mini" v-if="fieldsToFilter.indexOf('Global_Filter')<0">{{ $t('cfg.add_global_filter') }}</el-button>  
+              <el-button @click="addGlobalFilter()" size="small" v-if="fieldsToFilter.indexOf('Global_Filter')<0">{{ $t('cfg.add_global_filter') }}</el-button>  
             </div>                        
           </el-card>
           
@@ -100,7 +103,7 @@
                     ref="label"
                     :placeholder="$t('cfg.label_displayed')"
                     v-model="filterFieldToConfigure.title"
-                    size="mini"
+                    size="small"
                   ></el-input>
                 </el-row>
               </el-col>
@@ -113,7 +116,7 @@
                     ref="default"
                     :placeholder="$t('cfg.default_value')"
                     v-model="filterFieldToConfigure.default"
-                    size="mini"
+                    size="small"
                   ></el-input>
                 </el-row>
                 
@@ -126,7 +129,7 @@
                 </el-row>
                 <el-row>
                   <el-select
-                    size="mini"
+                    size="small"
                     v-model="filterFieldToConfigure.type"
                     :placeholder="$t('cfg.select_type')"
                   >
@@ -151,24 +154,22 @@
                         trigger="hover">
                         <el-row>{{ $t('cfg.each_line_represents') }} <b>{{ $t('cfg.option') }}</b></el-row>
                         <el-row>{{ $t('cfg.two_ways_create') }} <b>{{ $t('cfg.option') }}</b></el-row>
-                        <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value=label </i></el-row>
-                        <el-row> <i class="el-icon-caret-right" style="margin-left:5px; margin-right:5px"></i> <i>value </i></el-row>
+                        <el-row> <el-icon style="margin-left:5px; margin-right:5px"><component :is="$icons.CaretRight" /></el-icon> <i>value=label </i></el-row>
+                        <el-row> <el-icon style="margin-left:5px; margin-right:5px"><component :is="$icons.CaretRight" /></el-icon> <i>value </i></el-row>
                         
                         
-                        <el-button slot="reference" type="text" icon="el-icon-info" style="margin-left:15px;"></el-button>
+                        <template #reference><el-button type="text" :icon="$icons.InfoFilled" style="margin-left:15px;"></el-button></template>
                       </el-popover>
                 </el-row>
               </el-col>
             </el-row>
             <el-row v-if="filterFieldToConfigure.type == 'selecter'">
                <editor
-                v-model="selecterOptions"
+                v-model:value="selecterOptions"
                 @init="editorInit"
                 lang="text"
                 theme="chrome"
-                width="99%"
-                style="border: solid 1px #c0c4cc;"
-                height="200"
+                style="border: solid 1px #c0c4cc; height: 200px; width: 99%;"
               ></editor>
             </el-row>
 
@@ -191,7 +192,7 @@
                     ref="default"
                     placeholder="Query index"
                     v-model="filterFieldToConfigure.index"
-                    size="mini"
+                    size="small"
                   ></el-input>                
               </el-col>
               <el-col :span="1">   
@@ -202,7 +203,7 @@
                     ref="default"
                     placeholder="Query column"
                     v-model="filterFieldToConfigure.column"
-                    size="mini"
+                    size="small"
                   ></el-input>                
               </el-col>
               </el-row> -->
@@ -215,6 +216,7 @@
   </el-col>
 </template>
 <script>
+import { VAceEditor } from "vue3-ace-editor";
 import _ from "lodash";
 
 export default {
@@ -249,9 +251,7 @@ export default {
       }
     );
   },
-  components: {
-    editor: require("vue2-ace-editor")
-  },
+  components: { editor: VAceEditor },
   computed: {
     curConfigIn: function() {
       return this.currentConfig;
@@ -412,13 +412,13 @@ export default {
     },
     editorInit: function() {
       // eslint-disable-line
-      require("brace/ext/language_tools"); //language extension prerequsite...
-      require("brace/mode/html");
-      require("brace/mode/yaml");
-      require("brace/mode/javascript"); //language
-      require("brace/mode/less");
-      require("brace/theme/chrome");
-      require("brace/snippets/javascript"); //snippet
+      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
+      require("ace-builds/src-noconflict/mode-html");
+      require("ace-builds/src-noconflict/mode-yaml");
+      require("ace-builds/src-noconflict/mode-javascript"); //language
+      require("ace-builds/src-noconflict/mode-less");
+      require("ace-builds/src-noconflict/theme-chrome");
+      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
   }
 };

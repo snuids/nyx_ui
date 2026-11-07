@@ -3,7 +3,7 @@
     width="700px"
     :title="this.$t('user.user_form')"
     :before-close="closeDialog"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     class="dialog-user"
   >
     <UserResetPassword
@@ -18,7 +18,7 @@
             <el-form-item :label="this.$t('user.id_email')" :label-width="formLabelWidth" prop="_id">
               <el-input
                 :disabled="!newRec.isadd"
-                size="mini"
+                size="small"
                 v-model="newRec._id"
                 autocomplete="off"
               ></el-input>
@@ -26,7 +26,7 @@
           </el-row>
           <el-row>
             <el-form-item :label="this.$t('user.login')" :label-width="formLabelWidth" prop="_source.login">
-              <el-input size="mini" v-model="newRec._source.login" autocomplete="off"></el-input>
+              <el-input size="small" v-model="newRec._source.login" autocomplete="off"></el-input>
             </el-form-item>
           </el-row>
           <el-row>
@@ -36,26 +36,26 @@
                 :label-width="formLabelWidth"
                 prop="_source.firstname"
               >
-                <el-input size="mini" v-model="newRec._source.firstname" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec._source.firstname" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item :label="this.$t('user.lastname')" :label-width="formLabelWidth" prop="_source.lastname">
-                <el-input size="mini" v-model="newRec._source.lastname" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec._source.lastname" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item :label="this.$t('user.phone')" :label-width="formLabelWidth" prop="_source.phone">
-                <el-input size="mini" v-model="newRec._source.phone" autocomplete="off"></el-input>
+                <el-input size="small" v-model="newRec._source.phone" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" style="text-align:left;">
               <el-form-item :label="this.$t('user.mfa')" :label-width="formLabelWidth" prop="doublePhase">
                 <el-switch
                   @change="MFAChanged()"
-                  size="mini"
+                  size="small"
                   v-model="newRec._source.doublePhase"
                   autocomplete="off"
                 ></el-switch>
@@ -67,7 +67,7 @@
               <el-form-item :label="this.$t('user.language')" :label-width="formLabelWidth" prop="_source.language">
                 <el-select
                   style="width:210px;"
-                  size="mini"
+                  size="small"
                   v-model="newRec._source.language"
                   :placeholder="$t('ui.select_language')"
                 >
@@ -83,11 +83,11 @@
             <el-col :span="12">
               <el-form-item label :label-width="formLabelWidth">
                 <el-button
-                  size="mini"
+                  size="small"
                   @click="handleResetPassword()"
                   class="addbutton"
                   type="danger"
-                  icon="el-icon-warning"
+                  :icon="$icons.WarningFilled"
                   v-if="!newRec.isadd"
                 >{{$t('user.reset_password')}}</el-button>
               </el-form-item>
@@ -98,7 +98,7 @@
           <el-row style="padding-left:30px;">
             
             <el-transfer
-              size="mini"
+              size="small"
               style="text-align:left;"
               filterable
               v-model="newRec._source.privileges"
@@ -115,7 +115,7 @@
           <el-row style="padding-left:30px;">
             
             <el-transfer
-              size="mini"
+              size="small"
               style="text-align:left;"
               filterable
               v-model="newRec._source.filters"
@@ -131,20 +131,21 @@
       </el-collapse>
     </el-form>
 
-    <span slot="footer" class="dialog-footer">
+    <template #footer><span class="dialog-footer">
       <el-button @click="$emit('dialogclose')">{{this.$t("buttons.cancel")}}</el-button>
       <el-button type="primary" :disabled="recModified()" @click="submitForm('newRec')">{{this.$t("buttons.submit")}}</el-button>
-    </span>
+    </span></template>
   </el-dialog>
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import userresetpassword from "@/components/UserResetPassword";
 import Vue from "vue";
 import axios from "axios";
 import { i18n } from "../i18n-setup";
 
-Vue.component("UserResetPassword", userresetpassword);
+registerComponent("UserResetPassword", userresetpassword);
 
 export default {
   name: "UserDetails",
@@ -184,12 +185,12 @@ export default {
         _id: [
           {
             required: true,
-            message: i18n.t("ui.input_email"),
+            message: i18n.global.t("ui.input_email"),
             trigger: "blur"
           },
           {
             type: "email",
-            message: i18n.t("ui.input_correct_email"),
+            message: i18n.global.t("ui.input_correct_email"),
             trigger: ["blur"]
           },
           {
@@ -201,24 +202,24 @@ export default {
           firstname: [
             {
               required: true,
-              message: i18n.t("ui.input_firstname"),
+              message: i18n.global.t("ui.input_firstname"),
               trigger: "blur"
             }
           ],
           lastname: [
             {
               required: true,
-              message: i18n.t("ui.input_lastname"),
+              message: i18n.global.t("ui.input_lastname"),
               trigger: "blur"
             }
           ],
           phone: [
-            { required: false, message: i18n.t("ui.input_phone"), trigger: "blur" }
+            { required: false, message: i18n.global.t("ui.input_phone"), trigger: "blur" }
           ],
           language: [
             {
               required: true,
-              message: i18n.t("ui.input_language"),
+              message: i18n.global.t("ui.input_language"),
               trigger: "change"
             }
           ]

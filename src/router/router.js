@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Main from '../views/Main.vue'
 import Privacy from '../views/Privacy.vue'
@@ -11,10 +10,10 @@ import GenericComponent from '../components/GenericComponent.vue'
 // import Loading from "@/components/Loading";
 
 
-Vue.use(Router);
-
-
-export default new Router({
+export default createRouter({
+  // Vue Router 3 utilisait le mode hash par defaut ; on le conserve pour que les URL
+  // existantes (/  #/main) continuent de fonctionner.
+  history: createWebHashHistory(process.env.BASE_URL),
   routes: [
     {
       path: '/',

@@ -1,12 +1,12 @@
-<template slot="items">
+<template>
   <!--div v-bind:style="styleContainerComputed" -->
   
   <div>
     <!-- <h1>Grafana {{ computedUrl }}</h1> -->
     <div v-if="config.downloadChecked" :style="toolbarStyle">
       <el-button
-        size="mini"
-        icon="el-icon-download"
+        size="small"
+        :icon="$icons.Download"
         :loading="downloadLoading"
         :disabled="!dashboardUid"
         @click="downloadData"
@@ -366,7 +366,7 @@ export default {
       this.createUrl();
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING GRAFANA:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");

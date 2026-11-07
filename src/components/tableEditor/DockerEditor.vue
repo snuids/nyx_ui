@@ -2,7 +2,7 @@
   <el-dialog
     width="40%"
     :title="title"
-    :visible.sync="dialogFormVisible"
+    v-model="dialogFormVisible"
     :before-close="closeDialog"
     :close-on-click-modal="false"
     class="sr-report-exception-editor"
@@ -24,7 +24,7 @@
           <el-select                
                 v-model="action"
                 ref="type"
-                size="mini"
+                size="small"
                 placeholder="Mode"
               >
                 <el-option
@@ -38,7 +38,7 @@
               <el-button          
                 @click="sendMessage"
                 type="danger"
-                size="mini"
+                size="small"
               >Send</el-button>
         </el-col>
                   
@@ -50,7 +50,7 @@
         <el-button          
           @click="closeDialog"
           type="primary"
-          size="mini"
+          size="small"
         >Close</el-button>
       </el-row> -->
     </el-card>

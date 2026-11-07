@@ -9,7 +9,7 @@
       <el-header style="text-align: right; font-size: 12px">
         <el-row :gutter="24">
           <el-col :span="1">
-            <el-button circle type="primary" icon="el-icon-more" @click="changeMenuState"></el-button>
+            <el-button circle type="primary" :icon="$icons.MoreFilled" @click="changeMenuState"></el-button>
           </el-col>
           <el-col :span="5" style="text-align: left; font-size: 22px;color:white;">
             <span>
@@ -37,7 +37,7 @@
                         <el-form-item :label="$t('time.last')">
                           <el-input-number
                             :min="1"
-                            size="mini"
+                            size="small"
                             v-model="relativeTimeValue"
                             autocomplete="off"
                             @change="relativeTimeClosed"
@@ -48,7 +48,7 @@
                         <el-form-item >
                         <el-select
                           style="width:97%"
-                          size="mini"
+                          size="small"
                           v-model="relativeTimeType"
                           :placeholder="$t('ui.select_value')"
                           @change="relativeTimeClosed"
@@ -62,11 +62,10 @@
                       </el-col>
                     </el-row>
                   </el-form>
-                  <el-button
-                    size="mini"
-                    slot="reference"
-                    style="margin-right:5px;"
-                  >{{$t('time.last')}} {{relativeTimeValue}} {{relativeTimeType}}</el-button>
+                  <template #reference><el-button
+                    size="small"
+                   
+                    style="margin-right:5px;">{{$t('time.last')}} {{relativeTimeValue}} {{relativeTimeType}}</el-button></template>
                 </el-popover>
               </div>
               <div 
@@ -74,11 +73,10 @@
               >
 
                 <el-date-picker
-                  style="top:1px;"
                   :picker-options="rangePickerOptions"
                   v-model="timerange"
                   v-on:change="timeRangeChanged"
-                  size="mini"
+                  size="small"
                   type="datetimerange"
                   range-separator="To"
                   :start-placeholder="$t('reportgenerator.start_date')"
@@ -93,7 +91,7 @@
                 style="margin-bottom:3px;"
                 @change="timeModeChanged"
                 v-if="$store.getters.activeApp.timeSelectorChecked"
-                size="mini"
+                size="small"
                 v-model="timeType"
               >
                 <el-radio-button label="absolute">{{$t('time.absolute')}}</el-radio-button>
@@ -110,7 +108,7 @@
                 v-on:change="dayChanged"
                 :picker-options="{firstDayOfWeek:1}"
                 type="date"
-                size="mini"
+                size="small"
                 :placeholder="$t('reportgenerator.pick_day')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -125,7 +123,7 @@
                 v-on:change="weekChanged"
                 :picker-options="{firstDayOfWeek:1}"
                 type="week"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.pick_week')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -138,7 +136,7 @@
                 v-model="monthPicker"
                 v-on:change="monthChanged"
                 type="month"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.pick_month')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -151,7 +149,7 @@
                 v-model="yearPicker"
                 v-on:change="yearChanged"
                 type="year"
-                size="mini"
+                size="small"
                 :placeholder="$t('ui.pick_year')"
                 :clearable="false"
               ></el-date-picker>&nbsp;&nbsp;
@@ -173,16 +171,16 @@
                   :default-active="$store.getters.currentSubCategory.fulltitle"
                   :unique-opened="true"
                   class="el-menu-vertical"
-                  text-color="#666"
+                  style="--el-menu-text-color: #666"
                 >
                   <!--            v-if="menu.category!='apps'"-->
-                  <el-submenu
+                  <el-sub-menu
                     v-for="menu in filteredmenus"
                     :key="menu.category"
                     :index="menu.category"
                   >
-                    <template slot="title">
-                      <!--<i class="el-icon-location"></i>-->
+                    <template #title>
+                      <!--<el-icon><component :is="$icons.Location" /></el-icon>-->
                       <span>{{menu.loc_category}}</span>
                     </template>
                     <el-menu-item
@@ -202,7 +200,7 @@
                       />
                       &nbsp;{{subMenu.loc_title}}
                     </el-menu-item>
-                  </el-submenu>
+                  </el-sub-menu>
                 </el-menu>
               </el-col>
             </el-row>
@@ -219,6 +217,7 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import logout from "@/components/Logout";
 import apps from "@/components/Apps";
@@ -227,9 +226,9 @@ import Vue from "vue";
 import moment from "moment";
 import _ from "lodash";
 
-Vue.component("Logout", logout);
-Vue.component("Apps", apps);
-Vue.component("ChangePassword", changepassword);
+registerComponent("Logout", logout);
+registerComponent("Apps", apps);
+registerComponent("ChangePassword", changepassword);
 
 // @ is an alias to /src
 export default {
@@ -656,7 +655,7 @@ export default {
       });
     });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     this.$globalbus.$off("charttimerangeupdated");
     this.$globalbus.$off("forcetime");
     window.removeEventListener("resize", this.resizeListener);
@@ -691,21 +690,78 @@ body {
   width: 100%;
 }
 
-.el-submenu__title {
+/* Element Plus a renomme `.el-submenu` en `.el-sub-menu` : sans ces selecteurs, les hauteurs de
+   40 px definies ici ne s'appliquaient plus et les entrees reprenaient les 56 px par defaut, ce qui
+   faisait une barre de gauche beaucoup plus haute qu'avant. Les anciens selecteurs sont conserves,
+   ils ne genent pas. */
+.el-submenu__title,
+.el-sub-menu__title {
   height: 40px !important;
   line-height: 40px !important;
   font-weight: bold;
 }
 
-.el-submenu .el-menu-item {
+.el-submenu .el-menu-item,
+.el-sub-menu .el-menu-item {
   height: 40px !important;
   line-height: 40px !important;
   padding: 0 45px;
   min-width: 200px;
 }
 
-.aside .el-submenu .el-menu-item {
+.aside .el-submenu .el-menu-item,
+.aside .el-sub-menu .el-menu-item {
   min-width: 0;
+}
+
+/* L'en-tete centre ses enfants par `line-height: 60px`. Les boutons d'Element Plus sont en
+   `inline-flex`, donc alignes sur la ligne de base : le bouton rond de droite descendait par
+   rapport au reste. */
+/* Element UI 2 centrait les boutons de l'en-tete par la ligne (`line-height: 60px`). Element Plus
+   utilise des boites `inline-flex`, qui se posent sur la ligne de base : elles descendaient de 2 px,
+   et le bouton de l'avatar, lui, sortait de l'en-tete (-2 px) parce que son `.el-dropdown` ne faisait
+   que 40 px de haut.
+   La rangee devient donc un conteneur flex : chaque colonne centre verticalement son contenu, et la
+   derniere est alignee a droite. Plus de decalage a la main. */
+.el-header .el-row {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  /* L'en-tete herite de `line-height: 60px`. Avec des colonnes en flex, cette ligne de 60 px
+     s'ajoute au contenu des qu'un selecteur de date apparait et decale les boutons de quelques
+     pixels. En flex, le centrage se fait par `align-items` : la ligne n'a plus lieu d'etre. */
+  line-height: normal;
+}
+
+.el-header .el-row > .el-col {
+  display: flex;
+  align-items: center;
+}
+
+.el-header .el-row > .el-col:last-child {
+  justify-content: flex-end;
+}
+
+/* Le declencheur du menu de compte est enveloppe dans un <span> : la ligne de 60 px du span place le
+   `el-dropdown` en haut, d'ou un bouton d'avatar colle au bord superieur. `vertical-align: middle`
+   le recentre dans la ligne, comme le faisait Element UI 2. */
+.el-header .el-dropdown {
+  vertical-align: middle;
+}
+
+/* Sans cela, la colonne flex comprime le bouton rond (31 x 40 au lieu de 40 x 40). */
+.el-header .el-button {
+  flex-shrink: 0;
+}
+
+.el-header .el-button.is-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Element UI 2 : bouton rond de 40 px. Element Plus le dimensionne avec
+     --el-component-size (36 px ici), d'ou un bouton plus petit que dans l'en-tete. */
+  width: 40px;
+  height: 40px;
 }
 
 .menuiconaside {
@@ -719,8 +775,96 @@ body {
   overflow: hidden !important;
 }
 
-.el-dialog__title {
+/* Element Plus met le rembourrage sur `.el-dialog` (16 px), alors qu'Element UI 2 le mettait sur
+   `__header` et `__body`. L'en-tete bleu ne touchait donc plus les bords de la fenetre : il
+   flottait a l'interieur, sans les coins arrondis, et la croix de fermeture devenait noire. On
+   retablit le modele de boite d'Element UI 2. */
+/* Le prefixe `.el-overlay` n'est pas cosmetique : Element Plus definit `.el-dialog` avec une seule
+   classe, et selon l'ordre d'injection des feuilles (developpement, HMR) sa regle peut passer apres
+   la notre. Avec deux classes, la notre gagne dans tous les cas. */
+.el-overlay .el-dialog {
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Element UI 2 : bande de 54 px, titre a gauche, croix de 16 px dans le coin. Element Plus centre
+   (il herite du `text-align: center` de #app), reserve 32 px a droite pour une croix de 48 px, et
+   laisse donc beaucoup de vide en haut — c'est ce qui se voyait. */
+.el-overlay .el-dialog__header {
+  background-color: #409eff !important;
+  /* Element UI 2 : 20 px des deux cotes ; la croix de fermeture est positionnee en absolu, elle
+     n'a pas besoin que le titre lui laisse de la place. Les 40 px de droite vus en production
+     venaient d'Element Plus, qui reserve la place de sa croix de 48 px. */
+  padding: 20px 20px 10px;
+  text-align: left;
+}
+
+.el-overlay .el-dialog__title {
   color: white !important;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.el-overlay .el-dialog__headerbtn {
+  top: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+}
+
+.el-overlay .el-dialog__headerbtn .el-dialog__close {
+  font-size: 16px;
+}
+
+/* Element UI 2 mettait 30 px en haut du corps ; a l'usage l'ecart sous la bande de titre parait
+   trop grand (42 px mesures), surtout dans les fenetres qui commencent par une barre d'onglets.
+   20 px est un choix explicite de l'utilisateur : l'ecart passe a 32 px et le port differe ici de
+   la production precedente, volontairement. */
+.el-overlay .el-dialog__body {
+  padding: 20px 20px;
+  color: #606266;
+  font-size: 14px;
+}
+
+.el-overlay .el-dialog__footer {
+  padding: 10px 20px 20px;
+}
+
+/* Meme ecart pour les boites de confirmation ($alert / $confirm / $prompt) : Element Plus met un
+   rembourrage de 12 px autour de la boite et aucun en haut de l'en-tete, si bien que le titre
+   demarrait 12 px plus bas que dans Element UI 2. */
+.el-overlay-message-box .el-message-box {
+  padding: 0 0 10px;
+  border-radius: 4px;
+}
+
+.el-overlay-message-box .el-message-box__header {
+  padding: 15px 15px 10px;
+}
+
+.el-overlay-message-box .el-message-box__title {
+  font-size: 18px;
+  line-height: 24px;
+  color: #303133;
+}
+
+.el-overlay-message-box .el-message-box__headerbtn {
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+}
+
+.el-overlay-message-box .el-message-box__content {
+  padding: 10px 15px;
+  color: #606266;
+  font-size: 14px;
+}
+
+.el-overlay-message-box .el-message-box__btns {
+  padding: 5px 15px 0;
 }
 
 .el-dialog__headerbtn .el-dialog__close {

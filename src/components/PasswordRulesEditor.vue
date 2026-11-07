@@ -5,7 +5,7 @@
       <el-row style="text-align:left;">
         <el-button
           @click="savePasswordRules()"
-          size="mini"
+          size="small"
           :disabled="!passwordRulesModelModified"
           type="danger"
         >{{ $t('ui.save_rules') }}</el-button>
@@ -28,7 +28,7 @@
             style="text-align:center;"
             :body-style="passwordRulesModel.forceUpper?'padding:20px;': 'padding:0px;'"
           >
-            <div slot="header" class="clearfix">
+            <template #header><div class="clearfix">
               <el-button
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
@@ -38,14 +38,14 @@
                 style="float: right; padding: 3px 0"
                 v-model="passwordRulesModel.forceUpper"
               ></el-switch>
-            </div>
+            </div></template>
             <div v-show="passwordRulesModel.forceUpper">
               <el-row>
                 <b>{{ $t('ui.min_upper') }}</b>
               </el-row>
               <el-row>
                 <el-input-number
-                  size="mini"
+                  size="small"
                   v-model="passwordRulesModel.minUpper"
                   :step="1"
                   :min="0"
@@ -61,7 +61,7 @@
             style="text-align:center;"
             :body-style="passwordRulesModel.forceNumber?'padding:20px;': 'padding:0px;'"
           >
-            <div slot="header" class="clearfix">
+            <template #header><div class="clearfix">
               <el-button
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
@@ -71,14 +71,14 @@
                 style="float: right; padding: 3px 0"
                 v-model="passwordRulesModel.forceNumber"
               ></el-switch>
-            </div>
+            </div></template>
             <div v-show="passwordRulesModel.forceNumber">
               <el-row>
                 <b>{{ $t('ui.min_numbers') }}</b>
               </el-row>
               <el-row>
                 <el-input-number
-                  size="mini"
+                  size="small"
                   v-model="passwordRulesModel.minNumber"
                   :step="1"
                   :min="0"
@@ -94,7 +94,7 @@
             style="text-align:center;"
             :body-style="passwordRulesModel.forceSpecial?'padding:20px;': 'padding:0px;'"
           >
-            <div slot="header" class="clearfix">
+            <template #header><div class="clearfix">
               <el-button
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
@@ -104,14 +104,14 @@
                 style="float: right; padding: 3px 0"
                 v-model="passwordRulesModel.forceSpecial"
               ></el-switch>
-            </div>
+            </div></template>
             <div v-show="passwordRulesModel.forceSpecial">
               <el-row>
                 <b>{{ $t('ui.min_special') }}</b>
               </el-row>
               <el-row>
                 <el-input-number
-                  size="mini"
+                  size="small"
                   v-model="passwordRulesModel.minSpecial"
                   :step="1"
                   :min="0"
@@ -134,7 +134,7 @@
         size="small"
       >
         <el-form-item :label="$t('ui.try_password')" prop="testPwd" style="padding-bottom:20px;">
-          <el-input v-model="testPwdForm.testPwd" clearable size="mini" style="padding-bottom:5px;"></el-input>
+          <el-input v-model="testPwdForm.testPwd" clearable size="small" style="padding-bottom:5px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('testPwdForm')">Test</el-button>

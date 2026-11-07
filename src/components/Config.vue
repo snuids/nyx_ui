@@ -10,7 +10,7 @@
       v-on:dialogclose="dialogClosed()"
     ></ConfigDetails>
     <el-table
-      size="mini"
+      size="small"
       :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase()))))"
       :default-sort="{prop: '_source.title', order: 'descending'}"
       style="width: 100%"
@@ -24,26 +24,26 @@
       <el-table-column sortable prop="_source.order" :label="$t('config.order')" width="80"></el-table-column>
 
       <el-table-column width="60">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="scope.row._source.privileges?true:false"
             placement="left-start"
             :title="$t('config.privileges')"
             width="200"
             trigger="hover"
-            size="mini"
+            size="small"
           >
             <span :key="item" v-for="item in scope.row._source.privileges">
               &nbsp;
-              <el-tag size="mini">{{item}}</el-tag>
+              <el-tag size="small">{{item}}</el-tag>
             </span>
-            <el-button size="mini" slot="reference">{{scope.row._source.privileges.length}}</el-button>
+            <template #reference><el-button size="small">{{scope.row._source.privileges.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column align="right" width="300">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header>
           <div>
             <el-tooltip
               v-if="currentRow"
@@ -54,37 +54,37 @@
             >
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="duplicate()"
                 class="dupbutton"
                 type="primary"
-                icon="el-icon-copy-document"
+                :icon="$icons.CopyDocument"
               ></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="light" :content="$t('config.add')" placement="bottom">
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="handleAddApp()"
                 class="addbutton"
                 type="primary"
-                icon="el-icon-plus"
+                :icon="$icons.Plus"
               ></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="light" :content="$t('config.reload')" placement="bottom-start">
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="reloadConfig()"
                 class="regreshbutton"
                 plain
-                icon="el-icon-refresh"
+                :icon="$icons.Refresh"
               ></el-button>
             </el-tooltip>
           </div>
-          <el-input v-model="search" size="mini" :placeholder="$t('config.type_to_search')" class="searchfield" />
+          <el-input v-model="search" size="small" :placeholder="$t('config.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <v-icon
             v-if="scope.row._source.icon"
             :name="scope.row._source.icon"
@@ -92,15 +92,15 @@
             style="margin-bottom:-3px;"
           />&nbsp;&nbsp;
           <el-button
-            size="mini"
-            icon="el-icon-setting"
+            size="small"
+            :icon="$icons.Setting"
             plain
             @click="handleEdit(scope.$index, scope.row)"
           ></el-button>
           <el-button
-            size="mini"
+            size="small"
             type="danger"
-            icon="el-icon-delete"
+            :icon="$icons.Delete"
             plain
             @click="handleDelete(scope.$index, scope.row)"
           ></el-button>
@@ -110,12 +110,13 @@
   </div>
 </template>
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 
 import Vue from "vue";
 
 import configdetails from "@/components/ConfigDetails";
-Vue.component("ConfigDetails", configdetails);
+registerComponent("ConfigDetails", configdetails);
 
 export default {
   data() {

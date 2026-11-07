@@ -1,7 +1,9 @@
 <template>
   <div style="position:relative;overflow: hidden;">
-    <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" :visible.sync="dialogVisible" width="65%">
-      <el-tabs v-model="tabName" @tab-click="handleClick">
+    <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" v-model="dialogVisible" width="65%">
+      <!-- `handleClick` n'a jamais existe dans methods : l'attribut ne faisait rien et Vue 3
+           signale un gestionnaire invalide. -->
+      <el-tabs v-model="tabName">
         <el-tab-pane :label="$t('processlist.tab_general')" name="first">
           <el-table
             size="small"
@@ -58,9 +60,9 @@
         </el-tab-pane>
       </el-tabs>
       
-      <span slot="footer" class="dialog-footer">
+      <template #footer><span class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">{{ $t('processlist.close') }}</el-button>
-      </span>
+      </span></template>
     </el-dialog>
 
     <div>
@@ -68,7 +70,7 @@
         <el-row :gutter="10">
           <el-col :span="6"> 
             <el-form-item :label="$t('processlist.filter')" :label-width="formLabelWidth">
-              <el-input size="mini" v-model="filter" autocomplete="off"></el-input>
+              <el-input size="small" v-model="filter" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -405,25 +407,20 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     clearInterval(this.timer);
   }
 };
 </script>
 
 <style>
-.process_ok {
-  width: 280px;
-  height: 120px;
-  background-color: #fff;
-  border: solid 2px #aaa;
-  position: relative;
-  color: black;
-}
+/* The module cards used to be rendered inside an `el-radio` used as a clickable container, and this
+   block reset the radio to make room for a 120 px card. The cards are gone (no `el-radio`, no
+   `.process_ok` in the template any more) but the rules stayed — and this `<style>` is NOT scoped,
+   so `.el-radio { margin-right: 0 }` reached every radio of the console and glued the report
+   editor's five options together. Removed; the spacing now comes from Element Plus's own 30 px, and
+   `.el-radio-group .el-radio` in `styles/element-legacy.css` keeps it explicit. */
 
-.process_ok:hover {
-  background-color: #eee;
-}
 .process_ko {
   width: 280px;
   height: 120px;

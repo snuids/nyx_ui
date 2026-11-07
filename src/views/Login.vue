@@ -31,7 +31,7 @@
       :body-style="{ padding: '24px 20px' }"
       shadow="hover"
     >
-      <el-form class="login-form" label-width="0px" @submit.native.prevent>
+      <el-form class="login-form" label-width="0px" @submit.prevent>
         <el-col :span="24">
           <div class="force-change-title">{{ $t("firstlogin.title") }}</div>
           <div class="force-change-help">{{ $t("firstlogin.help") }}</div>
@@ -60,7 +60,7 @@
               autocomplete="off"
               v-model="newPassword.second"
               show-password
-              v-on:keyup.enter.native="submitNewPassword()"
+              v-on:keyup.enter="submitNewPassword()"
             />
           </el-form-item>
           <el-button
@@ -86,28 +86,23 @@
               name="login"
               autocomplete="none"
               v-model="form.login"
-              size="medium"
               clearable
             ></el-input>
           </el-form-item>
           <el-form-item label>
             <el-input
               :placeholder="$t('ui.enter_password')"
-              v-on:keyup.enter.native="validateUser()"
+              v-on:keyup.enter="validateUser()"
               type="password"
               name="password"
               autocomplete="none"
               v-model="form.password"
-              size="medium"
             />
           </el-form-item>
           <el-button
             class="login-button"
             @click="validateUser()"
             type="primary"
-            size="default"
-            color="#048"
-            
             :disabled="loginDisabled"
             :loading="loginunderway"
           >{{ $t("ui.login_button") }}</el-button>
@@ -281,8 +276,9 @@ export default {
       localStorage.authResponse = JSON.stringify(response)
 
       this.$i18n.locale = response.data.cred.user.language;
-      Vue.config.lang = response.data.cred.user.language;
-      //alert(this.$i18n.locale);
+      // `Vue.config.lang` was Element UI 2's locale switch; Element Plus reads the locale from
+      // the i18n instance, and Vue 3 has no global `Vue` object — the assignment threw here, after
+      // the token was stored and before the store commit, so the login looked refused.
 
       response.data.cred.user.user = this.form.login;
       this.$store.commit({
@@ -427,6 +423,10 @@ export default {
   color: white;
   margin-top: 170px;
   font-family: "Helvetica Neue";
+  /* Element UI 2 ramenait les titres a 20 px en graisse normale ; sans sa feuille de style, le
+     navigateur applique son h1 par defaut (32 px, gras). */
+  font-size: 20px;
+  font-weight: 400;
 }
 
 /* The title is again the original element, with its class: size, weight and colour unchanged.
@@ -534,6 +534,8 @@ export default {
 
 .login-form .el-button{
   margin-top: 12px;
-
+  /* Element UI 2 : bouton de 40 px. Element Plus suit --el-component-size (36 px ici). */
+  height: 40px;
+  width: 100%;
 }
 </style>

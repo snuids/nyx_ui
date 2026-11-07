@@ -50,7 +50,7 @@
       <el-pagination v-show="rows>pagesize"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        v-model:current-page="currentPage"
         :page-sizes="[100, 200, 300, 400, 500]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -61,7 +61,7 @@
     <el-row>
       <el-col :span="24">
         <el-table
-          size="mini"
+          size="small"
           :data="tableData"
           style="width: 100%"
           highlight-current-row
@@ -77,11 +77,11 @@
             sortable
             show-overflow-tooltip
           >
-            <template slot-scope="scope">
+            <template #default="scope">
               <div v-if="header.type=='select'">
                 <el-select
                   @change="selectChanged(scope.row, header)"
-                  size="mini"
+                  size="small"
                   v-model="scope.row._source[header.field.replace('_source.', '')]"
                   placeholder="Select"
                 >
@@ -108,7 +108,7 @@
           </el-table-column>
           <el-table-column label="Actions" align="right">
             <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-            <template slot="header" slot-scope="_scope">
+            <template #header>
               <div>
                 <el-tooltip
                   v-if="config.config.index && config.config.index.length>0 && currentRow"
@@ -119,10 +119,10 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="duplicateRecord()"
                     type="primary"
-                    icon="el-icon-copy-document"
+                    :icon="$icons.CopyDocument"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -134,10 +134,10 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="addRecord()"
                     type="primary"
-                    icon="el-icon-plus"
+                    :icon="$icons.Plus"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -149,27 +149,27 @@
                 >
                   <el-button
                     circle
-                    size="mini"
+                    size="small"
                     @click="refreshData()"
                     class="regreshbutton"
                     plain
-                    icon="el-icon-refresh"
+                    :icon="$icons.Refresh"
                   ></el-button>
                 </el-tooltip>
               </div>
             </template>
-            <template slot-scope="scope" v-if="config.config.index && config.config.index.length>0">
+            <template #default="scope" v-if="config.config.index && config.config.index.length>0">
               <el-button
-                size="mini"
+                size="small"
                 plain
-                icon="el-icon-setting"
+                :icon="$icons.Setting"
                 @click="handleView(scope.$index, scope.row)"
               ></el-button>
               <el-button
                 v-if="$store.getters.creds.hasPrivilege(config.config.writeprivileges)"
-                size="mini"
+                size="small"
                 type="danger"
-                icon="el-icon-delete"
+                :icon="$icons.Delete"
                 @click="handleDelete(scope.$index, scope.row)"
               ></el-button>
             </template>
@@ -181,6 +181,7 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import moment from "moment";
 import Vue from "vue";
@@ -200,10 +201,10 @@ req.keys().forEach(filename => {
   dynamicComponents[name] = component;
 });
 
-Vue.component("Map", map);
-Vue.component("BarChart", barchart);
-Vue.component("QueryBar", querybar);
-Vue.component("PGGenericTableDetails", pggenerictabledetails);
+registerComponent("Map", map);
+registerComponent("BarChart", barchart);
+registerComponent("QueryBar", querybar);
+registerComponent("PGGenericTableDetails", pggenerictabledetails);
 
 export default {
   name: "PGGenericTable",
@@ -792,7 +793,7 @@ export default {
     //   }
     // });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING: timerangechanged");
     this.$globalbus.$off("timerangechanged");
   }

@@ -1,4 +1,4 @@
-<template slot="items">
+<template>
   <div>
     <el-row v-if="config.queryFilterChecked">
       <QueryFilter :config="config" v-on:queryfilterchanged="queryfilterchanged"></QueryFilter>
@@ -12,7 +12,7 @@
     <div v-if="urlTooLong()">
 
         <el-row>
-          <i style="font-size:100px;" class="el-icon-warning-outline"></i>
+          <el-icon style="font-size:100px;"><component :is="$icons.WarningFilled" /></el-icon>
         </el-row>
 
         <el-row>
@@ -25,7 +25,7 @@
           <el-card style="width:300px; text-align:center; margin-top:10px;" shadow="never">
             <el-table
               :data="browsersData"
-              size="mini"
+              size="small"
               style="">
               <el-table-column
                 prop="name"
@@ -59,9 +59,6 @@
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
-import Vue from "vue";
-import browserDetect from "vue-browser-detect-plugin";
-Vue.use(browserDetect);
 
 export default {
   name: "Kibana",
@@ -514,7 +511,7 @@ export default {
     //   this.createUrl();
     // });
   },
-  beforeDestroy: function() {
+  beforeUnmount: function() {
     console.log("===============  UNREGISTERING KIBANA:");
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");

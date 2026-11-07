@@ -21,7 +21,7 @@
 
     <!--:default-sort="{prop: '_id', order: 'descending'}"-->
     <el-table
-      size="mini"
+      size="small"
       :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase())))            
       )"
       style="width: 100%"
@@ -29,23 +29,23 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column width="40">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="text-align:center;">
             <v-icon :name="scope.row._source.icon" scale="1.5" />
           </div>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.report')" prop="_id" sortable>
-        <template slot-scope="scope">
+        <template #default="scope">
           <div style="font-weight:bolder">{{computeTranslatedText(scope.row._source.title,$store.getters.creds.user.language)}}</div>
           <span>{{computeTranslatedText(scope.row._source.description,$store.getters.creds.user.language)}}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('report.output')" width="180">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span v-for="item in scope.row._source.output" :key="item">
             &nbsp;
-            <el-tag size="mini" type="info">{{item}}</el-tag>
+            <el-tag size="small" type="info">{{item}}</el-tag>
           </span>
         </template>
       </el-table-column>
@@ -55,21 +55,21 @@
         v-if="$store.getters.creds.hasPrivilege('reporteditor')"
         width="120"
       >
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="(scope.row._source.privileges?true:false) && (scope.row._source.privileges.length>0)"
             placement="left-start"
             :title="$t('generic.privileges')"
             width="200"
             trigger="hover"
-            size="mini"
+            size="small"
           >
             <span :key="item" v-for="item in scope.row._source.privileges">
               &nbsp;
-              <el-tag size="mini">{{item}}</el-tag>
+              <el-tag size="small">{{item}}</el-tag>
             </span>
 
-            <el-button size="mini" slot="reference">{{scope.row._source.privileges.length}}</el-button>
+            <template #reference><el-button size="small">{{scope.row._source.privileges.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
@@ -79,27 +79,27 @@
         v-if="$store.getters.creds.hasPrivilege('reporteditor')"
         width="120"
       >
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             v-if="(scope.row._source.parameters?true:false) && (scope.row._source.parameters.length>0)"
             placement="left-start"
             :title="$t('generic.parameters')"
             width="300"
             trigger="hover"
-            size="mini"
+            size="small"
           >
             <span :key="item.name" v-for="item in scope.row._source.parameters">
               &nbsp;
-              <el-tag size="mini">{{item.title}}/{{item.type}}</el-tag>
+              <el-tag size="small">{{item.title}}/{{item.type}}</el-tag>
             </span>
-            <el-button size="mini" slot="reference">{{scope.row._source.parameters.length}}</el-button>
+            <template #reference><el-button size="small">{{scope.row._source.parameters.length}}</el-button></template>
           </el-popover>
         </template>
       </el-table-column>
 
       <el-table-column align="right" width="300">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
-        <template slot="header" slot-scope="_scope">
+        <template #header>
           <div>
             <el-tooltip
               v-if="currentRow"
@@ -110,12 +110,12 @@
             >
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="duplicate()"
                 class="dupbutton"
                 type="primary"
                 plain
-                icon="el-icon-copy-document"
+                :icon="$icons.CopyDocument"
               ></el-button>
             </el-tooltip>
             <el-tooltip
@@ -127,22 +127,22 @@
             >
               <el-button
                 circle
-                size="mini"
+                size="small"
                 @click="addReport()"
                 class="addbutton"
                 type="primary"
                 plain
-                icon="el-icon-plus"
+                :icon="$icons.Plus"
               ></el-button>
             </el-tooltip>
           </div>
-          <el-input v-model="search" size="mini" :placeholder="$t('generic.type_to_search')" class="searchfield" />
+          <el-input v-model="search" size="small" :placeholder="$t('generic.type_to_search')" class="searchfield" />
         </template>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tooltip class="item" effect="dark" :content="$t('generic.generate')" placement="bottom-start">
             <el-button
-              size="mini"
-              icon="el-icon-caret-right"
+              size="small"
+              :icon="$icons.CaretRight"
               @click="askParameters(scope.$index, scope.row)"
               plain
             ></el-button>
@@ -150,8 +150,8 @@
           <el-tooltip class="item" effect="dark" :content="$t('generic.edit')" placement="bottom">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-              size="mini"
-              icon="el-icon-setting"
+              size="small"
+              :icon="$icons.Setting"
               @click="editReport(scope.$index, scope.row)"
               plain
             ></el-button>
@@ -159,9 +159,9 @@
           <el-tooltip class="item" effect="dark" :content="$t('generic.delete')" placement="bottom-end">
             <el-button
               v-if="$store.getters.creds.hasPrivilege('reporteditor')"
-              size="mini"
+              size="small"
               type="danger"
-              icon="el-icon-delete"
+              :icon="$icons.Delete"
               @click="askDeleteReport(scope.$index, scope.row)"
               plain
             ></el-button>
@@ -173,12 +173,13 @@
 </template>
 
 <script>
+import { registerComponent } from '@/utils/vue3shim'
 import axios from "axios";
 import reporteditor from "@/components/ReportEditor";
 import reportgenerator from "@/components/ReportGenerator";
 import Vue from "vue";
-Vue.component("ReportEditor", reporteditor);
-Vue.component("ReportGenerator", reportgenerator);
+registerComponent("ReportEditor", reporteditor);
+registerComponent("ReportGenerator", reportgenerator);
 import {computeTranslatedText} from '../globalfunctions'
 
 export default {
@@ -348,7 +349,7 @@ export default {
   },
 
   mounted: function() {},
-  beforeDestroy: function() {}
+  beforeUnmount: function() {}
 };
 </script>
 
