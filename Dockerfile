@@ -5,6 +5,9 @@ COPY package.json package-lock.json /etc/build/
 WORKDIR /etc/build
 RUN npm ci
 COPY . /etc/build
+# The public path is fixed at build time (the asset URLs are written into index.html).
+ARG PUBLIC_PATH=/
+ENV VUE_APP_PUBLIC_PATH=$PUBLIC_PATH
 RUN npm run build
 
 

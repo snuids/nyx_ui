@@ -6,8 +6,11 @@
 var express = require('express');
 var app = express();
 var path="/etc/opt/nyx_ui"
-console.log("Path:"+path)
-app.use(express.static(path));
+// BASE_PATH serves the console under a sub-path (/nyxv2/): the build's files carry that prefix,
+// so express has to expose them there. Default is the root, which is what the release image uses.
+var basePath = process.env.BASE_PATH || '/'
+console.log("Path:"+path+" base:"+basePath)
+app.use(basePath, express.static(path));
 
 
 //************** HTTP *************
