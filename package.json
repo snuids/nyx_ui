@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.5",
+    "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/coverage-v8": "^2.1.9",
     "@vue/cli-plugin-babel": "^5.0.9",
     "@vue/cli-plugin-eslint": "^5.0.9",

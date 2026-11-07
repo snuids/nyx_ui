@@ -411,6 +411,11 @@ export default {
         }        
         window.open(url);
       } else {
+        // Un sous-menu peut n'avoir aucune application (entree de menu vide, application retiree
+        // du catalogue) : sans ce garde-fou le clic levait un TypeError sur `apps[0].rec_id`,
+        // l'erreur remontait en console et le menu paraissait casse.
+        if (!e.apps || e.apps.length === 0) return;
+
         this.maintitle = e.loc_title;
     
         var path = "/main/" + e.apps[0].rec_id

@@ -95,21 +95,6 @@ export default {
       this.$store.getters.searchCache[this.config.rec_id] = this.query;
     
     },
-    modifyEvent: _.debounce(function() {
-      console.log("modify event ");
-
-      if(this.blockEvent) {
-        console.log('event blocked')
-        return
-      }
-
-      if (this.query !== this.oldQuery) {
-        console.log("emit");
-        this.$emit("querychanged", this.query);
-        this.$store.getters.searchCache[this.config.rec_id] = this.query;
-        this.oldQuery = this.query;
-      }
-    }, 1500),
     downloadSelection: function(format) {
       this.$emit("downloadasked", format);
     },
@@ -129,6 +114,25 @@ export default {
     }
   },
   created: function() {
+    // `_.debounce` ne cree qu'UNE fonction pour tout le module : deux QueryBar (un onglet par
+    // application dans GenericComponent) partageaient le meme minuteur, et la recherche tapee dans
+    // un onglet annulait celle en attente dans l'autre. Le debounce est donc construit par instance.
+    this.modifyEvent = _.debounce(() => {
+      console.log("modify event ");
+
+      if(this.blockEvent) {
+        console.log('event blocked')
+        return
+      }
+
+      if (this.query !== this.oldQuery) {
+        console.log("emit");
+        this.$emit("querychanged", this.query);
+        this.$store.getters.searchCache[this.config.rec_id] = this.query;
+        this.oldQuery = this.query;
+      }
+    }, 1500)
+
     console.log('created event')
     this.blockEvent = true
     

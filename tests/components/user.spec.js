@@ -1,0 +1,162 @@
+// @vitest-environment jsdom
+/**
+ * User — la liste des comptes, ecran d'administration.
+ *
+ * Petit ecran, consequences lourdes : c'est par ici qu'on cree un compte, qu'on l'ouvre pour
+ * changer ses privileges et qu'on le supprime. Le test verifie l'appel de liste, l'ouverture du
+ * dialogue, la creation d'un compte *sans mot de passe partage* et la suppression confirmee.
+ */
+
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { flushPromises } from '@vue/test-utils'
+import axios from 'axios'
+
+import User from '@/components/User.vue'
+import { resetStore, mountView } from '../helpers/mount-view'
+import store from '@/store/store.js'
+
+vi.mock('axios')
+
+const userRecord = (id, source) => ({
+  _id: id,
+  _index: 'nyx_user',
+  _source: { login: id, firstname: 'Ada', lastname: 'Lovelace', privileges: ['user'], ...source },
+})
+
+let notify
+let confirm
+let logs
+
+beforeEach(() => {
+  vi.useFakeTimers()
+  vi.clearAllMocks()
+  logs = vi.spyOn(console, 'log').mockImplementation(() => {})
+  notify = vi.fn()
+  confirm = vi.fn()
+  // `deleteRecord` (store) appelle `axios.delete(...).catch(...)` : un mock qui rend `undefined`
+  // fait echouer la mutation et l'ecran affiche « annule » alors que la suppression a eu lieu.
+  axios.delete.mockResolvedValue({ data: { error: '' } })
+  resetStore({
+    apiurl: 'api/v1/',
+    creds: { token: 'tok', user: { language: 'en', privileges: ['admin'] }, hasPrivilege: () => true },
+  })
+})
+
+afterEach(() => {
+  logs.mockRestore()
+  vi.useRealTimers()
+})
+
+const mountUsers = async () => {
+  const bar = await mountView(User, {
+    at: '/main/rec-1',
+    stubs: { UserDetails: { name: 'UserDetails', template: '<div class="details-stub" />', props: ['record'] } },
+    mocks: { $notify: notify, $confirm: confirm },
+  })
+  await flushPromises()
+  return bar
+}
+
+describe('User', () => {
+  it('charge la liste des comptes au montage', async () => {
+    axios.post.mockResolvedValue({ data: { error: '', records: [userRecord('alice', {})] } })
+
+    const { wrapper } = await mountUsers()
+
+    expect(axios.post).toHaveBeenCalledWith('api/v1/generic_search/nyx_user*?token=tok', { size: 1000 })
+    expect(wrapper.vm.tableData).toHaveLength(1)
+  })
+
+  it('affiche les comptes renvoyes par l\'API', async () => {
+    axios.post.mockResolvedValue({
+      data: { error: '', records: [userRecord('alice', {}), userRecord('bob', {})] },
+    })
+
+    const { wrapper } = await mountUsers()
+    await flushPromises()
+
+    const rows = wrapper.findAll('.el-table__row')
+    expect(rows).toHaveLength(2)
+    expect(wrapper.text()).toContain('Ada')
+    expect(wrapper.text()).toContain('Lovelace')
+  })
+
+  it('ouvre le dialogue d\'edition sur le compte clique', async () => {
+    axios.post.mockResolvedValue({ data: { error: '', records: [userRecord('alice', {})] } })
+
+    const { wrapper } = await mountUsers()
+    const row = wrapper.vm.tableData[0]
+    wrapper.vm.handleView(0, row)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.dialogFormVisible).toBe(true)
+    expect(wrapper.find('.details-stub').exists()).toBe(true)
+    expect(wrapper.findComponent({ name: 'UserDetails' }).props('record')).toEqual(row)
+  })
+
+  it('cree un compte vierge sans mot de passe', async () => {
+    axios.post.mockResolvedValue({ data: { error: '', records: [] } })
+
+    const { wrapper } = await mountUsers()
+    wrapper.vm.handleAddUser()
+    await wrapper.vm.$nextTick()
+
+    const created = wrapper.vm.currentRecord
+    expect(created.isadd).toBe(true)
+    expect(created._index).toBe('nyx_user')
+    // Aucun mot de passe n'est transmis : l'API en genere un que personne ne connait et marque le
+    // compte `mustResetPassword`. Un hash partage donnait le meme secret a tous les comptes.
+    expect(created._source.password).toBeUndefined()
+    expect(created._source.mustResetPassword).toBeUndefined()
+    expect(wrapper.vm.dialogFormVisible).toBe(true)
+  })
+
+  it('supprime le compte apres confirmation et recharge la liste', async () => {
+    axios.post.mockResolvedValue({ data: { error: '', records: [userRecord('alice', {})] } })
+    confirm.mockResolvedValue('confirm')
+    const commit = vi.spyOn(store, 'commit')
+
+    const { wrapper } = await mountUsers()
+    wrapper.vm.handleDelete(0, wrapper.vm.tableData[0])
+    await flushPromises()
+
+    const deletion = commit.mock.calls.find(([payload]) => payload && payload.type === 'deleteRecord')
+    expect(deletion).toBeDefined()
+    expect(deletion[0].data._id).toBe('alice')
+    expect(axios.delete).toHaveBeenCalledWith('api/v1/generic/nyx_user/alice?token=tok')
+    expect(notify).toHaveBeenCalledWith(expect.objectContaining({ type: 'success' }))
+
+    await vi.advanceTimersByTimeAsync(1100)
+    expect(axios.post).toHaveBeenCalledTimes(2)
+  })
+
+  it('ne supprime rien quand la confirmation est annulee', async () => {
+    axios.post.mockResolvedValue({ data: { error: '', records: [userRecord('alice', {})] } })
+    confirm.mockRejectedValue('cancel')
+    const commit = vi.spyOn(store, 'commit')
+
+    const { wrapper } = await mountUsers()
+    wrapper.vm.handleDelete(0, wrapper.vm.tableData[0])
+    await flushPromises()
+
+    expect(commit).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'deleteRecord' }))
+    expect(notify).toHaveBeenCalledWith(expect.objectContaining({ type: 'info' }))
+  })
+
+  it('filtre la liste sur la saisie de recherche', async () => {
+    axios.post.mockResolvedValue({
+      data: {
+        error: '',
+        records: [userRecord('alice', { firstname: 'Ada' }), userRecord('bob', { firstname: 'Bob' })],
+      },
+    })
+
+    const { wrapper } = await mountUsers()
+    wrapper.vm.search = 'bob'
+    await wrapper.vm.$nextTick()
+
+    // Le filtre est une expression du template : on lit ce qui est rendu, pas `tableData`.
+    expect(wrapper.findAll('.el-table__row')).toHaveLength(1)
+    expect(wrapper.text()).not.toContain('Ada')
+  })
+})
