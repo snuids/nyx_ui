@@ -1,6 +1,9 @@
 name: Build Docker Container
 
 on:
+  # `workflow_dispatch` exists to prove the version guard after a change to it: on a manual run
+  # there is no commit message, so the run takes the "no version" path and must stay green.
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -26,14 +29,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # The tag is the version of the release, taken from the commit message. Squash, rebase and
-      # merge commits all carry it (GitHub repeats the pull request title in the body of a merge
-      # commit), but a pull request whose title has no version would fail here with a bare
-      # "no version" — so the pull request title is the fallback, and the run fails with an
-      # explicit message instead of publishing an untagged image.
       - name: Check the language files are aligned
         run: node scripts/check-lang-keys.mjs
 
+      # The tag is the version of the release, taken from the commit message. Squash, rebase and
+      # merge commits all carry it (GitHub repeats the pull request title in the body of a merge
+      # commit), and the pull request title is the fallback.
+      #
+      # A commit without a version is not a failure: it is a change that does not publish an image.
+      # It used to `exit 1` here, which turned master red on every pull request that was not a
+      # release — a red check that said nothing about the change. The run now says so with a
+      # notice, and the build steps below are gated on the version being present.
       - name: Resolve the version
         id: extract_version
         env:
@@ -55,26 +61,30 @@ jobs:
           fi
 
           if [ -z "$VERSION" ]; then
-            echo "::error::No version (vX.Y.Z) in the commit message nor in the pull request title; refusing to publish an untagged image."
-            exit 1
+            echo "::notice::No version (vX.Y.Z) in the commit message nor in the pull request title: this commit does not publish an image."
+            exit 0
           fi
 
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Resolved version: $VERSION"
 
       - name: Set up QEMU
+        if: steps.extract_version.outputs.version != ''
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
+        if: steps.extract_version.outputs.version != ''
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
+        if: steps.extract_version.outputs.version != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push multi-platform Docker image
+        if: steps.extract_version.outputs.version != ''
         uses: docker/build-push-action@v6
         with:
           context: .
