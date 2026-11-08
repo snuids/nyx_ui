@@ -953,8 +953,8 @@ import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
 
 import { CONTROLLER_PAGES, describeController, otherComponents } from "@/controllerCatalog";
 
-import rison from "rison";
 import aceThemeMixin from "@/mixins/aceTheme";
+import { kibanaAppUrl, kibanaDashboardPath } from "@/utils/kibanaUrl";
 import {
   configYaml,
   controllerLabel,
@@ -975,10 +975,6 @@ registerComponent("GrafanaEditor", grafanaeditor);
 registerComponent("UploadEditor", uploadeditor);
 registerComponent("FileSystemEditor", filesystemeditor);
 
-
-function transformObject(obj) {
-  return rison.encode(obj);
-}
 
 export default {
   mixins: [aceThemeMixin],
@@ -1187,98 +1183,19 @@ export default {
       });
     },
     computeKibanaUrlFromSelectedDash() {
-      console.log('computeKibanaUrlFromSelectedDash')
-      var dashdata = this.selectedDash;
-      var url = "";
-      url += "/dashboard/" + dashdata.id + "";
-      var timek = "from:now-7d,mode:quick,to:now";
-      if (
-        this.curConfig.config != undefined &&
-        this.curConfig.config.kibanaTime != undefined
-      ) {
-        console.log("saving kibana time");
-        console.log(this.curConfig.config.kibanaTime);
-        timek = this.curConfig.config.kibanaTime;
-      }
+      // Le chemin du tableau de bord est construit dans `utils/kibanaUrl.js` : ici on ne garde que
+      // la periode retenue, que le formulaire doit reafficher.
+      const built = kibanaDashboardPath({
+        dash: this.selectedDash,
+        kibanaTime: this.curConfig.config && this.curConfig.config.kibanaTime,
+        timeRefresh: this.curConfig.timeRefresh,
+        timeRefreshValue: this.curConfig.timeRefreshValue,
+      });
 
-      console.log(timek);
-      this.curConfig.config.kibanaTime = timek;
+      if (this.curConfig.config == undefined) this.curConfig.config = {};
+      this.curConfig.config.kibanaTime = built.kibanaTime;
 
-      var strRefresh = "refreshInterval:(pause:!t,value:0)";
-
-      if (this.curConfig.timeRefresh && this.curConfig.timeRefreshValue != null)
-        strRefresh = 'refreshInterval:(pause:!f,value:'+this.curConfig.timeRefreshValue+')'
-
-      url +=
-        "?embed=true&_g=(" + strRefresh + ",time:(" + timek + "))";
-      url += "&_a=(description:'" + dashdata.attributes.description + "'";
-      url += ",filters:!(),fullScreenMode:!f";
-      console.log(url);
-      if (dashdata.attributes.optionsJSON != undefined) {
-        var options = JSON.parse(dashdata.attributes.optionsJSON);
-        var urloptions = Object.entries(options)
-          .map(e => e.join(":"))
-          .join(",");
-        urloptions = urloptions.replace(/true/g, "!t").replace(/false/g, "!f");
-
-        url += ",options:(" + urloptions + ")";
-      } else url += ",options:()";
-
-      var panels = [];
-      var panelsJSON = JSON.parse(dashdata.attributes.panelsJSON);
-
-      console.log(url);
-      console.log(panelsJSON);
-      for (var p in panelsJSON) {
-        console.log("==========+>");
-        console.log(panelsJSON[p]);
-
-        if (
-          dashdata.migrationVersion != null &&
-          dashdata.migrationVersion.dashboard != null &&
-          dashdata.migrationVersion.dashboard == "7.0.0"
-        ) {
-          for (var j in dashdata.references) {
-            if (dashdata.references[j].name == panelsJSON[p].panelRefName) {
-              panelsJSON[p].id = dashdata.references[p].id;
-              panelsJSON[p].type = dashdata.references[p].type;
-            }
-          }
-        }
-
-        var panel = transformObject(panelsJSON[p]);
-
-        panels.push("" + panel + "");
-      }
-
-      panels = panels
-        .join(",")
-        .replace(/#/g, "%23")
-        .replace(/&/g, "%26");
-      url += ",panels:!(" + panels + ")";
-
-      var querybag = "query:(language:lucene,query:'*')";
-      if (
-        dashdata.attributes.kibanaSavedObjectMeta != undefined &&
-        dashdata.attributes.kibanaSavedObjectMeta.searchSourceJSON != undefined
-      ) {
-        var querybag2 = JSON.parse(
-          dashdata.attributes.kibanaSavedObjectMeta.searchSourceJSON
-        );
-        if (querybag2.query != undefined) {
-          querybag = transformObject(querybag2.query);
-          querybag = "query:" + querybag;
-        }
-      }
-
-      url += "," + querybag + ",timeRestore:!f,title:Test,viewMode:view)";
-
-      console.log(
-        "********************compute kibana url***********************"
-      );
-      console.log(url);
-
-      return url;
+      return built.path;
     },
     kibanaDashboardSelected() {
       for (var i in this.dashboards) {
@@ -1301,9 +1218,11 @@ export default {
         "/app/kibana#" +
         this.computeKibanaUrlFromSelectedDash();
 
-      var tmp = JSON.parse(JSON.stringify(this.curConfig));
-      this.curConfig = null;
-      this.curConfig = tmp;
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     handleDeleteHeader(index) {
       this.currentHeader = {};
@@ -1337,17 +1256,21 @@ export default {
       this.computeUrlFromKibana();
 
 
-      var tmp = JSON.parse(JSON.stringify(this.curConfig));
-      this.curConfig = null;
-      this.curConfig = tmp;
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     timeRefreshSwitchChange() {
       this.computeUrlFromKibana();
 
 
-      var tmp = JSON.parse(JSON.stringify(this.curConfig));
-      this.curConfig = null;
-      this.curConfig = tmp;
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
 
       console.log(this.curConfig.config.url)
     },
@@ -1355,9 +1278,86 @@ export default {
       if (this.curConfig.timeSelectorType != null)
         this.curConfig.timeSelectorChecked = true;
 
-      var tmp = JSON.parse(JSON.stringify(this.curConfig));
-      this.curConfig = null;
-      this.curConfig = tmp;
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
+    },
+    kibanaTimeChange() {
+      console.log("kibana time changed");
+      this.computeUrlFromKibana();
+    },
+    computeUrlFromKibana() {
+      if (this.selectedDash != null) {
+        this.curConfig.config.url = kibanaAppUrl({
+          dash: this.selectedDash,
+          baseUrl: this.$store.getters.kibanaurl,
+          dashboardPath: this.computeKibanaUrlFromSelectedDash(),
+        });
+
+        this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
+      }
+    },
+    handleDeleteHeader(index) {
+      this.currentHeader = {};
+      this.curConfig.config.headercolumns.splice(index, 1);
+    },
+    handleDeleteQueryFilter(index) {
+      this.currentQueryFilter = {};
+      this.curConfig.config.queryfilters.splice(index, 1);
+    },
+    handleCurrentHeaderChange(val) {
+      this.currentHeader = val;
+    },
+    handleCurrentQueryFilterChange(val) {
+      this.currentQueryFilter = val;
+    },
+    handleEditHeader(index, row) {
+      // eslint-disable-line
+      this.currentHeader = row;
+      this.dialogHeaderVisible = true;
+    },
+    handleEditQueryFilterField(index, row) {
+      // eslint-disable-line
+      this.currentQueryFilter = row;
+      this.queryFilterEditorVisible = true;
+    },
+    timeRefreshSelectChange() {
+      if (this.curConfig.timeRefreshValue != null)
+        this.curConfig.timeRefresh = true;
+
+
+      this.computeUrlFromKibana();
+
+
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
+    },
+    timeRefreshSwitchChange() {
+      this.computeUrlFromKibana();
+
+
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
+
+      console.log(this.curConfig.config.url)
+    },
+    timeSelectorTypeChange() {
+      if (this.curConfig.timeSelectorType != null)
+        this.curConfig.timeSelectorChecked = true;
+
+      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
+      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
+      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
+      // template tombait sur `curConfig.type`.
+      this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     kibanaTimeChange() {
       console.log("kibana time changed");
