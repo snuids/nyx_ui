@@ -191,16 +191,14 @@ export default {
     loadMore($state) {
       console.log('load asked')
       setTimeout(()=>{
-        if(this.numberOfItems == 0) {
-          $state.complete()
-        }
-        else if(this.allData == 0) {
-          $state.loaded()
+        if(this.numberOfItems == 0 || this.tableData.length >= this.allData.length) {
           $state.complete()
         }
         else {
           this.pagination += 1;
-          this.tableData=this.tableData.concat(this.allData.splice(0, this.scrollSize))
+          this.tableData = this.tableData.concat(
+            this.allData.slice(this.tableData.length, this.tableData.length + this.scrollSize)
+          )
           $state.loaded()
         }
       }, 50)
@@ -396,8 +394,9 @@ export default {
 
             this.allData = response.data.data.sort((a, b) => (a.extension > b.extension) ? 1 : -1)
             this.numberOfItems = response.data.data.length
-            // this.tableData = this.allData.slice(0, this.scrollSize);
-            this.tableData=this.tableData.concat(this.allData.splice(0, this.scrollSize))
+            // `slice` et non `splice` : `splice` retirait les lignes de `allData`, donc le
+            // defilement infini n'avait plus rien a charger.
+            this.tableData = this.allData.slice(0, this.scrollSize)
             this.infiniteId += 1;
 
             if(refresh) {

@@ -181,13 +181,13 @@
         >
           <template #header><div class="clearfix" v-on:click="switch_to('users config')">
             <b>{{ $t('nyxinfo.users') }}</b> - {{ $t('nyxinfo.connected') }}
-            <b>{{WebSocketServer[0]._source.clients[0].clients}}</b>
+            <b>{{ webSocketClients.clients }}</b>
             - {{ $t('nyxinfo.uniques') }}
-            <b>{{Array.from(new Set(WebSocketServer[0]._source.clients[0].logins)).length}}</b>
+            <b>{{ webSocketLogins.length }}</b>
           </div></template>
           <div class="text item" v-on:click="switch_to('users config')">
             <div
-              v-for="(item, index) in Array.from(new Set(WebSocketServer[0]._source.clients[0].logins))"
+              v-for="(item, index) in webSocketLogins"
               :key="index"
             >&nbsp;- {{item}}</div>
           </div>
@@ -229,6 +229,24 @@ export default {
     refAutoRefresh: null,
   }),
   props: {},
+  computed: {
+    /**
+     * Le module WebSocket existe des qu'il demarre ; ses `clients` n'apparaissent qu'a la premiere
+     * connexion. Le template lisait `WebSocketServer[0]._source.clients[0].logins` derriere un garde
+     * qui ne verifiait que `_source` : un module sans client faisait tomber la page entiere au
+     * rendu (`Cannot read properties of undefined (reading '0')`).
+     */
+    webSocketClients() {
+      const source =
+        this.WebSocketServer && this.WebSocketServer[0] && this.WebSocketServer[0]._source;
+      const clients = source && source.clients;
+
+      return clients && clients[0] ? clients[0] : { clients: 0, logins: [] };
+    },
+    webSocketLogins() {
+      return Array.from(new Set(this.webSocketClients.logins || []));
+    },
+  },
   methods: {
     switch_to: function(newpath) {
       this.$store.dispatch("switchToApp", newpath).then(

@@ -417,7 +417,9 @@ export default createStore({
     },
     // eslint-disable-next-line
     refreshTimeRange(state) {
-      if (state.lastTimeRangeEvent.type == "relative") {// UGLY COPY OF CODE in setTimeRanbge
+      // `lastTimeRangeEvent` n'existe qu'a partir du premier choix de periode : sans ce garde, une
+      // pagination ou un tri avant tout choix de periode levait une TypeError ici.
+      if (state.lastTimeRangeEvent != null && state.lastTimeRangeEvent.type == "relative") {// UGLY COPY OF CODE in setTimeRanbge
         var minutesmulti = 1;
         switch (state.lastTimeRangeEvent.relativeType) {
           case 'h':

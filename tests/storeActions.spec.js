@@ -298,9 +298,15 @@ describe('refreshTimeRange', () => {
     expect(store.state.timeRange).toBe('untouched')
   })
 
-  it('throws when no range was ever set', () => {
-    // called before the first setTimeRange: `lastTimeRangeEvent` is null
-    expect(() => store.commit('refreshTimeRange')).toThrow(TypeError)
+  it('ne fait rien tant qu\'aucune periode n\'a ete choisie', () => {
+    // `lastTimeRangeEvent` n'existe qu'apres le premier `setTimeRange` : la mutation levait une
+    // TypeError, donc une pagination avant tout choix de periode cassait l'ecran. Elle ne fait
+    // desormais rien, et laisse la plage telle quelle.
+    store.state.lastTimeRangeEvent = null
+    store.state.timeRange = 'untouched'
+
+    expect(() => store.commit('refreshTimeRange')).not.toThrow()
+    expect(store.state.timeRange).toBe('untouched')
   })
 })
 
