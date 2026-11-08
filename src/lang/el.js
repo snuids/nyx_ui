@@ -178,6 +178,7 @@ export const messages = {
       desc_external_detail_1:"Εάν το εξωτερικό url περιέχει token=TOKEN, η ετικέτα TOKEN αντικαθίσταται από το πραγματικό token χρήστη.",
       desc_external_detail_2:"HOST από το όνομα κεντρικού υπολογιστή, API από το URL API, και LANG από τη γλώσσα του χρήστη.",
       desc_external_detail_3:"Αντικαθιστά τις ετικέτες TODATE και FROMDATE εάν είναι ενεργοποιημένος επιλογέας χρόνου. (Χρησιμοποιώντας Unix Timestamp)",
+      desc_external_detail_4:"Το THEME αντικαθίσταται από το ενεργό θέμα, light ή dark: δείξτε την εφαρμογή σας στο ?theme=THEME και ακολουθεί την κονσόλα.",
       desc_upload:"Εμφανίζει φόρμα μεταφόρτωσης.",
       desc_upload_detail:"Το αρχείο αποστέλλεται σε προορισμό ActiveMQ και μπορεί να διαχειριστεί από Camel, NodeRed ή Lambda.",
       desc_file_system:"Εμφανίζει εξερευνητή αρχείων.",

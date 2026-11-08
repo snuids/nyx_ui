@@ -275,6 +275,7 @@ export const messages = {
         desc_external_detail_1:"Bevat de externe URL token=TOKEN, dan wordt TOKEN vervangen door het token van de gebruiker.",
         desc_external_detail_2:"HOST door de hostnaam, API door de URL van de API en LANG door de taal van de gebruiker.",
         desc_external_detail_3:"Vervangt de tags TODATE en FROMDATE wanneer een tijdkeuze is ingeschakeld (Unix-tijdstempel).",
+        desc_external_detail_4:"THEME wordt vervangen door het actieve thema, light of dark: richt uw toepassing op ?theme=THEME en ze volgt de console.",
         desc_upload:"Toont een uploadformulier.",
         desc_upload_detail:"Het bestand wordt naar een ActiveMQ-bestemming gestuurd en kan door Camel, Node-RED of een Lambda worden verwerkt.",
         desc_file_system:"Toont een bestandsverkenner.",

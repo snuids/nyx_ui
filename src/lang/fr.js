@@ -271,6 +271,7 @@ export const messages = {
         desc_external_detail_1:"Si l'url externe contient token=TOKEN, la balise TOKEN est remplacée par le jeton utilisateur réel.",
         desc_external_detail_2:"HOST par le nom d'hôte, API par l'URL de l'API, et LANG par la langue de l'utilisateur.",
         desc_external_detail_3:"Remplace les balises TODATE et FROMDATE si un sélecteur de temps est activé. (Utilisant le timestamp Unix)",
+        desc_external_detail_4:"THEME est remplacé par le thème en cours, light ou dark : pointez votre application sur ?theme=THEME et elle suit la console.",
         desc_upload:"Affiche un formulaire de téléversement.",
         desc_upload_detail:"Le fichier est envoyé vers une destination ActiveMQ et peut être traité par Camel, NodeRed ou un Lambda.",
         desc_file_system:"Affiche un explorateur de fichiers.",

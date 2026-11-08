@@ -155,7 +155,8 @@
                 {{ $t('configdetails.desc_external_detail_1') }}<br/> 
                 <b>{{ $t('configdetails.desc_external_detail_2') }}</b><br/>                 
                 <br/> 
-                {{ $t('configdetails.desc_external_detail_3') }}
+                {{ $t('configdetails.desc_external_detail_3') }}<br/>
+                {{ $t('configdetails.desc_external_detail_4') }}
                 
               </el-col>
               </el-card>
