@@ -1,5 +1,5 @@
 <template>
-  <span class="nyx-icon" :style="style">
+  <span class="nyx-icon" :class="{ 'nyx-icon--spin': spin }" :style="style">
     <font-awesome-icon :icon="icon" />
   </span>
 </template>
@@ -38,6 +38,13 @@ export default {
     // (`<v-icon :color="...">` dans les colonnes « format: icon ») etait perdue et les icones
     // sortaient en noir la ou la version precedente les affichait en vert.
     color: { type: String, default: '' },
+    /**
+     * `vue-awesome` tournait l'icone avec une prop `spin` ; FontAwesome n'a pas d'equivalent en
+     * props, et son animation vit dans sa feuille de style, que ce projet ne charge pas. Sans cette
+     * prop, `<v-icon name="spinner" spin>` rendait un glyphe fixe : l'etat « Waiting » du tableau
+     * des rapports affichait un rond immobile au lieu d'un rond qui tourne.
+     */
+    spin: { type: Boolean, default: false },
   },
   computed: {
     icon() {
@@ -53,6 +60,16 @@ export default {
 </script>
 
 <style>
+@keyframes nyx-icon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.nyx-icon--spin svg {
+  animation: nyx-icon-spin 1s linear infinite;
+}
+
 .nyx-icon {
   display: inline-flex;
   align-items: center;
