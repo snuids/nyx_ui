@@ -18,6 +18,7 @@ import _ from "lodash";
 import moment from "moment";
 
 import { currentTheme } from "@/utils/theme";
+import { appendQueryParam } from "@/utils/url";
 
 
 function extractHostname(url) {
@@ -134,7 +135,19 @@ export default {
             endTimeAsUtc.format("YYYY-MM-DDTHH:mm:ss") + "Z"
           );
         }
-        
+
+        // Une application branchee sur notre contexte (elle porte TOKEN, API ou LANG) recoit aussi
+        // le theme, meme si sa configuration ne cite pas THEME. Oublier le jeton dans une
+        // configuration ne produit aucune erreur : l'application s'ouvre simplement sans theme, et
+        // rien ne le dit. Les liens tiers (kibana, grafana, cerebro…) ne portent pas ces jetons et
+        // restent donc intacts.
+        const usesConsoleContext = /token=TOKEN|\bAPI\b|\bLANG\b/.test(
+          this.config.config.url
+        );
+        if (usesConsoleContext && !/\bTHEME\b/.test(this.config.config.url)) {
+          url = appendQueryParam(url, "theme", this.themeName);
+        }
+
         return url
     }
   },

@@ -96,4 +96,19 @@ describe('External — jeton THEME', () => {
 
     expect(wrapper.vm.computedUrl).toBe('https://app.example/MYTHEMEAPP?theme=dark')
   })
+
+  it('ajoute le theme a une application du contexte qui ne cite pas THEME', async () => {
+    applyTheme('dark')
+    // une application branchee sur nos jetons mais dont la configuration a oublie THEME
+    const { wrapper } = await mountExternal('/logs/?token=TOKEN&lang=LANG&path=/logs')
+
+    expect(wrapper.vm.computedUrl).toContain('theme=dark')
+  })
+
+  it('laisse intact un lien tiers qui ne porte aucun de nos jetons', async () => {
+    applyTheme('dark')
+    const { wrapper } = await mountExternal('/cerebro/#!/overview?host=http:%2F%2Fes:9200')
+
+    expect(wrapper.vm.computedUrl).not.toContain('theme=')
+  })
 })
