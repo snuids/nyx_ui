@@ -28,6 +28,19 @@ html.dark body {
   color: var(--nyx-text);
 }
 
+/* --- Titres ----------------------------------------------------------------
+   `element-legacy.css` force `h1..h6 { color: #606266 }` pour retrouver la typographie
+   d'Element UI 2. Ce gris est celui du theme clair : sur une carte sombre il tombe a un contraste
+   de 2,5:1, et les libelles de la page d'etat (« Memory: 42 % », « Load 1m ») deviennent illisibles. */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: var(--nyx-text);
+}
+
 /* --- Bandeau ---------------------------------------------------------------
    `ui_css` (servi par l'API) force un fond blanc avec `!important`. */
 html.dark .el-header {
