@@ -55,30 +55,45 @@ export default {
         axios.interceptors.response.use((response) => {
             // console.log('response interceptor success')
             // console.log(response)
-            if(response.data != null && response.data.error != null && response.data.error == 'UNKNOWN_TOKEN') {
-              console.warn('UNKNOWN_TOKEN')
-              if(this.$route.path != '/') {
-                this.logoutDebounce(true)
-              }
-            }
-            else if (response.data != null && response.data.error != null && response.data.error != ''){
-              
-              this.$notify({
-                title: "Error",
-                message: response.data.error,
-                type: "error",
-                position: "bottom-right"
-              });
-            }
-
+            this.reportApiError(response.data)
             return response
-        }, function(error) {
-            console.warn('response interceptor error')
-            console.log(error)
+        }, (error) => {
+            /* Depuis nyx_rest 3.22.23 les refus de token ne repondent plus 200 : NO_TOKEN et
+             * UNKNOWN_TOKEN sont des 401, NO_PRIVILEGE et MUST_CHANGE_PASSWORD des 403. Sans ce
+             * branchement, `axios` rejette la promesse et aucun `.then()` ne s'execute : l'ecran
+             * restait fige au lieu de deconnecter. Le corps garde sa forme, c'est donc le meme
+             * traitement que pour un 200 d'erreur. */
+            const payload = error.response && error.response.data
+            this.reportApiError(payload)
+            if (!(payload && payload.error)) {
+              console.warn('response interceptor error')
+              console.log(error)
+            }
             return Promise.reject(error)
         })
     },
-    
+
+    /* Un refus d'authentification deconnecte, toute autre erreur de l'API se signale. Un 401 sur
+     * l'ecran de connexion n'est pas une session perdue : il reste silencieux. */
+    reportApiError(data) {
+        if (data == null || data.error == null || data.error == '') {
+            return
+        }
+        if (data.error == 'UNKNOWN_TOKEN' || data.error == 'NO_TOKEN') {
+            console.warn(data.error)
+            if (this.$route.path != '/') {
+                this.logoutDebounce(true)
+            }
+            return
+        }
+        this.$notify({
+            title: "Error",
+            message: data.error,
+            type: "error",
+            position: "bottom-right"
+        });
+    },
+
     disableInterceptor() {
         axios.interceptors.request.eject(this.axiosInterceptor)
     },  
