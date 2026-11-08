@@ -33,6 +33,16 @@ export const messages = {
         content:'Contenu',
 
       },
+      github: {
+        or: "ou",
+        signin: "Se connecter avec GitHub",
+        waiting: "Connexion à GitHub…",
+        failed: "La connexion GitHub a échoué.",
+        no_account: "Aucun compte NYX n'est associé à cette identité GitHub.",
+        unavailable: "La connexion GitHub n'est pas disponible.",
+        back: "Retour à la connexion",
+        change_password: "Ce compte doit d'abord changer son mot de passe via la connexion par mot de passe."
+      },
       firstlogin: {
         locked: "Trop de tentatives. Réessayez dans {seconds} secondes.",
         unreachable: "Le serveur est injoignable. Réessayez dans un instant.",

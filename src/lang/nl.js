@@ -1,5 +1,15 @@
 export const messages = {
     nl: {
+      github: {
+        or: "of",
+        signin: "Inloggen met GitHub",
+        waiting: "Bezig met inloggen via GitHub…",
+        failed: "Inloggen via GitHub is mislukt.",
+        no_account: "Er is geen NYX-account gekoppeld aan deze GitHub-identiteit.",
+        unavailable: "Inloggen via GitHub is niet beschikbaar.",
+        back: "Terug naar inloggen",
+        change_password: "Dit account moet eerst zijn wachtwoord wijzigen via het inloggen met wachtwoord."
+      },
       firstlogin: {
         locked: "Te veel pogingen. Probeer het over {seconds} seconden opnieuw.",
         unreachable: "De server is onbereikbaar. Probeer het zo dadelijk opnieuw.",

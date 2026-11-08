@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Main from '../views/Main.vue'
 import Privacy from '../views/Privacy.vue'
+import OAuth from '../views/OAuth.vue'
 
 
 import GenericComponent from '../components/GenericComponent.vue'
@@ -25,6 +26,14 @@ export default createRouter({
       path: '/privacy',
       name: 'Privacy',
       component: Privacy
+    },
+    {
+      // Landing page of the GitHub sign-in (`?code=…&state=…`). A sibling of `/main`, never a
+      // child: a child would inherit the authenticated shell and render the menu of a session
+      // that does not exist yet. The path is the `GITHUB_REDIRECT_URI` configured on the API.
+      path: '/oauth',
+      name: 'OAuth',
+      component: OAuth
     },
     {
       path: '/main',

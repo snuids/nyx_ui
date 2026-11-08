@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.13 08/Nov/2026
+* **Connexion avec GitHub.** Le bouton n'apparait que si l'API repond `login.github` sur `/config` — c'est elle qui detient le client id et le secret, la console ne construit donc jamais l'URL elle-meme : elle demande `GET cred/oauth/state` et suit l'URL renvoyee
+* **La page de retour `/oauth` termine la session comme le formulaire.** Elle lit `?code` et `?state` de l'URL (fragment compris : `getUrlVars` le garde, il est retire avant l'envoi), poste sur `cred/login_github`, puis fait exactement ce que fait `Login.vue` quand le mot de passe passe : `localStorage.authResponse`, locale de l'ecran, commit `login` du store, ouverture de la premiere application du compte. Elle remplace l'URL au lieu d'y empiler une entree, pour que le `code` — a usage unique — ne reste pas dans l'historique
+* **Les cas de refus sont dits, pas avales** : URL sans code (retour a la main), identite sans compte NYX (« aucun compte n'est associe »), compte sans application (le message existant de `firstlogin.no_menu` au lieu du `TypeError` sur `loc_title`), mot de passe provisoire (on renvoie vers la connexion par mot de passe, seul endroit ou il se change), serveur injoignable
+* Routes : `/oauth` est **frere** de `/main`, pas enfant — un enfant heriterait du shell authentifie et dessinerait le menu d'une session qui n'existe pas encore
+* 8 cles `github.*` ajoutees aux quatre catalogues (le controle `check-lang-keys` reste a 666 cles alignees), et `tests/views/oauth.spec.js` couvre les six issues ci-dessus
+
 ## V3.6.12 08/Nov/2026
 * **Le theme suit desormais toutes les applications branchees sur le contexte.** Une application externe qui porte `TOKEN`, `API` ou `LANG` recoit `theme` meme si sa configuration ne cite pas `THEME` : oublier le jeton ne produisait aucune erreur, l'application s'ouvrait simplement sans theme (le symptome trompeur : `token` et `lang` arrivent, `theme` manque). Le parametre est ajoute avant le fragment et seulement s'il est absent ; les liens tiers (kibana, grafana, cerebro, nodered, rediscom, jupyter) restent intacts
 
