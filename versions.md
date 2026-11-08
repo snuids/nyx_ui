@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.14 08/Nov/2026
+* **Le retour de GitHub arrive sur un chemin, la console est en mode hash.** Une `redirect_uri` OAuth ne peut pas contenir de fragment : GitHub appelle donc `/oauth?code=...`, un chemin que la console ne sait pas router — l'application demarrait sur `/`, montait l'ecran de connexion, et la session n'etait jamais terminee. `normalizeOAuthLocation()` (au chargement du routeur) deplace la requete dans le fragment (`/#/oauth?code=...`) avant que le routeur ne lise l'URL
+* Meme chose cote serveur : nginx doit servir l'index sur `/oauth` (le serveur statique de l'image repond 404 sur un chemin inconnu). Sans ce report applicatif, l'ecran `/oauth` reste indispensable : il lit `code` et `state` dans les deux formes d'URL
+* 5 tests pour le report (`tests/router-oauth-location.spec.js`) : deplacement, barre oblique finale, URL deja fragmente, autres chemins, absence de `window`
+
 ## V3.6.13 08/Nov/2026
 * **Connexion avec GitHub.** Le bouton n'apparait que si l'API repond `login.github` sur `/config` — c'est elle qui detient le client id et le secret, la console ne construit donc jamais l'URL elle-meme : elle demande `GET cred/oauth/state` et suit l'URL renvoyee
 * **La page de retour `/oauth` termine la session comme le formulaire.** Elle lit `?code` et `?state` de l'URL (fragment compris : `getUrlVars` le garde, il est retire avant l'envoi), poste sur `cred/login_github`, puis fait exactement ce que fait `Login.vue` quand le mot de passe passe : `localStorage.authResponse`, locale de l'ecran, commit `login` du store, ouverture de la premiere application du compte. Elle remplace l'URL au lieu d'y empiler une entree, pour que le `code` — a usage unique — ne reste pas dans l'historique
