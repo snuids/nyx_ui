@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.8 08/Nov/2026
+* **La carte de description des types de rapport coupe son texte.** Chaque type avait son bloc de template, avec une hauteur fixe sur la carte (70 px, 90 px pour Jasper JDBC) et des `el-col` poses directement dans la carte, sans `el-row` : la description de Jasper JDBC fait trois lignes, la troisieme etait invisible et une barre de defilement apparaissait dans la carte. Les cinq blocs deviennent un seul, pilote par une table `type -> {cle de traduction, icone}` ; la carte prend la hauteur de son contenu, l'icone et le texte partagent une ligne flex. Mesure : 92 px de haut avec 90 px de contenu (barre de defilement) -> 105 px, texte entier, aucun debordement
+* **La zone de depot JRXML deborde de sa ligne.** `el-upload` portait `style="height:30px"` et le `dragger` 40 px pour deux lignes de texte : le `dragger` mesurait 82 px dans une boite de 30 et passait par-dessus le champ suivant ; il partait aussi du bord de la colonne alors que les champs voisins sont indentees de la largeur du libelle. Il est enveloppe dans un `el-form-item` sans libelle et sa hauteur est libre : x=633 l=486 h=30 -> x=753 l=366, l'x et la largeur des champs de sa colonne
+* Cinq tests de plus verrouillent la structure (pas de hauteur inline sur la carte ni sur la zone, ligne flex icone/texte, une description pour chacun des cinq types, zone dans un `form-item`) — 399 tests
+
 ## V3.6.7 08/Nov/2026
 * **Un refus de token deconnecte a nouveau.** `nyx_rest` 3.22.23 ne repond plus 200 quand il refuse un token : `NO_TOKEN` et `UNKNOWN_TOKEN` sont des 401, `NO_PRIVILEGE` et `MUST_CHANGE_PASSWORD` des 403. L'intercepteur de reponse ne regardait que les corps des reponses reussies, donc `axios` rejetait la promesse sans qu'aucun `.then()` ne s'execute : la session perdue laissait l'ecran fige au lieu de ramener a la connexion. Le traitement du corps est maintenant partage par les deux branches (`reportApiError`), et un 401 sur l'ecran de connexion reste silencieux
 * Le reste est inchange : les erreurs de route de l'API continuent de repondre 200 et sont toujours notifiees de la meme facon, et le corps `{"error": …}` garde sa forme
