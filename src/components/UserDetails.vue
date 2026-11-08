@@ -334,6 +334,20 @@ export default {
 };
 </script>
 <style>
+/* Le formulaire deplie fait 938 px : sur une fenetre de 577 px, le pied de page (Annuler /
+   Soumettre) sortait de l'ecran et il fallait faire defiler la page entiere. Le dialogue tient
+   maintenant dans la fenetre et c'est son corps qui defile. */
+.dialog-user {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  margin: 5vh auto;
+}
+
+.dialog-user .el-dialog__body {
+  overflow-y: auto;
+}
+
 /* `el-row` est un conteneur flex : le `<el-transfer>` y devient un element flex dimensionne sur
    son contenu, et les deux listes se reduisaient a 200 px chacune. Il prend toute la largeur. */
 .dialog-user .el-transfer {
