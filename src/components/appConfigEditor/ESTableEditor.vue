@@ -38,7 +38,7 @@
       </el-row>
 
       <el-row>
-        <el-table :data="esMapping" size="small" style="width: 100%">
+        <el-table :data="esMapping || []" size="small" style="width: 100%">
           <el-table-column label="id" prop="id">
             <template #header>
               <p
@@ -651,12 +651,22 @@
 <script>
 import { registerComponent } from '@/utils/vue3shim'
 //import axios from "axios";
-import Vue from "vue";
 import axios from "axios";
 import _ from "lodash";
 
 import userquerieseditor from "@/components/appConfigEditor/UserQueriesEditor";
 import linkeditor from "@/components/appConfigEditor/LinkEditor";
+import {
+  allFieldsAsList,
+  exportColumnsFromTableFields,
+  fieldsOf,
+  flattenMapping,
+  latLonCandidates,
+  selectionToColumns,
+  tableFieldsFromExportColumns,
+  timefieldSelection,
+  withTimeSelectors,
+} from "@/utils/tableEditorFields";
 registerComponent("UserQueriesEditor", userquerieseditor);
 registerComponent("LinkEditor", linkeditor);
 
@@ -745,19 +755,14 @@ export default {
       };
     },
     allFieldsFilter() {
-      return Object.assign({}, ...Object.keys(this.allFields).map(k => ({[k]: {'field': k}})));
+      return allFieldsAsList(this.allFields);
     },
     // Champs candidats pour une latitude / une longitude, quand l'index ne porte pas de `geo_point`
     // (deux champs numeriques, ou deux textes qui contiennent la coordonnee). On retombe sur tous les
     // champs si le mapping n'en declare aucun du bon type, pour ne jamais proposer une liste vide.
     latLonFields() {
-      const numeric = ["long", "integer", "short", "byte", "double", "float",
-                       "half_float", "scaled_float", "unsigned_long", "keyword"];
-      const fields = this.allFields || {};
-      let names = Object.keys(fields).filter(k => numeric.indexOf(fields[k].type) >= 0);
-      if (names.length == 0) names = Object.keys(fields);
-      return names.sort().map(name => ({ field: name }));
-    },
+      return latLonCandidates(this.allFields);
+    }
   },
   watch: {
     indexPattern: {
@@ -773,25 +778,26 @@ export default {
     },
     timefieldSelected: {
       handler: function() {
-        if (this.timefieldSelected == "_____________________") {
+        const selection = timefieldSelection(this.timefieldSelected);
+
+        // Retour en arriere dans le selecteur : rien d'autre a changer.
+        if (selection.backToNone) {
           this.timefieldSelected = null;
           this.currentConfig.config.timefield = null;
           return;
         }
 
-        if (
-          !this.timefieldSelected ||
-          this.timefieldSelected == "I don't want to use the Time Filter"
-        ) {
+        // Pas de filtre de temps : le graphique et le selecteur de periode n'ont plus de sens.
+        if (selection.clearGraphic) {
           this.currentConfig.config.timefield = null;
           this.currentConfig.graphicChecked = false;
           this.currentConfig.timeSelectorChecked = false;
           return;
         }
 
-        this.currentConfig.config.timefield = this.timefieldSelected;
+        this.currentConfig.config.timefield = selection.timefield;
       }
-    }
+    },
   },
   props: {
     forcestep: { type: Number },
@@ -830,9 +836,9 @@ export default {
         return;
       }
 
-      this.currentConfig.config.exportColumns = this.currentConfig.config.tableFieldsToDownload
-        .map(element => element.field + "->" + element.title)
-        .join();
+      this.currentConfig.config.exportColumns = exportColumnsFromTableFields(
+        this.currentConfig.config.tableFieldsToDownload
+      );
     }, 500),
     setIndex(indexPattern) {
       console.log("setindex");
@@ -847,25 +853,14 @@ export default {
       this.selectFieldsToDownloadChanged();
     },
     draggableChanged(type) {
-      let tmp = [];
-      let field1 = "";
-      let field2 = "";
+      const lists = {
+        display: ["headercolumns", "fieldsToDisplay"],
+        download: ["tableFieldsToDownload", "fieldsToDownload"],
+        filter: ["queryfilters", "fieldsToFilter"],
+      };
+      const [configKey, localKey] = lists[type];
 
-      if (type == "display") {
-        field1 = "headercolumns";
-        field2 = "fieldsToDisplay";
-      } else if (type == "download") {
-        field1 = "tableFieldsToDownload";
-        field2 = "fieldsToDownload";
-      } else if (type == "filter") {
-        field1 = "queryfilters";
-        field2 = "fieldsToFilter";
-      }
-
-      for (var i = 0; i < this.currentConfig.config[field1].length; i++) {
-        tmp.push(this.currentConfig.config[field1][i].field);
-      }
-      this[field2] = tmp;
+      this[localKey] = fieldsOf(this.currentConfig.config[configKey]);
     },
     prepareData() {
       console.log("prepareData ESTableEditor");
@@ -891,19 +886,12 @@ export default {
         }
       }
       if (this.currentConfig.config.exportColumns != null) {
-        this.currentConfig.config.tableFieldsToDownload = [];
-        var tmp = this.currentConfig.config.exportColumns.split(",");
-
-        console.log(tmp);
-
-        for (let i = 0; i < tmp.length; i++) {
-          var obj = {
-            field: tmp[i].split("->")[0],
-            title: tmp[i].split("->")[1]
-          };
-          this.currentConfig.config.tableFieldsToDownload.push(obj);
-          this.fieldsToDownload.push(tmp[i].split("->")[0]);
-        }
+        this.currentConfig.config.tableFieldsToDownload = tableFieldsFromExportColumns(
+          this.currentConfig.config.exportColumns
+        );
+        this.currentConfig.config.tableFieldsToDownload.forEach((entry) => {
+          this.fieldsToDownload.push(entry.field);
+        });
       }
 
       // this.$nextTick(() => {this.step = this.forcestep;});
@@ -992,52 +980,18 @@ export default {
       this.$nextTick(() => select.focus());
     },
     selectFieldsToDisplayChanged: function(val) {
-      console.log("selectFieldsToDisplayChanged");
-
-      let tmp = JSON.parse(JSON.stringify(this.currentConfig.config.headercolumns));
-      this.currentConfig.config.headercolumns = [];
-
-      if(val.length == 0) 
-        return
-
-      for(var i = 0; i < val.length; i++) {
-        let flag = false;
-        for(var j = 0; j < tmp.length; j++) {
-          if(val[i] == tmp[j].field) {
-            this.currentConfig.config.headercolumns.push(tmp[j])
-            flag = true
-            break
-          }
-        }
-
-        if(!flag) {
-          this.currentConfig.config.headercolumns.push(this.allFields[val[i]])
-        }
-      }
+      this.currentConfig.config.headercolumns = selectionToColumns(
+        val,
+        this.currentConfig.config.headercolumns,
+        this.allFields
+      );
     },
     selectFieldsToDownloadChanged: function(val) {
-      console.log("selectFieldsToDownloadChanged");
-
-      let tmp = JSON.parse(JSON.stringify(this.currentConfig.config.tableFieldsToDownload));
-      this.currentConfig.config.tableFieldsToDownload = [];
-
-      if(val.length == 0) 
-        return
-
-      for(var i = 0; i < val.length; i++) {
-        let flag = false;
-        for(var j = 0; j < tmp.length; j++) {
-          if(val[i] == tmp[j].field) {
-            this.currentConfig.config.tableFieldsToDownload.push(tmp[j])
-            flag = true
-            break
-          }
-        }
-
-        if(!flag) {
-          this.currentConfig.config.tableFieldsToDownload.push(this.allFields[val[i]])
-        }
-      }
+      this.currentConfig.config.tableFieldsToDownload = selectionToColumns(
+        val,
+        this.currentConfig.config.tableFieldsToDownload,
+        this.allFields
+      );
     },
     resetTest: function() {
       this.fieldsToDisplay = [];
@@ -1062,65 +1016,12 @@ export default {
       this.step = step;
     },
     computeFields: function() {
-      this.timeFields = {};
-      this.geoFields = {};
-      this.allFields = {
-        _id: {
-          field: "_id",
-          type: "_id",
-          title: "_id"
-        },
-        _index: {
-          field: "_index",
-          type: "_index",
-          title: "_index"
-        }
-      };
+      const flattened = flattenMapping(this.esMapping);
 
-      for (var idx in this.esMapping) {
-        var indexMapping = this.esMapping[idx];
-        if (indexMapping.obj != null) {
-          if (indexMapping.obj.mappings.properties != null) {
-            this.getRecMappings("", indexMapping.obj.mappings);
-          } else {
-            for (var _type in indexMapping.obj.mappings) {
-              this.getRecMappings("", indexMapping.obj.mappings[_type]);
-            }
-          }
-        }
-      }
-
-      if (Object.keys(this.timeFields).length > 0) {
-        this.timeFields["_____________________"] = {
-          field: "_____________________"
-        };
-        this.timeFields["none"] = {
-          field: "I don't want to use the Time Filter"
-        };
-        this.noTimeField = false;
-      } else {
-        this.noTimeField = true;
-      }
-    },
-    getRecMappings: function(curpath, curstruct) {
-      for (var i in curstruct.properties) {
-        var curobj = curstruct.properties[i];
-        if (curobj.properties != null)
-          this.getRecMappings(curpath + i + ".", curobj);
-        else {
-          var obj = {
-            field: curpath + i,
-            type: curobj.type,
-            title: curpath + i
-          };
-
-          this.allFields[curpath + i] = obj;
-
-          if (obj.type == "date") this.timeFields[curpath + i] = obj;
-
-          if (obj.type == "geo_point") this.geoFields[curpath + i] = obj;
-        }
-      }
+      this.allFields = flattened.allFields;
+      this.timeFields = withTimeSelectors(flattened.timeFields);
+      this.geoFields = flattened.geoFields;
+      this.noTimeField = flattened.noTimeField;
     }
   }
 };
