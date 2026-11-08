@@ -331,4 +331,33 @@ describe('bouton GitHub et hauteur de la carte', () => {
     // ...et une carte plus haute que la fenetre defile au lieu d'etre coupee.
     expect(rule('.login-container')).toContain('overflow-y: auto;')
   })
+
+  it('garde le texte d’accueil sous la carte, quelle que soit sa hauteur', async () => {
+    // Avec la carte en absolu et le titre a `50% + 170px`, l'ajout du bouton GitHub faisait
+    // passer la carte par-dessus le titre : le texte blanc devenait invisible sur le fond blanc
+    // de la carte. Le groupe carte + titre est desormais en colonne, donc le titre suit.
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const group = source.match(/<div class="login-center"[^>]*>([\s\S]*?)<\/div>\s*\n\s*<!--/)
+    expect(group, 'groupe .login-center introuvable').toBeTruthy()
+    expect(group[1]).toMatch(/<el-card[\s\S]*?<\/el-card>[\s\S]*?<h1 class="title-login">/)
+
+    const rule = source.match(/\.login-center \{[^}]*\}/)[0]
+    expect(rule).toMatch(/display:\s*flex/)
+    expect(rule).toMatch(/flex-direction:\s*column/)
+
+    const wrapper = (await mountLogin()).wrapper
+    expect(wrapper.find('.title-login .privacy-link').exists()).toBe(false)
+    expect(wrapper.find('.login-center .privacy-link').exists()).toBe(false)
+    expect(wrapper.find('.privacy-link').exists()).toBe(true)
+  })
+
+  it('place le lien de confidentialite au milieu, en bas', async () => {
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const rule = source.match(/\.privacy-link \{([^}]*)\}/)[1]
+
+    expect(rule).toMatch(/position:\s*absolute/)
+    expect(rule).toMatch(/left:\s*50%/)
+    expect(rule).toMatch(/bottom:\s*\d+px/)
+    expect(rule).toMatch(/transform:\s*translateX\(-50%\)/)
+  })
 })

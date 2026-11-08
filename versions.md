@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.16 08/Nov/2026
+* **Le texte d'accueil ne passe plus sous la carte.** La carte etait en position absolue et le titre pose a `50% + 170px` : tant que la carte mesurait 200px le titre tombait juste en dessous, mais des qu'elle grandit (bouton GitHub) la carte le recouvrait — texte blanc sur fond blanc, invisible. La carte et le titre forment maintenant un seul groupe en colonne, dont le bord haut est celui qu'avait la carte : le titre suit la hauteur reelle
+* **Le lien de confidentialite passe au milieu, en bas de la page.** Il etait sur la ligne du titre, ou il se disputait la place avec le texte d'accueil ; il est desormais positionne seul (`left: 50%`, `bottom: 12px`, `translateX(-50%)`), hors du groupe carte + titre
+* Le panneau de premier changement de mot de passe garde son decalage propre (`50% - 180px`), sinon il deborderait par le bas sur un portable
+* 2 tests de plus : le lien n'est plus dans le titre ni dans le groupe (il est au niveau de la page) et la regle qui le place est verifiee
+
 ## V3.6.15 08/Nov/2026
 * **La carte de connexion ne fige plus sa hauteur.** Elle avait `height: 200px`, la taille du seul formulaire mot de passe : le bouton GitHub ajoute un separateur et un bouton (~60px), le contenu debordait de la carte et il fallait defiler pour l'atteindre. La carte se dimensionne desormais sur son contenu (`min-height: 200px`, le reste en `auto`), avec le meme bord haut et le meme centrage horizontal qu'avant pour ne pas deplacer le formulaire
 * Le panneau de premier changement de mot de passe suit la meme regle (`min-height: 340px`) : il doit grandir lui aussi quand un message d'erreur s'ajoute
