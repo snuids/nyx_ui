@@ -123,6 +123,18 @@ describe('retour de la connexion GitHub', () => {
     expect(wrapper.vm.errorMessage).toBe('')
   })
 
+  it('la requete dans le fragment (apres le report du routeur) est lue pareil', async () => {
+    // `normalizeOAuthLocation` deplace `/oauth?code=…` en `/#/oauth?code=…` : l'ecran doit lire
+    // les deux formes, sinon il ne se passe rien au retour de GitHub.
+    window.history.replaceState({}, '', '/#/oauth?code=the-code&state=the-state')
+    axios.post.mockResolvedValue(authResponse())
+
+    const { wrapper } = await mountOAuth()
+
+    expect(axios.post.mock.calls[0][1]).toEqual({ code: 'the-code', state: 'the-state' })
+    expect(wrapper.vm.errorMessage).toBe('')
+  })
+
   it('le fragment de l’URL n’est pas collé au state', async () => {
     // getUrlVars garde le `#fragment` : le laisser passer ferait refuser le state par l'API.
     openAt('?code=the-code&state=the-state')
