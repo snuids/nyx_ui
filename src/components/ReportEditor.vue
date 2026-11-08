@@ -37,67 +37,19 @@
             </el-col>            
            </el-row >
 
-            <el-row v-if="newRec.reportType=='python'" class="transition-box desc-card" style="text-align:left;">     
-              <el-card shadow="never" style="height:70px;background-color:rgb(236, 245, 255);">     
-              <el-col :span="4" style="text-align:right;padding-right:20px">
-                <v-icon name="code" scale="2.2" />
-              </el-col>
-              <el-col :span="20">
-                {{ $t('rep.desc_python') }}
-                <br/> 
-              </el-col>
+            <!-- Une seule carte, pilotee par le type choisi. Les cinq blocs precedents portaient une
+                 hauteur fixe (70 ou 90 px) et un `el-col` sans `el-row` : le texte des descriptions
+                 longues etait coupe, avec une barre de defilement dans la carte. -->
+            <el-row v-if="reportTypeDescription" class="desc-card">
+              <el-card shadow="never" class="desc-card__card">
+                <div class="desc-card__inner">
+                  <span class="desc-card__icon">
+                    <v-icon :name="reportTypeDescription.icon" scale="2.2" />
+                  </span>
+                  <p class="desc-card__text">{{ $t(reportTypeDescription.key) }}</p>
+                </div>
               </el-card>
             </el-row>
-          <el-row v-if="newRec.reportType=='notebook_doc'" class="transition-box desc-card" style="text-align:left">     
-            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
-            <el-col :span="4" style="text-align:right;padding-right:20px">
-              <v-icon name="regular/file-word" scale="2.2" />
-            </el-col>
-            <el-col :span="20">
-              {{ $t('rep.desc_notebook_doc') }}
-               <br/>
-               <br/> 
-            </el-col>
-            </el-card>
-          </el-row>
-          
-          <el-row v-if="newRec.reportType=='notebook'" class="desc-card" style="text-align:left">     
-            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
-            <el-col :span="4" style="text-align:right;padding-right:20px">
-              <v-icon name="regular/file-excel" scale="2.2" />
-            </el-col>
-            <el-col :span="20">
-              {{ $t('rep.desc_notebook') }}
-               <br/> 
-            </el-col>
-            </el-card>
-          </el-row>
-          <el-row v-if="newRec.reportType=='jasper'" class="desc-card" style="text-align:left">     
-            <el-card shadow="never"  style="height:70px;background-color:rgb(236, 245, 255);">       
-            <el-col :span="4" style="text-align:right;padding-right:20px">
-              <v-icon name="regular/file-pdf" scale="2.2" />
-            </el-col>
-            <el-col :span="20">
-              {{ $t('rep.desc_jasper') }}
-               <br/> 
-            </el-col>
-            </el-card>
-          </el-row>
-          <el-row v-if="newRec.reportType=='jasper_jdbc'" class="desc-card" style="text-align:left">     
-            <el-card shadow="never"  style="height:90px;background-color:rgb(236, 245, 255);">       
-            <el-col :span="4" style="text-align:right;padding-right:20px">
-              <v-icon name="regular/file-pdf" scale="2.2" />
-            </el-col>
-            <el-col :span="20">
-              {{ $t('rep.desc_jasper_jdbc') }}
-               <br/> 
-            </el-col>
-            </el-card>
-          </el-row>
-          
-          
-
-          
 
           <el-row>
             <el-col :span="8">
@@ -229,6 +181,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'">
+            <!-- Dans un `el-form-item` sans libelle : la zone de depot s'aligne ainsi sur le champ
+                 de la colonne de gauche (meme retrait de libelle), au lieu de partir du bord. -->
+            <el-form-item :label-width="formLabelWidth">
             <el-upload
                 class="jasper-upload upload-box"
                 drag
@@ -238,7 +193,6 @@
                 
                 accept=".jrxml"
                 size="small"
-                style="height:30px"
               >              
                 <div class="el-upload__text">
                   {{ $t('rep.drop_jrxml') }}<br/>
@@ -246,6 +200,7 @@
                 </div>
                 
               </el-upload> 
+            </el-form-item>
             </el-col>
           </el-row>
 
@@ -496,6 +451,16 @@ import IconPicker from "@/components/IconPicker";
 import { i18n } from "../i18n-setup";
 import { jupyterLabToken, withJupyterLabToken } from "@/utils/jupyter";
 
+// Description et icone de chaque type de rapport : elles etaient recopiees dans cinq blocs de
+// template, avec leur propre hauteur de carte.
+const REPORT_TYPE_DESCRIPTIONS = {
+  notebook_doc: { key: "rep.desc_notebook_doc", icon: "regular/file-word" },
+  notebook: { key: "rep.desc_notebook", icon: "regular/file-excel" },
+  python: { key: "rep.desc_python", icon: "code" },
+  jasper: { key: "rep.desc_jasper", icon: "regular/file-pdf" },
+  jasper_jdbc: { key: "rep.desc_jasper_jdbc", icon: "regular/file-pdf" },
+};
+
 export default {
   name: "ReportEditor",
   components: {
@@ -558,6 +523,10 @@ export default {
   computed: {
     recordin: function() {
       return this.record;
+    },
+    reportTypeDescription: function() {
+      if (!this.newRec) return null;
+      return REPORT_TYPE_DESCRIPTIONS[this.newRec.reportType] || null;
     },
     recordstr: function() {
       return JSON.stringify(this.record);
@@ -1028,7 +997,46 @@ export default {
 }
 
 
-.jasper-upload .el-upload-dragger{
-  height:40px !important;
+/* Carte de description : hauteur libre. Les 70/90 px fixes coupaient le texte des descriptions
+   longues (une barre de defilement apparaissait dans la carte) ; `el-col` sans `el-row` ne
+   s'aligne pas non plus, d'ou la ligne flex. */
+.desc-card__card {
+  background-color: rgb(236, 245, 255);
+}
+
+.desc-card__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.desc-card__icon {
+  flex: 0 0 44px;
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.desc-card__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Zone de depot : `el-upload` portait `height:30px` et le `dragger` 40 px, pour deux lignes de
+   texte. Le contenu debordait de 50 px sous sa ligne et passait par-dessus le champ suivant. */
+.jasper-upload {
+  width: 100%;
+}
+
+.jasper-upload .el-upload-dragger {
+  height: auto !important;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  box-sizing: border-box;
 }
 </style>
