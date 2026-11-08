@@ -107,6 +107,16 @@
             :loading="loginunderway"
           >{{ $t("ui.login_button") }}</el-button>
           <div class="login_error" v-if="form.error">{{form.error}}</div>
+          <template v-if="githubEnabled">
+            <div class="login-separator"><span>{{ $t("github.or") }}</span></div>
+            <el-button
+              class="login-button github-button"
+              @click="startGithubLogin()"
+              :loading="githubunderway"
+            >
+              <v-icon name="github" scale="1" />&nbsp;{{ $t("github.signin") }}
+            </el-button>
+          </template>
         </el-col>
       </el-form>
     </el-card>
@@ -141,6 +151,8 @@ export default {
       welcome: "loading"
     },
     loginunderway: false,
+    // GitHub sign-in: the button is shown only when the API answers that it is configured.
+    githubunderway: false,
     // Provisional password: the API only allows the password change until one is chosen.
     forceChange: false,
     newPassword: { current: "", first: "", second: "", error: "" },
@@ -168,6 +180,22 @@ export default {
         }
 
       }
+    },
+
+    async startGithubLogin() {
+      this.githubunderway = true;
+      try {
+        const response = await axios.get(this.$store.getters.apiurl + "cred/oauth/state");
+        if (response.data.error == "" && response.data.url) {
+          // The API also set the `state` cookie this browser must give back.
+          window.location.href = response.data.url;
+          return;
+        }
+        this.form.error = this.$t("github.unavailable");
+      } catch (e) {
+        this.form.error = this.$t("github.unavailable");
+      }
+      this.githubunderway = false;
     },
 
     async validateUser() {
@@ -378,6 +406,11 @@ export default {
     privacyLink() {
       return privacyNotice((this.$i18n && this.$i18n.locale) || "en").link;
     },
+    // `/config` carries `login.github`: the API is the one that knows whether it holds a GitHub
+    // client id, secret and redirect URI, so the console never builds the URL itself.
+    githubEnabled() {
+      return !!(this.config && this.config.login && this.config.login.github);
+    },
     loginDisabled() {
       return (
         this.form.login.length == 0 ||
@@ -495,6 +528,28 @@ export default {
 .login-button {
   width: 100%;
   margin-top: 10px;
+}
+
+/* « ou » entre les deux moyens de se connecter : une regle simple, pour ne pas laisser le
+   second bouton collé au premier. */
+.login-separator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 2px;
+  color: #909399;
+  font-size: 12px;
+}
+
+.login-separator::before,
+.login-separator::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid #dcdfe6;
+}
+
+.github-button {
+  margin-top: 6px;
 }
 
 .login-container {

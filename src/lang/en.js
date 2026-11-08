@@ -1,5 +1,15 @@
 export const messages = {
     en: {
+      github: {
+        or: "or",
+        signin: "Sign in with GitHub",
+        waiting: "Signing in with GitHub…",
+        failed: "The GitHub sign-in failed.",
+        no_account: "No NYX account is linked to this GitHub identity.",
+        unavailable: "The GitHub sign-in is not available.",
+        back: "Back to sign-in",
+        change_password: "This account must first change its password through the password sign-in."
+      },
       firstlogin: {
         locked: "Too many attempts. Try again in {seconds} seconds.",
         unreachable: "The server is unreachable. Try again in a moment.",
