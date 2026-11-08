@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.10 08/Nov/2026
+* **Mode sombre : les libelles de la page d'etat etaient illisibles.** Ils sont dans des `<h3>`, et `element-legacy.css` force `h1..h6 { color: #606266 }` : ce gris du theme clair tombe a 2,5:1 sur une carte sombre. `dark.css` reprend les titres (`var(--nyx-text)`), le contraste mesure sur la page passe de 2,5:1 a 11:1 et il ne reste aucun element sous 4,5:1
+* **Nouveau parametre `THEME` pour les applications externes.** `External.vue` remplacait deja `token=TOKEN`, `API`, `HOST`, `LANG`, `FROMDATE` et `TODATE` ; il remplace maintenant `THEME` par le theme en cours (`light` ou `dark`) : `https://app.exemple/?theme=THEME`. L'ecran suit les bascules clair/sombre sans etre remonte (`nyx:theme`). Le jeton est encadre de limites de mot, `MYTHEMEAPP` reste intact
+* Documentation de l'app external mise a jour dans les quatre langues (`configdetails.desc_external_detail_4`, dans l'aide de l'ecran de configuration)
+
 ## V3.6.9 08/Nov/2026
 * **L'animation de l'etat des rapports ne tournait plus.** `ReportTask` affiche « Waiting » avec `<v-icon name="spinner" spin scale="2" />` ; le rond avec ses points s'affichait, immobile. `spin` etait une prop de `vue-awesome` que `VIcon` n'a jamais reprise, et l'animation de FontAwesome vit dans sa feuille de style, que ce projet ne charge pas : la prop etait ignoree, sur les trois appels qui l'utilisent (etat des rapports, deux boutons de traitement du formulaire). `VIcon` prend `spin` et applique lui-meme un tour complet par seconde
 * **Explorateur de fichiers : le defilement infini n'avait plus rien a charger.** `listDir` retirait les lignes de `allData` avec `splice` (et la ligne etait ecrite deux fois) ; `loadMore` spliceait aussi et ne s'arretait jamais. Passe en `slice`, avec detection de fin de liste
