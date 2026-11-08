@@ -25,105 +25,107 @@
       <b>Nyx</b> Platform <b>{{this.$store.getters.version}}</b> ({{$store.getters.elasticVersion}})
     </div>
 
-    <el-card
-      v-if="forceChange"
-      class="login-card force"
-      :body-style="{ padding: '24px 20px' }"
-      shadow="hover"
-    >
-      <el-form class="login-form" label-width="0px" @submit.prevent>
-        <el-col :span="24">
-          <div class="force-change-title">{{ $t("firstlogin.title") }}</div>
-          <div class="force-change-help">{{ $t("firstlogin.help") }}</div>
-          <el-form-item label>
-            <el-input
-              :placeholder="$t('firstlogin.current')"
-              type="password"
-              autocomplete="off"
-              v-model="newPassword.current"
-              show-password
-            />
-          </el-form-item>
-          <el-form-item label>
-            <el-input
-              :placeholder="$t('firstlogin.new')"
-              type="password"
-              autocomplete="off"
-              v-model="newPassword.first"
-              show-password
-            />
-          </el-form-item>
-          <el-form-item label>
-            <el-input
-              :placeholder="$t('firstlogin.repeat')"
-              type="password"
-              autocomplete="off"
-              v-model="newPassword.second"
-              show-password
-              v-on:keyup.enter="submitNewPassword()"
-            />
-          </el-form-item>
-          <el-button
-            class="login-button"
-            type="primary"
-            size="default"
-            color="#048"
-            :disabled="changeDisabled"
-            :loading="loginunderway"
-            @click="submitNewPassword()"
-          >{{ $t("firstlogin.submit") }}</el-button>
-          <div class="login_error" v-if="newPassword.error">{{ newPassword.error }}</div>
-        </el-col>
-      </el-form>
-    </el-card>
-
-    <el-card v-else class="login-card" :body-style="{ padding: '30px 20px'  }" shadow="hover">
-      <el-form class="login-form" label-width="0px">
-        <el-col :span="24">
-          <el-form-item label>
-            <el-input
-                            :placeholder="$t('ui.enter_email')"
-              name="login"
-              autocomplete="none"
-              v-model="form.login"
-              clearable
-            ></el-input>
-          </el-form-item>
-          <el-form-item label>
-            <el-input
-              :placeholder="$t('ui.enter_password')"
-              v-on:keyup.enter="validateUser()"
-              type="password"
-              name="password"
-              autocomplete="none"
-              v-model="form.password"
-            />
-          </el-form-item>
-          <el-button
-            class="login-button"
-            @click="validateUser()"
-            type="primary"
-            :disabled="loginDisabled"
-            :loading="loginunderway"
-          >{{ $t("ui.login_button") }}</el-button>
-          <div class="login_error" v-if="form.error">{{form.error}}</div>
-          <template v-if="githubEnabled">
-            <div class="login-separator"><span>{{ $t("github.or") }}</span></div>
+    <div class="login-center" :class="{ force: forceChange }">
+      <el-card
+        v-if="forceChange"
+        class="login-card force"
+        :body-style="{ padding: '24px 20px' }"
+        shadow="hover"
+      >
+        <el-form class="login-form" label-width="0px" @submit.prevent>
+          <el-col :span="24">
+            <div class="force-change-title">{{ $t("firstlogin.title") }}</div>
+            <div class="force-change-help">{{ $t("firstlogin.help") }}</div>
+            <el-form-item label>
+              <el-input
+                :placeholder="$t('firstlogin.current')"
+                type="password"
+                autocomplete="off"
+                v-model="newPassword.current"
+                show-password
+              />
+            </el-form-item>
+            <el-form-item label>
+              <el-input
+                :placeholder="$t('firstlogin.new')"
+                type="password"
+                autocomplete="off"
+                v-model="newPassword.first"
+                show-password
+              />
+            </el-form-item>
+            <el-form-item label>
+              <el-input
+                :placeholder="$t('firstlogin.repeat')"
+                type="password"
+                autocomplete="off"
+                v-model="newPassword.second"
+                show-password
+                v-on:keyup.enter="submitNewPassword()"
+              />
+            </el-form-item>
             <el-button
-              class="login-button github-button"
-              @click="startGithubLogin()"
-              :loading="githubunderway"
-            >
-              <v-icon name="github" scale="1" />&nbsp;{{ $t("github.signin") }}
-            </el-button>
-          </template>
-        </el-col>
-      </el-form>
-    </el-card>
-    <h1 class="title-login">
-      {{config.welcome}}
-      <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
-    </h1>
+              class="login-button"
+              type="primary"
+              size="default"
+              color="#048"
+              :disabled="changeDisabled"
+              :loading="loginunderway"
+              @click="submitNewPassword()"
+            >{{ $t("firstlogin.submit") }}</el-button>
+            <div class="login_error" v-if="newPassword.error">{{ newPassword.error }}</div>
+          </el-col>
+        </el-form>
+      </el-card>
+
+      <el-card v-else class="login-card" :body-style="{ padding: '30px 20px'  }" shadow="hover">
+        <el-form class="login-form" label-width="0px">
+          <el-col :span="24">
+            <el-form-item label>
+              <el-input
+                              :placeholder="$t('ui.enter_email')"
+                name="login"
+                autocomplete="none"
+                v-model="form.login"
+                clearable
+              ></el-input>
+            </el-form-item>
+            <el-form-item label>
+              <el-input
+                :placeholder="$t('ui.enter_password')"
+                v-on:keyup.enter="validateUser()"
+                type="password"
+                name="password"
+                autocomplete="none"
+                v-model="form.password"
+              />
+            </el-form-item>
+            <el-button
+              class="login-button"
+              @click="validateUser()"
+              type="primary"
+              :disabled="loginDisabled"
+              :loading="loginunderway"
+            >{{ $t("ui.login_button") }}</el-button>
+            <div class="login_error" v-if="form.error">{{form.error}}</div>
+            <template v-if="githubEnabled">
+              <div class="login-separator"><span>{{ $t("github.or") }}</span></div>
+              <el-button
+                class="login-button github-button"
+                @click="startGithubLogin()"
+                :loading="githubunderway"
+              >
+                <v-icon name="github" scale="1" />&nbsp;{{ $t("github.signin") }}
+              </el-button>
+            </template>
+          </el-col>
+        </el-form>
+      </el-card>
+      <h1 class="title-login">{{config.welcome}}</h1>
+    </div>
+
+    <!-- Au milieu, en bas : le lien ne se disputait plus la place avec le texte d'accueil. -->
+    <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
 
   </div>
 </template>
@@ -449,12 +451,10 @@ export default {
 }
 
 .title-login {
-  position: absolute;
   width: 100%;
   text-align: center;
-  top: 50%;
+  margin: 0;
   color: white;
-  margin-top: 170px;
   font-family: "Helvetica Neue";
   /* Element UI 2 ramenait les titres a 20 px en graisse normale ; sans sa feuille de style, le
      navigateur applique son h1 par defaut (32 px, gras). */
@@ -473,13 +473,18 @@ export default {
   z-index: 10;
 }
 
+/* Au milieu, en bas de la page : sa place etait sous le texte d'accueil, ou il se disputait la
+   ligne avec le titre et passait sous la carte des que celle-ci grandissait. */
 .privacy-link {
-  display: block;
-  margin-top: 2px;
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
   font-size: 12px;
   font-weight: normal;
   color: #ffffff;
   text-decoration: underline;
+  white-space: nowrap;
 }
 
 .privacy-link:hover {
@@ -564,24 +569,40 @@ export default {
   overflow-y: auto;
 }
 
-/* La carte se dimensionne sur son contenu. La hauteur fixe de 200px datait du seul formulaire
-   mot de passe : le bouton GitHub (separateur + bouton, ~60px) debordait de la carte, et l'ecran
-   de connexion demandait de defiler pour l'atteindre. Le bord haut et le centrage horizontal
-   restent ceux d'avant, pour ne pas deplacer le formulaire. */
-.login-card {
+/* La carte et le texte d'accueil forment un seul groupe, centre horizontalement, dont le bord
+   haut reste celui qu'avait la carte. Le texte est donc *sous* la carte quelle que soit sa
+   hauteur : avec la carte en position absolue et le titre a `50% + 170px`, l'ajout du bouton
+   GitHub faisait passer la carte par-dessus le titre, et le texte blanc devenait invisible sur
+   le fond blanc de la carte. */
+.login-center {
   position: absolute;
-  left: 50%;
   top: calc(50% - 50px);
+  left: 50%;
   transform: translateX(-50%);
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Le panneau de premier changement est plus haut : il garde le decalage qu'il avait (bord haut
+   a `50% - 180px`), sinon il deborderait par le bas sur un ecran de portable. */
+.login-center.force {
+  top: calc(50% - 180px);
+}
+
+/* La carte se dimensionne sur son contenu. La hauteur fixe de 200px datait du seul formulaire
+   mot de passe : le bouton GitHub (separateur + bouton, ~60px) debordait de la carte, et l'ecran
+   de connexion demandait de defiler pour l'atteindre. */
+.login-card {
+  width: 100%;
   min-height: 200px;
 }
 
 /* Le panneau de premier changement a trois champs : il garde sa hauteur mini plus grande, mais
    il doit lui aussi grandir si un message s'ajoute (erreur de saisie, mot de passe refuse). */
 .login-card.force {
-  top: calc(50% - 180px);
-  width: 420px;
   min-height: 340px;
 }
 
