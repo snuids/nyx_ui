@@ -111,9 +111,14 @@ export default defineConfig({
         },
         // GenericComponent, GenericTable, QueryBar, QueryFilter, User, LandingPage and the
         // screens v3.6.6 added; the rest of `src/components` is still at zero.
+        //
+        // These numbers go *down* when logic is extracted out of a component: the statements and
+        // branches that were covered leave this glob for `src/**/*.js` (the query builder of
+        // `GenericTable` moved to `utils/esQuery.js`, covered at 100 %). That is a gain, not a
+        // loss — read the two globs together, and `src/**/*.js` is the one that must stay high.
         'src/components/**/*.vue': {
           statements: 13,
-          branches: 21,
+          branches: 20,
           functions: 13,
           lines: 13,
         },

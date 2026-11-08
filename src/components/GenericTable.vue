@@ -219,6 +219,7 @@ import querybar from "@/components/QueryBar";
 import queryfilter from "@/components/QueryFilter";
 import _ from "lodash";
 import { computeTranslatedText } from "../globalfunctions";
+import { buildSearchQuery, genericSearchUrl, resolveTimeRange } from "@/utils/esQuery";
 
 const req = require.context("../components/tableEditor/", true, /\.vue$/);
 
@@ -637,184 +638,46 @@ export default {
       if (download == undefined) download = false;
       // console.log("LOAD DATA...Download=" + download);
 
-      var doc_type = "";
-      if (
-        this.config.config.doc_type != undefined &&
-        this.config.config.doc_type != ""
-      ) {
-        doc_type = "&doc_type=" + this.config.config.doc_type;
-      }
+      // La requete vit dans `utils/esQuery.js` : ce composant ne garde que l'appel et la reponse.
+      const payload = this.config.config || {};
 
-      var rangetouse;
+      const { range, interval } = resolveTimeRange(this.config.timeSelectorType, {
+        classic: this.$store.getters.timeRange,
+        day: this.$store.getters.timeRangeDay,
+        week: this.$store.getters.timeRangeWeek,
+        month: this.$store.getters.timeRangeMonth,
+        year: this.$store.getters.timeRangeYear,
+        autoClassic: this.$store.getters.autoTime,
+        autoDay: this.$store.getters.autoTimeDay,
+        autoWeek: this.$store.getters.autoTimeWeek,
+        autoMonth: this.$store.getters.autoTimeMonth,
+        autoYear: this.$store.getters.autoTimeYear,
+      });
+      this.autotime = interval;
 
-      switch (this.config.timeSelectorType) {
-        case "week":
-          rangetouse = this.$store.getters.timeRangeWeek;
-          this.autotime = this.$store.getters.autoTimeWeek;
-          break;
-        case "month":
-          rangetouse = this.$store.getters.timeRangeMonth;
-          this.autotime = this.$store.getters.autoTimeMonth;
-          break;
-        case "year":
-          rangetouse = this.$store.getters.timeRangeYear;
-          this.autotime = this.$store.getters.autoTimeYear;
-          break;
+      const url = genericSearchUrl({
+        apiurl: this.$store.getters.apiurl,
+        index: payload.index,
+        token: this.$store.getters.creds.token,
+        download,
+        exportformat,
+        docType: payload.doc_type,
+      });
 
-        case "day":
-          rangetouse = this.$store.getters.timeRangeDay;
-          this.autotime = this.$store.getters.autoTimeDay;
-          break;
-
-        default:
-          rangetouse = this.$store.getters.timeRange;
-          this.autotime = this.$store.getters.autoTime;
-          break;
-      }
-
-      var url =
-        this.$store.getters.apiurl +
-        "generic_search/" +
-        this.config.config.index +
-        "?token=" +
-        this.$store.getters.creds.token +
-        "&download=" +
-        (download ? 1 : 0) +
-        "&output=" +
-        exportformat +
-        doc_type;
-
-      var query = {
-        size: download ? 10000 : this.pagesize,
-        query: {
-          bool: {
-            must: [
-              {
-                match_all: {}
-              }
-            ]
-          }
-        }
-      };
-      if (
-        this.config.config.timefield != null &&
-        this.config.config.timefield != ""
-      ) {
-        if (rangetouse != null) {
-          var timeRange = rangetouse;
-
-          var range = {
-            gte: timeRange[0].getTime(),
-            lte: timeRange[1].getTime(),
-            format: "epoch_millis"
-          };
-          var query2 = {
-            range: {}
-          };
-          query2.range[this.config.config.timefield] = range;
-          query.query.bool.must.push(query2);
-
-          if (this.config.graphicChecked) {
-            query.aggs = {
-              "2": {
-                date_histogram: {
-                  field: this.config.config.timefield,
-                  interval: this.autotime, //this.$store.getters.autoTime,
-                  time_zone: "Europe/Berlin",
-                  min_doc_count: 1
-                }
-              }
-            };
-          }
-        } else {
-          console.log("TIME RANGE IS NOT DEFINED...");
-          query.query.bool.must.push({
-            range: {
-              "@timestamp": {
-                gte: "now-1d",
-                lte: "now",
-                format: "epoch_millis"
-              }
-            }
-          });
-        }
-      }
-      var curquery = "";
-      if (this.config.queryBarChecked && this.queryField != "") {
-        curquery = this.queryField;
-      }
-      //alert(this.config.config.hiddenQuery);
-      if (
-        this.config.config.hiddenQuery != undefined &&
-        this.config.config.hiddenQuery != ""
-      ) {
-        if(this.config.config.hiddenQuery.includes("{{id}}")){
-          this.config.config.hiddenQuery = this.config.config.hiddenQuery.replace(/{{id}}/g, this.$store.getters.creds.user.id)
-        }
-        if(this.config.config.hiddenQuery.includes("{{login}}")){
-          this.config.config.hiddenQuery = this.config.config.hiddenQuery.replace(/{{login}}/g, this.$store.getters.creds.user.login)
-        }
-        //console.log("this.config.config.hiddenQuery")        
-        //console.log(this.config.config.hiddenQuery)        
-        if (curquery == "") curquery = this.config.config.hiddenQuery;
-        else
-          curquery =
-            "(" + this.config.config.hiddenQuery + ") AND (" + curquery + ")";
-      }
-
-      if (this.queryfilter != "" && this.config.queryFilterChecked) {
-        if (curquery == "") curquery = this.queryfilter;
-        else curquery = "(" + curquery + ") AND (" + this.queryfilter + ")";
-      }
-
-      this.query = curquery;
-
-      if (curquery != "") {
-        query.query.bool.must.push({
-          query_string: {
-            query: curquery,
-            analyze_wildcard: true,
-            default_field: "*"
-          }
-        });
-      }
-
-      if (
-        this.config.config.orderField != undefined &&
-        this.config.config.orderField != "" &&
-        Object.keys(this.sort).length==0
-      ) {
-        query.sort = [];
-        var order = {};
-        var direction = "asc";
-        if (this.config.config.orderDirection) direction = "desc";
-
-        order[this.config.config.orderField] = { order: direction };
-        query.sort.push(order);
-      }
-
-      if(Object.keys(this.sort).length!=0)
-      {
-        query.sort = [];
-        query.sort.push(this.sort);
-      }
-
-      if (
-        this.config.config.exportColumns != undefined &&
-        this.config.config.exportColumns != ""
-      ) {
-        query.extra = { exportColumns: this.config.config.exportColumns };
-      }
-      
-      if(query.extra == undefined)
-        query.extra={"currentpage":this.currentPage,
-            "pagesize":this.pagesize}
-      else
-      {
-        query.extra.currentpage=this.currentPage;
-        query.extra.pagesize=this.pagesize;
-      }
-
+      const built = buildSearchQuery({
+        config: this.config,
+        pagesize: this.pagesize,
+        download,
+        currentPage: this.currentPage,
+        timeRange: range,
+        interval,
+        queryField: this.queryField,
+        queryfilter: this.queryfilter,
+        sort: this.sort,
+        user: this.$store.getters.creds.user || {},
+      });
+      const query = built.query;
+      this.query = built.queryText;
 
       axios
         .post(url, query)
@@ -963,7 +826,9 @@ export default {
 
       if (this.config.mapChecked && !this.dontrefreshMap)
       {
-        query2=JSON.parse(JSON.stringify(query));
+        // `query2` etait une variable globale implicite (elle marchait parce que le `var` de la
+        // construction de requete la hoistait) : declaree ici, elle appartient a la fonction.
+        const query2 = JSON.parse(JSON.stringify(query));
         query2.size=1000;
         // Les deux champs du plan (lat / lon) doivent être demandés explicitement : une requête qui ne
         // ramene que `mapfield` laisse le plan vide quand l'index n'a pas de geo_point.
