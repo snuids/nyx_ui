@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.11 08/Nov/2026
+* **La fenetre « Info » du menu utilisateur redevient lisible en theme sombre.** `Main.vue` peint les boites de confirmation avec les couleurs du theme clair — titre `#303133`, contenu `#606266` — et une couleur explicite l'emporte sur les variables sombres d'Element Plus : sur le fond `#141414` rendu par la boite, le titre tombait a **1,9:1** et le contenu (version, version d'API, taille de fenetre, navigateur, jeton) a **3,2:1**, tous deux sous le seuil AA de 4,5:1. Meme famille que les titres de la page d'etat corriges en 3.6.10, meme remede : `html.dark` reprend `.el-message-box__title`, `__content` et `__message` (y compris `p` et `strong`) sur `var(--nyx-text)`
+* Mesure au navigateur, apres correction, dans la vraie boite ouverte depuis le menu : titre et contenu a **14,44:1**, zero element de texte sous 4,5:1 — hors le libelle du bouton principal, qui est le blanc sur bleu `#409eff` d'Element Plus (**2,78:1**), identique en theme clair et laisse tel quel pour ne pas changer la charte du console
+* Theme clair verifie inchange : boite blanche, titre `#303133`, contenu `#606266`
+* `tests/dark-theme-text.spec.js` gagne deux assertions : la cause est toujours dans `Main.vue` (si elle disparait, l'override devient inutile et le test le dit) et le theme sombre la reprend bien
+
 ## V3.6.10 08/Nov/2026
 * **Mode sombre : les libelles de la page d'etat etaient illisibles.** Ils sont dans des `<h3>`, et `element-legacy.css` force `h1..h6 { color: #606266 }` : ce gris du theme clair tombe a 2,5:1 sur une carte sombre. `dark.css` reprend les titres (`var(--nyx-text)`), le contraste mesure sur la page passe de 2,5:1 a 11:1 et il ne reste aucun element sous 4,5:1
 * **Nouveau parametre `THEME` pour les applications externes.** `External.vue` remplacait deja `token=TOKEN`, `API`, `HOST`, `LANG`, `FROMDATE` et `TODATE` ; il remplace maintenant `THEME` par le theme en cours (`light` ou `dark`) : `https://app.exemple/?theme=THEME`. L'ecran suit les bascules clair/sombre sans etre remonte (`nyx:theme`). Le jeton est encadre de limites de mot, `MYTHEMEAPP` reste intact
