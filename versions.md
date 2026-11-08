@@ -1,5 +1,8 @@
 # Version History
 
+## V3.6.12 08/Nov/2026
+* **Le theme suit desormais toutes les applications branchees sur le contexte.** Une application externe qui porte `TOKEN`, `API` ou `LANG` recoit `theme` meme si sa configuration ne cite pas `THEME` : oublier le jeton ne produisait aucune erreur, l'application s'ouvrait simplement sans theme (le symptome trompeur : `token` et `lang` arrivent, `theme` manque). Le parametre est ajoute avant le fragment et seulement s'il est absent ; les liens tiers (kibana, grafana, cerebro, nodered, rediscom, jupyter) restent intacts
+
 ## V3.6.11 08/Nov/2026
 * **La fenetre « Info » du menu utilisateur redevient lisible en theme sombre.** `Main.vue` peint les boites de confirmation avec les couleurs du theme clair — titre `#303133`, contenu `#606266` — et une couleur explicite l'emporte sur les variables sombres d'Element Plus : sur le fond `#141414` rendu par la boite, le titre tombait a **1,9:1** et le contenu (version, version d'API, taille de fenetre, navigateur, jeton) a **3,2:1**, tous deux sous le seuil AA de 4,5:1. Meme famille que les titres de la page d'etat corriges en 3.6.10, meme remede : `html.dark` reprend `.el-message-box__title`, `__content` et `__message` (y compris `p` et `strong`) sur `var(--nyx-text)`
 * Mesure au navigateur, apres correction, dans la vraie boite ouverte depuis le menu : titre et contenu a **14,44:1**, zero element de texte sous 4,5:1 — hors le libelle du bouton principal, qui est le blanc sur bleu `#409eff` d'Element Plus (**2,78:1**), identique en theme clair et laisse tel quel pour ne pas changer la charte du console
