@@ -17,6 +17,8 @@
 import _ from "lodash";
 import moment from "moment";
 
+import { currentTheme } from "@/utils/theme";
+
 
 function extractHostname(url) {
   try {
@@ -32,7 +34,10 @@ function extractHostname(url) {
 export default {
   name: "External",
   data: () => ({
-    url: ""
+    url: "",
+    // Le theme en cours, reactif : une application externe ne connait pas notre theme, elle le lit
+    // dans son URL. Sans cette valeur suivie, l'iframe gardait le theme du jour de son ouverture.
+    themeName: currentTheme()
   }),
   props: {
     config: {
@@ -113,6 +118,8 @@ export default {
         extractHostname(window.location.href)
       ).replace(/LANG/g,
         userLang
+      ).replace(/\bTHEME\b/g,
+        this.themeName
       );
         if (this.config.timeSelectorChecked)
         {
@@ -133,6 +140,13 @@ export default {
   },
   mounted: function() {
     console.log("===============  REGISTERING EXTERNAL:");
+
+    // `nyx:theme` est emis par `applyTheme` a chaque bascule clair/sombre : on recalcule alors
+    // l'URL de l'iframe, donc le parametre THEME qu'elle porte.
+    this.themeHandler = () => {
+      this.themeName = currentTheme();
+    };
+    document.addEventListener("nyx:theme", this.themeHandler);
     this.$globalbus.$on("timerangechanged", payLoad => {
       console.log("GLOBALBUS/KIBANATIMERANGE/");      
       this.createUrl();
@@ -140,6 +154,7 @@ export default {
   },
   beforeUnmount: function() {
     console.log("===============  UNREGISTERING EXTERNAL:");
+    document.removeEventListener("nyx:theme", this.themeHandler);
     this.$globalbus.$off("timerangechanged");
     this.$globalbus.$off("kibanaactivated");
   }
