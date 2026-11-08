@@ -16,7 +16,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # `contents: write` pour publier le badge sur la branche `badges` (push sur master uniquement)
+  contents: write
   # the coverage summary is posted as a pull-request comment (same-repo branches only)
   pull-requests: write
 
@@ -57,6 +58,16 @@ jobs:
           --coverage.reporter=json-summary
           --coverage.reporter=html
 
+      # La couverture publiee de `master`, pour afficher le delta dans le resume et le commentaire.
+      # Absente au premier run, ou si la branche `badges` n'existe pas encore : le script s'en passe.
+      - name: Fetch the published coverage, for the delta
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: |
+          mkdir -p coverage
+          curl -sfL "https://raw.githubusercontent.com/${{ github.repository }}/badges/coverage.json" \
+            -o coverage/baseline.json || echo "pas de couverture publiee sur master"
+
       # Always: even when the gate is red, the run page must show what the coverage was.
       - name: Summarise the coverage
         if: always()
@@ -70,6 +81,29 @@ jobs:
           path: coverage/
           if-no-files-found: ignore
           retention-days: 14
+
+      # Le badge lit ce fichier sur la branche `badges` (`shields.io/endpoint`), ce qui evite un
+      # service externe et un compte a maintenir. Publie sur master seulement : une PR qui casse la
+      # couverture ne doit pas changer le badge.
+      - name: Publish the coverage badge data
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          test -f coverage/badge.json
+          cd "$RUNNER_TEMP"
+          git init -q badges
+          cd badges
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth=1 origin badges
+          git checkout -q badges
+          cp "$GITHUB_WORKSPACE/coverage/badge.json" coverage.json
+          git -c user.name="github-actions[bot]" \
+              -c user.email="github-actions[bot]@users.noreply.github.com" \
+              commit -q -am "coverage: ${GITHUB_SHA::7}"
+          git push -q origin badges
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       # One comment, updated in place across pushes (hidden marker at the top), so a PR does not
       # collect a wall of coverage tables. `continue-on-error`: a fork's token is read-only and
