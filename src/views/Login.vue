@@ -560,25 +560,29 @@ export default {
   bottom: 0px;
   height: 100%;
   background-color: #048;
+  /* Une carte plus haute que la fenetre (portable, zoom) defile ici au lieu d'etre coupee. */
+  overflow-y: auto;
 }
 
+/* La carte se dimensionne sur son contenu. La hauteur fixe de 200px datait du seul formulaire
+   mot de passe : le bouton GitHub (separateur + bouton, ~60px) debordait de la carte, et l'ecran
+   de connexion demandait de defiler pour l'atteindre. Le bord haut et le centrage horizontal
+   restent ceux d'avant, pour ne pas deplacer le formulaire. */
 .login-card {
   position: absolute;
   left: 50%;
-  height: 200px;
-  top: 50%;
-  margin-top: -50px;
+  top: calc(50% - 50px);
+  transform: translateX(-50%);
   width: 400px;
-  margin-left: -200px;
+  min-height: 200px;
 }
 
-/* The first-change panel has three fields: the login card itself has a fixed height of 200 px.
-   Without this variant, the last field and the button fall outside the frame. */
+/* Le panneau de premier changement a trois champs : il garde sa hauteur mini plus grande, mais
+   il doit lui aussi grandir si un message s'ajoute (erreur de saisie, mot de passe refuse). */
 .login-card.force {
-  height: 340px;
-  margin-top: -180px;
+  top: calc(50% - 180px);
   width: 420px;
-  margin-left: -210px;
+  min-height: 340px;
 }
 
 .login-form .el-input__inner{
