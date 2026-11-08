@@ -953,10 +953,16 @@ import filesystemeditor from "@/components/appConfigEditor/FileSystemEditor";
 
 import { CONTROLLER_PAGES, describeController, otherComponents } from "@/controllerCatalog";
 
-import Vue from "vue";
 import rison from "rison";
-import YAML from "js-yaml";
 import aceThemeMixin from "@/mixins/aceTheme";
+import {
+  configYaml,
+  controllerLabel,
+  normaliseConfigForForm,
+  resolveSavedSource,
+  suggestCategories,
+  suggestSubcategories,
+} from "@/utils/appConfigForm";
 
 registerComponent("FreeTextDetails", freetextdetails);
 registerComponent("IconPicker", iconpicker);
@@ -1053,9 +1059,11 @@ export default {
   methods: {
     // The translation wins when it exists, the English description of the catalogue is the fallback.
     controllerDescription: function(page) {
-      const key = "configdetails.ctrl." + page.name;
-      if (typeof this.$te === "function" && this.$te(key)) return this.$t(key);
-      return page.description;
+      return controllerLabel(
+        page,
+        (key) => this.$te(key),
+        (key) => this.$t(key)
+      );
     },
     query_filter_changed:function() {
         if(this.curConfig.queryFilterChecked)
@@ -1071,46 +1079,17 @@ export default {
       this.$emit("dialogclose");
     },
     categorySuggestion: function(queryString, cb) {
-      var cat = [];
-      for (var i in this.$store.getters.filteredmenus) {
-        cat.push({ value: this.$store.getters.filteredmenus[i].category });
-      }
-
-      var results = queryString
-        ? cat.filter(function(el) {
-            if (el.value.indexOf(queryString) >= 0) return el;
-          })
-        : cat;
-
-      cb(results);
+      cb(suggestCategories(this.$store.getters.filteredmenus, queryString));
     },
     handleSelect() {},
     subcategorySuggestion: function(queryString, cb) {
-      if (this.curConfig.category == "") return cb([]);
-
-      var submenus = [];
-
-      for (var i in this.$store.getters.filteredmenus) {
-        if (
-          this.curConfig.category ==
-          this.$store.getters.filteredmenus[i].category
-        ) {
-          for (var j in this.$store.getters.filteredmenus[i].submenus) {
-            submenus.push({
-              value: this.$store.getters.filteredmenus[i].submenus[j].loc_title
-            });
-          }
-          break;
-        }
-      }
-
-      var results = queryString
-        ? submenus.filter(function(el) {
-            if (el.value.indexOf(queryString) >= 0) return el;
-          })
-        : submenus;
-
-      cb(results);
+      cb(
+        suggestSubcategories(
+          this.$store.getters.filteredmenus,
+          this.curConfig.category,
+          queryString
+        )
+      );
     },
     editorInitRO: function(editor) {
       require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
@@ -1163,24 +1142,13 @@ export default {
     prepareData() {
       console.log(this.currentConfig)
       this.dialogFormVisible = true;
-      this.curConfig = JSON.parse(JSON.stringify(this.currentConfig));
-      console.log('end of prepare date configDetails')
-      console.log(this.curConfig)
+      // Copie profonde, listes par defaut, valeur de rafraichissement Kibana remise en clair :
+      // c'est `normaliseConfigForForm`, teste sans monter l'ecran.
+      this.curConfig = normaliseConfigForForm(this.currentConfig);
 
       this.dialogHeaderVisible = false;
       this.formFielfEditorVisible = false;
       this.currentHeader = {};
-      if (this.curConfig.config == undefined) this.curConfig.config = {};
-      // if (this.curConfig.config.databaseType == undefined
-      //   && this.curConfig.config.controller == "PGGenericTable") 
-      //   this.curConfig.config.databaseType = "postgres";
-      if (this.curConfig.config.queryfilters == undefined)
-        this.curConfig.config.queryfilters = [];
-
-
-      if(this.currentConfig.timeRefreshValue != null)
-        this.curConfig.timeRefreshValue = this.curConfig.timeRefreshValue.replace('refreshInterval:(pause:!f,value:', '').replace(')', '')
-
 
       this.strNewRec = "";
       this.strOrgRec = "";
@@ -1195,11 +1163,10 @@ export default {
 
     },
     refresh2: function() {
-      this.strNewRec = "";
-      this.strOrgRec = "";
-
-      this.strNewRec = YAML.safeDump(this.curConfig, 10);
-      this.strOrgRec = YAML.safeDump(this.currentConfig, 10);
+      // Le YAML sert d'apercu et de comparaison : editer l'apercu est le seul moyen d'ecrire ce
+      // que le formulaire ne montre pas.
+      this.strNewRec = configYaml(this.curConfig);
+      this.strOrgRec = configYaml(this.currentConfig);
     },
     handleAddField() {
       if (this.curConfig.config.headercolumns == undefined) {
@@ -1412,11 +1379,12 @@ export default {
       }
     },
     saveRecord() {
-      if (this.strNewRec != this.strOrgRec && !this.isAdd) {
-        this.orgConfig._source = YAML.safeLoad(this.strNewRec);
-      } else {
-        this.orgConfig._source = this.curConfig;
-      }
+      this.orgConfig._source = resolveSavedSource({
+        newText: this.strNewRec,
+        orgText: this.strOrgRec,
+        curConfig: this.curConfig,
+        isAdd: this.isAdd,
+      });
 
       this.$store.commit({
         type: "updateRecord",
