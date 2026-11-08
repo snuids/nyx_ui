@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.17 08/Nov/2026
+* **Le lien de confidentialite reste seul, et le texte d'accueil au-dessus.** Le lien descend au milieu, en bas de la page (`left: 50%`, `bottom: 12px`, `translateX(-50%)`), hors du bloc carte + titre : il ne se dispute plus la ligne avec « Energy Monitoring Platform »
+* **La composition remonte sur une fenetre courte.** Le groupe carte + titre est place par `clamp(96px, 50% - 70px, 100% - 400px)` : sur un ecran de portable ou en zoom, il remonte pour laisser la place au pied de page au lieu de passer dessous. Les deux decors (anneau et icone) sont desormais dans le groupe et se placent par rapport au haut de la carte, donc ils la suivent — ancores a `50%`, ils se retrouvaient sur la carte quand le groupe remontait
+* Sous 470px de haut (telephone en paysage, zoom fort), les decors sont masques et le groupe remonte a 8px : sans cela le titre passait sous le lien de confidentialite. La requete media est en **fin de feuille** — meme specificite que la regle generale, seul l'ordre decide, et placee avant elle ne s'appliquait jamais (le defaut a ete vu a la mesure, pas a la compilation)
+* Geometrie verifiee a 380, 470, 500, 577, 640 et 800px de haut : l'ecart entre le titre et le lien reste positif partout (26 a 124px)
+
 ## V3.6.16 08/Nov/2026
 * **Le texte d'accueil ne passe plus sous la carte.** La carte etait en position absolue et le titre pose a `50% + 170px` : tant que la carte mesurait 200px le titre tombait juste en dessous, mais des qu'elle grandit (bouton GitHub) la carte le recouvrait — texte blanc sur fond blanc, invisible. La carte et le titre forment maintenant un seul groupe en colonne, dont le bord haut est celui qu'avait la carte : le titre suit la hauteur reelle
 * **Le lien de confidentialite passe au milieu, en bas de la page.** Il etait sur la ligne du titre, ou il se disputait la place avec le texte d'accueil ; il est desormais positionne seul (`left: 50%`, `bottom: 12px`, `translateX(-50%)`), hors du groupe carte + titre

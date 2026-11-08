@@ -351,6 +351,31 @@ describe('bouton GitHub et hauteur de la carte', () => {
     expect(wrapper.find('.privacy-link').exists()).toBe(true)
   })
 
+  it('garde les decors au-dessus de la carte', async () => {
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const group = source.match(/<div class="login-center"[^>]*>([\s\S]*?)<el-card/)
+    expect(group, 'groupe .login-center introuvable').toBeTruthy()
+    expect(group[1]).toContain('class="title-icon"')
+    expect(group[1]).toContain('class="title-icon2"')
+
+    // ...et qu'ils se placent par rapport a la carte, pas au milieu de la page.
+    const icon = source.match(/\.title-icon \{([^}]*)\}/)[1]
+    expect(icon).toMatch(/top:\s*-\d+px/)
+    expect(icon).not.toMatch(/margin-top:\s*-/)
+  })
+
+  it('remonte le groupe et masque les decors sur une fenetre tres courte', async () => {
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const media = source.match(/@media \(max-height: 470px\) \{([\s\S]*?)\n\}/)
+    expect(media, 'requete media introuvable').toBeTruthy()
+    expect(media[1]).toMatch(/\.login-center,[\s\S]*?top:\s*8px/)
+    expect(media[1]).toMatch(/display:\s*none/)
+
+    // Meme specificite que la regle generale : seule l'ordre dans la feuille decide, donc la
+    // requete media doit venir *apres* `.login-center`, sinon elle ne s'applique jamais.
+    expect(source.indexOf('@media (max-height: 470px)')).toBeGreaterThan(source.indexOf('.login-center {'))
+  })
+
   it('place le lien de confidentialite au milieu, en bas', async () => {
     const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
     const rule = source.match(/\.privacy-link \{([^}]*)\}/)[1]

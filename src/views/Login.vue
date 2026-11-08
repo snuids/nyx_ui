@@ -2,23 +2,7 @@
   
   <div class="login-container">
     <language-select dark class="login-language" />
-    <div class="title-icon"></div>
     <div class="login-logo1">
-    </div>
-    <div class="title-icon2">
-      <v-icon
-        style="color:white"
-        name="spinner"
-        scale="3"
-        spin
-        v-if="!initialized || loginunderway"
-      />
-      <v-icon
-        style="color:white"
-        :name="config.icon"
-        scale="3"
-        v-if="initialized  && !loginunderway"
-      />
     </div>
 
     <div class="title-disclaimer">
@@ -26,6 +10,23 @@
     </div>
 
     <div class="login-center" :class="{ force: forceChange }">
+      <!-- Les deux decors au-dessus de la carte : dans le groupe, ils suivent sa position. -->
+      <div class="title-icon"></div>
+      <div class="title-icon2">
+        <v-icon
+          style="color:white"
+          name="spinner"
+          scale="3"
+          spin
+          v-if="!initialized || loginunderway"
+        />
+        <v-icon
+          style="color:white"
+          :name="config.icon"
+          scale="3"
+          v-if="initialized  && !loginunderway"
+        />
+      </div>
       <el-card
         v-if="forceChange"
         class="login-card force"
@@ -502,6 +503,9 @@ export default {
   padding:3px;
 }
 
+/* Les deux decors se placent par rapport au haut de la carte (-140px et -112px, les ecarts
+   qu'ils avaient avec `top: 50%`), et non plus par rapport au milieu de la page : quand le groupe
+   remonte sur une fenetre courte, ils remontent avec lui au lieu de se retrouver sur la carte. */
 .title-icon {
   position: absolute;
   left: 50%;
@@ -509,8 +513,7 @@ export default {
   width: 100px;
   height: 100px;
   margin-left: -50px;
-  margin-top: -190px;
-  top: 50%;
+  top: -140px;
   color: red;
   font-family: "Helvetica Neue";
   border: solid 2px white;
@@ -524,8 +527,7 @@ export default {
   width: 100px;
   height: 100px;
   margin-left: -48px;
-  margin-top: -162px;
-  top: 50%;
+  top: -112px;
   color: red;
   font-family: "Helvetica Neue";
 }
@@ -576,7 +578,10 @@ export default {
    le fond blanc de la carte. */
 .login-center {
   position: absolute;
-  top: calc(50% - 50px);
+  /* 50% - 70px est la position de croisiere. Sur une fenetre courte (portable, zoom), le groupe
+     remonte pour laisser la place au pied de page : sans cela la carte pousse le texte d'accueil
+     sous le lien de confidentialite, ancre en bas. `clamp` garde les decors visibles en haut. */
+  top: clamp(96px, calc(50% - 70px), calc(100% - 400px));
   left: 50%;
   transform: translateX(-50%);
   width: 400px;
@@ -589,7 +594,7 @@ export default {
 /* Le panneau de premier changement est plus haut : il garde le decalage qu'il avait (bord haut
    a `50% - 180px`), sinon il deborderait par le bas sur un ecran de portable. */
 .login-center.force {
-  top: calc(50% - 180px);
+  top: clamp(96px, calc(50% - 180px), calc(100% - 520px));
 }
 
 /* La carte se dimensionne sur son contenu. La hauteur fixe de 200px datait du seul formulaire
@@ -618,4 +623,18 @@ export default {
   height: 40px;
   width: 100%;
 }
+/* Fenetre tres courte (telephone en paysage, zoom fort) : les decors au-dessus de la carte
+   n'apportent rien et prennent la place qui manque au texte d'accueil. Sans cela, le titre passe
+   sous le lien de confidentialite, qui est ancre en bas. */
+@media (max-height: 470px) {
+  .title-icon,
+  .title-icon2 {
+    display: none;
+  }
+  .login-center,
+  .login-center.force {
+    top: 8px;
+  }
+}
+
 </style>
