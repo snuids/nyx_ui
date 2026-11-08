@@ -293,6 +293,19 @@ export default {
           cururl = this.config.config.shorturl;
           
         }
+        // Aucune periode choisie (ecran ouvert directement, avant la barre de temps) : les getters
+        // sont a `null` et `timeRange[0]` levait une TypeError au montage. On laisse alors l'URL
+        // telle quelle : Kibana appliquera sa propre periode.
+        var selectedRange =
+          {
+            day: this.$store.getters.timeRangeDay,
+            week: this.$store.getters.timeRangeWeek,
+            month: this.$store.getters.timeRangeMonth,
+            year: this.$store.getters.timeRangeYear,
+          }[this.config.timeSelectorType] || this.$store.getters.timeRange;
+
+        if (selectedRange == null) return;
+
         var startTimeAsUtc = moment(this.$store.getters.timeRange[0]).utc();
         var endTimeAsUtc = moment(this.$store.getters.timeRange[1]).utc();
 
@@ -420,6 +433,10 @@ export default {
 
       const myregex = /(query:'[^']*')/g;
       var match = myregex.exec(fullurl);
+
+      // Un tableau de bord dont l'URL ne porte pas de `query:'...'` (URL courte, ou `_a` vide) :
+      // `match[0]` levait une TypeError. Il n'y a alors rien a remplacer.
+      if (match == null) return fullurl;
 
       var queryextract = match[0].replace("query:'", "").replace("'", "");
       var replacement = "";
