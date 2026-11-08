@@ -1,5 +1,9 @@
 # Version History
 
+## V3.6.7 08/Nov/2026
+* **Un refus de token deconnecte a nouveau.** `nyx_rest` 3.22.23 ne repond plus 200 quand il refuse un token : `NO_TOKEN` et `UNKNOWN_TOKEN` sont des 401, `NO_PRIVILEGE` et `MUST_CHANGE_PASSWORD` des 403. L'intercepteur de reponse ne regardait que les corps des reponses reussies, donc `axios` rejetait la promesse sans qu'aucun `.then()` ne s'execute : la session perdue laissait l'ecran fige au lieu de ramener a la connexion. Le traitement du corps est maintenant partage par les deux branches (`reportApiError`), et un 401 sur l'ecran de connexion reste silencieux
+* Le reste est inchange : les erreurs de route de l'API continuent de repondre 200 et sont toujours notifiees de la meme facon, et le corps `{"error": …}` garde sa forme
+
 ## V3.6.6 07/Nov/2026
 *No application change: tests only. The shipped bundle is byte-for-byte the 3.6.5 one.*
 * **Coverage of the screens that produced this week's regressions.** Four specs mount components that had none: `Map` (88,7 % des statements), `Activity` (88,2 %), `LambdaEditor` (74,9 %), `ReportEditor` (65,9 %). Overall statements go from **23,3 % to 33,9 %**, the component block from **17,2 % to 29,0 %**, with 36 new tests (394 in total)
