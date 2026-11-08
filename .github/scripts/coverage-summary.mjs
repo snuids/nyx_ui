@@ -18,6 +18,10 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 
 const REPORT = 'coverage/coverage-summary.json'
 const OUT_FILE = 'coverage/summary.md'
+// Ecrit pour le badge `shields.io` (endpoint JSON) publie sur la branche `badges`.
+const BADGE_FILE = 'coverage/badge.json'
+// Couverture de `master` au dernier run publie : sert a afficher le delta d'une pull request.
+const BASELINE_FILE = 'coverage/baseline.json'
 const METRICS = ['statements', 'branches', 'functions', 'lines']
 const METRIC_LABELS = {
   statements: 'instructions',
@@ -35,6 +39,25 @@ const AREAS = [
 ]
 
 const pct = (m) => (m.total === 0 ? '—' : `${m.pct.toFixed(1).replace('.', ',')} %`)
+
+/** Couleur `shields.io` : le chiffre doit se lire d'un coup d'oeil, pas se deviner. */
+function badgeColor(value) {
+  if (value >= 80) return 'brightgreen'
+  if (value >= 60) return 'green'
+  if (value >= 40) return 'yellowgreen'
+  if (value >= 25) return 'yellow'
+  if (value >= 10) return 'orange'
+  return 'red'
+}
+
+/** La couverture publiee sur `master`, si la CI en a laissee une. */
+function readBaseline() {
+  try {
+    return JSON.parse(readFileSync(BASELINE_FILE, 'utf8'))
+  } catch {
+    return null
+  }
+}
 const counts = (m) => (m.total === 0 ? '—' : `${m.covered} / ${m.total}`)
 
 function empty(reason) {
@@ -66,6 +89,18 @@ function main() {
       `**${pct(total.statements)}** des instructions, ${pct(total.branches)} des branches.`,
     ''
   )
+
+  // Le delta n'a de sens que sur une pull request : la CI y depose la couverture de `master`.
+  const baseline = readBaseline()
+  if (baseline && typeof baseline.value === 'number') {
+    const delta = total.statements.pct - baseline.value
+    const sign = delta > 0 ? '+' : delta < 0 ? '−' : '±'
+    lines.push(
+      `**Δ vs master : ${sign}${Math.abs(delta).toFixed(1).replace('.', ',')} pt** ` +
+        `(${pct({ pct: baseline.value, total: 1 })} → ${pct(total.statements)})`,
+      ''
+    )
+  }
 
   // Per-area table: the global number alone says nothing while most components are untested.
   lines.push(`| zone | ${METRICS.map((m) => METRIC_LABELS[m]).join(' | ')} |`)
@@ -109,6 +144,29 @@ function main() {
 const markdown = main()
 
 process.stdout.write(markdown + '\n')
+
+// Le badge lit ce fichier via `raw.githubusercontent.com` : `shields.io/endpoint` accepte
+// `{schemaVersion, label, message, color}`.
+try {
+  const value = JSON.parse(readFileSync(REPORT, 'utf8')).total.statements.pct
+  writeFileSync(
+    BADGE_FILE,
+    JSON.stringify(
+      {
+        schemaVersion: 1,
+        label: 'couverture',
+        message: `${value.toFixed(1).replace('.', ',')} %`,
+        color: badgeColor(value),
+        // Pas lu par shields.io, mais c'est la valeur que la CI relit sur master pour le delta.
+        value: Number(value.toFixed(2)),
+      },
+      null,
+      2
+    ) + '\n'
+  )
+} catch {
+  // Pas de rapport : pas de badge non plus, l'etape de publication le verra absent.
+}
 
 if (process.env.GITHUB_STEP_SUMMARY) {
   writeFileSync(process.env.GITHUB_STEP_SUMMARY, markdown + '\n', { flag: 'a' })
