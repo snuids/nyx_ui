@@ -82,40 +82,39 @@ export default defineConfig({
       ],
       reporter: ['text', 'json-summary'],
       thresholds: {
-        // Whole `src`: statements 33.9 %, branches 83.9 %, functions 44.3 %, lines 33.9 %.
-        // Low by construction — most of the 63 single-file components are still untested. The point
-        // of the number is to fall if the suite loses a file, not to flatter.
+        // Re-baselined for Vitest 5, not lowered because tests were lost.
         //
-        // It moves in *both* directions as screens enter the assiette: mounting `Map`, `Activity`
-        // and `LambdaEditor` took statements from 23.3 % to 33.9 % (components 17.2 % -> 29.0 %)
-        // while pulling branches and functions down (85.8 -> 83.9 and 49.0 -> 44.3), because the
-        // parts of those screens the tests do not exercise are now measured. Read the per-glob
-        // numbers below for the quality of the suite; this one is the tripwire.
-        statements: 33,
-        branches: 83,
-        functions: 44,
-        lines: 33,
-        // Logic and store: held closely, as before.
+        // Vitest 5 remaps v8 coverage through the AST unconditionally (the old
+        // `experimentalAstAwareRemapping` switch is gone): the template render functions and the
+        // branches of every measured `.vue` are now counted file-wide. The same 46 spec files and
+        // 394 tests therefore report 22.8 % statements / 32.7 % branches / 18.9 % functions,
+        // where Vitest 2 reported 33.9 / 83.9 / 44.3. Nothing regressed — the ruler changed.
+        //
+        // Read the per-glob numbers below for the quality of the suite; this one is the tripwire.
+        statements: 22,
+        branches: 32,
+        functions: 18,
+        lines: 23,
+        // Logic and store: held closely (98.5 / 95.5 / 97.1 / 98.9 under the new measure).
         'src/**/*.js': {
           statements: 97,
-          branches: 96,
-          functions: 94,
+          branches: 94,
+          functions: 96,
           lines: 97,
         },
-        // The three screens that now have tests (Login 95.9 %, Main 80.7 %, Privacy 100 %).
+        // Login 95.9 %, Main 80.8 %, Privacy 100 %, App.vue : 74.2 % aggregate.
         'src/views/**/*.vue': {
-          statements: 85,
-          branches: 80,
-          functions: 50,
-          lines: 85,
+          statements: 73,
+          branches: 72,
+          functions: 72,
+          lines: 73,
         },
-        // The generic screens: GenericComponent 97.7 %, GenericTable 74.9 %, QueryBar 98.4 %,
-        // QueryFilter 88.9 %, LandingPage 100 %. The aggregate is low because the other
-        // components come in only through them; it is there to notice a lost spec file.
+        // GenericComponent, GenericTable, QueryBar, QueryFilter, User, LandingPage and the
+        // screens v3.6.6 added; the rest of `src/components` is still at zero.
         'src/components/**/*.vue': {
           statements: 13,
-          branches: 68,
-          functions: 23,
+          branches: 21,
+          functions: 13,
           lines: 13,
         },
       },
