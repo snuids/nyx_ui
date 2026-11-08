@@ -32,4 +32,15 @@ describe('theme sombre — couleurs de texte', () => {
   it('le theme sombre peint aussi le texte courant du document', () => {
     expect(dark).toMatch(/html\.dark body\s*{[^}]*color:\s*var\(--nyx-text\)/)
   })
+
+  it('les boites de confirmation reprennent le texte clair', () => {
+    // `Main.vue` fixe #303133 sur le titre et #606266 sur le contenu : sur le fond #141414
+    // d'Element Plus, la fenetre « Info » etait illisible (1,9:1 et 3,2:1).
+    const main = read('src/views/Main.vue')
+    expect(main).toMatch(/\.el-overlay-message-box \.el-message-box__title\s*{[^}]*color:\s*#303133/)
+    expect(main).toMatch(/\.el-overlay-message-box \.el-message-box__content\s*{[^}]*color:\s*#606266/)
+
+    expect(dark).toMatch(/html\.dark \.el-overlay-message-box \.el-message-box__title,[\s\S]*?color:\s*var\(--nyx-text\)/)
+    expect(dark).toMatch(/html\.dark \.el-overlay-message-box \.el-message-box__content,[\s\S]*?color:\s*var\(--nyx-text\)/)
+  })
 })

@@ -114,6 +114,21 @@ html.dark .el-dialog__footer {
   background-color: var(--nyx-surface);
 }
 
+/* --- Boites de confirmation ------------------------------------------------
+   `Main.vue` peint `.el-overlay-message-box` avec les couleurs du theme clair : titre #303133 et
+   contenu #606266. Element Plus ne reprend pas la main — une couleur explicite gagne sur l'heritage
+   des variables sombres — donc la fenetre « Info » du menu utilisateur (version, version d'API,
+   taille de fenetre, navigateur, jeton) s'ouvrait sur un texte a 1,9:1 pour le titre et 3,2:1 pour
+   le contenu, sur le fond #141414 rendu par Element Plus. Meme famille que les titres de la page
+   d'etat corriges en 3.6.10, meme remede : une regle `html.dark` qui reprend le texte. */
+html.dark .el-overlay-message-box .el-message-box__title,
+html.dark .el-overlay-message-box .el-message-box__content,
+html.dark .el-overlay-message-box .el-message-box__message,
+html.dark .el-overlay-message-box .el-message-box__message p,
+html.dark .el-overlay-message-box .el-message-box__message strong {
+  color: var(--nyx-text);
+}
+
 /* --- Tableaux et cartes --------------------------------------------------- */
 html.dark .el-table {
   --el-table-bg-color: var(--nyx-surface);
