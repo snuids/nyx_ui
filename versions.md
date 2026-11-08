@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.15 08/Nov/2026
+* **La carte de connexion ne fige plus sa hauteur.** Elle avait `height: 200px`, la taille du seul formulaire mot de passe : le bouton GitHub ajoute un separateur et un bouton (~60px), le contenu debordait de la carte et il fallait defiler pour l'atteindre. La carte se dimensionne desormais sur son contenu (`min-height: 200px`, le reste en `auto`), avec le meme bord haut et le meme centrage horizontal qu'avant pour ne pas deplacer le formulaire
+* Le panneau de premier changement de mot de passe suit la meme regle (`min-height: 340px`) : il doit grandir lui aussi quand un message d'erreur s'ajoute
+* `.login-container` defile (`overflow-y: auto`) sur une fenetre plus courte que la carte — portable, zoom navigateur — au lieu de couper le bas du formulaire
+* Trois tests : le bouton n'apparait que si `/config` repond `login.github`, et une garde sur la feuille de style (pas de `height` fixe sur la carte) — jsdom ne calcule pas de mise en page, un debordement ne se verrait pas au montage
+
 ## V3.6.14 08/Nov/2026
 * **Le retour de GitHub arrive sur un chemin, la console est en mode hash.** Une `redirect_uri` OAuth ne peut pas contenir de fragment : GitHub appelle donc `/oauth?code=...`, un chemin que la console ne sait pas router — l'application demarrait sur `/`, montait l'ecran de connexion, et la session n'etait jamais terminee. `normalizeOAuthLocation()` (au chargement du routeur) deplace la requete dans le fragment (`/#/oauth?code=...`) avant que le routeur ne lise l'URL
 * Meme chose cote serveur : nginx doit servir l'index sur `/oauth` (le serveur statique de l'image repond 404 sur un chemin inconnu). Sans ce report applicatif, l'ecran `/oauth` reste indispensable : il lit `code` et `state` dans les deux formes d'URL

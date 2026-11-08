@@ -10,6 +10,8 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import axios from 'axios'
 
 import Login from '@/views/Login.vue'
@@ -281,5 +283,52 @@ describe('Login.vue — changement de mot de passe', () => {
 
     expect(wrapper.vm.newPassword.error).toBe('Password reused')
     expect(wrapper.vm.loginunderway).toBe(false)
+  })
+})
+
+describe('bouton GitHub et hauteur de la carte', () => {
+  it("n'affiche pas le bouton quand l'API ne le declare pas configure", async () => {
+    axios.get.mockResolvedValue({ data: { error: '', welcome: 'W', login: { github: false } } })
+    const { wrapper } = await mountLogin()
+    // `loadConfig` part une seconde apres le montage (minuteurs simules dans ce fichier).
+    await vi.advanceTimersByTimeAsync(1000)
+    await flushPromises()
+
+    expect(wrapper.vm.githubEnabled).toBe(false)
+    expect(wrapper.text()).not.toContain('Sign in with GitHub')
+  })
+
+  it("affiche le bouton quand l'API repond login.github", async () => {
+    axios.get.mockResolvedValue({ data: { error: '', welcome: 'W', login: { github: true } } })
+    const { wrapper } = await mountLogin()
+    await vi.advanceTimersByTimeAsync(1000)
+    await flushPromises()
+
+    expect(wrapper.vm.githubEnabled).toBe(true)
+    expect(wrapper.text()).toContain('Sign in with GitHub')
+  })
+
+  it('ne fige plus la hauteur de la carte', async () => {
+    // La carte avait `height: 200px`, taille du seul formulaire mot de passe : le bouton GitHub
+    // (separateur + bouton) debordait, et l'ecran demandait de defiler pour l'atteindre. Une
+    // assertion sur la feuille de style est le seul garde possible — jsdom ne calcule pas de mise
+    // en page, donc un debordement ne se voit pas au montage.
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const rule = (selector) => {
+      const m = source.match(new RegExp('\\' + selector + '\\s*{([^}]*)}'))
+      expect(m, 'regle ' + selector + ' introuvable').toBeTruthy()
+      return m[1].split('\n').map((l) => l.trim()).filter(Boolean)
+    }
+
+    const card = rule('.login-card')
+    expect(card.filter((l) => /^height\s*:/.test(l))).toEqual([])
+    expect(card).toContain('min-height: 200px;')
+
+    const force = rule('.login-card.force')
+    expect(force.filter((l) => /^height\s*:/.test(l))).toEqual([])
+    expect(force).toContain('min-height: 340px;')
+
+    // ...et une carte plus haute que la fenetre defile au lieu d'etre coupee.
+    expect(rule('.login-container')).toContain('overflow-y: auto;')
   })
 })
