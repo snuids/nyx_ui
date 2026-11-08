@@ -175,6 +175,13 @@
 import axios from "axios";
 import moment from "moment";
 import {computeTranslatedText} from '../globalfunctions'
+import {
+  buildParameterValuesQuery,
+  parameterValuesUrl,
+  rangeShortcut,
+  valuesFromBuckets,
+  visibleParameters,
+} from "@/utils/reportParameters";
 
 export default {
   name: "ReportEditor",
@@ -194,60 +201,21 @@ export default {
   }),
   computed: {
     rangePickerOptions() {
+      // Les cinq raccourcis ne different que par leur duree : les bornes sont calculees par
+      // `rangeShortcut`, testable sans horloge simulee.
+      const shortcut = (text, key) => ({
+        text,
+        onClick: (picker) => picker.$emit("pick", rangeShortcut(key)),
+      });
+
       return {
         shortcuts: [
-          {
-            text: this.$t('reportgenerator.last_day'),
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: this.$t('reportgenerator.last_week'),
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: this.$t('reportgenerator.last_month'),
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: this.$t('reportgenerator.last_3_months'),
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: this.$t('reportgenerator.today'),
-            onClick(picker) {
-              const end = moment()
-                .startOf("day")
-                .add(1, "d")
-                .toDate();
-              const start = moment()
-                .startOf("day")
-                .toDate();
-
-              start.setTime(start.getTime());
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+          shortcut(this.$t("reportgenerator.last_day"), "1d"),
+          shortcut(this.$t("reportgenerator.last_week"), "7d"),
+          shortcut(this.$t("reportgenerator.last_month"), "30d"),
+          shortcut(this.$t("reportgenerator.last_3_months"), "90d"),
+          shortcut(this.$t("reportgenerator.today"), "today"),
+        ],
       };
     },
     recordin: function() {
@@ -257,12 +225,7 @@ export default {
       return JSON.stringify(this.record);
     },
     filteredParameters() {
-      var results = [];
-      for (var i in this.record.parameters) {
-        if (!this.record.parameters[i].hidden)
-          results.push(this.record.parameters[i]);
-      }
-      return results;
+      return visibleParameters(this.record.parameters);
     }
   },
   props: {
@@ -363,124 +326,40 @@ export default {
       console.log(this.recordin.parameters)
     },
 
-    getESValues(par, interval, fixdate, intervalValue, fixdateValue){
-      var index = par.escomboindex
-      var key = par.escombokey
-      var query = {
-        "size": 0,
-        "aggs": {
-          "values_uniques": {
-            "terms": {
-              "field": key,
-              "size": 10000
-            }
-          }
-        }
-      }
+    getESValues(par, interval, fixdate, intervalValue, fixdateValue) {
+      // La requete et l'URL viennent de `utils/reportParameters.js` : ici on envoie, et on remplit
+      // la liste des valeurs du parametre.
+      const query = buildParameterValuesQuery({
+        par,
+        interval,
+        fixdate,
+        intervalValue,
+        fixdateValue,
+      });
 
-      if(par.usetimestamp && interval){
-        var timestampfield = par.timestampfield
-        var start = intervalValue.start.toISOString()
-        var end = new Date(intervalValue.end.setHours(23,59,59,999)).toISOString()
-        query["query"]= {
-                "bool": {
-                  "must": [
-                    {
-                      "range": {
-                        [timestampfield]: {   
-                          "gte": start,   
-                          "lte": end      
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            
-      }
-
-      if(par.usetimestamp && fixdate){
-        const timestampfield = par.timestampfield
-        const start = fixdateValue.toISOString()
-        const enddt = new Date(fixdateValue.setHours(23,59,59,999))
-        const end = enddt.toISOString()
-        query["query"]= {
-                "bool": {
-                  "must": [
-                    {
-                      "range": {
-                        [timestampfield]: {   
-                          "gte": start,   
-                          "lte": end      
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            
-      }
-
-      if(par.useboolean)
-      {
-        var booleanfield = par.booleanfield
-        if(par.usetimestamp){
-          query["query"]["bool"]["must"][1] = {"term": {[booleanfield]: true }}
-        }
-        else{
-          console.log(query)
-         query["query"]= {
-              "bool":{
-                "must":[
-                  {"term": {[booleanfield]: true}}
-                ]
-                
-              }
-            }
-        }
-        }
-      
-
-
-      console.log(query)
-
-      let url =
-        this.$store.getters.apiurl +
-        "generic_search/"+index+"?token=" +
-        this.$store.getters.creds.token;
-
-      console.log(url)
-
-      var valuelist = []
+      const url = parameterValuesUrl({
+        apiurl: this.$store.getters.apiurl,
+        token: this.$store.getters.creds.token,
+        index: par.escomboindex,
+      });
 
       axios
         .post(url, query)
         .then(response => {
           if (response.data.error != "") {
-            console.log("Unable to search...");
             this.$notify({
               title: "Failed",
               type: "danger",
               message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
-          } else {
-              for(var i in response.data.aggs.values_uniques.buckets)
-              {
-                var rec = response.data.aggs.values_uniques.buckets[i]
-                //console.log(rec.key)
-                valuelist[i] = rec.key
-              }
-              console.log(valuelist)
-              this.$forceUpdate();
-             par.valuelist = valuelist.sort();
+            return;
           }
+
+          par.valuelist = valuesFromBuckets(response.data);
+          this.$forceUpdate();
         })
-        .catch(error => {
-          console.log(error);
-        });
-
-
+        .catch(() => {});
     },
 
     loadUsers: function() {

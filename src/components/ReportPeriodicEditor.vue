@@ -336,6 +336,11 @@ import axios from "axios";
 import moment from "moment";
 import {computeTranslatedText} from '../globalfunctions'
 import { i18n } from "../i18n-setup";
+import {
+  buildParameterValuesQuery,
+  parameterValuesUrl,
+  valuesFromBuckets,
+} from "@/utils/reportParameters";
 
 export default {
   name: "ReportPeriodicEditor",
@@ -580,90 +585,22 @@ export default {
         }
       }
     },
-    getESValues(par, interval, fixdate, intervalValue, fixdateValue){
-      var index = par.escomboindex
-      var key = par.escombokey
-      var query = {
-        "size": 0,
-        "aggs": {
-          "values_uniques": {
-            "terms": {
-              "field": key,
-              "size": 10000
-            }
-          }
-        }
-      }
+    getESValues(par, interval, fixdate, intervalValue, fixdateValue) {
+      // La requete et l'URL viennent de `utils/reportParameters.js` : ici on envoie, et on remplit
+      // la liste des valeurs du parametre.
+      const query = buildParameterValuesQuery({
+        par,
+        interval,
+        fixdate,
+        intervalValue,
+        fixdateValue,
+      });
 
-      if(par.usetimestamp && interval){
-        let timestampfield = par.timestampfield
-        let start = intervalValue.start.toISOString()
-        let end = new Date(intervalValue.end.setHours(23,59,59,999)).toISOString()
-        query["query"]= {
-                "bool": {
-                  "must": [
-                    {
-                      "range": {
-                        [timestampfield]: {   
-                          "gte": start,   
-                          "lte": end      
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            
-      }
-
-      if(par.usetimestamp && fixdate){
-        let timestampfield = par.timestampfield
-        let start = fixdateValue.toISOString()
-        let enddt = new Date(fixdateValue.setHours(23,59,59,999))
-        let end = enddt.toISOString()
-        query["query"]= {
-                "bool": {
-                  "must": [
-                    {
-                      "range": {
-                        [timestampfield]: {   
-                          "gte": start,   
-                          "lte": end      
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            
-      }
-
-      if(par.useboolean)
-      {
-        var booleanfield = par.booleanfield
-        if(par.usetimestamp){
-          query["query"]["bool"]["must"][1] = {"term": {[booleanfield]: true }}
-        }
-        else{
-         query["query"]= {
-              "bool":{
-                "must":[
-                  {"term": {[booleanfield]: true}}
-                ]
-                
-              }
-            }
-        }
-        }
-      
-
-
-      let url =
-        this.$store.getters.apiurl +
-        "generic_search/"+index+"?token=" +
-        this.$store.getters.creds.token;
-
-      var valuelist = []
+      const url = parameterValuesUrl({
+        apiurl: this.$store.getters.apiurl,
+        token: this.$store.getters.creds.token,
+        index: par.escomboindex,
+      });
 
       axios
         .post(url, query)
@@ -675,21 +612,13 @@ export default {
               message: this.$t("rep.unable_send"),
               position: "bottom-right"
             });
-          } else {
-              for(var i in response.data.aggs.values_uniques.buckets)
-              {
-                var rec = response.data.aggs.values_uniques.buckets[i]
-                //console.log(rec.key)
-                valuelist[i] = rec.key
-              }
-              this.$forceUpdate();
-             par.valuelist = valuelist.sort();
+            return;
           }
+
+          par.valuelist = valuesFromBuckets(response.data);
+          this.$forceUpdate();
         })
-        .catch(() => {
-        });
-
-
+        .catch(() => {});
     },
     reportChange: function() {
       for (var i in this.reports) {
