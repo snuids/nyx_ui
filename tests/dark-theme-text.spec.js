@@ -93,4 +93,18 @@ describe('theme sombre — couleurs de texte', () => {
     expect(offenders, 'un gris du theme clair fige une couleur : passer par var(--el-text-color-*)')
       .toEqual([])
   })
+
+  it("le dialogue d'edition reprend la palette de la console", () => {
+    // Les panneaux du transfert restaient sur `--el-bg-color-overlay` (#1d1e1f, quasi noir sur la
+    // surface #1f2430) et leur en-tete sur `--el-color-black` : noir sur #262727, 1,0:1.
+    expect(dark).toMatch(/html\.dark \.el-overlay \.el-dialog\s*{[^}]*--el-bg-color-overlay:\s*var\(--nyx-surface-raised\)/)
+    expect(dark).toMatch(/html\.dark \.el-transfer-panel__header\s*{\s*color:\s*var\(--nyx-text\)/)
+  })
+
+  it('la barre de telechargement de Grafana suit le theme', () => {
+    const grafana = read('src/components/Grafana.vue')
+    // `background: "#fff"` laissait un bandeau blanc au-dessus de la console sombre.
+    expect(grafana).not.toMatch(/background:\s*"#fff"/)
+    expect(grafana).toMatch(/background:\s*"var\(--nyx-surface, #fff\)"/)
+  })
 })

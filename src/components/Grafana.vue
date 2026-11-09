@@ -3,7 +3,7 @@
   
   <div>
     <!-- <h1>Grafana {{ computedUrl }}</h1> -->
-    <div v-if="config.downloadChecked" :style="toolbarStyle">
+    <div v-if="config.downloadChecked" class="grafana-toolbar" :style="toolbarStyle">
       <el-button
         size="small"
         :icon="$icons.Download"
@@ -75,7 +75,9 @@ export default {
         alignItems: "center",
         gap: "10px",
         padding: "0 10px",
-        background: "#fff",
+        // `#fff` en dur : la barre restait un bandeau blanc au-dessus de la console sombre.
+        // `--nyx-surface` n'existe qu'en sombre, d'ou le repli sur blanc pour le theme clair.
+        background: "var(--nyx-surface, #fff)",
         zIndex: 10
       };
     },
@@ -400,6 +402,12 @@ export default {
 .grafana-download-hint {
   color: var(--el-text-color-regular);
   font-size: 12px;
+}
+
+/* La barre est posee au-dessus de l'iframe : sans bordure, sa limite se confond avec le fond de
+   la page en mode sombre. */
+html.dark .grafana-toolbar {
+  border-bottom: 1px solid var(--nyx-border);
 }
 </style>
 
