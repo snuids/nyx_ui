@@ -321,7 +321,8 @@ export default {
   padding: 20px;
 }
 .sql-editor .el-form-item__label {
-  color: #464646;
+  /* Même gris clair écrit en dur que dans l'éditeur d'enregistrement : illisible en mode sombre. */
+  color: var(--el-text-color-regular);
   font-weight: 600;
 }
 </style>

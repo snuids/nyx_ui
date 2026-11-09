@@ -259,7 +259,11 @@ export default {
 </script>
 <style>
 .table-details .el-form-item__label{
-  color: #464646;
+  /* `#464646` était le gris du thème clair, écrit en dur : sur une surface sombre (#1f2430) le
+     contraste tombait à 1,6:1 et les noms de champs de l'éditeur d'enregistrement étaient
+     illisibles. La variable d'Element bascule avec le thème (#606266 en clair, #cfd3dc en sombre,
+     soit 10,4:1 ici). */
+  color: var(--el-text-color-regular);
   font-weight:600;
 }
 .table-details .el-form-item__content{

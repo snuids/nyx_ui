@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.18 09/Nov/2026
+* **Les libelles de l'editeur d'enregistrement redeviennent lisibles en mode sombre.** La feuille du composant figeait `color: #464646` sur `.el-form-item__label` : sur la surface `#1f2430` des cartes, les noms de champs tombaient a **1,6:1** — presents, mais illisibles. La regle passe a `var(--el-text-color-regular)`, la variable d'Element Plus qui bascule avec le theme (`#606266` en clair, `#cfd3dc` en sombre, soit **10,4:1** sur cette meme surface)
+* Meme gris ecrit en dur dans l'editeur SQL des applications (`tableEditor/SQLEditor.vue`) : corrige avec, la regle etant identique
+* Un test de plus (`dark-theme-text.spec.js`) : les deux composants doivent styler le libelle par la variable du theme, jamais par un code hexadecimaire — c'est exactement ce genre de regression qui ne casse aucune compilation
+
 ## V3.6.17 08/Nov/2026
 * **Le lien de confidentialite reste seul, et le texte d'accueil au-dessus.** Le lien descend au milieu, en bas de la page (`left: 50%`, `bottom: 12px`, `translateX(-50%)`), hors du bloc carte + titre : il ne se dispute plus la ligne avec « Energy Monitoring Platform »
 * **La composition remonte sur une fenetre courte.** Le groupe carte + titre est place par `clamp(96px, 50% - 70px, 100% - 400px)` : sur un ecran de portable ou en zoom, il remonte pour laisser la place au pied de page au lieu de passer dessous. Les deux decors (anneau et icone) sont desormais dans le groupe et se placent par rapport au haut de la carte, donc ils la suivent — ancores a `50%`, ils se retrouvaient sur la carte quand le groupe remontait
