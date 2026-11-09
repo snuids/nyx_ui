@@ -398,7 +398,7 @@ export default {
   font-weight: bolder;
 }
 .grafana-download-hint {
-  color: #606266;
+  color: var(--el-text-color-regular);
   font-size: 12px;
 }
 </style>

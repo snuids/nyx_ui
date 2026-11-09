@@ -587,7 +587,7 @@ export default {
 .icon-name {
   margin-top: 8px;
   font-size: 11px;
-  color: #606266;
+  color: var(--el-text-color-regular);
   text-align: center;
   word-break: break-word;
   text-transform: capitalize;

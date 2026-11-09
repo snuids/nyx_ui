@@ -575,7 +575,8 @@ export default {
 .panel-title {
   font-size: 13px;
   font-weight: 600;
-  color: #606266;
+  /* `#606266` en dur : identique en clair, illisible sur une carte sombre. */
+  color: var(--el-text-color-regular);
   margin-bottom: 4px;
 }
 .panel-meta {
