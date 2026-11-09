@@ -114,6 +114,23 @@ html.dark .el-dialog__footer {
   background-color: var(--nyx-surface);
 }
 
+/* Ce que le dialogue contient garde les valeurs d'Element pour le sombre : les deux panneaux du
+   transfert de l'edition d'utilisateur sont peints avec `--el-bg-color-overlay` (#1d1e1f, quasi
+   noir sur la surface #1f2430 — ils occupent les deux tiers de la fenetre) et leur en-tete ecrit
+   en `--el-color-black`, du noir sur #262727 : 1,0:1, le titre du panneau est invisible. Mesure au
+   navigateur, sur la feuille servie. Les variables sont reprises dans le dialogue plutot que
+   composant par composant, pour que l'editeur d'applications en profite aussi. */
+html.dark .el-overlay .el-dialog {
+  --el-bg-color-overlay: var(--nyx-surface-raised);
+  --el-fill-color-light: var(--nyx-surface-raised);
+  --el-fill-color-blank: var(--nyx-surface-raised);
+  --el-transfer-border-color: var(--nyx-border);
+}
+
+html.dark .el-transfer-panel__header {
+  color: var(--nyx-text);
+}
+
 /* --- Boites de confirmation ------------------------------------------------
    `Main.vue` peint `.el-overlay-message-box` avec les couleurs du theme clair : titre #303133 et
    contenu #606266. Element Plus ne reprend pas la main — une couleur explicite gagne sur l'heritage
