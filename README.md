@@ -109,18 +109,41 @@ La couverture porte sur tout `src` (javascript et `.vue`). Les seuils de `vitest
 par glob : 97/96/94/97 sur le javascript de logique, 85/80/50/85 sur `src/views`, 13/68/23/13 sur
 `src/components` et un seuil global bas qui sert surtout a reperer un fichier de test perdu.
 
-Etat au 7 novembre 2026 : **352 tests**, **23,2 %** des instructions de `src` (20 970). Par zone :
+Etat au 9 novembre 2026 : **608 tests**, **34,75 %** des instructions de `src` (7 464). Par zone :
 
-| zone | statements | fichiers testes |
-|---|---|---|
-| `src` javascript (logique, store, routeur) | 99,1 % | tous |
-| `src/views` | 87,2 % | Login 95,9 · Main 80,8 · Privacy 100 · App.vue 65,6 |
-| `src/components` | 13,2 % | GenericComponent 97,7 · QueryBar 98,4 · User 96,3 · QueryFilter 88,9 · GenericTable 74,9 · LandingPage 100 |
+| zone | statements | branches | remarque |
+|---|---|---|---|
+| `src` (racine : `main`, `App`, i18n) | 62,5 % | 45,6 % | |
+| `src/router` | 100 % | 91,7 % | |
+| `src/store` | 98,9 % | 95,0 % | |
+| `src/utils` | 99,6 % | 96,0 % | |
+| `src/views` | 75,4 % | 75,3 % | Login 79,7 · Main 64,7 · OAuth 100 · Privacy 100 |
+| `src/components` | 26,1 % | 31,4 % | les écrans montés tirent le chiffre vers le haut, les éditeurs restent peu couverts |
 
 Les composants non testes tirent le chiffre global vers le bas : c'est la mesure honnete, pas une
-regression. Prochaines cibles par taille et par risque : `GenericTableDetails` (edition d'un
-enregistrement), `ReportGenerator` / `ReportTask`, `ConfigDetails` (constructeur d'applications),
-`NYXInfo`, `PGGenericTable`.
+regression. Prochaines cibles par taille et par risque : les éditeurs d'application
+(`appConfigEditor/ESTableEditor`, `ConfigDetails`), `ReportGenerator` / `ReportTask`,
+`GenericTableDetails` (edition d'un enregistrement), `NYXInfo`, `PGGenericTable`.
+
+### Dependances
+
+`npm audit` signale 17 vulnerabilites (10 hautes, 7 moyennes) au 9 novembre 2026, contre 25 avant
+le lot de corrections du jour. Ce qui part dans le navigateur et ce qui ne quitte pas la chaine de
+construction n'ont pas le meme poids :
+
+| paquet | d'ou il vient | etat |
+|---|---|---|
+| `postcss`, `serialize-javascript`, `minimatch`, `uuid` | outillage de construction | **corriges** — les `overrides` de `package.json` les forcent a la version remediee (8.5.23, 7.1.3, 11.0.1, 11.1.1). Build de production et 608 tests verifies |
+| `webpack-dev-server`, `webpack-dev-middleware` | `@vue/cli-service` 5, uniquement `npm run serve` | rien dans cette version : vue-cli 5 exige `webpack-dev-server` 4, les avis sont corriges en 5.2. La console servie n'est pas concernee |
+| `@vue/cli-*`, `cross-spawn`, `execa`, `yorkie`, `glob`, `js-beautify` | meme outillage | `npm audit` ne propose qu'un **retour** a vue-cli 3.12 : aucune version remediee n'existe dans la 5. Construction et tests, jamais executes dans le navigateur |
+| `vue-i18n` 9.14.5 (+ `@intlify/*`) | **le bundle servi** | 9.14.5 est la derniere de la serie 9 (etiquette `legacy9`), qui n'est plus maintenue : GHSA-83rm-6c8r-g728 n'est corrige qu'a partir de 11.4.14 |
+
+L'exposition de `vue-i18n` est nulle en pratique aujourd'hui : les messages sont des fichiers JSON
+du depot, aucune chaine traduite n'est construite a partir d'une saisie, et `escapeParameter` n'est
+pas utilise. Passer a la 11 supprime le mode `legacy` : `$i18n.locale` devient une ref, donc chaque
+lecture et chaque ecriture — `this.$i18n.locale` dans quatre ecrans, le `watch` de `App.vue`, les
+tests qui lisent la locale — doit dire `.value`. C'est une migration a mener pour elle-meme, pas un
+correctif d'urgence.
 
 ### Extending the UI
 
