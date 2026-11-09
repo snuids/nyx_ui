@@ -205,21 +205,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  background-color: aqua;
-}
-
-#nav a {
-  padding: 30px;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  padding: 30px;
-  color:red;
+  /* `#2c3e50` etait le gris du theme clair, pose sur la racine de l'application : tout texte qui
+     n'a pas de couleur propre heritait de celui-la, donc restait sombre sur fond sombre (1,7:1 sur
+     `--nyx-surface`). Element Plus bascule cette variable avec le theme (#303133 en clair,
+     #e5eaf3 en sombre). Les regles `#nav`, heritees du squelette Vue CLI et sans element
+     correspondant, partent avec (l'une peignait un fond `aqua`). */
+  color: var(--el-text-color-primary);
 }
 /* 
 .nyxapp

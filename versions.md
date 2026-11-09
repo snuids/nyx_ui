@@ -1,5 +1,13 @@
 # Version History
 
+## V3.6.19 09/Nov/2026
+* **Balayage du mode sombre : les gris du theme clair ecrits en dur.** Apres les libelles de l'editeur d'enregistrement (3.6.18), neuf fichiers en portaient encore. Sur les surfaces sombres de la console, ils tombaient entre **1,3:1 et 2,9:1** : presents, illisibles. Les regles passent aux variables d'Element Plus, qui basculent avec le theme — `--el-text-color-regular` (#606266 en clair, #cfd3dc en sombre, 9,3 a 11,6:1) et `--el-text-color-primary` (#303133 / #e5eaf3, jusqu'a 14,4:1). En clair, la valeur rendue est identique au pixel
+* **`#app` portait `color: #2c3e50`.** C'est la racine de l'application : tout texte sans couleur propre en heritait et restait donc sombre sur fond sombre, malgre `html.dark body`. C'etait la cause de fond, celle qui expliquait les retouches ponctuelles des versions precedentes
+* Corriges avec lui : `Activity` (titres de panneaux), `Grafana` (indication de telechargement), `IconPicker` (legende des icones), `ESTableEditor` (deux boutons texte, la cellule de tableau, le champ `#indexPattern` qui recopiait les styles d'Element en blanc), et les trois regles de `Main.vue` qui peignaient les dialogues
+* Deux exceptions assumees, documentees dans le test : les `<option>` du select de langue (peintes par le systeme sur blanc) et la page de confidentialite (une feuille de papier, blanche dans les deux themes)
+* Les regles `#nav` d'`App.vue`, heritees du squelette Vue CLI et sans element correspondant (l'une peignait un fond `aqua`), sont supprimees
+* Test de garde : aucun composant ne peut plus figer un gris du theme clair — le parcours des `.vue` echoue sur `color: #2c3e50|303133|464646|606266|333|666` hors des deux exceptions. 608 tests
+
 ## V3.6.18 09/Nov/2026
 * **Les libelles de l'editeur d'enregistrement redeviennent lisibles en mode sombre.** La feuille du composant figeait `color: #464646` sur `.el-form-item__label` : sur la surface `#1f2430` des cartes, les noms de champs tombaient a **1,6:1** — presents, mais illisibles. La regle passe a `var(--el-text-color-regular)`, la variable d'Element Plus qui bascule avec le theme (`#606266` en clair, `#cfd3dc` en sombre, soit **10,4:1** sur cette meme surface)
 * Meme gris ecrit en dur dans l'editeur SQL des applications (`tableEditor/SQLEditor.vue`) : corrige avec, la regle etant identique

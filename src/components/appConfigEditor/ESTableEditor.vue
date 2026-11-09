@@ -48,7 +48,7 @@
             </template>
             <template #default="scope">
               <el-button
-                style="padding: 0px;color: #606266;"
+                style="padding: 0px;"
                 @click="setIndex(scope.row.id)"
                 type="text"
               >{{scope.row.id}}</el-button>
@@ -357,7 +357,7 @@
                   @click="copyFieldsToDisplayToDownload()"
                   type="text"
                   size="small"
-                  style="color: #606266;"
+                  
                 >{{ $t('cfg.copy_from_fields') }}</el-button>
               
             </el-row>
@@ -1045,7 +1045,7 @@ export default {
   display: inline-block;
   text-align: start;
   -webkit-appearance: textfield;
-  background-color: white;
+  background-color: var(--el-fill-color-blank);
   -webkit-rtl-ordering: logical;
   cursor: text;
   margin: 0em;
@@ -1056,12 +1056,11 @@ export default {
   border-color: initial;
   border-image: initial;
   -webkit-appearance: none;
-  background-color: #ffffff;
   background-image: none;
   border-radius: 4px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--el-border-color);
   box-sizing: border-box;
-  color: #606266;
+  color: var(--el-text-color-regular);
   display: inline-block;
   font-size: inherit;
   outline: none;
@@ -1091,8 +1090,8 @@ export default {
 
 .table-display td {
   padding: 5px 18px 5px 0px;
-  border-top: solid 1px #ebeef5;
-  color: #606266;
+  border-top: solid 1px var(--el-border-color-lighter);
+  color: var(--el-text-color-regular);
 }
 
 .flip-list-move {

@@ -11,7 +11,7 @@
  * regle de disparaitre d'un refactor.
  */
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const read = (path) => readFileSync(resolve(process.cwd(), path), 'utf8')
@@ -34,11 +34,13 @@ describe('theme sombre — couleurs de texte', () => {
   })
 
   it('les boites de confirmation reprennent le texte clair', () => {
-    // `Main.vue` fixe #303133 sur le titre et #606266 sur le contenu : sur le fond #141414
-    // d'Element Plus, la fenetre « Info » etait illisible (1,9:1 et 3,2:1).
+    // `Main.vue` fixait #303133 sur le titre et #606266 sur le contenu : sur le fond #141414
+    // d'Element Plus, la fenetre « Info » etait illisible (1,9:1 et 3,2:1). Les deux regles
+    // passent par les variables du theme depuis 3.6.19 ; les overrides `html.dark` restent en
+    // second rideau, ils ne peuvent plus faire de mal.
     const main = read('src/views/Main.vue')
-    expect(main).toMatch(/\.el-overlay-message-box \.el-message-box__title\s*{[^}]*color:\s*#303133/)
-    expect(main).toMatch(/\.el-overlay-message-box \.el-message-box__content\s*{[^}]*color:\s*#606266/)
+    expect(main).toMatch(/\.el-overlay-message-box \.el-message-box__title\s*{[^}]*color:\s*var\(--el-text-color-primary\)/)
+    expect(main).toMatch(/\.el-overlay-message-box \.el-message-box__content\s*{[^}]*color:\s*var\(--el-text-color-regular\)/)
 
     expect(dark).toMatch(/html\.dark \.el-overlay-message-box \.el-message-box__title,[\s\S]*?color:\s*var\(--nyx-text\)/)
     expect(dark).toMatch(/html\.dark \.el-overlay-message-box \.el-message-box__content,[\s\S]*?color:\s*var\(--nyx-text\)/)
@@ -60,5 +62,35 @@ describe('theme sombre — couleurs de texte', () => {
       expect(rule[0]).toMatch(/color:\s*var\(--el-text-color-regular\)/)
       expect(rule[0]).not.toMatch(/color:\s*#[0-9a-fA-F]{3,6}/)
     }
+  })
+
+  it('aucun autre composant ne fige un gris du theme clair', () => {
+    // Le balayage de 3.6.19 : les memes gris ecrits en dur dans neuf fichiers. Deux exceptions,
+    // volontaires, ou le fond est blanc quelle que soit la preference :
+    //  - `LanguageSelect` : les `<option>` d'un select natif, peints par le systeme sur blanc ;
+    //  - `Privacy` : la page legale est une feuille de papier, lisible en sombre comme en clair.
+    const allowed = new Set(['components/LanguageSelect.vue', 'views/Privacy.vue'])
+    const greys = /color:\s*#(2c3e50|303133|464646|606266|333|666)\b/i
+    const offenders = []
+
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = resolve(dir, entry.name)
+        if (entry.isDirectory()) walk(full)
+        else if (entry.name.endsWith('.vue') && !entry.name.startsWith('.')) {
+          const relative = full.slice(resolve(process.cwd(), 'src').length + 1)
+          if (allowed.has(relative)) continue
+          for (const line of read(full).split('\n')) {
+            if (greys.test(line) && !line.trimStart().startsWith('//') && !line.includes('/*')) {
+              offenders.push(`${relative}: ${line.trim()}`)
+            }
+          }
+        }
+      }
+    }
+    walk(resolve(process.cwd(), 'src'))
+
+    expect(offenders, 'un gris du theme clair fige une couleur : passer par var(--el-text-color-*)')
+      .toEqual([])
   })
 })

@@ -171,7 +171,7 @@
                   :default-active="$store.getters.currentSubCategory.fulltitle"
                   :unique-opened="true"
                   class="el-menu-vertical"
-                  style="--el-menu-text-color: #666"
+                  style="--el-menu-text-color: var(--el-text-color-regular)"
                 >
                   <!--            v-if="menu.category!='apps'"-->
                   <el-sub-menu
@@ -829,7 +829,7 @@ body {
    la production precedente, volontairement. */
 .el-overlay .el-dialog__body {
   padding: 20px 20px;
-  color: #606266;
+  color: var(--el-text-color-regular);
   font-size: 14px;
 }
 
@@ -864,7 +864,7 @@ body {
 .el-overlay-message-box .el-message-box__title {
   font-size: 18px;
   line-height: 24px;
-  color: #303133;
+  color: var(--el-text-color-primary);
 }
 
 .el-overlay-message-box .el-message-box__headerbtn {
@@ -876,7 +876,7 @@ body {
 
 .el-overlay-message-box .el-message-box__content {
   padding: 10px 15px;
-  color: #606266;
+  color: var(--el-text-color-regular);
   font-size: 14px;
 }
 
