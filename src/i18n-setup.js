@@ -36,7 +36,13 @@ const messages = {
 
 export const localized_messages = messages
 
-// legacy: true keeps `this.$t` and `this.$i18n.locale = ...` working, which is what the components use.
+// legacy: true keeps `this.$t` and `this.$i18n.locale = ...` working, which is what the components
+// use. 9.14.5 is the last release of the 9.x line (npm tag `legacy9`) and 9.x is out of support:
+// GHSA-83rm-6c8r-g728, fixed only in 11.4.14+, stays open against it. Moving to 11 means dropping
+// this mode — `$i18n.locale` then becomes a ref, so every read and write in the components
+// (`this.$i18n.locale`, the `"$i18n.locale"` watcher of `App.vue`, the tests) has to say `.value`.
+// The exposure today is nil in practice: the messages are static JSON in the repository, no
+// translated string is built from user input, and `escapeParameter` is not used.
 export const i18n = createI18n({
   locale: 'en',
   fallbackLocale: 'en',

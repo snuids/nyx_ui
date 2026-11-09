@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.20 09/Nov/2026
+* **Quatre familles d'avis de securite fermees par des `overrides`.** `postcss` 8.5.23, `serialize-javascript` 7.1.3, `minimatch` 11.0.1 et `uuid` 11.1.1 sont forces dans `package.json` : dix alertes Dependabot en moins (21 avant, 11 apres). Tous les quatre viennent de la chaine de construction (`@vue/cli-service`, `terser-webpack-plugin`) et aucun ne part dans le bundle servi ; build de production et 608 tests verifies apres coup
+* **`vue-i18n` 9.14.4 → 9.14.5**, la derniere de la serie 9 (etiquette `legacy9`). Elle corrige l'avis moyen sur `escapeParameterHtml`. L'avis suivant — XSS via `srcdoc` dans un message — n'est corrige qu'a partir de la 11.4.14 : la 9.x n'est plus maintenue. La migration vers la 11 supprime le mode `legacy`, donc `$i18n.locale` devient une ref et chaque lecture comme chaque ecriture doit dire `.value` (quatre ecrans, le `watch` de `App.vue`, les tests). Tentee puis retiree : 12 tests tombent, ce n'est pas un correctif mais une migration
+* Exposition residuelle de `vue-i18n` : nulle en pratique. Les messages sont des fichiers JSON du depot, aucune chaine traduite n'est construite a partir d'une saisie, et `escapeParameter` n'est pas utilise
+* Restent 11 alertes, toutes dans l'outillage fige par `vue-cli` 5 (`webpack-dev-server` 4, `@vue/cli-*`) : `npm audit` ne propose qu'un *retour* a vue-cli 3.12, aucune version remediee n'existe dans la 5. Documente dans le README, section « Dependances », avec l'etat de chaque paquet
+* Le README remet aussi ses chiffres a jour : 608 tests, 34,75 % des instructions de `src` (il annoncait 352 tests et 23,2 %)
+
 ## V3.6.19 09/Nov/2026
 * **Balayage du mode sombre : les gris du theme clair ecrits en dur.** Apres les libelles de l'editeur d'enregistrement (3.6.18), neuf fichiers en portaient encore. Sur les surfaces sombres de la console, ils tombaient entre **1,3:1 et 2,9:1** : presents, illisibles. Les regles passent aux variables d'Element Plus, qui basculent avec le theme — `--el-text-color-regular` (#606266 en clair, #cfd3dc en sombre, 9,3 a 11,6:1) et `--el-text-color-primary` (#303133 / #e5eaf3, jusqu'a 14,4:1). En clair, la valeur rendue est identique au pixel
 * **`#app` portait `color: #2c3e50`.** C'est la racine de l'application : tout texte sans couleur propre en heritait et restait donc sombre sur fond sombre, malgre `html.dark body`. C'etait la cause de fond, celle qui expliquait les retouches ponctuelles des versions precedentes
