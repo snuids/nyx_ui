@@ -3,7 +3,8 @@
 ![badge](https://img.shields.io/badge/made%20with-vuejs-blue.svg?style=flat-square)
 ![badge](https://img.shields.io/github/languages/code-size/snuids/nyx_ui)
 ![badge](https://img.shields.io/github/last-commit/snuids/nyx_ui)
-![couverture](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/snuids/nyx_ui/badges/coverage.json)
+![couverture](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/snuids/nyx_ui/badges/coverage.json&style=flat-square)
+![CI](https://img.shields.io/github/actions/workflow/status/snuids/nyx_ui/ci-tests.yml?style=flat-square&label=tests)
 
 
 ## Introduction
