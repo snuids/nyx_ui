@@ -12,7 +12,7 @@
           <template #append><el-button 
             
             :icon="$icons.Search" 
-            @click="dialogVisible = true"></el-button></template>
+            @click="openDialog"></el-button></template>
         </el-input>
       </el-col>
       <el-col :span="6" v-if="iconPreview">
@@ -92,6 +92,8 @@
 </template>
 
 <script>
+import { loadAllIconSets } from "@/utils/fontAwesome"
+
 export default {
   name: "IconPicker",
   // Vue 3 binds `v-model` to `modelValue` / `update:modelValue`; the call sites written for Vue 2
@@ -502,6 +504,20 @@ export default {
     }
   },
   methods: {
+    /**
+     * The picker shows a thousand thumbnails at once: loading them one by one (which is what
+     * `<v-icon>` does for a single icon) would be a thousand requests. The three sets are therefore
+     * registered whole when the dialog opens — outside the initial bundle.
+     */
+    async openDialog() {
+      this.dialogVisible = true
+      try {
+        await loadAllIconSets()
+      } catch (e) {
+        console.error("icons unavailable:", e)
+      }
+    },
+
     emitValue(value) {
       this.$emit("update:modelValue", value);
       this.$emit("input", value);

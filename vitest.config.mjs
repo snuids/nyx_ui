@@ -55,6 +55,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // Same aliases as `vue.config.js`: the FontAwesome packages' `exports` map rejects a `.js`
+      // wildcard, and tests must resolve the icon chunk imports the application makes.
+      '@fa-solid': fileURLToPath(new URL('./node_modules/@fortawesome/free-solid-svg-icons', import.meta.url)),
+      '@fa-regular': fileURLToPath(new URL('./node_modules/@fortawesome/free-regular-svg-icons', import.meta.url)),
+      '@fa-brands': fileURLToPath(new URL('./node_modules/@fortawesome/free-brands-svg-icons', import.meta.url)),
     },
     // `vue-cli-service` resolved components without an extension (`@/components/Apps`); Vite does
     // not, and neither would a test import.

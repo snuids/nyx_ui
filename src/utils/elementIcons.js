@@ -1,0 +1,81 @@
+/**
+ * The Element Plus icons the console uses.
+ *
+ * `main.js` used to register `import * as ElementPlusIcons` — the whole set — to provide the 33 the
+ * templates name (`$icons.Refresh`, `$icons.Upload`, …). The access is always a literal property
+ * (never a computed index), so the list can be pinned here: `grep '$icons\\.' src` verifies it.
+ *
+ * Adding an icon to a template means adding it here; `tests/elementIcons.spec.js` compares the list
+ * against the sources and fails otherwise.
+ */
+import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  CaretRight,
+  Check,
+  CircleCheck,
+  CircleClose,
+  Clock,
+  CopyDocument,
+  DCaret,
+  Delete,
+  Document,
+  Download,
+  EditPen,
+  InfoFilled,
+  Key,
+  Location,
+  Menu,
+  Moon,
+  MoreFilled,
+  Notebook,
+  Plus,
+  QuestionFilled,
+  Refresh,
+  RefreshLeft,
+  RefreshRight,
+  Search,
+  Setting,
+  Sunny,
+  Upload,
+  User,
+  WarningFilled,
+} from '@element-plus/icons-vue'
+
+export const elementIcons = {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  CaretRight,
+  Check,
+  CircleCheck,
+  CircleClose,
+  Clock,
+  CopyDocument,
+  DCaret,
+  Delete,
+  Document,
+  Download,
+  EditPen,
+  InfoFilled,
+  Key,
+  Location,
+  Menu,
+  Moon,
+  MoreFilled,
+  Notebook,
+  Plus,
+  QuestionFilled,
+  Refresh,
+  RefreshLeft,
+  RefreshRight,
+  Search,
+  Setting,
+  Sunny,
+  Upload,
+  User,
+  WarningFilled,
+}

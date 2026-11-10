@@ -1,11 +1,14 @@
+import { defineAsyncComponent } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Login from '../views/Login.vue'
-import Main from '../views/Main.vue'
-import Privacy from '../views/Privacy.vue'
-import OAuth from '../views/OAuth.vue'
 
-
-import GenericComponent from '../components/GenericComponent.vue'
+// Each route is loaded when it is visited: before, the four views *and* the generic component
+// (which drags the tables, Kibana, Grafana and the editors behind it) were imported at startup, so
+// the login screen downloaded the whole console.
+const Login = defineAsyncComponent(() => import('../views/Login.vue'))
+const Main = defineAsyncComponent(() => import('../views/Main.vue'))
+const Privacy = defineAsyncComponent(() => import('../views/Privacy.vue'))
+const OAuth = defineAsyncComponent(() => import('../views/OAuth.vue'))
+const GenericComponent = defineAsyncComponent(() => import('../components/GenericComponent.vue'))
 // import User from '../components/User.vue'
 // import Config from '../components/Config.vue'
 // import Loading from "@/components/Loading";
