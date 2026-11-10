@@ -111,7 +111,7 @@ par glob : 97/94/96/97 sur le javascript de logique, 73 sur `src/views`, plus ba
 `src/components`, et un seuil global a 34/39/30/35 — un point sous la mesure (34,75 / 40,37 / 30,8 /
 35,94), assez haut pour qu'un ecran de test perdu fasse echouer la CI.
 
-Etat au 9 novembre 2026 : **608 tests**, **34,75 %** des instructions de `src` (7 464). Par zone :
+Etat au 10 novembre 2026 : **611 tests**, **34,75 %** des instructions de `src` (7 464). Par zone :
 
 | zone | statements | branches | remarque |
 |---|---|---|---|

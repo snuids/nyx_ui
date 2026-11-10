@@ -101,6 +101,19 @@ describe('theme sombre — couleurs de texte', () => {
     expect(dark).toMatch(/html\.dark \.el-transfer-panel__header\s*{\s*color:\s*var\(--nyx-text\)/)
   })
 
+  it("le dialogue d'edition n'a qu'une surface", () => {
+    // `--el-fill-color-blank` repris sur le dialogue peint aussi l'en-tete et le corps des sections
+    // d'un `el-collapse` : le formulaire utilisateur s'ouvrait sur deux noirs (#262c3a cerne de
+    // #1f2430). Les sections repassent en transparent ; les champs et les panneaux du transfert
+    // restent, eux, sureleves.
+    expect(dark).toMatch(
+      /html\.dark \.el-overlay \.el-dialog \.el-collapse-item__header,[\s\S]*?background-color:\s*transparent/
+    )
+    // `--el-disabled-bg-color` se resout sur `html` (#262727) : le champ desactive gardait donc un
+    // troisieme gris a cote des champs actifs.
+    expect(dark).toMatch(/html\.dark \.el-overlay \.el-dialog\s*{[^}]*--el-disabled-bg-color:\s*var\(--nyx-surface-raised\)/)
+  })
+
   it('la barre de telechargement de Grafana suit le theme', () => {
     const grafana = read('src/components/Grafana.vue')
     // `background: "#fff"` laissait un bandeau blanc au-dessus de la console sombre.
