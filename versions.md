@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.22 09/Nov/2026
+* **Le garde-fou de couverture passe de 22 a 34 %** (branches 32 → 39, fonctions 18 → 30, lignes 23 → 35). La suite mesure 34,75 / 40,37 / 30,8 / 35,94 sur 610 tests : le seuil global etait **douze points sous la mesure**, donc il ne pouvait plus signaler quoi que ce soit. Les nouveaux seuils sont a peu pres un point sous le mesure, de sorte qu'un ecran de test perdu se voie en CI au lieu de deriver en silence
+* Verifie dans les deux sens avant de merger : avec `statements: 99` la CI echoue (« Coverage for statements (34.75%) does not meet global threshold (99%) »), avec `statements: 34` elle passe. Le garde-fou mord vraiment
+* Les seuils par glob (logique 97/94/96/97, vues 73, composants) ne bougent pas : ce sont eux qui portent la qualite de la suite, le seuil global n'est que le filet
+
 ## V3.6.21 09/Nov/2026
 * **Le dialogue d'edition d'utilisateur redevient un dialogue de la console en mode sombre.** Le corps reprenait deja `--nyx-surface` (#1f2430), mais ce qu'il contient gardait les valeurs d'Element pour le sombre : les deux panneaux du transfert sont peints en `--el-bg-color-overlay` (**#1d1e1f, quasi noir**, sur une surface #1f2430, et ils occupent les deux tiers de la fenetre) et leur en-tete ecrit en `--el-color-black` — du noir sur #262727, soit **1,0:1**, le titre du panneau invisible. Mesure au navigateur, sur la feuille servie
 * Les variables sont reprises **dans le dialogue** (`--el-bg-color-overlay`, `--el-fill-color-light`, `--el-fill-color-blank`, `--el-transfer-border-color` vers la palette `--nyx-*`) plutot que composant par composant : l'editeur d'applications, qui empile les memes elements, en profite aussi. L'en-tete du transfert passe en `var(--nyx-text)`
