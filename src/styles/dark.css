@@ -119,12 +119,33 @@ html.dark .el-dialog__footer {
    noir sur la surface #1f2430 — ils occupent les deux tiers de la fenetre) et leur en-tete ecrit
    en `--el-color-black`, du noir sur #262727 : 1,0:1, le titre du panneau est invisible. Mesure au
    navigateur, sur la feuille servie. Les variables sont reprises dans le dialogue plutot que
-   composant par composant, pour que l'editeur d'applications en profite aussi. */
+   composant par composant, pour que l'editeur d'applications en profite aussi.
+   `--el-disabled-bg-color` est declaree sur `html` comme `var(--el-fill-color-light)` et se resout
+   la-bas en #262727 : la reprendre ici est le seul moyen d'en finir avec le champ desactive qui
+   gardait une teinte a lui (ID/Courriel, non editable en edition). */
 html.dark .el-overlay .el-dialog {
   --el-bg-color-overlay: var(--nyx-surface-raised);
   --el-fill-color-light: var(--nyx-surface-raised);
   --el-fill-color-blank: var(--nyx-surface-raised);
+  --el-disabled-bg-color: var(--nyx-surface-raised);
   --el-transfer-border-color: var(--nyx-border);
+}
+
+/* `--el-fill-color-blank` ne sert pas qu'aux panneaux : c'est aussi le fond des sections d'un
+   `el-collapse`. Repris sur le dialogue, il peignait l'en-tete *et* le corps de chaque section en
+   #262c3a au milieu d'une surface #1f2430 — le formulaire utilisateur s'ouvrait sur deux noirs : un
+   bloc plus clair cerne de sombre, et un pied de page d'une autre teinte encore. Les sections
+   reprennent la surface du dialogue ; seuls les champs et les deux listes du transfert restent
+   sureleves, et les separations prennent la bordure de la palette. */
+html.dark .el-overlay .el-dialog .el-collapse,
+html.dark .el-overlay .el-dialog .el-collapse-item__header,
+html.dark .el-overlay .el-dialog .el-collapse-item__wrap {
+  background-color: transparent;
+}
+
+html.dark .el-overlay .el-dialog .el-collapse-item__header,
+html.dark .el-overlay .el-dialog .el-collapse-item__wrap {
+  border-color: var(--nyx-border);
 }
 
 html.dark .el-transfer-panel__header {

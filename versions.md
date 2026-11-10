@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.23 10/Nov/2026
+* **Le formulaire utilisateur n'a plus qu'une surface en mode sombre.** Le remappage de `--el-fill-color-blank` introduit en 3.6.21 ne sert pas qu'aux panneaux du transfert : c'est aussi le fond des sections d'un `el-collapse`. Repris sur le dialogue, il peignait l'en-tete **et** le corps de chaque section en **#262c3a** au milieu d'une surface **#1f2430**, avec un pied de page revenu en #1f2430 sous eux : le formulaire s'ouvrait sur deux noirs — un bloc plus clair cerne de sombre
+* Les sections repassent en `transparent` (`html.dark .el-overlay .el-dialog .el-collapse-item__header` / `__wrap`), leurs separations prennent `var(--nyx-border)`. Seuls les champs et les deux listes du transfert restent sureleves, comme partout ailleurs dans la console. Mesure apres correction sur le bundle serveur : dialogue, corps, sections et pied de page tous en `rgb(31,36,48)`, champs et panneaux en `rgb(38,44,58)`
+* **Le champ desactive gardait un troisieme gris.** `--el-disabled-bg-color` est declaree sur `html` comme `var(--el-fill-color-light)` et s'y resout en **#262727** : la valeur est heritee deja calculee, donc le remappage fait dans le dialogue ne l'atteignait pas. Le champ « ID/Courriel », non editable en edition, prend la meme teinte que les champs actifs ; son texte et sa bordure restent ceux d'un champ desactive
+* Theme clair re-mesure inchange : dialogue, sections et panneaux blancs, champ desactive #f5f7fa
+* Un test de plus dans `dark-theme-text.spec.js` (sections transparentes, `--el-disabled-bg-color` repris dans le dialogue) : 611 tests, couverture inchangee a 34,75 / 40,37 / 30,8 / 35,94
+
 ## V3.6.22 09/Nov/2026
 * **Le garde-fou de couverture passe de 22 a 34 %** (branches 32 → 39, fonctions 18 → 30, lignes 23 → 35). La suite mesure 34,75 / 40,37 / 30,8 / 35,94 sur 610 tests : le seuil global etait **douze points sous la mesure**, donc il ne pouvait plus signaler quoi que ce soit. Les nouveaux seuils sont a peu pres un point sous le mesure, de sorte qu'un ecran de test perdu se voie en CI au lieu de deriver en silence
 * Verifie dans les deux sens avant de merger : avec `statements: 99` la CI echoue (« Coverage for statements (34.75%) does not meet global threshold (99%) »), avec `statements: 34` elle passe. Le garde-fou mord vraiment
