@@ -90,11 +90,15 @@ export default defineConfig({
         // 394 tests therefore report 22.8 % statements / 32.7 % branches / 18.9 % functions,
         // where Vitest 2 reported 33.9 / 83.9 / 44.3. Nothing regressed — the ruler changed.
         //
-        // Read the per-glob numbers below for the quality of the suite; this one is the tripwire.
-        statements: 22,
-        branches: 32,
-        functions: 18,
-        lines: 23,
+        // Re-baselined again on 9 November 2026, this time upward: the suite measures 34.75 %
+        // statements / 40.37 % branches / 30.8 % functions / 35.94 % lines (610 tests). The values
+        // below sit about a point under, so that a screen test lost by accident shows up as a
+        // failure rather than a silent drift — a tripwire 12 points under the measure protected
+        // nothing. Read the per-glob numbers below for the quality of the suite.
+        statements: 34,
+        branches: 39,
+        functions: 30,
+        lines: 35,
         // Logic and store: held closely (98.5 / 95.5 / 97.1 / 98.9 under the new measure).
         'src/**/*.js': {
           statements: 97,

@@ -106,8 +106,9 @@ store, `jsdom` pour les ecrans montes (le fichier de test le declare en tete :
 globals de `src/main.js` sont fournis par `tests/helpers/mount-view.js`.
 
 La couverture porte sur tout `src` (javascript et `.vue`). Les seuils de `vitest.config.mjs` sont
-par glob : 97/96/94/97 sur le javascript de logique, 85/80/50/85 sur `src/views`, 13/68/23/13 sur
-`src/components` et un seuil global bas qui sert surtout a reperer un fichier de test perdu.
+par glob : 97/94/96/97 sur le javascript de logique, 73 sur `src/views`, plus bas sur
+`src/components`, et un seuil global a 34/39/30/35 — un point sous la mesure (34,75 / 40,37 / 30,8 /
+35,94), assez haut pour qu'un ecran de test perdu fasse echouer la CI.
 
 Etat au 9 novembre 2026 : **608 tests**, **34,75 %** des instructions de `src` (7 464). Par zone :
 
