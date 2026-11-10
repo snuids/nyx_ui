@@ -14,36 +14,51 @@ import Privacy from '@/views/Privacy.vue'
 import Main from '@/views/Main.vue'
 import GenericComponent from '@/components/GenericComponent.vue'
 
+/**
+ * The screen a route mounts, resolved through its async wrapper.
+ *
+ * Routes are declared with `defineAsyncComponent` (the views, and the generic component behind them,
+ * used to be in the initial bundle), so `components.default` is no longer the component itself but
+ * the wrapper that loads it. Resolving the loader keeps the test on what matters: this path mounts
+ * that screen.
+ */
+async function screenOf(record) {
+  const component = record.components.default
+  if (!component.__asyncLoader) return component
+  const module = await component.__asyncLoader()
+  return module && module.default ? module.default : module
+}
+
 describe('router', () => {
-  it('ouvre l\'ecran de connexion sur la racine', () => {
+  it('ouvre l\'ecran de connexion sur la racine', async () => {
     const resolved = router.resolve('/')
 
     expect(resolved.name).toBe('Login')
-    expect(resolved.matched[0].components.default).toBe(Login)
+    expect(await screenOf(resolved.matched[0])).toBe(Login)
   })
 
-  it('rend la notice de confidentialite joignable sans compte', () => {
+  it('rend la notice de confidentialite joignable sans compte', async () => {
     const resolved = router.resolve('/privacy')
 
     expect(resolved.name).toBe('Privacy')
-    expect(resolved.matched[0].components.default).toBe(Privacy)
+    expect(await screenOf(resolved.matched[0])).toBe(Privacy)
   })
 
-  it('monte le cadre principal sur /main', () => {
+  it('monte le cadre principal sur /main', async () => {
     const resolved = router.resolve('/main')
 
     expect(resolved.name).toBe('Main')
-    expect(resolved.matched[0].components.default).toBe(Main)
+    expect(await screenOf(resolved.matched[0])).toBe(Main)
   })
 
-  it('ouvre l\'application demandee comme enfant de /main', () => {
+  it('ouvre l\'application demandee comme enfant de /main', async () => {
     // C'est le chemin que `Login.vue` pousse apres authentification (`/main/<rec_id>`).
     const resolved = router.resolve('/main/rec-1')
 
     expect(resolved.name).toBe('GenericComponent')
     expect(resolved.params.recid).toBe('rec-1')
     expect(resolved.matched).toHaveLength(2)
-    expect(resolved.matched[1].components.default).toBe(GenericComponent)
+    expect(await screenOf(resolved.matched[1])).toBe(GenericComponent)
   })
 
   it('conserve le mode hash des URL existantes', () => {
