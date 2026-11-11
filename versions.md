@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.29 11/Nov/2026
+* **`GET /js/mode-yaml.js` and `GET /js/theme-tomorrow_night.js` — 404 on every screen with an editor.** ACE does not fail on a module it does not know: it builds a `<script src>` from `basePath` and fetches it. With the bundle served under `/js/`, that was `/js/mode-yaml.js`, which nothing serves. The modules were in the bundle all along, but the 55 `require("ace-builds/…")` calls that register them sat in `mounted` and in the `@init` handler — and `ace.edit()` asks for the theme *before* those run. The theme was therefore never applied either: this is the same root cause as the white editor the `theme="chrome"` prop never fixed.
+* `src/utils/aceModules.js` registers the eleven modules once, as side-effect imports, before any editor exists: the core, the language tools, `mode-html`, `mode-yaml`, `mode-javascript`, `mode-less`, `mode-sql`, the `javascript` and `sql` snippets, and both themes. The 55 scattered `require`s are gone from the five editor components and from `mixins/aceTheme.js`, which loses `registerAceThemes` — it existed to compensate, and compensation is no longer needed.
+* `tests/ace-modules.spec.js` holds three failures: a `lang="…"` in a template with no matching `mode-` import in the registry (`text` excepted, it ships in ACE's core), a theme named by the mixin but not imported, and any `require("ace-builds/…")` left outside the registry. Verified by removing `mode-sql`: *"add mode-<lang> …: expected [ 'sql' ] to deeply equal []"*.
+* **736 tests**.
+
+
 ## V3.6.28 11/Nov/2026
 * **`ElementPlusError: [ElOnlyChild] no valid child node found`** in the list of generated reports. A tooltip needs one element child to hang on; the error icon of `ReportTask.vue` was hidden behind `v-if="status == 'Error'"` *inside* its own tooltip, so every row that had **not** failed left a comment node there — the warning fired as soon as the screen opened, on the rows where everything had gone well. The `v-if` is on the tooltip now, which is what was meant: nothing renders when there is no error.
 * Five more of the same shape, found by scanning: the edit and delete buttons of `ReportList.vue` and `ReportPeriodic.vue`, and the logs and regenerate buttons of `ReportTask.vue` — each tooltip wrapped a button carrying `v-if="hasPrivilege('reporteditor')"`, so a user without the privilege got an empty tooltip *and* the warning. The condition is on the tooltip, and the logs button's two conditions are merged into one attribute.

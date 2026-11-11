@@ -14,6 +14,7 @@
  * Usage: `mixins: [aceThemeMixin]` and `:theme="aceTheme"` on the `<editor>`.
  */
 
+import "@/utils/aceModules"; // the themes must be registered before any editor mounts
 import { currentTheme } from "@/utils/theme";
 
 export const ACE_THEME_LIGHT = "chrome";
@@ -41,21 +42,11 @@ export default {
     document.removeEventListener("nyx:theme", this.aceThemeHandler);
   },
   methods: {
-    /** ACE loads a theme by side effect: without this the dark theme resolves to a missing module. */
-    registerAceThemes: function() {
-      require("ace-builds/src-noconflict/theme-chrome");
-      require("ace-builds/src-noconflict/theme-tomorrow_night");
-    },
     /**
      * Re-apply the theme on the editors already mounted. `ace.edit(el)` stores the instance on
      * `el.env.editor`; going through the DOM reaches the editor the prop could not re-theme.
      */
     syncAceEditors: function() {
-      try {
-        this.registerAceThemes();
-      } catch (e) {
-        /* module already loaded, or require unavailable: the prop path still applies */
-      }
       const theme = "ace/theme/" + aceThemeFor(currentTheme());
       const editors = document.querySelectorAll(".ace_editor");
       Array.prototype.forEach.call(editors, (node) => {
