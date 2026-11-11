@@ -100,10 +100,14 @@ export default defineConfig({
         // below sit about a point under, so that a screen test lost by accident shows up as a
         // failure rather than a silent drift — a tripwire 12 points under the measure protected
         // nothing. Read the per-glob numbers below for the quality of the suite.
-        statements: 34,
-        branches: 39,
+        //
+        // Raised again on 11 November 2026, after the two screens every user sees were covered:
+        // Main.vue 64,7 -> 85,3 % and Login.vue 79,7 -> 92,0 %, which lifts the suite to 36,08 %
+        // statements / 41,73 % branches / 31,51 % functions / 37,31 % lines (664 tests).
+        statements: 35,
+        branches: 40,
         functions: 30,
-        lines: 35,
+        lines: 36,
         // Logic and store: held closely (98.5 / 95.5 / 97.1 / 98.9 under the new measure).
         'src/**/*.js': {
           statements: 97,
