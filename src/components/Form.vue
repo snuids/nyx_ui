@@ -10,14 +10,20 @@
               :label-width="formLabelWidth"
               v-if="item.type =='number'"
             >
-              <el-input-number :size="formSize"  v-model="item.value" autocomplete="off"></el-input-number>
+              <el-input-number :size="formSize" v-model="item.value" autocomplete="off" style="width: 100%"></el-input-number>
             </el-form-item>
             <el-form-item
               :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
               :label-width="formLabelWidth"
               v-else-if="item.type =='date'"
             >
-              <el-date-picker :size="formSize" v-model="item.value" type="date" :placeholder="$t('reportgenerator.pick_day')"></el-date-picker>
+              <el-date-picker
+                :size="formSize"
+                v-model="item.value"
+                type="date"
+                style="width: 100%"
+                :placeholder="$t('reportgenerator.pick_day')"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item
               :label="computeTranslatedText(item.title,$store.getters.creds.user.language)"
@@ -25,10 +31,11 @@
               v-else-if="item.type =='datetime'"
             >
               <el-date-picker
-                size="small"
+                :size="formSize"
                 v-model="item.value"
                 type="datetime"
                 :placeholder="$t('ui.pick_datetime')"
+                style="width: 100%"
               ></el-date-picker>
             </el-form-item>
 
@@ -37,7 +44,7 @@
               :label-width="formLabelWidth"
               v-else-if="item.type =='selecter'"
             >
-              <el-select v-model="item.value" :size="formSize" placeholder="Select">
+              <el-select v-model="item.value" :size="formSize" placeholder="Select" style="width: 100%">
                 <el-option
                   v-for="item in item.selectOptions"
                   :key="item"
@@ -81,7 +88,11 @@ export default {
   data: () => ({
     formLabelWidth: "120px",
     commitunderway: false,
-    formSize: 'mini',
+    // Element UI 2 sizes were mini/small/medium/mini; Element Plus knows large/default/small only, and
+    // `mini` fell through to "no size" — the fields then took the default height while the selects
+    // took their own (32 px), which is exactly the size mismatch this screen had. `default` is the
+    // console's height (36 px, see `styles/element-legacy.css`).
+    formSize: "default",
   }),
   props: {
     config: {
