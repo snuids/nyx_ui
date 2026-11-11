@@ -75,8 +75,8 @@ export default {
         // left every Vega module blank while the console showed one rejection per chart.
         let spec = JSON.parse(this.configin.config.vegaSpec);
 
-        // Le spec est ecrit par l'auteur de l'application : il ne connait pas notre theme. On ne
-        // repeint que l'habillage (axes, legende, titres), les marques gardent leurs couleurs.
+        // The spec is written by the application author: it does not know our theme. Only the
+        // decoration is repainted (axes, legend, titles), the marks keep their colours.
         if (currentTheme() === "dark") {
           spec.config = darkChartConfig(spec.config);
         }
@@ -180,8 +180,8 @@ export default {
       this.prepareVega();
     };
     this.$globalbus.$on("timerangechanged", this.timerangeHandler);
-    // Un changement de theme repeint l'habillage du graphique : il est dessine sur un canvas, aucune
-    // feuille de style ne peut le reprendre.
+    // A theme change repaints the decoration of the chart: it is drawn on a canvas, no
+    // stylesheet can take it over.
     this.themeHandler = () => {
       this.prepareVega();
     };

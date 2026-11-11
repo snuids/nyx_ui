@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * `External` — l'ecran qui affiche une application tierce dans une iframe.
+ * `External` — the screen that displays a third-party application in an iframe.
  *
- * Son URL porte des jetons que la console remplace : le token de l'utilisateur, l'API, l'hote, la
- * langue, les bornes de temps et, depuis cette version, le theme en cours (`THEME`). Un ecran a 0 %
- * de couverture jusqu'ici, alors que c'est le seul endroit ou ces remplacements existent.
+ * Its URL carries tokens that the console replaces: the user's token, the API, the host, the
+ * language, the time bounds and, since this version, the current theme (`THEME`). A screen at 0%
+ * coverage until now, although it is the only place where those replacements exist.
  */
 
 import { describe, it, expect, afterEach, vi } from 'vitest'
@@ -53,7 +53,7 @@ describe('External — jetons de l\'URL', () => {
     expect(url).toContain('token=tok-123')
     expect(url).not.toContain('TOKEN')
     expect(url).toContain('lang=fr')
-    expect(url).toContain('api/v1/') // `apiurl` du store
+    expect(url).toContain('api/v1/') // `apiurl` from the store
   })
 
   it('n\'invente pas d\'hôte quand l\'URL est illisible', async () => {
@@ -83,7 +83,7 @@ describe('External — jeton THEME', () => {
     const { wrapper } = await mountExternal('https://app.example/?theme=THEME')
     expect(wrapper.vm.computedUrl).toContain('theme=light')
 
-    // `applyTheme` emet `nyx:theme` : l'ecran ecoute pour recalculer l'URL de l'iframe
+    // `applyTheme` emits `nyx:theme`: the screen listens to recompute the iframe URL
     applyTheme('dark')
     await wrapper.vm.$nextTick()
 
@@ -99,7 +99,7 @@ describe('External — jeton THEME', () => {
 
   it('ajoute le theme a une application du contexte qui ne cite pas THEME', async () => {
     applyTheme('dark')
-    // une application branchee sur nos jetons mais dont la configuration a oublie THEME
+    // an application wired to our tokens but whose configuration forgot THEME
     const { wrapper } = await mountExternal('/logs/?token=TOKEN&lang=LANG&path=/logs')
 
     expect(wrapper.vm.computedUrl).toContain('theme=dark')

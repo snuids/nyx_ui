@@ -19,9 +19,9 @@
         </el-col>
       </el-row>      
 
-      <!-- Une seule ligne pour le selecteur et le bouton : en Element Plus `el-select` prend 100 %
-           de la largeur, donc « Send » tombait sous le selecteur (il tenait a cote en Element UI 2).
-           Le select occupe la place restante, le bouton garde la sienne. -->
+      <!-- One line for the selector and the button: in Element Plus `el-select` takes 100 % of
+           the width, so "Send" fell under the selector (it sat beside it in Element UI 2). The
+           select takes the remaining room, the button keeps its own. -->
       <el-row>
         <el-col :span="24">
           <div class="docker-action-row">
@@ -143,16 +143,16 @@ export default {
 </script>
 
 <style >
-/* Le libelle du champ : un bouton (il place le focus sur le selecteur), pas un titre. */
+/* The label of the field: a button (it puts the focus on the selector), not a title. */
 .docker-action-label {
   padding: 0;
   height: auto;
   vertical-align: baseline;
 }
 
-/* Selecteur et bouton sur la meme ligne : `el-select` fait 100 % de large par defaut en
-   Element Plus, d'ou le `flex: 1` qui lui laisse la place restante et le `min-width: 0` qui
-   l'autorise a retrecir au lieu de pousser le bouton a la ligne. */
+/* Selector and button on the same line: `el-select` is 100 % wide by default in Element
+   Plus, hence the `flex: 1` that leaves it the remaining room and the `min-width: 0` that
+   lets it shrink instead of pushing the button onto the next line. */
 .docker-action-row {
   display: flex;
   align-items: center;

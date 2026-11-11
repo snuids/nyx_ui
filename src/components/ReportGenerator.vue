@@ -201,8 +201,8 @@ export default {
   }),
   computed: {
     rangePickerOptions() {
-      // Les cinq raccourcis ne different que par leur duree : les bornes sont calculees par
-      // `rangeShortcut`, testable sans horloge simulee.
+      // The five shortcuts only differ by their duration: the bounds are computed by
+      // `rangeShortcut`, testable without a simulated clock.
       const shortcut = (text, key) => ({
         text,
         onClick: (picker) => picker.$emit("pick", rangeShortcut(key)),
@@ -327,8 +327,8 @@ export default {
     },
 
     getESValues(par, interval, fixdate, intervalValue, fixdateValue) {
-      // La requete et l'URL viennent de `utils/reportParameters.js` : ici on envoie, et on remplit
-      // la liste des valeurs du parametre.
+      // The query and the URL come from `utils/reportParameters.js`: here we send, and fill the
+      // list of values of the parameter.
       const query = buildParameterValuesQuery({
         par,
         interval,

@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 /**
- * GenericTable — la table generique, ecran de travail quotidien de la console.
+ * GenericTable — the generic table, the console's everyday work screen.
  *
- * Ce qui compte ici n'est pas le rendu de `el-table` (Element Plus le teste pour nous) mais la
- * requete que ce composant fabrique : periode en epoch millis, `hiddenQuery` avec ses jetons,
- * filtre d'ecran combine a la recherche libre, tri, pagination, export. Une erreur dans cette
- * requete ne se voit pas — l'ecran affiche des lignes, seulement pas les bonnes.
+ * What matters here is not how `el-table` renders (Element Plus tests that for us) but the query
+ * this component builds: period in epoch millis, `hiddenQuery` with its tokens, screen filter
+ * combined with the free-text search, sorting, pagination, export. An error in that query does not
+ * show — the screen displays rows, just not the right ones.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -129,7 +129,7 @@ describe('GenericTable — requete envoyee', () => {
 
     await mountTable(config({ queryBarChecked: true }))
 
-    // La barre emet `querychanged` a son propre montage : c'est elle qui declenche la recherche.
+    // The bar emits `querychanged` on its own mount: it is the one that triggers the search.
     expect(axios.post).not.toHaveBeenCalled()
   })
 
@@ -162,8 +162,8 @@ describe('GenericTable — requete envoyee', () => {
 
     const last = sentBody(axios.post.mock.calls.length - 1)
     const queryString = last.query.bool.must.find((clause) => clause.query_string)
-    // Le filtre d'ecran est ajoute apres la requete cachee et la recherche libre, d'ou ce
-    // groupement imbrique — sans consequence pour `query_string`, mais c'est la forme envoyee.
+    // The screen filter is appended after the hidden query and the free-text search, hence this
+    // nested grouping — harmless for `query_string`, but that is the shape sent.
     expect(queryString.query_string.query).toBe('((tenant:acme) AND (facture)) AND (status:"open")')
   })
 
@@ -207,8 +207,8 @@ describe('GenericTable — reponse', () => {
 
     expect(wrapper.vm.rows).toBe(1)
     expect(wrapper.vm.tableData).toHaveLength(1)
-    // L'instantane garde la valeur brute : c'est lui qui permet de ne renvoyer que les champs
-    // reellement modifies a l'enregistrement.
+    // The snapshot keeps the raw value: it is what makes it possible to send back only the fields
+    // actually modified on save.
     expect(wrapper.vm.tableData[0].original._source).toEqual({
       client: 'acme',
       date: '2026-03-02 10:11:12',
@@ -235,7 +235,7 @@ describe('GenericTable — reponse', () => {
     await flushPromises()
 
     expect(wrapper.vm.series).toEqual([{ name: 'Documents', data: [[1772442000000, 7]] }])
-    // L'agregation suit le pas de temps calcule par le store.
+    // The aggregation follows the time step computed by the store.
     expect(sentBody().aggs['2'].date_histogram.interval).toBe('20m')
   })
 

@@ -299,9 +299,9 @@ describe('refreshTimeRange', () => {
   })
 
   it('ne fait rien tant qu\'aucune periode n\'a ete choisie', () => {
-    // `lastTimeRangeEvent` n'existe qu'apres le premier `setTimeRange` : la mutation levait une
-    // TypeError, donc une pagination avant tout choix de periode cassait l'ecran. Elle ne fait
-    // desormais rien, et laisse la plage telle quelle.
+    // `lastTimeRangeEvent` only exists after the first `setTimeRange`: the mutation raised a
+    // TypeError, so a pagination before any period choice broke the screen. It now does
+    // nothing, and leaves the range as it is.
     store.state.lastTimeRangeEvent = null
     store.state.timeRange = 'untouched'
 

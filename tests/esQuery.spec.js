@@ -1,10 +1,10 @@
 /**
- * La requete Elasticsearch des ecrans generiques (`utils/esQuery.js`).
+ * The Elasticsearch query of the generic screens (`utils/esQuery.js`).
  *
- * Ces fonctions etaient dans `GenericTable.loadData` : les tester demandait de monter l'ecran, de
- * mocker `axios` et de lire le corps envoye. Ici c'est un module pur — environnement `node`, pas de
- * DOM ni de composant — donc chaque branche coute une ligne et les cas limites (plage absente,
- * compte sans identifiant, export) se testent pour de bon.
+ * These functions lived in `GenericTable.loadData`: testing them required mounting the screen,
+ * mocking `axios` and reading the body sent. Here it is a pure module — `node` environment, no
+ * DOM and no component — so each branch costs one line and the edge cases (missing range,
+ * count without identifier, export) are really tested.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -17,7 +17,7 @@ import {
 
 const RANGE = [new Date('2026-03-01T00:00:00Z'), new Date('2026-03-08T00:00:00Z')]
 
-/** Configuration d'un ecran generique, comme `GenericTable` la recoit. */
+/** Configuration of a generic screen, as `GenericTable` receives it. */
 const screen = (overrides = {}, payload = {}) => ({
   queryBarChecked: false,
   queryFilterChecked: false,
@@ -192,8 +192,8 @@ describe('buildSearchQuery — recherche', () => {
       queryfilter: 'status:"open"',
     })
 
-    // Le filtre d'ecran est ajoute apres coup, d'ou le groupement imbrique : sans consequence
-    // pour `query_string`, mais c'est la forme envoyee (et celle que `GenericTable` testait deja).
+    // The screen filter is added afterwards, hence the nested grouping: no consequence
+    // for `query_string`, but it is the shape sent (and the one `GenericTable` already tested).
     expect(queryText).toBe('((tenant:acme) AND (facture)) AND (status:"open")')
   })
 

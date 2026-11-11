@@ -586,8 +586,8 @@ export default {
       }
     },
     getESValues(par, interval, fixdate, intervalValue, fixdateValue) {
-      // La requete et l'URL viennent de `utils/reportParameters.js` : ici on envoie, et on remplit
-      // la liste des valeurs du parametre.
+      // The query and the URL come from `utils/reportParameters.js`: here we send, and fill the
+      // list of values of the parameter.
       const query = buildParameterValuesQuery({
         par,
         interval,

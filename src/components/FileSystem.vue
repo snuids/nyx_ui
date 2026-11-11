@@ -394,8 +394,8 @@ export default {
 
             this.allData = response.data.data.sort((a, b) => (a.extension > b.extension) ? 1 : -1)
             this.numberOfItems = response.data.data.length
-            // `slice` et non `splice` : `splice` retirait les lignes de `allData`, donc le
-            // defilement infini n'avait plus rien a charger.
+            // `slice`, not `splice`: `splice` removed the rows from `allData`, so the infinite scroll
+            // had nothing left to load.
             this.tableData = this.allData.slice(0, this.scrollSize)
             this.infiniteId += 1;
 

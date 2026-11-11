@@ -36,10 +36,10 @@ const GenericComponent = route(() => import('../components/GenericComponent.vue'
 
 
 /**
- * GitHub renvoie sur `/oauth?code=…` : une `redirect_uri` OAuth ne peut pas porter de fragment, donc
- * le retour arrive sur un chemin, alors que ce routeur est en mode hash. Sans ce report, la console
- * demarrerait sur `/`, monterait l'ecran de connexion, et la session ne serait jamais terminee.
- * La requete passe dans le fragment, qui reste cote navigateur.
+ * GitHub returns to `/oauth?code=…`: an OAuth `redirect_uri` cannot carry a fragment, so the
+ * return lands on a path, while this router is in hash mode. Without this forward, the
+ * console would start on `/`, mount the login screen, and the session would never be
+ * completed. The query travels in the fragment, which stays in the browser.
  */
 export function normalizeOAuthLocation(win) {
   const w = win || (typeof window !== 'undefined' ? window : null)
@@ -52,8 +52,8 @@ export function normalizeOAuthLocation(win) {
 normalizeOAuthLocation()
 
 export default createRouter({
-  // Vue Router 3 utilisait le mode hash par defaut ; on le conserve pour que les URL
-  // existantes (/  #/main) continuent de fonctionner.
+  // Vue Router 3 used hash mode by default; it is kept so that the existing URLs (/  #/main)
+  // keep working.
   history: createWebHashHistory(process.env.BASE_URL),
   routes: [
     {

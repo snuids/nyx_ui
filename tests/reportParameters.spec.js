@@ -1,9 +1,9 @@
 /**
- * Les valeurs des parametres d'un rapport (`utils/reportParameters.js`).
+ * The parameter values of a report (`utils/reportParameters.js`).
  *
- * `ReportGenerator` et `ReportPeriodicEditor` portaient la meme methode `getESValues`, recopiee a
- * l'identique — 110 lignes chacune, dans deux composants a 0 % de couverture. La requete, l'URL et
- * la lecture de la reponse se testent ici ; l'appel `axios` reste dans les composants.
+ * `ReportGenerator` and `ReportPeriodicEditor` carried the same `getESValues` method, copied
+ * verbatim — 110 lines each, in two components at 0 % coverage. The query, the URL and the reading
+ * of the response are tested here; the `axios` call stays in the components.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -49,7 +49,7 @@ describe('buildParameterValuesQuery — bornes de temps', () => {
 
     const range = query.query.bool.must[0].range.created
     expect(range.gte).toBe(DAY.start.toISOString())
-    // `setHours` travaille en heure locale : la fin de journée est 23:59:59.999 *locale*.
+    // `setHours` works in local time: the end of the day is 23:59:59.999 *local*.
     const end = new Date(range.lte)
     expect([end.getHours(), end.getMinutes(), end.getSeconds(), end.getMilliseconds()]).toEqual([
       23, 59, 59, 999,

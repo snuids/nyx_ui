@@ -1,7 +1,8 @@
 /**
- * Element Plus change la forme de l'argument de `@tab-click` : un TabsPaneContext, dont le nom est
- * `paneName`. Lire `tab.name` donnait "/main/undefined", le routeur ouvrait `/main/undefined` et la
- * vue cherchait une application inexistante — l'interface plantait au premier clic d'onglet.
+ * Element Plus changes the shape of the `@tab-click` argument: a TabsPaneContext, whose name is
+ * `paneName`. Reading `tab.name` produced "/main/undefined", the router opened `/main/undefined` and
+ * the view looked for an application that does not exist — the interface crashed on the first tab
+ * click.
  */
 import { describe, it, expect } from 'vitest'
 import { paneNameOf } from '@/utils/tabs'
@@ -25,7 +26,7 @@ describe('paneNameOf', () => {
   })
 
   it('does not turn a missing name into a route', () => {
-    // c'est le bug d'origine : "/main/" + undefined
+    // this is the original bug: "/main/" + undefined
     expect('/main/' + String(paneNameOf({}))).toBe('/main/undefined')
     expect(paneNameOf({})).toBeFalsy()
   })

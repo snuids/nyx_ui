@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * `ConfigDetails` — l'ecran de configuration d'une application.
+ * `ConfigDetails` — the configuration screen of an application.
  *
- * Il fait 1 476 lignes et n'etait couvert par rien : c'est l'ecran qui decide ce qui part a
- * l'enregistrement, et qui construit l'URL Kibana d'un tableau de bord. Les tests ci-dessous figent
- * ce comportement avant que la construction de l'URL ne sorte du composant.
+ * It is 1,476 lines long and nothing covered it: it is the screen that decides what goes into a
+ * save, and that builds a dashboard's Kibana URL. The tests below freeze that behaviour before the
+ * URL construction moves out of the component.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -38,15 +38,15 @@ const DASH = {
   },
 }
 
-// Chaque ecran monte est demonte apres son test : le store est un singleton, et un composant
-// encore vivant se re-rend avec `appConfigObj` a null quand le test suivant le remet a zero.
+// Every mounted screen is unmounted after its test: the store is a singleton, and a component still
+// alive re-renders with `appConfigObj` at null when the next test resets it.
 const mounted = []
 
 afterEach(() => {
   while (mounted.length) mounted.pop().unmount()
 })
 
-/** Monte l'ecran avec ses enfants lourds remplaces : on teste ce composant, pas Ace ni le picker. */
+/** Mounts the screen with its heavy children stubbed: we test this component, not Ace or the picker. */
 async function mountDetails(overrides = {}) {
   const props = {
     currentConfig: JSON.parse(JSON.stringify(APP)),
@@ -82,7 +82,7 @@ describe('ConfigDetails — mise en forme de la configuration', () => {
 
     expect(wrapper.vm.dialogFormVisible).toBe(true)
     expect(wrapper.vm.curConfig.name).toBe('deliveries')
-    // une copie : modifier le formulaire ne touche pas la configuration d'origine
+    // a copy: editing the form does not touch the original configuration
     wrapper.vm.curConfig.name = 'autre'
     expect(wrapper.vm.currentConfig.name).toBe('deliveries')
   })
@@ -104,9 +104,8 @@ describe('ConfigDetails — mise en forme de la configuration', () => {
     expect(wrapper.vm.strOrgRec).toContain('name: deliveries')
     expect(wrapper.vm.strNewRec).toContain('name: deliveries')
 
-    // Le formulaire ajoute `queryfilters: []` a sa copie : les deux YAML different donc toujours,
-    // meme sans intervention. C'est ce que compare `resolveSavedSource`, et c'est pourquoi
-    // l'enregistrement relit le YAML.
+    // The form adds `queryfilters: []` to its copy, so the two YAMLs always differ, even with no
+    // intervention. That is what `resolveSavedSource` compares, and why the save re-reads the YAML.
     expect(wrapper.vm.strNewRec).not.toBe(wrapper.vm.strOrgRec)
   })
 })
@@ -222,15 +221,15 @@ describe('ConfigDetails — URL du tableau de bord Kibana', () => {
     wrapper.vm.selectedDash = DASH
     wrapper.vm.computeUrlFromKibana()
 
-    // L'URL complete, figee : c'est la garantie que l'extraction vers `utils/kibanaUrl.js` n'a rien
-    // change a ce que Kibana recoit.
+    // The full URL, frozen: it guarantees that the extraction to `utils/kibanaUrl.js` changed
+    // nothing in what Kibana receives.
     expect(wrapper.vm.curConfig.config.url).toBe(
       "./kibananyx//app/kibana#/dashboard/dash-1?embed=true&_g=" +
         '(refreshInterval:(pause:!t,value:0),time:(from:now-7d,mode:quick,to:now))' +
         "&_a=(description:'Deliveries over time',filters:!(),fullScreenMode:!f,options:()" +
         ",panels:!(),query:(language:lucene,query:'*'),timeRestore:!f,title:Test,viewMode:view)"
     )
-    // la periode retenue est recopiee dans la configuration, pour le champ du formulaire
+    // the selected period is copied back into the configuration, for the form field
     expect(wrapper.vm.curConfig.config.kibanaTime).toBe('from:now-7d,mode:quick,to:now')
   })
 })

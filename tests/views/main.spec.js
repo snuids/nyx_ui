@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 /**
- * Ecran principal — le cadre de travail : bandeau, menu lateral, selecteur de periode.
+ * Main screen — the working frame: header, side menu, period selector.
  *
- * C'est le seul ecran que l'utilisateur ne quitte pas ; une regression y coute la navigation
- * entiere (menu vide, periode par defaut fausse, retour en boucle vers la connexion). Les enfants
- * (`Apps`, `Logout`, `ChangePassword`) sont remplaces par des doubles : ils ont leurs propres
- * appels reseau, hors sujet ici.
+ * It is the only screen the user never leaves; a regression there costs the whole navigation (empty
+ * menu, wrong default period, loop back to the login). The children (`Apps`, `Logout`,
+ * `ChangePassword`) are replaced with doubles: they have their own network calls, out of scope
+ * here.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -124,8 +124,8 @@ describe('Main.vue — cadre', () => {
     const { wrapper, router } = await mountMain()
 
     const stock = wrapper.findAll('.submenu-item').find((item) => item.text().includes('Stock'))
-    // Le sous-menu Stock n'a aucune application : le clic ne doit pas naviguer — ni lever une
-    // exception sur `apps[0].rec_id`, ce qu'il faisait avant que le clic ne soit protege.
+    // The Stock submenu has no application: the click must not navigate — nor throw on
+    // `apps[0].rec_id`, as it did before the click was guarded.
     await stock.trigger('click')
     expect(router.currentRoute.value.path).toBe('/main/rec-1')
     expect(store.state.maintitle).toBe('Sales')
@@ -162,7 +162,7 @@ describe('Main.vue — cadre', () => {
     await flushPromises()
 
     expect(router.currentRoute.value.path).toBe('/')
-    // Le chemin est memorise pour etre rouvert apres la connexion.
+    // The path is remembered so it can be reopened after sign-in.
     expect(store.state.redirection).toBe('/main/rec-42')
     expect(wrapper.find('.el-container').exists()).toBe(false)
   })

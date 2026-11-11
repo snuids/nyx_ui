@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * `PGGenericTable` — la table d'un index PostgreSQL.
+ * `PGGenericTable` — the table of a PostgreSQL index.
  *
- * 812 lignes a 0 % : meme contrat que `GenericTable` (requete, tri, pagination, export) mais une
- * requete differente, sans le cache de champs. Les tests figent ce que l'ecran demande au serveur et
- * ce qu'il fait des lignes.
+ * 812 lines at 0%: same contract as `GenericTable` (query, sorting, pagination, export) but a
+ * different query, without the field cache. The tests freeze what the screen asks the server for and
+ * what it does with the rows.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -32,8 +32,8 @@ const CONFIG = {
 }
 
 async function mountTable(overrides = {}) {
-  // `creds.hasPrivilege` est posee sur le store au login : le template la lit pour afficher les
-  // actions d'ecriture.
+  // `creds.hasPrivilege` is set on the store at login: the template reads it to display the write
+  // actions.
   resetStore({ creds: { token: 'tok', hasPrivilege: () => true } })
 
   post.mockImplementation(() =>
@@ -76,7 +76,7 @@ describe('PGGenericTable — requête', () => {
     await mountTable()
 
     const [url, body] = post.mock.calls[0]
-    // les tables PostgreSQL passent par `pg_search`, adresse par `rec_id` et non par index
+    // PostgreSQL tables go through `pg_search`, addressed by `rec_id` and not by index
     expect(url).toContain('pg_search/app-pg')
     expect(url).toContain('token=tok')
     expect(url).toContain('download=0')
@@ -146,7 +146,7 @@ describe('PGGenericTable — export et lignes', () => {
   it('demande un export et ouvre le fichier rendu', async () => {
     const open = vi.spyOn(window, 'open').mockImplementation(() => null)
     const { wrapper } = await mountTable()
-    // l'export doit repondre autre chose que le chargement de page
+    // the export must answer something other than a page load
     post.mockImplementation(() =>
       Promise.resolve({ data: { error: '', url: 'https://files/x.xlsx', type: 'file', total: 2 } })
     )

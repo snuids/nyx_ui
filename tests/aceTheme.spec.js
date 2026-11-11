@@ -101,7 +101,7 @@ describe('mixin lifecycle', () => {
     expect(() => ticked()).not.toThrow()
     expect(synced).toBe(1)
 
-    // un changement de theme met la prop a jour puis resynchronise les editeurs
+    // a theme change updates the prop then resynchronises the editors
     vm.aceTheme = ACE_THEME_LIGHT
     listeners['nyx:theme']()
     expect(vm.aceTheme).toBe(ACE_THEME_DARK)
@@ -112,8 +112,8 @@ describe('mixin lifecycle', () => {
   })
 
   it('loads both ACE themes by side effect', () => {
-    // `ace-builds` n'est pas resolvable sous node : la fonction doit au moins s'executer jusqu'au
-    // premier require (c'est elle qui rend `ace/theme/tomorrow_night` disponible dans le bundle).
+    // `ace-builds` is not resolvable under node: the function must at least run up to the
+    // first require (it is what makes `ace/theme/tomorrow_night` available in the bundle).
     expect(() => aceThemeMixin.methods.registerAceThemes()).toThrow()
   })
 })

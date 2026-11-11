@@ -10,9 +10,9 @@
         @change="refresh()"
       >
         <template #prefix><el-icon class="prefix-icon"><component :is="$icons.ArrowRight" /></el-icon></template>
-        <!-- Le bouton de telechargement est dans le champ, colle a son bord droit comme en
-             production (20 x 28 px, a 5 px du bord), et non pose a cote : a cote, il flottait entre
-             le champ et le bouton « Refresh ». -->
+        <!-- The download button is inside the field, against its right edge as in production
+             (20 x 28 px, 5 px from the edge), and not placed beside it: beside it, it floated
+             between the field and the "Refresh" button. -->
         <template #suffix>
           <el-popover
             placement="bottom-start"
@@ -114,9 +114,9 @@ export default {
     }
   },
   created: function() {
-    // `_.debounce` ne cree qu'UNE fonction pour tout le module : deux QueryBar (un onglet par
-    // application dans GenericComponent) partageaient le meme minuteur, et la recherche tapee dans
-    // un onglet annulait celle en attente dans l'autre. Le debounce est donc construit par instance.
+    // `_.debounce` creates only ONE function for the whole module: two QueryBars (one tab per
+    // application in GenericComponent) shared the same timer, and a search typed in one tab
+    // cancelled the one pending in the other. The debounce is therefore built per instance.
     this.modifyEvent = _.debounce(() => {
       console.log("modify event ");
 
@@ -147,9 +147,9 @@ export default {
 </script>
 
 <style>
-/* Element UI 2 rendait `el-row` en `display: block`, et ce bandeau repose sur des `float`
-   (`input-bar` a gauche, `refresh-button` a droite). Element Plus rend `el-row` en flex : les deux
-   blocs devenaient des elements flex et la barre de recherche tombait a 145 px au lieu de 890. */
+/* Element UI 2 rendered `el-row` as `display: block`, and this bar relies on `float`s
+   (`input-bar` on the left, `refresh-button` on the right). Element Plus renders `el-row`
+   as flex: both blocks became flex items and the search bar fell to 145 px instead of 890. */
 .query-bar {
   display: block;
 }
@@ -167,8 +167,8 @@ export default {
   float: left;
 }
 
-/* Le bouton de telechargement est revenu dans le champ (slot suffix) : le champ reprend toute la
-   largeur du bandeau, comme la production (913 px pour une barre de 1048). */
+/* The download button is back inside the field (suffix slot): the field takes the whole
+   width of the bar again, as in production (913 px for a bar of 1048). */
 .query-bar .input-bar .query-input {
   width: 100%;
 }
@@ -190,8 +190,8 @@ export default {
   float: right;
 }
 
-/* Bouton de telechargement : 20 x 28 px, colle a 5 px du bord droit du champ, icone bleue de
-   14 px — les mesures de la production (bouton [1101,118,20,28] dans un champ finissant a 1126). */
+/* Download button: 20 x 28 px, 5 px from the right edge of the field, 14 px blue icon —
+   the production measurements (button [1101,118,20,28] in a field ending at 1126). */
 .search-dl-bt {
   --el-button-text-color: var(--el-color-primary);
   --el-button-hover-text-color: var(--el-color-primary);
@@ -208,8 +208,8 @@ export default {
   justify-content: center;
 }
 
-/* `.el-button.is-link` (deux classes) impose `height: auto` : il faut trois classes pour donner au
-   bouton la hauteur du champ et garder l'icone centree. */
+/* `.el-button.is-link` (two classes) imposes `height: auto`: three classes are needed to
+   give the button the height of the field and keep the icon centred. */
 .el-button.search-dl-bt.is-link {
   height: 28px;
   min-height: 28px;
@@ -220,11 +220,11 @@ export default {
   font-size: 14px;
 }
 
-/* Le suffixe d'Element Plus se pose dans le rembourrage du champ : la production laisse 15 px a
-   gauche pour le texte mais 5 px a droite pour l'icone, et le champ reste haut de 28 px (avec 15 px
-   des deux cotes il mesurait 30 px et l'icone tombait a 15 px du bord). */
-/* Trois classes : la regle globale `.el-input--small .el-input__wrapper` (deux classes) est
-   ecrite plus loin dans la feuille compilee et l'emporterait a specificite egale. */
+/* The Element Plus suffix sits in the padding of the field: production leaves 15 px on the
+   left for the text but 5 px on the right for the icon, and the field stays 28 px high (with
+   15 px on both sides it measured 30 px and the icon fell 15 px from the edge). */
+/* Three classes: the global rule `.el-input--small .el-input__wrapper` (two classes) is
+   written further down the compiled sheet and would win at equal specificity. */
 .query-bar .query-input .el-input__wrapper {
   padding: 0 5px 0 15px;
 }

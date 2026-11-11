@@ -21,9 +21,9 @@
       ></GenericTableDetails>
     </span>
 
-    <!-- Un `div` et non un `el-row` : en Element Plus `el-row` est un conteneur flex, donc le
-         bandeau qu'il contient se reduisait a la largeur de son contenu (337 px au lieu de 890 sur
-         l'ecran Docker) au lieu de prendre toute la largeur comme avec Element UI 2. -->
+    <!-- A `div`, not an `el-row`: in Element Plus `el-row` is a flex container, so the bar it
+         holds shrank to the width of its content (337 px instead of 890 on the Docker screen)
+         instead of taking the full width as it did with Element UI 2. -->
     <div v-if="config.queryBarChecked">
       <QueryBar @querychanged="queryBarChanged" @downloadasked="downloadAsked" :config="config"></QueryBar>
     </div>
@@ -353,8 +353,8 @@ export default {
     }
   },
   methods: {
-    // Les configurations enregistrees portent un nom d'icone Element UI 2 ("el-icon-download") :
-    // Element Plus attend un composant, donc on traduit ici.
+    // Saved configurations carry an Element UI 2 icon name ("el-icon-download"): Element Plus
+    // expects a component, so it is translated here.
     buttonIcon: function(name) {
       return iconComponent(name, this.$icons)
     },
@@ -638,7 +638,7 @@ export default {
       if (download == undefined) download = false;
       // console.log("LOAD DATA...Download=" + download);
 
-      // La requete vit dans `utils/esQuery.js` : ce composant ne garde que l'appel et la reponse.
+      // The query lives in `utils/esQuery.js`: this component only keeps the call and the response.
       const payload = this.config.config || {};
 
       const { range, interval } = resolveTimeRange(this.config.timeSelectorType, {
@@ -826,12 +826,12 @@ export default {
 
       if (this.config.mapChecked && !this.dontrefreshMap)
       {
-        // `query2` etait une variable globale implicite (elle marchait parce que le `var` de la
-        // construction de requete la hoistait) : declaree ici, elle appartient a la fonction.
+        // `query2` was an implicit global (it worked because the `var` of the query builder hoisted
+        // it): declared here, it belongs to the function.
         const query2 = JSON.parse(JSON.stringify(query));
         query2.size=1000;
-        // Les deux champs du plan (lat / lon) doivent être demandés explicitement : une requête qui ne
-        // ramene que `mapfield` laisse le plan vide quand l'index n'a pas de geo_point.
+        // Both map fields (lat / lon) must be requested explicitly: a query that only brings back
+        // `mapfield` leaves the map empty when the index has no geo_point.
         var mapCfg = this.config.config;
         query2._source=[];
         if (mapCfg.maplatfield && mapCfg.maplonfield) {
@@ -850,7 +850,7 @@ export default {
         }
 
         if (query2._source.length == 0) {
-          // Aucun champ de plan configure : on laisse Elasticsearch renvoyer le document entier.
+          // No map field configured: Elasticsearch is left to return the whole document.
           delete query2._source;
         }
 

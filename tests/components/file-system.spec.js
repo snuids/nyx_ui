@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * `FileSystem` — l'explorateur de fichiers d'une application.
+ * `FileSystem` — the file browser of an application.
  *
- * 529 lignes a 0 % : il liste un repertoire, construit le fil d'Ariane, garde les lignes
- * selectionnees et lance les telechargements. Les tests donnent un repertoire au serveur simule et
- * verifient ce que l'ecran demande et retient.
+ * 529 lines at 0%: it lists a directory, builds the breadcrumb, keeps the selected rows and starts
+ * downloads. The tests give a directory to the simulated server and check what the screen requests
+ * and remembers.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -40,11 +40,11 @@ async function mountFs({ files = FILES, path = '/' } = {}) {
     currentSubCategory: { apps: [{}, {}], loc_title: 'Files' },
   })
 
-  // une copie : le composant trie le tableau recu, dans l'ordre des extensions
+  // a copy: the component sorts the array it receives, by extension order
   post.mockImplementation(() =>
     Promise.resolve({ data: { error: '', data: files.map((file) => ({ ...file })) } })
   )
-  // les telechargements passent par `axios.get` en blob
+  // downloads go through `axios.get` as a blob
   get.mockImplementation(() => Promise.resolve({ data: new Blob(['x']) }))
 
   const result = await mountView(FileSystem, {

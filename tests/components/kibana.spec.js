@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 /**
- * `Kibana` — l'ecran qui embarque un tableau de bord Kibana.
+ * `Kibana` — the screen that embeds a Kibana dashboard.
  *
- * 527 lignes a 0 % : il calcule la hauteur de l'iframe, compose l'URL du tableau de bord avec la
- * recherche et le filtre d'ecran, et lance les exports (PDF, CSV) par le serveur.
+ * 527 lines at 0%: it computes the iframe height, composes the dashboard URL with the search and
+ * the screen filter, and starts the exports (PDF, CSV) through the server.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -22,7 +22,7 @@ afterEach(() => {
   while (mounted.length) mounted.pop().unmount()
 })
 
-// une URL Kibana reelle porte la recherche dans `_a=(query:'...')`
+// a real Kibana URL carries the search in `_a=(query:'...')`
 const URL_WITH_QUERY = "kibana#/dashboard/dash-1?embed=true&_a=(query:'*',filters:!())"
 
 const CONFIG = {
@@ -84,9 +84,9 @@ describe('Kibana — URL du tableau de bord', () => {
 
     const result = wrapper.vm.updateQuery(URL_WITH_QUERY)
 
-    // les jetons sont substitues dans la configuration, et la recherche part avec l'URL
+    // the tokens are substituted into the configuration, and the search goes out with the URL
     expect(wrapper.vm.config.config.hiddenQuery).toBe('owner:alice')
-    // la requete cachee est groupee avec la recherche courante (`*` ici)
+    // the hidden query is grouped with the current search (`*` here)
     expect(result).toContain('owner:alice')
   })
 })

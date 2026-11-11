@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  # `contents: write` pour publier le badge sur la branche `badges` (push sur master uniquement)
+  # `contents: write` to publish the badge on the `badges` branch (push to master only)
   contents: write
   # the coverage summary is posted as a pull-request comment (same-repo branches only)
   pull-requests: write
@@ -58,8 +58,8 @@ jobs:
           --coverage.reporter=json-summary
           --coverage.reporter=html
 
-      # La couverture publiee de `master`, pour afficher le delta dans le resume et le commentaire.
-      # Absente au premier run, ou si la branche `badges` n'existe pas encore : le script s'en passe.
+      # The published coverage of `master`, to show the delta in the summary and the comment.
+      # Absent on the first run, or if the `badges` branch does not exist yet: the script does without it.
       - name: Fetch the published coverage, for the delta
         if: github.event_name == 'pull_request'
         continue-on-error: true
@@ -82,9 +82,9 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
-      # Le badge lit ce fichier sur la branche `badges` (`shields.io/endpoint`), ce qui evite un
-      # service externe et un compte a maintenir. Publie sur master seulement : une PR qui casse la
-      # couverture ne doit pas changer le badge.
+      # The badge reads this file on the `badges` branch (`shields.io/endpoint`), which avoids an
+      # external service and an account to maintain. Published on master only: a PR that breaks the
+      # coverage must not change the badge.
       - name: Publish the coverage badge data
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         continue-on-error: true

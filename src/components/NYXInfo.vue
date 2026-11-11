@@ -231,10 +231,10 @@ export default {
   props: {},
   computed: {
     /**
-     * Le module WebSocket existe des qu'il demarre ; ses `clients` n'apparaissent qu'a la premiere
-     * connexion. Le template lisait `WebSocketServer[0]._source.clients[0].logins` derriere un garde
-     * qui ne verifiait que `_source` : un module sans client faisait tomber la page entiere au
-     * rendu (`Cannot read properties of undefined (reading '0')`).
+     * The WebSocket module exists as soon as it starts; its `clients` only appear on the first
+     * connection. The template read `WebSocketServer[0]._source.clients[0].logins` behind a
+     * guard that only checked `_source`: a module without a client took the whole page down at
+     * render time (`Cannot read properties of undefined (reading '0')`).
      */
     webSocketClients() {
       const source =

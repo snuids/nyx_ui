@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 /**
- * GenericComponent — l'ecran qui affiche *toutes* les pages de la console.
+ * GenericComponent — the screen that displays *all* the pages of the console.
  *
- * Il lit `currentSubCategory.apps` et decide quoi rendre : un ecran generique par `type`
- * (`generic-table`, `external`, `kibana`, `grafana`, `form`, `upload`), ou le controleur nomme dans
- * `config.controller`, charge par `require.context`. Une erreur ici ne casse pas une page, elle les
- * casse toutes — et le message d'erreur ressemble a « page blanche ».
+ * It reads `currentSubCategory.apps` and decides what to render: a generic screen per `type`
+ * (`generic-table`, `external`, `kibana`, `grafana`, `form`, `upload`), or the controller named in
+ * `config.controller`, loaded through `require.context`. An error here does not break one page, it
+ * breaks all of them — and the error message looks like "blank page".
  *
- * Les enfants sont remplaces par des doubles (sauf `LandingPage`, teste en vrai) : eux seuls font
- * les appels reseau, et c'est le choix de l'enfant, pas son contenu, que ce composant decide.
+ * The children are replaced with doubles (except `LandingPage`, tested for real): they alone make
+ * the network calls, and it is the choice of child, not its content, that this component decides.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -64,7 +64,7 @@ let logs
 beforeEach(() => {
   globalBus.all.clear()
   localBus.all.clear()
-  // Le composant journalise chaque cycle de vie : sans ca la sortie du run devient illisible.
+  // The component logs every lifecycle step: without this the run output becomes unreadable.
   logs = vi.spyOn(console, 'log').mockImplementation(() => {})
 })
 
@@ -96,24 +96,24 @@ describe('GenericComponent — une seule application', () => {
     const { wrapper } = await mountPage()
 
     expect(wrapper.findComponent(stubs[componentName]).exists()).toBe(true)
-    // Un seul enfant : les autres branches ne doivent rien rendre.
+    // A single child: the other branches must render nothing.
     for (const [name, stubbed] of Object.entries(stubs)) {
       if (name !== componentName) expect(wrapper.findComponent(stubbed).exists()).toBe(false)
     }
   })
 
   it('charge le controleur nomme par config.controller', async () => {
-    // Chemin par defaut : la page est un composant de `src/components`, resolu par require.context.
+    // Default path: the page is a component from `src/components`, resolved by require.context.
     seed([app({ type: undefined, config: { controller: 'LandingPage' } })])
 
     const { wrapper } = await mountPage()
-    // Le composant est charge a la demande (defineAsyncComponent) : sans attendre les imports
-    // dynamiques, le noeud reste un commentaire et l'assertion porterait sur du vide.
+    // The component is loaded on demand (defineAsyncComponent): without waiting for the dynamic
+    // imports, the node stays a comment and the assertion would test nothing.
     await vi.dynamicImportSettled()
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    // LandingPage affiche le plan du site a partir des menus du store.
+    // LandingPage renders the site map from the store's menus.
     expect(wrapper.text()).toContain('Rapports')
   })
 
@@ -199,7 +199,7 @@ describe('GenericComponent — bus et routage', () => {
 
   it('se desabonne au demontage sans couper les autres abonnes du bus', async () => {
     seed()
-    const other = vi.fn() // l'ecouteur d'App.vue, sur le meme evenement
+    const other = vi.fn() // App.vue's listener, on the same event
     globalBus.$on('messagereceived', other)
 
     const { wrapper } = await mountPage()

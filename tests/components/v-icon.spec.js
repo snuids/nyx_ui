@@ -83,7 +83,7 @@ describe('VIcon — resolution du nom', () => {
     const first = icon({ name: 'code' })
     await vi.waitFor(() => expect(first.find('svg').exists()).toBe(true))
 
-    // seconde instance : la resolution est synchrone, le glyphe est la au premier rendu
+    // second instance: resolution is synchronous, the glyph is there on the first render
     const second = icon({ name: 'code' })
     expect(second.find('svg').exists()).toBe(true)
   })

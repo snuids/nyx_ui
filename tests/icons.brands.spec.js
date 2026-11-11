@@ -1,9 +1,8 @@
 // @vitest-environment jsdom
 /**
- * `brands/docker` et `brands/canadian-maple-leaf` sont stockes tels quels dans la configuration des
- * applications. Ils n'existent que dans le jeu « brands » de FontAwesome : sans `fab`, ils ne
- * produisent aucun glyphe — c'est ainsi que l'icone Docker a disparu du menu de gauche, et la
- * feuille d'erable avec elle.
+ * `brands/docker` and `brands/canadian-maple-leaf` are stored as they are in the application
+ * configuration. They only exist in the FontAwesome "brands" set: without `fab` they produce no
+ * glyph — that is how the Docker icon disappeared from the left menu, and the maple leaf with it.
  */
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'

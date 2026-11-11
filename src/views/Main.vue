@@ -411,9 +411,9 @@ export default {
         }        
         window.open(url);
       } else {
-        // Un sous-menu peut n'avoir aucune application (entree de menu vide, application retiree
-        // du catalogue) : sans ce garde-fou le clic levait un TypeError sur `apps[0].rec_id`,
-        // l'erreur remontait en console et le menu paraissait casse.
+        // A submenu may hold no application (empty menu entry, application removed from the
+        // catalogue): without this guard the click raised a TypeError on `apps[0].rec_id`, the
+        // error surfaced in the console and the menu looked broken.
         if (!e.apps || e.apps.length === 0) return;
 
         this.maintitle = e.loc_title;
@@ -695,10 +695,9 @@ body {
   width: 100%;
 }
 
-/* Element Plus a renomme `.el-submenu` en `.el-sub-menu` : sans ces selecteurs, les hauteurs de
-   40 px definies ici ne s'appliquaient plus et les entrees reprenaient les 56 px par defaut, ce qui
-   faisait une barre de gauche beaucoup plus haute qu'avant. Les anciens selecteurs sont conserves,
-   ils ne genent pas. */
+/* Element Plus renamed `.el-submenu` to `.el-sub-menu`: without these selectors the 40 px heights
+   defined here stopped applying and the entries fell back to the default 56 px, which made the left
+   bar much taller than before. The old selectors are kept, they do no harm. */
 .el-submenu__title,
 .el-sub-menu__title {
   height: 40px !important;
@@ -719,22 +718,21 @@ body {
   min-width: 0;
 }
 
-/* L'en-tete centre ses enfants par `line-height: 60px`. Les boutons d'Element Plus sont en
-   `inline-flex`, donc alignes sur la ligne de base : le bouton rond de droite descendait par
-   rapport au reste. */
-/* Element UI 2 centrait les boutons de l'en-tete par la ligne (`line-height: 60px`). Element Plus
-   utilise des boites `inline-flex`, qui se posent sur la ligne de base : elles descendaient de 2 px,
-   et le bouton de l'avatar, lui, sortait de l'en-tete (-2 px) parce que son `.el-dropdown` ne faisait
-   que 40 px de haut.
-   La rangee devient donc un conteneur flex : chaque colonne centre verticalement son contenu, et la
-   derniere est alignee a droite. Plus de decalage a la main. */
+/* The header centres its children with `line-height: 60px`. Element Plus buttons are
+   `inline-flex`, so they sit on the baseline: the round button on the right dropped below the
+   rest. */
+/* Element UI 2 centred the header buttons through the line (`line-height: 60px`). Element Plus
+   uses `inline-flex` boxes, which sit on the baseline: they dropped by 2 px, and the avatar button
+   left the header altogether (-2 px) because its `.el-dropdown` was only 40 px tall.
+   The row therefore becomes a flex container: each column centres its content vertically, and the
+   last one is right-aligned. No more manual offsets. */
 .el-header .el-row {
   display: flex;
   align-items: center;
   height: 60px;
-  /* L'en-tete herite de `line-height: 60px`. Avec des colonnes en flex, cette ligne de 60 px
-     s'ajoute au contenu des qu'un selecteur de date apparait et decale les boutons de quelques
-     pixels. En flex, le centrage se fait par `align-items` : la ligne n'a plus lieu d'etre. */
+  /* The header inherits `line-height: 60px`. With flex columns, that 60 px line adds to the
+     content as soon as a date picker appears and shifts the buttons by a few pixels. In flex,
+     centring is done by `align-items`: the line is no longer needed. */
   line-height: normal;
 }
 
@@ -747,14 +745,14 @@ body {
   justify-content: flex-end;
 }
 
-/* Le declencheur du menu de compte est enveloppe dans un <span> : la ligne de 60 px du span place le
-   `el-dropdown` en haut, d'ou un bouton d'avatar colle au bord superieur. `vertical-align: middle`
-   le recentre dans la ligne, comme le faisait Element UI 2. */
+/* The account menu trigger is wrapped in a <span>: the 60 px line of the span puts the
+   `el-dropdown` at the top, which glues the avatar button to the upper edge. `vertical-align: middle`
+   recentres it in the line, as Element UI 2 did. */
 .el-header .el-dropdown {
   vertical-align: middle;
 }
 
-/* Sans cela, la colonne flex comprime le bouton rond (31 x 40 au lieu de 40 x 40). */
+/* Without this, the flex column squeezes the round button (31 x 40 instead of 40 x 40). */
 .el-header .el-button {
   flex-shrink: 0;
 }
@@ -763,8 +761,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Element UI 2 : bouton rond de 40 px. Element Plus le dimensionne avec
-     --el-component-size (36 px ici), d'ou un bouton plus petit que dans l'en-tete. */
+  /* Element UI 2: 40 px round button. Element Plus sizes it with
+     --el-component-size (36 px here), hence a button smaller than in the header. */
   width: 40px;
   height: 40px;
 }
@@ -780,27 +778,27 @@ body {
   overflow: hidden !important;
 }
 
-/* Element Plus met le rembourrage sur `.el-dialog` (16 px), alors qu'Element UI 2 le mettait sur
-   `__header` et `__body`. L'en-tete bleu ne touchait donc plus les bords de la fenetre : il
-   flottait a l'interieur, sans les coins arrondis, et la croix de fermeture devenait noire. On
-   retablit le modele de boite d'Element UI 2. */
-/* Le prefixe `.el-overlay` n'est pas cosmetique : Element Plus definit `.el-dialog` avec une seule
-   classe, et selon l'ordre d'injection des feuilles (developpement, HMR) sa regle peut passer apres
-   la notre. Avec deux classes, la notre gagne dans tous les cas. */
+/* Element Plus puts the padding on `.el-dialog` (16 px), whereas Element UI 2 put it on
+   `__header` and `__body`. The blue header therefore no longer touched the edges of the window: it
+   floated inside, without the rounded corners, and the close cross turned black. We restore the
+   Element UI 2 box model. */
+/* The `.el-overlay` prefix is not cosmetic: Element Plus defines `.el-dialog` with a single
+   class, and depending on the stylesheet injection order (development, HMR) its rule can come after
+   ours. With two classes, ours wins in every case. */
 .el-overlay .el-dialog {
   padding: 0;
   border-radius: 4px;
   overflow: hidden;
 }
 
-/* Element UI 2 : bande de 54 px, titre a gauche, croix de 16 px dans le coin. Element Plus centre
-   (il herite du `text-align: center` de #app), reserve 32 px a droite pour une croix de 48 px, et
-   laisse donc beaucoup de vide en haut — c'est ce qui se voyait. */
+/* Element UI 2: 54 px band, title on the left, 16 px cross in the corner. Element Plus centres
+   (it inherits `text-align: center` from #app), reserves 32 px on the right for a 48 px cross, and
+   therefore leaves a lot of empty space at the top — that is what showed. */
 .el-overlay .el-dialog__header {
   background-color: #409eff !important;
-  /* Element UI 2 : 20 px des deux cotes ; la croix de fermeture est positionnee en absolu, elle
-     n'a pas besoin que le titre lui laisse de la place. Les 40 px de droite vus en production
-     venaient d'Element Plus, qui reserve la place de sa croix de 48 px. */
+  /* Element UI 2: 20 px on both sides; the close cross is absolutely positioned, it does not
+     need the title to leave it room. The 40 px on the right seen in production came from
+     Element Plus, which reserves room for its 48 px cross. */
   padding: 20px 20px 10px;
   text-align: left;
 }
@@ -823,10 +821,10 @@ body {
   font-size: 16px;
 }
 
-/* Element UI 2 mettait 30 px en haut du corps ; a l'usage l'ecart sous la bande de titre parait
-   trop grand (42 px mesures), surtout dans les fenetres qui commencent par une barre d'onglets.
-   20 px est un choix explicite de l'utilisateur : l'ecart passe a 32 px et le port differe ici de
-   la production precedente, volontairement. */
+/* Element UI 2 put 30 px at the top of the body; in use the gap under the title band looks too
+   large (42 px measured), especially in the windows that start with a tab bar.
+   20 px is an explicit choice of the user: the gap becomes 32 px and the port differs here from
+   the previous production, on purpose. */
 .el-overlay .el-dialog__body {
   padding: 20px 20px;
   color: var(--el-text-color-regular);
@@ -837,11 +835,11 @@ body {
   padding: 10px 20px 20px;
 }
 
-/* L'en-tete centre ses elements par `line-height: 60px`, et un champ y herite cette hauteur de ligne :
-   le wrapper interne d'Element Plus s'etire alors a 58 px dans un controleur de 28 px, si bien que le
-   texte se pose en bas d'une boite blanche plus haute que l'en-tete. Le selecteur de mois le montrait
-   le plus nettement (un seul champ, large, avec de l'air au-dessus du texte). Deux valeurs rendent au
-   champ sa hauteur : le wrapper redevient le flex qu'Element Plus declare, et sa ligne redevient normale. */
+/* The header centres its elements with `line-height: 60px`, and a field inherits that line height:
+   the inner wrapper of Element Plus then stretches to 58 px inside a 28 px control, so the text sits
+   at the bottom of a white box taller than the header. The month picker showed it most clearly (a
+   single wide field, with empty space above the text). Two values give the field its height back: the
+   wrapper becomes the flex Element Plus declares again, and its line becomes normal again. */
 .el-header .el-date-editor .el-input__wrapper {
   display: inline-flex;
   align-items: center;
@@ -849,9 +847,9 @@ body {
   height: 26px;
 }
 
-/* Meme ecart pour les boites de confirmation ($alert / $confirm / $prompt) : Element Plus met un
-   rembourrage de 12 px autour de la boite et aucun en haut de l'en-tete, si bien que le titre
-   demarrait 12 px plus bas que dans Element UI 2. */
+/* Same gap for the confirmation boxes ($alert / $confirm / $prompt): Element Plus puts 12 px of
+   padding around the box and none at the top of the header, so the title started 12 px lower than
+   in Element UI 2. */
 .el-overlay-message-box .el-message-box {
   padding: 0 0 10px;
   border-radius: 4px;

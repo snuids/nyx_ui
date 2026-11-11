@@ -1,11 +1,11 @@
 /**
- * `vue-awesome` acceptait une prop `color` ; FontAwesome colore via `currentColor`. Sans cette prop,
- * les icones des colonnes « format: icon » (colonne Result des Lambdas) perdaient leur vert et
- * sortaient en noir.
+ * `vue-awesome` accepted a `color` prop; FontAwesome colours through `currentColor`. Without that
+ * prop, the icons of the "format: icon" columns (the Result column of the Lambdas) lost their green
+ * and came out black.
  *
- * Ce projet teste des modules JavaScript : le montage de composants `.vue` demanderait
- * `@vitejs/plugin-vue` (absent de la configuration Vitest). On verifie donc la declaration, et le
- * rendu est controle dans le navigateur (`color: green` sur le SVG).
+ * This project tests JavaScript modules: mounting `.vue` components would require
+ * `@vitejs/plugin-vue` (absent from the Vitest configuration). We therefore check the declaration,
+ * and the render is checked in the browser (`color: green` on the SVG).
  */
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'

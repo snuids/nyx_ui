@@ -10,7 +10,7 @@
     </div>
 
     <div class="login-center" :class="{ force: forceChange }">
-      <!-- Les deux decors au-dessus de la carte : dans le groupe, ils suivent sa position. -->
+      <!-- The two decorations above the card: inside the group, they follow its position. -->
       <div class="title-icon"></div>
       <div class="title-icon2">
         <v-icon
@@ -125,7 +125,7 @@
       <h1 class="title-login">{{config.welcome}}</h1>
     </div>
 
-    <!-- Au milieu, en bas : le lien ne se disputait plus la place avec le texte d'accueil. -->
+    <!-- Centred at the bottom: the link no longer competes for room with the welcome text. -->
     <router-link class="privacy-link" to="/privacy">{{ privacyLink }}</router-link>
 
   </div>
@@ -457,8 +457,8 @@ export default {
   margin: 0;
   color: white;
   font-family: "Helvetica Neue";
-  /* Element UI 2 ramenait les titres a 20 px en graisse normale ; sans sa feuille de style, le
-     navigateur applique son h1 par defaut (32 px, gras). */
+  /* Element UI 2 brought headings down to 20 px, normal weight; without its stylesheet the
+     browser applies its default h1 (32 px, bold). */
   font-size: 20px;
   font-weight: 400;
 }
@@ -474,8 +474,8 @@ export default {
   z-index: 10;
 }
 
-/* Au milieu, en bas de la page : sa place etait sous le texte d'accueil, ou il se disputait la
-   ligne avec le titre et passait sous la carte des que celle-ci grandissait. */
+/* Centred at the bottom of the page: it used to sit under the welcome text, where it competed
+   for the line with the title and slid under the card as soon as the card grew. */
 .privacy-link {
   position: absolute;
   left: 50%;
@@ -503,9 +503,9 @@ export default {
   padding:3px;
 }
 
-/* Les deux decors se placent par rapport au haut de la carte (-140px et -112px, les ecarts
-   qu'ils avaient avec `top: 50%`), et non plus par rapport au milieu de la page : quand le groupe
-   remonte sur une fenetre courte, ils remontent avec lui au lieu de se retrouver sur la carte. */
+/* The two decorations are positioned relative to the top of the card (-140px and -112px, the
+   offsets they had with `top: 50%`), no longer relative to the middle of the page: when the group
+   moves up on a short window, they move up with it instead of landing on the card. */
 .title-icon {
   position: absolute;
   left: 50%;
@@ -537,8 +537,8 @@ export default {
   margin-top: 10px;
 }
 
-/* « ou » entre les deux moyens de se connecter : une regle simple, pour ne pas laisser le
-   second bouton collé au premier. */
+/* "or" between the two ways of signing in: a simple rule, so the second button does not sit
+   glued to the first one. */
 .login-separator {
   display: flex;
   align-items: center;
@@ -567,20 +567,19 @@ export default {
   bottom: 0px;
   height: 100%;
   background-color: #048;
-  /* Une carte plus haute que la fenetre (portable, zoom) defile ici au lieu d'etre coupee. */
+  /* A card taller than the window (laptop, zoom) scrolls here instead of being cut off. */
   overflow-y: auto;
 }
 
-/* La carte et le texte d'accueil forment un seul groupe, centre horizontalement, dont le bord
-   haut reste celui qu'avait la carte. Le texte est donc *sous* la carte quelle que soit sa
-   hauteur : avec la carte en position absolue et le titre a `50% + 170px`, l'ajout du bouton
-   GitHub faisait passer la carte par-dessus le titre, et le texte blanc devenait invisible sur
-   le fond blanc de la carte. */
+/* The card and the welcome text form a single group, centred horizontally, whose top edge is
+   the one the card had. The text therefore stays *under* the card whatever its height: with the
+   card in absolute position and the title at `50% + 170px`, adding the GitHub button made the
+   card cover the title, and the white text became invisible on the white background of the card. */
 .login-center {
   position: absolute;
-  /* 50% - 70px est la position de croisiere. Sur une fenetre courte (portable, zoom), le groupe
-     remonte pour laisser la place au pied de page : sans cela la carte pousse le texte d'accueil
-     sous le lien de confidentialite, ancre en bas. `clamp` garde les decors visibles en haut. */
+  /* 50% - 70px is the cruising position. On a short window (laptop, zoom) the group moves up
+     to leave room for the footer: without that the card pushes the welcome text under the
+     privacy link, which is anchored at the bottom. `clamp` keeps the decorations visible up top. */
   top: clamp(96px, calc(50% - 70px), calc(100% - 400px));
   left: 50%;
   transform: translateX(-50%);
@@ -591,22 +590,22 @@ export default {
   gap: 18px;
 }
 
-/* Le panneau de premier changement est plus haut : il garde le decalage qu'il avait (bord haut
-   a `50% - 180px`), sinon il deborderait par le bas sur un ecran de portable. */
+/* The first-change panel is taller: it keeps the offset it had (top edge at `50% - 180px`),
+   otherwise it would overflow at the bottom on a laptop screen. */
 .login-center.force {
   top: clamp(96px, calc(50% - 180px), calc(100% - 520px));
 }
 
-/* La carte se dimensionne sur son contenu. La hauteur fixe de 200px datait du seul formulaire
-   mot de passe : le bouton GitHub (separateur + bouton, ~60px) debordait de la carte, et l'ecran
-   de connexion demandait de defiler pour l'atteindre. */
+/* The card sizes itself to its content. The fixed 200px height dated from the password form
+   alone: the GitHub button (separator + button, ~60px) overflowed the card, and the login screen
+   had to scroll to reach it. */
 .login-card {
   width: 100%;
   min-height: 200px;
 }
 
-/* Le panneau de premier changement a trois champs : il garde sa hauteur mini plus grande, mais
-   il doit lui aussi grandir si un message s'ajoute (erreur de saisie, mot de passe refuse). */
+/* The first-change panel has three fields: it keeps its larger minimum height, but it must
+   also grow when a message is added (bad input, refused password). */
 .login-card.force {
   min-height: 340px;
 }
@@ -619,13 +618,13 @@ export default {
 
 .login-form .el-button{
   margin-top: 12px;
-  /* Element UI 2 : bouton de 40 px. Element Plus suit --el-component-size (36 px ici). */
+  /* Element UI 2: 40 px button. Element Plus follows --el-component-size (36 px here). */
   height: 40px;
   width: 100%;
 }
-/* Fenetre tres courte (telephone en paysage, zoom fort) : les decors au-dessus de la carte
-   n'apportent rien et prennent la place qui manque au texte d'accueil. Sans cela, le titre passe
-   sous le lien de confidentialite, qui est ancre en bas. */
+/* Very short window (phone in landscape, strong zoom): the decorations above the card add
+   nothing and take the room the welcome text is missing. Without that, the title slides under
+   the privacy link, which is anchored at the bottom. */
 @media (max-height: 470px) {
   .title-icon,
   .title-icon2 {

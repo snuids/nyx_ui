@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
- * Verification de rendu : une icone Element Plus doit produire un <svg> dans le bouton. Sans ce
- * test, une table de correspondance fausse passerait inapercue — le bouton serait simplement vide.
+ * Render check: an Element Plus icon must produce an <svg> inside the button. Without this test, a
+ * wrong mapping table would go unnoticed — the button would simply be empty.
  */
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'

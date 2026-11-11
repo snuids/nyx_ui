@@ -609,8 +609,8 @@ export default {
   fill: #606266;
   font-weight: 400;
 }
-/* Etiquettes de l'axe Y (maximum, zero, titre tourne) : elles n'avaient aucune classe et prenaient le
-   noir du navigateur — invisible sur le fond sombre. */
+/* Y-axis labels (maximum, zero, rotated title): they had no class and took the browser's
+   black — invisible on the dark background. */
 .barchart_axis {
   font: 13px sans-serif;
   fill: #606266;

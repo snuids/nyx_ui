@@ -1,18 +1,18 @@
 /**
- * Les petites choses qu'on fait a une URL avant de la donner a une iframe.
+ * The little things done to a URL before handing it to an iframe.
  *
- * Une application externe recoit son contexte par l'URL (token, API, langue, theme). Oublier un
- * parametre dans la configuration d'une application ne produit aucune erreur : l'application
- * s'ouvre, simplement sans le contexte — c'est ainsi qu'un theme sombre reste clair sans que rien
- * ne le signale.
+ * An external application receives its context through the URL (token, API, language, theme).
+ * Forgetting a parameter in an application's configuration produces no error: the application
+ * opens, simply without the context — that is how a dark theme stays light with nothing
+ * signalling it.
  */
 
 /**
- * Ajoute un parametre a une URL, en respectant ce qu'elle porte deja.
+ * Appends a parameter to a URL, respecting what it already carries.
  *
- * Le parametre va avant le fragment : `./cerebro/#!/overview?host=x` + `theme=dark` donne
- * `./cerebro/?theme=dark#!/overview?host=x`, et non `…?host=x&theme=dark` qui atterrirait dans le
- * fragment et ne serait lu par personne.
+ * The parameter goes before the fragment: `./cerebro/#!/overview?host=x` + `theme=dark` gives
+ * `./cerebro/?theme=dark#!/overview?host=x`, and not `…?host=x&theme=dark` which would land in the
+ * fragment and be read by nobody.
  */
 export function appendQueryParam(url, name, value) {
   if (url == undefined || url === "") return url;
@@ -22,7 +22,7 @@ export function appendQueryParam(url, name, value) {
   const beforeHash = hashAt >= 0 ? text.slice(0, hashAt) : text;
   const fragment = hashAt >= 0 ? text.slice(hashAt) : "";
 
-  // Deja present ? On ne touche a rien : la configuration fait foi.
+  // Already there? Nothing is touched: the configuration has the last word.
   const already = new RegExp("[?&]" + name + "=").test(beforeHash);
   if (already) return text;
 

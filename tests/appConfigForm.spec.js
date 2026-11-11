@@ -1,9 +1,9 @@
 /**
- * Ce que `ConfigDetails` fait autour du formulaire (`utils/appConfigForm.js`).
+ * What `ConfigDetails` does around the form (`utils/appConfigForm.js`).
  *
- * Ces six fonctions etaient dans un composant de 1 476 lignes, a 0 % de couverture : les atteindre
- * demandait de monter l'ecran de configuration complet. Ici, environnement `node`, chaque branche
- * coute une assertion.
+ * These six functions lived in a 1,476-line component at 0 % coverage: reaching them required
+ * mounting the whole configuration screen. Here, a `node` environment, each branch costs one
+ * assertion.
  */
 
 import { describe, it, expect } from 'vitest'

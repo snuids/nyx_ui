@@ -757,9 +757,9 @@ export default {
     allFieldsFilter() {
       return allFieldsAsList(this.allFields);
     },
-    // Champs candidats pour une latitude / une longitude, quand l'index ne porte pas de `geo_point`
-    // (deux champs numeriques, ou deux textes qui contiennent la coordonnee). On retombe sur tous les
-    // champs si le mapping n'en declare aucun du bon type, pour ne jamais proposer une liste vide.
+    // Candidate fields for a latitude / a longitude, when the index has no `geo_point` (two
+    // numeric fields, or two texts that contain the coordinate). It falls back to all fields
+    // when the mapping declares none of the right type, so as never to offer an empty list.
     latLonFields() {
       return latLonCandidates(this.allFields);
     }
@@ -780,14 +780,14 @@ export default {
       handler: function() {
         const selection = timefieldSelection(this.timefieldSelected);
 
-        // Retour en arriere dans le selecteur : rien d'autre a changer.
+        // Back to the "none" choice in the selector: nothing else to change.
         if (selection.backToNone) {
           this.timefieldSelected = null;
           this.currentConfig.config.timefield = null;
           return;
         }
 
-        // Pas de filtre de temps : le graphique et le selecteur de periode n'ont plus de sens.
+        // No time filter: the chart and the period selector no longer make sense.
         if (selection.clearGraphic) {
           this.currentConfig.config.timefield = null;
           this.currentConfig.graphicChecked = false;

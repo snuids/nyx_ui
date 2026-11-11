@@ -212,7 +212,7 @@ const myExport = {
   },
   methods: {
     handleTabClick: function(tab) {
-      // Element Plus passe un TabsPaneContext : le nom est dans paneName, pas dans name (undefined).
+      // Element Plus passes a TabsPaneContext: the name is in paneName, not in name (undefined).
       const name = paneNameOf(tab)
       if (!name) return
 
@@ -227,9 +227,9 @@ const myExport = {
     
     this.selectedTab=this.$store.getters.activeApp.rec_id
 
-    // Les gestionnaires sont gardes sur l'instance : `$off(type)` sans gestionnaire (mitt) retire
-    // *tous* les abonnes du type, y compris celui d'`App.vue` qui affiche les notifications
-    // globales. Il faut donc pouvoir retirer les deux siens, et eux seuls.
+    // The handlers are kept on the instance: `$off(type)` without a handler (mitt) removes
+    // *every* subscriber of the type, including the `App.vue` one that shows the global
+    // notifications. Both of its own therefore have to be removable, and only them.
     this.onReportGenerated = () => {
       for (var i in this.$store.getters.currentSubCategory.apps) {
         var app = this.$store.getters.currentSubCategory.apps[i];
@@ -258,8 +258,8 @@ const myExport = {
 
     window.dispatchEvent(new Event("resize"));
   },
-  // `destroyed` est un hook Vue 2 : en Vue 3 il n'est jamais appele, et les deux ecouteurs du bus
-  // restaient branches a chaque changement d'application (fuite silencieuse, doubles emissions).
+  // `destroyed` is a Vue 2 hook: in Vue 3 it is never called, and the two bus listeners
+  // stayed attached on every application change (silent leak, double emissions).
   beforeUnmount: function() {
     console.log("===============  UN REGISTERING REport Generated:");
     this.$globalbus.$off("reportgenerated", this.onReportGenerated);

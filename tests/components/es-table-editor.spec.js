@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * `ESTableEditor` — l'editeur de table d'une application.
+ * `ESTableEditor` — the table editor of an application.
  *
- * 1 219 lignes, 0 % de couverture : c'est l'ecran ou l'on choisit l'index, les colonnes affichees,
- * les colonnes exportees, le champ de temps et la carte. Les tests figent ce que l'ecran fait de la
- * configuration recue, avant que la lecture du mapping n'en sorte (`utils/tableEditorFields.js`).
+ * 1,219 lines, 0% coverage: this is the screen where you pick the index, the displayed columns, the
+ * exported columns, the time field and the map. The tests freeze what the screen does with the
+ * configuration it receives, before the mapping reading moves out of it (`utils/tableEditorFields.js`).
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
@@ -14,8 +14,8 @@ import { mountView, resetStore } from '../helpers/mount-view'
 import ESTableEditor from '@/components/appConfigEditor/ESTableEditor.vue'
 
 /**
- * Un `esmapping/` : `response.data.data` est la **liste** des index, chacun avec son `obj`.
- * Le composant la donne telle quelle a `el-table`, d'ou la liste et non un objet.
+ * An `esmapping/`: `response.data.data` is the **list** of indexes, each with its own `obj`.
+ * The component passes it to `el-table` as is, hence a list and not an object.
  */
 const MAPPING = [
   {
@@ -152,7 +152,7 @@ describe('ESTableEditor — lecture du mapping', () => {
     wrapper.vm.esMapping = MAPPING
     wrapper.vm.computeFields()
 
-    // `address.city` est un `keyword` : il peut porter une coordonnee stockee en texte.
+    // `address.city` is a `keyword`: it can carry a coordinate stored as text.
     expect(wrapper.vm.latLonFields).toEqual([
       { field: 'address.city' },
       { field: 'amount' },

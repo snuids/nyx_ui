@@ -4,12 +4,12 @@ import router from './router/router'
 import store from './store/store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-// Variables CSS du theme sombre : la bascule se fait ensuite en posant `data-theme="dark"` sur
-// <html>, sans bibliotheque supplementaire.
+// Dark theme CSS variables: the switch is then done by setting `data-theme="dark"` on
+// <html>, without an extra library.
 import 'element-plus/theme-chalk/dark/css-vars.css'
-// Dimensions d'Element UI 2 (36 px) que le gabarit suppose : voir le fichier.
+// Element UI 2 dimensions (36 px) that the template assumes: see the file.
 import './styles/element-legacy.css'
-// Reprise du bandeau, du menu et des cartes pour le theme sombre (cle `html.dark`).
+// Re-skin of the header, the menu and the cards for the dark theme (key `html.dark`).
 import './styles/dark.css'
 import draggable from 'vuedraggable'
 import InfiniteLoading from 'vue3-infinite-loading'
@@ -25,9 +25,9 @@ import { globalBus, localBus } from '@/utils/bus'
 import { browserDetect } from '@/utils/browser'
 import { geolocation, getLocation } from '@/utils/geolocation'
 import { bindApp } from '@/utils/vue3shim'
-// `theme/index.css` etait le theme Element UI 2 compile (1 Mo, 4474 regles `.el-*`). Charge apres
-// Element Plus, il ecrasait ses composants : doubles bordures sur les champs, largeurs faussees.
-// Le theme de l'application vient de `api/v1/ui_css`, servi par l'API (degrade, en-tete, dialogues).
+// `theme/index.css` was the compiled Element UI 2 theme (1 MB, 4474 `.el-*` rules). Loaded
+// after Element Plus, it overrode its components: double borders on the fields, wrong widths.
+// The application theme comes from `api/v1/ui_css`, served by the API (gradient, header, dialogs).
 
 const vars = getUrlVars(window.location.href)
 
@@ -40,9 +40,9 @@ try {
 
 i18n.global.locale = resolveLanguage(vars, storage)
 
-// Theme avant le montage : sans cela, la page s'affiche en clair le temps que la session se
-// restaure, puis bascule — un flash blanc a chaque rechargement. Le choix enregistre sur le compte
-// (champ `theme` du document utilisateur) prend le dessus des que la session est restauree.
+// Theme before mount: without it, the page shows in light while the session is being
+// restored, then switches — a white flash on every reload. The choice saved on the account
+// (`theme` field of the user document) takes over as soon as the session is restored.
 applyTheme(readStoredTheme(storage) || "auto")
 watchAutoTheme(() => readStoredTheme(storage) || "auto")
 
@@ -63,11 +63,11 @@ app.config.globalProperties.$globalbus = globalBus
 app.config.globalProperties.$localbus = localBus
 app.config.globalProperties.$browserDetect = browserDetect
 app.config.globalProperties.$geolocation = geolocation
-// Nom expose par `vue-browser-geolocation` en Vue 2 : conserve pour les appels existants.
+// Name exposed by `vue-browser-geolocation` in Vue 2: kept for the existing calls.
 app.config.globalProperties.$getLocation = getLocation
-// `vue-authenticate` (plugin Vue 2, absent de ce build) fournissait `$auth`. L'ecran de connexion
-// LinkedIn (`LoginOAuth.vue`) l'appelle encore : sans cet objet, le clic levait un TypeError opaque.
-// On expose un refus explicite a la place.
+// `vue-authenticate` (Vue 2 plugin, absent from this build) provided `$auth`. The LinkedIn
+// login screen (`LoginOAuth.vue`) still calls it: without that object, the click raised an
+// opaque TypeError. An explicit refusal is exposed instead.
 app.config.globalProperties.$auth = {
   authenticate(provider) {
     return Promise.reject(new Error('OAuth sign-in is not available in this build (' + provider + ')'))
@@ -75,8 +75,8 @@ app.config.globalProperties.$auth = {
 }
 // Vue 3 removed template filters: `x | formatDate` became `$filters.formatDate(x)` (migration
 // codemod). `$numeral` replaces the `numeral` filter of vue-numeral-filter.
-// Element Plus n'a plus de police d'icones : ses icones sont des composants. Ils sont exposes ici
-// une fois pour toutes, ce qui evite un import par fichier dans les 62 composants.
+// Element Plus no longer has an icon font: its icons are components. They are exposed here
+// once and for all, which avoids one import per file in the 62 components.
 app.config.globalProperties.$icons = elementIcons
 app.config.globalProperties.$filters = filters
 app.config.globalProperties.$numeral = (value, format) => numeral(value).format(format)
@@ -87,9 +87,9 @@ if (process.env.NODE_ENV !== 'production') {
   const apiUrlOverride = apiOverride(window.location.href)
   if (apiUrlOverride) {
     store.state.apiurl = apiUrlOverride
-    // Le theme de l'application est servi par l'API (`api/v1/ui_css`) et index.html le demande en
-    // relatif : en developpement il tomberait sur le serveur webpack, qui repond 404. On le prend
-    // donc sur l'API pointee. En production, ce bloc est compile hors du bundle.
+    // The application theme is served by the API (`api/v1/ui_css`) and index.html asks for it
+    // relatively: in development it would hit the webpack server, which answers 404. It is
+    // therefore taken from the API being targeted. In production, this block is compiled out.
     const themeLink = document.createElement('link')
     themeLink.rel = 'stylesheet'
     themeLink.href = apiUrlOverride.replace(/\/?$/, '/') + 'ui_css'

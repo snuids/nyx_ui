@@ -62,9 +62,9 @@
         </template>
       </el-table-column>
 
-      <!-- 260 px : avec une ligne selectionnee, l'en-tete porte deux boutons ronds (28 px) et le
-           champ de recherche (150 px, marge de 10) — 228 px de contenu, soit plus que les 196 px
-           utiles d'une colonne de 220 : le champ passait sous les boutons. -->
+      <!-- 260 px: with a row selected, the header carries two round buttons (28 px) and the
+           search field (150 px, margin of 10) — 228 px of content, more than the 196 px usable
+           in a 220 column: the field went under the buttons. -->
       <el-table-column align="right" width="260">
         <!-- Element UI renders header content via $scopedSlots; keep it scoped -->
         <template #header>

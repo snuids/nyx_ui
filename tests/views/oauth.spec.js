@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
 /**
- * Page de retour de la connexion GitHub (`/oauth?code=…&state=…`).
+ * Return page of the GitHub sign-in (`/oauth?code=…&state=…`).
  *
- * Ce que l'ecran doit faire tient en trois lignes : lire le `code` et le `state` de l'URL, les
- * donner a l'API, puis terminer la session comme le formulaire de mot de passe. Ce qui casse en
- * pratique est autour : une URL sans code (l'utilisateur revient a la main), une identite sans
- * compte, un compte qui doit d'abord changer son mot de passe, un compte sans application — et
- * l'URL qui garde le code en memoire si la redirection n'est pas un `replace`.
+ * What the screen must do fits in three lines: read the `code` and the `state` from the URL, give
+ * them to the API, then finish the session like the password form. What actually breaks is around
+ * that: a URL with no code (the user comes back by hand), an identity with no account, an account
+ * that must first change its password, an account with no application — and the URL keeping the
+ * code in memory if the redirect is not a `replace`.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -59,8 +59,8 @@ function openAt(query) {
 }
 
 async function mountOAuth() {
-  // `mountView` est asynchrone : sans `await`, on pousse une promesse dans la liste des
-  // composants a demonter et toutes les assertions lisent `undefined`.
+  // `mountView` is asynchronous: without `await`, a promise is pushed into the list of components
+  // to unmount and every assertion reads `undefined`.
   const view = await mountView(OAuth)
   mounted.push(view.wrapper)
   await flushPromises()
@@ -69,8 +69,8 @@ async function mountOAuth() {
 
 describe('retour de la connexion GitHub', () => {
   beforeEach(() => {
-    // Le catalogue est resolu par la locale de l'instance : on lit les messages par leur cle
-    // pour que le test ne depende pas de la langue active.
+    // The catalogue is resolved from the instance locale: messages are read by their key so that
+    // the test does not depend on the active language.
     i18n.global.locale = 'en'
     resetStore()
     localStorage.clear()
@@ -124,8 +124,8 @@ describe('retour de la connexion GitHub', () => {
   })
 
   it('la requete dans le fragment (apres le report du routeur) est lue pareil', async () => {
-    // `normalizeOAuthLocation` deplace `/oauth?code=…` en `/#/oauth?code=…` : l'ecran doit lire
-    // les deux formes, sinon il ne se passe rien au retour de GitHub.
+    // `normalizeOAuthLocation` moves `/oauth?code=…` to `/#/oauth?code=…`: the screen must read both
+    // forms, otherwise nothing happens on the way back from GitHub.
     window.history.replaceState({}, '', '/#/oauth?code=the-code&state=the-state')
     axios.post.mockResolvedValue(authResponse())
 
@@ -136,7 +136,7 @@ describe('retour de la connexion GitHub', () => {
   })
 
   it('le fragment de l’URL n’est pas collé au state', async () => {
-    // getUrlVars garde le `#fragment` : le laisser passer ferait refuser le state par l'API.
+    // getUrlVars keeps the `#fragment`: letting it through would make the API reject the state.
     openAt('?code=the-code&state=the-state')
     axios.post.mockResolvedValue(authResponse())
 

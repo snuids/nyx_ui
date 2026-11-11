@@ -1,10 +1,10 @@
 /**
- * Meme famille de panne que `el-submenu` -> `el-sub-menu`, mais cote CSS : un selecteur qui ne
- * correspond plus ne produit aucune erreur, il ne s'applique simplement pas. C'est ainsi que les
- * entrees de la barre de gauche ont repris les 56 px par defaut au lieu des 40 px definis ici.
+ * Same family of failure as `el-submenu` -> `el-sub-menu`, but on the CSS side: a selector that no
+ * longer matches produces no error, it simply does not apply. That is how the entries of the left
+ * bar fell back to the default 56 px instead of the 40 px defined here.
  *
- * Le test lit les blocs <style> des 62 composants et verifie que chaque classe `el-*` citee existe
- * dans la feuille d'Element Plus.
+ * The test reads the <style> blocks of the 62 components and checks that every `el-*` class cited
+ * exists in the Element Plus stylesheet.
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -13,10 +13,10 @@ import { join, resolve } from 'node:path'
 const SRC = resolve(process.cwd(), 'src')
 const EP_CSS = readFileSync(resolve(process.cwd(), 'node_modules/element-plus/dist/index.css'), 'utf8')
 
-// Classes volontairement absentes d'Element Plus :
-//  - `el-menu-vertical` est le nom de classe du projet (prefixe `el-` par heritage) ;
-//  - les selecteurs Element UI 2 sont conserves a cote des nouveaux, sans effet ;
-//  - `el-icon-info` reste d'une ancienne regle de ConfigDetails.
+// Classes deliberately absent from Element Plus:
+//  - `el-menu-vertical` is the project's own class name (prefixed `el-` by inheritance);
+//  - the Element UI 2 selectors are kept next to the new ones, with no effect;
+//  - `el-icon-info` is left over from an old ConfigDetails rule.
 const ALLOWED = new Set(['el-menu-vertical', 'el-submenu', 'el-submenu__title', 'el-icon-info'])
 
 function styleBlocks(dir) {

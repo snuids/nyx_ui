@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * User — la liste des comptes, ecran d'administration.
+ * User — the list of accounts, an administration screen.
  *
- * Petit ecran, consequences lourdes : c'est par ici qu'on cree un compte, qu'on l'ouvre pour
- * changer ses privileges et qu'on le supprime. Le test verifie l'appel de liste, l'ouverture du
- * dialogue, la creation d'un compte *sans mot de passe partage* et la suppression confirmee.
+ * A small screen with heavy consequences: this is where an account is created, opened to change its
+ * privileges and deleted. The test checks the list call, opening the dialog, creating an account
+ * *without a shared password*, and the confirmed deletion.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -33,8 +33,8 @@ beforeEach(() => {
   logs = vi.spyOn(console, 'log').mockImplementation(() => {})
   notify = vi.fn()
   confirm = vi.fn()
-  // `deleteRecord` (store) appelle `axios.delete(...).catch(...)` : un mock qui rend `undefined`
-  // fait echouer la mutation et l'ecran affiche « annule » alors que la suppression a eu lieu.
+  // `deleteRecord` (store) calls `axios.delete(...).catch(...)`: a mock returning `undefined` makes
+  // the mutation fail and the screen shows "cancelled" although the deletion did happen.
   axios.delete.mockResolvedValue({ data: { error: '' } })
   resetStore({
     apiurl: 'api/v1/',
@@ -104,8 +104,8 @@ describe('User', () => {
     const created = wrapper.vm.currentRecord
     expect(created.isadd).toBe(true)
     expect(created._index).toBe('nyx_user')
-    // Aucun mot de passe n'est transmis : l'API en genere un que personne ne connait et marque le
-    // compte `mustResetPassword`. Un hash partage donnait le meme secret a tous les comptes.
+    // No password is sent: the API generates one that nobody knows and marks the account
+    // `mustResetPassword`. A shared hash gave every account the same secret.
     expect(created._source.password).toBeUndefined()
     expect(created._source.mustResetPassword).toBeUndefined()
     expect(wrapper.vm.dialogFormVisible).toBe(true)
@@ -155,7 +155,7 @@ describe('User', () => {
     wrapper.vm.search = 'bob'
     await wrapper.vm.$nextTick()
 
-    // Le filtre est une expression du template : on lit ce qui est rendu, pas `tableData`.
+    // The filter is a template expression: we read what is rendered, not `tableData`.
     expect(wrapper.findAll('.el-table__row')).toHaveLength(1)
     expect(wrapper.text()).not.toContain('Ada')
   })

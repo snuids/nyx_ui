@@ -26,8 +26,8 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import 'leaflet-fa-markers/L.Icon.FontAwesome.css'
 
 import L from "leaflet";
-// `leaflet-fa-markers` n'est pas un module : il lit un global `L`. Il est donc charge par require()
-// apres l'avoir pose, et non par un import (qui s'executerait avant, les imports etant hisses).
+// `leaflet-fa-markers` is not a module: it reads a global `L`. It is therefore loaded by
+// require() after setting it, not by an import (which would run first, imports being hoisted).
 window.L = L;
 require('leaflet-fa-markers/L.Icon.FontAwesome.js');
 delete L.Icon.Default.prototype._getIconUrl;
@@ -59,7 +59,7 @@ export default {
       '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
     marker: L.latLng(47.41322, -1.219482),
     markers: [],
-    // vrai quand l'editeur impose un centre : le plan ne se recadre alors pas sur ses marqueurs
+    // true when the editor imposes a centre: the map does not re-centre on its markers then
     explicitCenter: false
   }),
   components: {
@@ -97,8 +97,8 @@ export default {
       var newmarkers=[];
       var icons={};
       var nofmarkers=0;
-      // Un marqueur par position : l'index d'exemple renvoie 1000 documents sur trois positions, et
-      // empiler 1000 icones au meme point bloquait le navigateur sans rien montrer de plus.
+      // One marker per position: the sample index returns 1000 documents over three positions, and
+      // stacking 1000 icons at the same point blocked the browser without showing anything more.
       var seen={};
       
       var transparency=0;
@@ -128,8 +128,8 @@ export default {
         nofmarkers+=1;
         var record=this.tableData[rec]._source;
         
-        // Coordonnees du document : deux champs (lat / lon) ou un geo_point — la resolution vit dans
-        // `utils/mapCoords.js`, avec ses tests (un document sans coordonnee ne produit pas de marqueur).
+        // Document coordinates: two fields (lat / lon) or a geo_point — the resolution lives in
+        // `utils/mapCoords.js`, with its tests (a document without coordinates produces no marker).
         var res = resolveLatLng(record, this.config.config);
 
         if (res != null) {
@@ -189,13 +189,14 @@ export default {
       }
       //console.log(icons);
       this.markers = newmarkers;
-      // Le plan se cadre sur ses marqueurs quand aucun centre n'a ete choisi dans l'editeur : sans
-      // cela, la carte s'ouvre sur un point arbitraire et les marqueurs sont hors champ (ou, quand le
-      // zoom et le centre sont absents, aucune tuile n'est calculee du tout).
+      // The map frames its markers when no centre was chosen in the editor: without that, it
+      // opens on an arbitrary point and the markers are off screen (or, when zoom and centre are
+      // both absent, no tile is computed at all).
       this.$nextTick(() => { this.fitToMarkers(); });
       console.log("END PREPARE DATA....");
     },
-    // Centre le plan sur les marqueurs, sauf si l'editeur impose deja un centre (`maplat`/`maplong`).
+    // Centres the map on its markers, unless the editor already imposes a centre
+    // (`maplat`/`maplong`).
     fitToMarkers: function() {
       if (this.explicitCenter || !this.markers || this.markers.length == 0) return;
       var map = this.$refs.mapRef && this.$refs.mapRef.leafletObject;
@@ -210,9 +211,9 @@ export default {
   },
   created: function() {
     console.log("===============  MAP CREATED:");
-    // Un zoom ou un centre absent (champ vide dans l'editeur) ne doit pas casser la carte : Leaflet
-    // leve « Invalid LatLng object » sur `L.latLng(undefined, undefined)`, et un zoom `undefined`
-    // laisse la couche de tuiles sans vue a calculer — d'ou un fond gris et aucun marqueur.
+    // A missing zoom or centre (empty field in the editor) must not break the map: Leaflet
+    // raises "Invalid LatLng object" on `L.latLng(undefined, undefined)`, and an `undefined`
+    // zoom leaves the tile layer with no view to compute — hence a grey background, no marker.
     var conf = this.config.config || {};
     this.explicitCenter =
       conf.maplat !== undefined && conf.maplat !== null &&
@@ -230,8 +231,8 @@ export default {
 
     console.log("===============  MAP MOUNTED2:");
     
-    // `mitt` retire un ecouteur par reference : sans la garder, `$off` n'en retire aucun et chaque
-    // visite empile un rendu supplementaire.
+    // `mitt` removes a listener by reference: without keeping it, `$off` removes none, and every
+    // visit stacks one more render.
     this.timerangeHandler = () => {
       console.log("GLOBALBUS/MAPTIMERANGE/");
     };

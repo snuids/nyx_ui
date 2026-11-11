@@ -1,10 +1,10 @@
 /**
- * `vue-draggable-next` exige un slot `#item` : sans lui il leve « draggable element must have an item
- * slot » et **rien** du bloc ne se rend (c'etait le cas de l'editeur de table Elasticsearch, dont la
- * liste des champs restait invisible). Le codemod avait laisse la forme Vue 2 : un `v-for` sur un
- * enfant direct.
+ * `vue-draggable-next` requires an `#item` slot: without it, it raises "draggable element must have an
+ * item slot" and **nothing** of the block renders (that was the case of the Elasticsearch table
+ * editor, whose field list stayed invisible). The codemod had left the Vue 2 shape: a `v-for` on a
+ * direct child.
  *
- * Regle : chaque `<draggable>` porte un `<template #item>` et son enfant n'a pas de `v-for`.
+ * Rule: every `<draggable>` carries a `<template #item>` and its child has no `v-for`.
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'

@@ -1,25 +1,25 @@
 /**
- * `require.context` de webpack, pour les tests.
+ * webpack's `require.context`, for the tests.
  *
- * Quatre fichiers de `src/` listent les ecrans disponibles a l'execution :
- * `GenericComponent.vue` (rend `<component :is="config.controller">`), `FileSystem.vue`,
- * `GenericTable.vue`, `PGGenericTable.vue` et `controllerCatalog.js`. Webpack seul fournit
- * `require.context` ; sous Vite (donc sous Vitest) l'appel n'existe pas et le module qui le
- * contient ne se charge meme pas — GenericComponent, l'ecran qui affiche toutes les pages, etait
- * donc impossible a monter en test.
+ * Four files in `src/` list the screens available at runtime:
+ * `GenericComponent.vue` (renders `<component :is="config.controller">`), `FileSystem.vue`,
+ * `GenericTable.vue`, `PGGenericTable.vue` and `controllerCatalog.js`. webpack alone provides
+ * `require.context`; under Vite (hence under Vitest) the call does not exist and the module
+ * holding it does not even load — GenericComponent, the screen that displays every page, was
+ * therefore impossible to mount in a test.
  *
- * Ce module en donne un equivalent, adosse au glob de Vite : `keys()` reste synchrone (c'est tout
- * ce dont le catalogue a besoin) et `ctx(key)` renvoie un composant asynchrone, pour ne pas charger
- * les 63 SFC a l'import. Le remplacement de l'appel est fait par le plugin `nyx-require-context`
- * de `vitest.config.mjs`, qui ne s'applique qu'aux tests.
+ * This module provides an equivalent, backed by Vite's glob: `keys()` stays synchronous (all the
+ * catalogue needs) and `ctx(key)` returns an async component, so as not to load the 63 SFCs at
+ * import. The call is swapped out by the `nyx-require-context` plugin in `vitest.config.mjs`,
+ * which only applies to tests.
  */
 
 import { defineAsyncComponent } from 'vue'
 
-// Chemins relatifs a CE fichier : `tests/helpers/` -> `src/components/`.
+// Paths relative to THIS file: `tests/helpers/` -> `src/components/`.
 const loaders = import.meta.glob('../../src/components/**/*.vue')
 
-/** `api` = `./components/fileEditor/`, `../components/` ou `components/` selon l'appelant. */
+/** `api` = `./components/fileEditor/`, `../components/` or `components/`, depending on the caller. */
 function normalizeDir(dir) {
   return String(dir)
     .replace(/^\.\//, '')
@@ -43,8 +43,8 @@ export function createRequireContext(dir = '.', recursive = true, regexp = /\.vu
       candidate.endsWith('/src/components/' + rel)
     )
     if (!file) throw new Error(`require.context: ${key} is not in ${dir}`)
-    // webpack renvoie l'espace de noms du module : les appelants lisent `.default`
-    // (`GenericComponent.vue` enregistre ses pages ainsi).
+    // webpack returns the module namespace: callers read `.default`
+    // (`GenericComponent.vue` registers its pages that way).
     return { default: defineAsyncComponent(loaders[file]) }
   }
 

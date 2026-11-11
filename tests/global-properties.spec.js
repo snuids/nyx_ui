@@ -1,10 +1,10 @@
 /**
- * Les plugins Vue 2 (`vue-browser-geolocation`, `vue-browser-detect-plugin`...) posaient des
- * proprietes globales (`$getLocation`, `$browserDetect`...). En Vue 3 il faut les declarer une a une
- * dans `main.js` ; celles qu'on oublie levent `TypeError: this.$x is not a function` **au clic**, pas
- * au chargement — le bouton reste alors bloque sur son spinner (cas de « Submit » dans l'app Test).
+ * The Vue 2 plugins (`vue-browser-geolocation`, `vue-browser-detect-plugin`...) set global
+ * properties (`$getLocation`, `$browserDetect`...). In Vue 3 they must be declared one by one in
+ * `main.js`; the ones we forget raise `TypeError: this.$x is not a function` **on click**, not at
+ * load — the button then stays stuck on its spinner (the case of "Submit" in the Test app).
  *
- * Ce test compare les `this.$xxx` du code aux proprietes enregistrees.
+ * This test compares the `this.$xxx` of the code with the registered properties.
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'

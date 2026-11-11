@@ -1,10 +1,10 @@
 /**
- * Les icones ont change de nature entre les deux bibliotheques : Element UI 2 utilisait une police
- * (`class="el-icon-edit"`), Element Plus des composants SVG. Une icone qui ne resout pas ne casse
- * rien — le bouton s'affiche simplement vide, ce qui est facile a ne pas remarquer.
+ * Icons changed nature between the two libraries: Element UI 2 used a font
+ * (`class="el-icon-edit"`), Element Plus uses SVG components. An icon that does not resolve breaks
+ * nothing — the button simply renders empty, which is easy not to notice.
  *
- * Ces tests verifient donc que chaque nom de la table de correspondance existe vraiment dans le
- * paquet, et que les noms stockes dans les configurations ("el-icon-download") sont bien traduits.
+ * These tests therefore check that every name of the mapping table really exists in the package,
+ * and that the names stored in the configurations ("el-icon-download") are translated.
  */
 import { describe, it, expect } from 'vitest'
 import * as icons from '@element-plus/icons-vue'

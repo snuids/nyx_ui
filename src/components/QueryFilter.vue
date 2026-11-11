@@ -160,9 +160,8 @@ export default {
 
         var valq = this.queryFilterCopy[queryind].selected;
 
-        // Une valeur numerique (montant, annee, code) n'a pas d'`indexOf` : sans cette conversion,
-        // un filtre dont la valeur par defaut est un nombre levait un TypeError et l'ecran ne
-        // filtrait plus du tout.
+        // A numeric value (amount, year, code) has no `indexOf`: without this conversion, a filter
+        // whose default value is a number threw a TypeError and the screen stopped filtering at all.
         if (valq !== undefined && valq !== null) valq = String(valq);
 
 
@@ -396,9 +395,9 @@ export default {
 </script>
 
 <style>
-/* Meme cause que dans `QueryBar` : `el-row` est un conteneur flex en Element Plus, donc les `float`
-   du bandeau et de ses boutons ne s'appliquent plus et tout se replie en colonne. On rétablit le
-   comportement d'Element UI 2 (bloc + clearfix) sur la racine du composant seulement. */
+/* Same cause as in `QueryBar`: `el-row` is a flex container in Element Plus, so the `float`s
+   of the bar and of its buttons no longer apply and everything collapses into a column. The
+   Element UI 2 behaviour (block + clearfix) is restored on the component root only. */
 .query-filter {
   display: block;
 }
@@ -409,8 +408,8 @@ export default {
   clear: both;
 }
 
-/* Les `el-col` d'Element Plus sont des elements flex (`flex: 0 0 33.33%`) : dans un conteneur flex
-   ils s'alignent cote a cote, comme les colonnes flottantes d'Element UI 2. */
+/* Element Plus `el-col`s are flex items (`flex: 0 0 33.33%`): inside a flex container they
+   line up side by side, like the floated columns of Element UI 2. */
 .query-filter .select-bar-container {
   display: flex;
   align-items: center;
@@ -421,11 +420,11 @@ export default {
   align-items: center;
   white-space: nowrap;
   box-sizing: border-box;
-  /* Un peu d'air entre le libelle et le selecteur : ils se touchaient dans le bandeau des lambdas. */
+  /* A little air between the label and the selector: they touched in the lambdas bar. */
   gap: 10px;
-  /* ... et entre le selecteur et le libelle de la colonne suivante : les colonnes de 286 px etaient
-     remplies de bout en bout, le selecteur touchait le libelle d'a cote. 32 px reproduisent l'espace
-     visible en production (selecteur de 197 px dans une colonne de 286). */
+  /* ... and between the selector and the label of the next column: the 286 px columns were
+     filled end to end, the selector touched the label next to it. 32 px reproduce the spacing
+     visible in production (197 px selector in a 286 column). */
   padding-right: 32px;
 }
 
@@ -433,8 +432,8 @@ export default {
   padding-right: 0;
 }
 
-/* Le libelle reste en ligne devant le champ ; le selecteur occupe la place restante de la colonne
-   (en production il mesurait 197 px pour une colonne de 286). */
+/* The label stays inline in front of the field; the selector takes the remaining room of
+   the column (in production it measured 197 px for a 286 column). */
 .query-filter .select-bar-container .el-select {
   flex: 1 1 auto;
   min-width: 120px;

@@ -1,24 +1,23 @@
 /**
- * Polyfills dont jsdom manque et que les composants Element Plus utilisent au montage
- * (`el-select`, `el-popover`, `el-table` mesurent leur conteneur).
+ * Polyfills that jsdom lacks and that Element Plus components use when mounting
+ * (`el-select`, `el-popover`, `el-table` measure their container).
  *
- * Sans eux, monter un ecran leve « ResizeObserver is not defined » et le test echoue pour une
- * raison qui n'a rien a voir avec le code teste.
+ * Without them, mounting a screen raises "ResizeObserver is not defined" and the test fails for a
+ * reason that has nothing to do with the code under test.
  */
 
 /**
- * `Storage` en memoire, utilise seulement si l'environnement n'en fournit pas.
+ * In-memory `Storage`, used only when the environment does not provide one.
  *
- * Node 26 definit un `localStorage` global (derriere `--localstorage-file`) qui vaut `undefined`
- * sans ce drapeau ; la cle existant deja sur `globalThis`, Vitest ne peut pas y installer celui de
- * jsdom, et les ecrans qui ecrivent dans le stockage (`Login.vue` garde `authResponse`,
- * `LanguageSelect` retient la langue) leveraient un TypeError en test alors qu'ils marchent en
- * navigateur.
+ * Node 26 defines a global `localStorage` (behind `--localstorage-file`) which is `undefined`
+ * without that flag; the key already exists on `globalThis`, so Vitest cannot install jsdom's on it,
+ * and the screens that write to storage (`Login.vue` keeps `authResponse`, `LanguageSelect`
+ * remembers the language) would raise a TypeError in test while they work in a browser.
  *
- * Le Proxy n'est pas un detail : le code applicatif ecrit `localStorage.authResponse = ...`
- * (acces par propriete, comme le veut l'API Storage), pas seulement `setItem`. Sans les pieges
- * ci-dessous, ces ecritures resteraient des proprietes quelconques de l'objet et `clear()`
- * laisserait les valeurs d'un test dans le suivant.
+ * The Proxy is not a detail: the application code writes `localStorage.authResponse = ...`
+ * (property access, as the Storage API wants), not only `setItem`. Without the traps
+ * below, those writes would stay ordinary properties of the object and `clear()` would leave the
+ * values of one test for the next.
  */
 class MemoryStorage {
   constructor() {

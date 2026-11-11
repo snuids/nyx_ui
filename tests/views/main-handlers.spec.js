@@ -86,12 +86,12 @@ describe('Main — les gestionnaires de periode', () => {
 
     wrapper.vm.weekChanged('2026-03-10')
 
-    // Comportement observe, fige ici : la borne basse est le jour *choisi* (le 10 mars, un mardi),
-    // pas le lundi de sa semaine. Changer cela decalerait les rapports deja enregistres.
+    // Observed behaviour, frozen here: the low bound is the *chosen* day (10 March, a Tuesday),
+    // not the Monday of its week. Changing that would shift reports already saved.
     expect(wrapper.vm.timerange[0]).toEqual(new Date(2026, 2, 10, 0, 0, 0, 0))
 
-    // la fin de semaine depend de la locale de moment (« en » : samedi, « fr » : dimanche) : on
-    // verifie la duree et l'heure de fin plutot qu'un jour de la semaine
+    // the end of the week depends on the moment locale ("en": Saturday, "fr": Sunday): we check
+    // the duration and the end hour rather than a weekday
     const [start, end] = wrapper.vm.timerange
     expect(end.getHours()).toBe(23)
     expect(end.getTime()).toBeGreaterThanOrEqual(start.getTime())
@@ -105,7 +105,7 @@ describe('Main — les gestionnaires de periode', () => {
 
     expect(wrapper.vm.timerange[0].getMonth()).toBe(1)
     expect(wrapper.vm.timerange[0].getDate()).toBe(1)
-    expect(wrapper.vm.timerange[1].getDate()).toBe(28) // fevrier 2026
+    expect(wrapper.vm.timerange[1].getDate()).toBe(28) // February 2026
   })
 
   it('une annee choisie couvre l annee entiere', async () => {
@@ -138,7 +138,7 @@ describe('Main — les gestionnaires de periode', () => {
 
     vi.useFakeTimers()
     wrapper.vm.timeModeChanged('relative')
-    await vi.advanceTimersByTimeAsync(600) // le debounce de 500 ms
+    await vi.advanceTimersByTimeAsync(600) // the 500 ms debounce
     expect(onRange).toHaveBeenCalledWith({ type: 'relative', subtype: 'classic' })
     vi.useRealTimers()
 
@@ -160,8 +160,8 @@ describe('Main — les raccourcis du selecteur de dates', () => {
   })
 
   it('propose les dix raccourcis documentes, tous traduits', () => {
-    // 24 h, 7 jours, mois precedent, mois courant, mois suivant, 3 mois, annee derniere, aujourd'hui,
-    // semaine courante, annee courante
+    // 24 h, 7 days, previous month, current month, next month, 3 months, last year, today, current
+    // week, current year
     const shortcuts = wrapper.vm.rangePickerOptions.shortcuts
 
     expect(shortcuts).toHaveLength(10)
@@ -325,7 +325,7 @@ describe('Main — ce que le bus pousse dans la periode', () => {
     const before = wrapper.vm.timerange
     globalBus.$emit('forcetime', '-1d')
 
-    // le selecteur est desactive : la plage par defaut posee a l'ouverture ne bouge pas
+    // the selector is disabled: the default range set on opening does not move
     expect(wrapper.vm.timerange).toBe(before)
   })
 

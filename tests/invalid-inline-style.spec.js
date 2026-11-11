@@ -1,16 +1,15 @@
 // @vitest-environment jsdom
 /**
- * Garde-fou : un `style="{...}"` dans un template ne fait rien.
+ * Guard: a `style="{...}"` in a template does nothing.
  *
- * `LogViewer` portait `<span style="{ color:black;white-space: pre-wrap !important;}">` — du balisage
- * Vue 2 (un objet lié par `:style`) laissé en attribut statique. Le navigateur jette la déclaration
- * entière : ni la couleur ni le `pre-wrap` ne s'appliquaient, donc les longues lignes de log ne se
- * repliaient pas et poussaient une barre de défilement horizontale. La couleur restait *légitime* en
- * clair, ce qui rendait le défaut invisible jusqu'à ce qu'un fond sombre ou une ligne longue le
- * révèle.
+ * `LogViewer` carried `<span style="{ color:black;white-space: pre-wrap !important;}">` — Vue 2
+ * markup (an object bound through `:style`) left as a static attribute. The browser drops the whole
+ * declaration: neither the colour nor the `pre-wrap` applied, so the long log lines did not wrap
+ * and pushed a horizontal scrollbar. The colour stayed *legitimate* in light mode, which kept the
+ * defect invisible until a dark background or a long line revealed it.
  *
- * Ce test lit la source : aucune feuille de style ne peut rattraper un attribut invalide, et le
- * compilateur Vue ne dit rien.
+ * This test reads the source: no stylesheet can fix an invalid attribute, and the Vue compiler
+ * says nothing.
  */
 
 import { describe, expect, it } from 'vitest'
@@ -19,7 +18,7 @@ import { join, resolve } from 'node:path'
 
 const SRC = resolve(process.cwd(), 'src')
 
-/** Neutralise les commentaires HTML en gardant la longueur, donc les numeros de ligne. */
+/** Neutralises HTML comments while keeping the length, hence the line numbers. */
 function withoutTemplateComments(source) {
   return source.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ' '))
 }
@@ -41,8 +40,8 @@ describe('styles inline des templates', () => {
       const source = withoutTemplateComments(readFileSync(file, 'utf8'))
       const lines = source.split('\n')
       lines.forEach((line, index) => {
-        // `style="{ ... }"` : l'objet d'un `:style` ecrit sans les deux-points, ou `style="{{ x }}"`
-        // `:style` et `:body-style` sont des liaisons : seuls les attributs nus sont fautifs
+        // `style="{ ... }"`: the object of a `:style` written without the colon, or `style="{{ x }}"`
+        // `:style` and `:body-style` are bindings: only bare attributes are at fault
         if (/(?<![:-\w])style\s*=\s*"\{/.test(line)) {
           fautifs.push(`${file.replace(SRC, '')}:${index + 1} ${line.trim().slice(0, 70)}`)
         }
@@ -52,7 +51,7 @@ describe('styles inline des templates', () => {
   })
 
   it('lie une expression de style avec `:style`, pas `style`', () => {
-    // Un `style="width: {{ x }}px"` n'est pas non plus du Vue : le mustache reste litteral.
+    // A `style="width: {{ x }}px"` is not Vue either: the mustache stays literal.
     const fautifs = []
     for (const file of vueFiles(SRC)) {
       const source = withoutTemplateComments(readFileSync(file, 'utf8'))

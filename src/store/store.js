@@ -243,8 +243,8 @@ export default createStore({
       state.initialized = false;
       state.menuOpen = true;
       state.creds = payload.data.cred;
-      // Le theme enregistre sur le compte fait foi : il est applique des la restauration de la
-      // session et recopie localement, pour que le prochain chargement peigne juste avant le login.
+      // The theme saved on the account prevails: it is applied as soon as the session is restored
+      // and copied locally, so that the next load paints just before login.
       if (state.creds.user && state.creds.user.theme) {
         applyTheme(state.creds.user.theme);
         storeTheme(state.creds.user.theme);
@@ -417,8 +417,8 @@ export default createStore({
     },
     // eslint-disable-next-line
     refreshTimeRange(state) {
-      // `lastTimeRangeEvent` n'existe qu'a partir du premier choix de periode : sans ce garde, une
-      // pagination ou un tri avant tout choix de periode levait une TypeError ici.
+      // `lastTimeRangeEvent` only exists from the first period choice: without this guard, a
+      // pagination or a sort before any period choice threw a TypeError here.
       if (state.lastTimeRangeEvent != null && state.lastTimeRangeEvent.type == "relative") {// UGLY COPY OF CODE in setTimeRanbge
         var minutesmulti = 1;
         switch (state.lastTimeRangeEvent.relativeType) {

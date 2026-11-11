@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * QueryBar — le champ de recherche des ecrans generiques.
+ * QueryBar — the search field of the generic screens.
  *
- * Petit composant, mais c'est lui qui decide *quand* la console interroge Elasticsearch : une
- * recherche par frappe (au lieu du debounce de 1,5 s) ou un cache de recherche non ecrit, et
- * l'ecran affiche des resultats qui ne correspondent plus a ce qui est tape.
+ * A small component, but it is the one that decides *when* the console queries Elasticsearch: one
+ * search per keystroke (instead of the 1.5 s debounce), or a search cache left unwritten, and the
+ * screen displays results that no longer match what is typed.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -61,7 +61,7 @@ describe('QueryBar', () => {
 
   it('bloque la recherche automatique pendant 1,5 s apres un rafraichissement manuel', async () => {
     const { wrapper } = await mountBar()
-    await vi.advanceTimersByTimeAsync(1800) // le blocage du demarrage est retombe
+    await vi.advanceTimersByTimeAsync(1800) // the start-up block has expired
     expect(wrapper.vm.blockEvent).toBe(false)
 
     wrapper.vm.refresh()
@@ -79,7 +79,7 @@ describe('QueryBar', () => {
     wrapper.vm.blockEvent = true
     wrapper.vm.query = 'pendant le blocage'
     await wrapper.vm.$nextTick()
-    await vi.advanceTimersByTimeAsync(1600) // le debounce tire, le blocage le fait sortir
+    await vi.advanceTimersByTimeAsync(1600) // the debounce fires, the block makes it exit
 
     expect(wrapper.emitted('querychanged').length).toBe(emitted)
   })

@@ -1,8 +1,8 @@
 /**
- * Un `<template>` ne peut porter qu'une seule directive de slot. Le codemod qui a transforme
- * `slot="header" slot-scope="scope"` en `#header #default="scope"` a produit exactement le contraire
- * de ce qu'il fallait : sept tableaux ont perdu leur en-tete d'actions (le bouton « modifier » de la
- * liste des utilisateurs, entre autres).
+ * A `<template>` can carry only one slot directive. The codemod that turned
+ * `slot="header" slot-scope="scope"` into `#header #default="scope"` produced exactly the opposite
+ * of what was needed: seven tables lost their action header (the "edit" button of the user list,
+ * among others).
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'

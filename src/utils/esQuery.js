@@ -1,19 +1,18 @@
 /**
- * La requete Elasticsearch d'un ecran generique, hors du composant.
+ * The Elasticsearch query of a generic screen, outside the component.
  *
- * `GenericTable.loadData` construisait tout cela dans le composant : l'URL, le choix de la plage
- * de temps selon le selecteur, les jetons `{{id}}`/`{{login}}` de la requete cachee, la
- * combinaison du filtre d'ecran et de la recherche libre, le tri, la pagination et l'export. Trois
- * cent lignes qui ne touchent ni au DOM ni a Vue, donc intestables autrement qu'en montant l'ecran
- * entier et en interceptant `axios`.
+ * `GenericTable.loadData` built all of this inside the component: the URL, the choice of time
+ * range according to the selector, the `{{id}}`/`{{login}}` tokens of the hidden query, the
+ * combination of the screen filter and the free-text search, the sort, the pagination and the
+ * export. Three hundred lines that touch neither the DOM nor Vue, hence untestable other than by
+ * mounting the whole screen and intercepting `axios`.
  *
- * Ici, ce sont des fonctions pures : on leur donne la configuration et l'etat, elles rendent la
- * requete. Elles se testent en millisecondes (environnement `node`, aucun composant monte) et
- * chaque branche — plage absente, agregation, tri par defaut, export — est couverte pour le meme
- * prix qu'une assertion.
+ * Here they are pure functions: they are given the configuration and the state, they return the
+ * query. They test in milliseconds (`node` environment, no component mounted) and every branch —
+ * missing range, aggregation, default sort, export — is covered for the price of an assertion.
  */
 
-/** Selecteur de periode -> cles des getters du store (plage et pas d'agregation). */
+/** Period selector -> keys of the store getters (range, and aggregation step). */
 const TIME_RANGE_KEYS = {
   week: ["week", "autoWeek"],
   month: ["month", "autoMonth"],
@@ -22,10 +21,10 @@ const TIME_RANGE_KEYS = {
 };
 
 /**
- * La plage et le pas d'agregation que ce selecteur doit utiliser.
+ * The range and aggregation step this selector must use.
  *
- * `ranges` porte les getters du store (`classic`, `day`, `week`, `month`, `year` et leurs
- * `auto*`). Un selecteur inconnu retombe sur `classic`, comme le `default` du `switch` d'origine.
+ * `ranges` carries the store getters (`classic`, `day`, `week`, `month`, `year` and their
+ * `auto*`). An unknown selector falls back to `classic`, like the original `switch`'s `default`.
  */
 export function resolveTimeRange(timeSelectorType, ranges = {}) {
   const [rangeKey, intervalKey] = TIME_RANGE_KEYS[timeSelectorType] || [
@@ -35,7 +34,7 @@ export function resolveTimeRange(timeSelectorType, ranges = {}) {
   return { range: ranges[rangeKey], interval: ranges[intervalKey] };
 }
 
-/** URL de `generic_search`, avec `doc_type` seulement quand il est configure. */
+/** URL of `generic_search`, with `doc_type` only when it is configured. */
 export function genericSearchUrl({
   apiurl,
   index,
@@ -62,7 +61,7 @@ export function genericSearchUrl({
   return url;
 }
 
-/** Jetons de la requete cachee. Un compte sans `id`/`login` ne doit pas ecrire « undefined ». */
+/** Tokens of the hidden query. An account without `id`/`login` must not write "undefined". */
 function substituteTokens(hiddenQuery, user) {
   return String(hiddenQuery)
     .replace(/{{id}}/g, user && user.id != null ? String(user.id) : "")
@@ -70,10 +69,10 @@ function substituteTokens(hiddenQuery, user) {
 }
 
 /**
- * La requete envoyee a `generic_search`.
+ * The query sent to `generic_search`.
  *
- * Rend `{ query, queryText }` : `query` est le corps, `queryText` la chaine de recherche retenue
- * (le composant l'affiche et la reinjecte dans la barre).
+ * Returns `{ query, queryText }`: `query` is the body, `queryText` the search string kept (the
+ * component displays it and feeds it back into the bar).
  */
 export function buildSearchQuery({
   config = {},
@@ -94,8 +93,8 @@ export function buildSearchQuery({
     query: { bool: { must: [{ match_all: {} }] } },
   };
 
-  // La plage de temps ne s'applique que si l'ecran declare un champ de date ; sans plage dans le
-  // store, on retombe sur les dernieres 24 h plutot que de tout ramener.
+  // The time range only applies if the screen declares a date field; without a range in the
+  // store, the last 24 h are used rather than pulling everything back.
   if (payload.timefield != null && payload.timefield !== "") {
     if (timeRange != null) {
       query.query.bool.must.push({
@@ -129,8 +128,8 @@ export function buildSearchQuery({
     }
   }
 
-  // Recherche libre, puis requete cachee de la configuration, puis filtre d'ecran : chaque couche
-  // est groupee avant d'etre combinee en `AND`.
+  // Free-text search, then the configuration's hidden query, then the screen filter: each layer
+  // is grouped before being combined with `AND`.
   let queryText = "";
   if (config.queryBarChecked && queryField !== "") {
     queryText = queryField;
@@ -158,7 +157,7 @@ export function buildSearchQuery({
     });
   }
 
-  // Tri : celui de l'utilisateur l'emporte, sinon celui de la configuration.
+  // Sort: the user's wins, otherwise the configuration's.
   if (
     payload.orderField != undefined &&
     payload.orderField !== "" &&

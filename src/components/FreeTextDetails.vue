@@ -1,9 +1,8 @@
 <template>
   <div style="text-align:left;">
-    <!-- tiptap 1 n'a pas d'equivalent Vue 3 : la barre de mise en forme et l'editeur riche sont
-         remplaces par une zone de texte qui edite le HTML source. Le contrat du composant est
-         conserve (prop `config`, evenement `freetextchanged`). A reprendre avec tiptap 3 si la mise
-         en forme riche doit revenir. -->
+    <!-- tiptap 1 has no Vue 3 equivalent: the formatting bar and the rich editor are replaced
+         by a text area that edits the raw HTML. The component contract is kept (prop `config`,
+         event `freetextchanged`). To revisit with tiptap 3 if rich formatting has to come back. -->
     <p class="editor__hint">{{ $t('ui.free_text') }} — HTML</p>
     <el-input v-model="html" type="textarea" :rows="14" spellcheck="false" />
   </div>

@@ -1,15 +1,15 @@
 // @vitest-environment jsdom
 /**
- * Activity — le tableau de bord d'activite (appels API : volumetrie, erreurs, latences).
+ * Activity — the API activity dashboard (volumetry, errors, latencies).
  *
- * Deux familles de defauts y ont deja ete signalees : des compteurs illisibles en mode sombre (couleur
- * inline `#303133`) et un chemin de requete qui deborde de sa barre. Ce qui est verifie ici est ce que
- * l'ecran calcule, pas le rendu d'`el-table` :
+ * Two families of defects have already been reported there: counters unreadable in dark mode (inline
+ * `#303133` colour) and a request path overflowing its bar. What is checked here is what the screen
+ * computes, not how `el-table` renders:
  *
- * - les couleurs des quatre compteurs (neutre = variable de theme, erreurs = vert/rouge semantique) ;
- * - `errorCount` / `activeUsers` : compteur exact de l'agregation, repli sur les buckets cappes a 10 ;
- * - `topEndpoints` : pourcentage relatif au maximum, latence arrondie ou `-` ;
- * - `buildQuery` : periode en epoch millis sur le champ de temps configure, `onlyErrors`, export.
+ * - the colours of the four counters (neutral = theme variable, errors = semantic green/red);
+ * - `errorCount` / `activeUsers`: exact count from the aggregation, fallback on buckets capped at 10;
+ * - `topEndpoints`: percentage relative to the maximum, latency rounded or `-`;
+ * - `buildQuery`: period in epoch millis on the configured time field, `onlyErrors`, export.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -112,7 +112,7 @@ describe('Activity — compteurs', () => {
 
     const kpis = wrapper.vm.kpis
     const byKey = Object.fromEntries(kpis.map((k) => [k.key, k]))
-    // Couleur inline : une feuille de style ne peut pas reprendre `#303133` sur fond sombre.
+    // Inline colour: a stylesheet cannot override `#303133` on a dark background.
     expect(byKey.calls.color).toBe('var(--nyx-text, #303133)')
     expect(byKey.users.color).toBe('var(--nyx-text, #303133)')
     expect(byKey.latency.color).toBe('var(--nyx-text, #303133)')
@@ -139,11 +139,11 @@ describe('Activity — compteurs', () => {
     serveNetwork()
     const { wrapper } = await mountActivity()
 
-    // `errors_total` fait foi (les buckets de termes sont cappes a 10)
+    // `errors_total` is authoritative (terms buckets are capped at 10)
     expect(wrapper.vm.errorCount).toBe(3)
     expect(wrapper.vm.activeUsers).toBe(7)
 
-    // sans les compteurs exacts (ancien mapping), on additionne / compte les buckets
+    // without the exact counters (older mapping), we sum / count the buckets
     wrapper.vm.aggs = {
       by_error: { buckets: [{ key: 'a', doc_count: 4 }, { key: 'b', doc_count: 2 }] },
       by_user: { buckets: [{ key: 'a', doc_count: 9 }, { key: 'b', doc_count: 1 }] },
@@ -173,7 +173,7 @@ describe('Activity — requete envoyee', () => {
     const range = body.query.bool.must[0].range['@timestamp']
     expect(range.format).toBe('epoch_millis')
     expect(range.lte - range.gte).toBe(24 * 3600 * 1000)
-    // le mapping dit `url: text + keyword` et `user: keyword` : le premier prend `.keyword`
+    // the mapping says `url: text + keyword` and `user: keyword`: the former takes `.keyword`
     expect(body.aggs.by_url.terms.field).toBe('url.keyword')
     expect(body.aggs.by_user.terms.field).toBe('user')
   })
