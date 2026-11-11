@@ -131,12 +131,12 @@
             effect="dark"
             :content="scope.row._source.treatment.error"
             placement="bottom"
+            v-if="scope.row._source.treatment.status == 'Error'"
           >
             <v-icon
               style="color:#F56C6C"
               name="exclamation-triangle"
               scale="2"
-              v-if="scope.row._source.treatment.status == 'Error'"
             />
           </el-tooltip>
         </template>
@@ -189,19 +189,23 @@
             effect="dark"
             :content="$t('generic.logs')"
             placement="bottom"
-            v-if="scope.row._source.report.reportType=='notebook' || scope.row._source.report.reportType=='notebook_doc'"
+            v-if="(scope.row._source.report.reportType=='notebook' || scope.row._source.report.reportType=='notebook_doc') && $store.getters.creds.hasPrivilege('reporteditor')"
           >
             <el-button
-              v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
               :icon="$icons.Document"
               @click="openLogs(scope.$index, scope.row)"
               plain
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('report.regenerate')" placement="bottom">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('report.regenerate')"
+            placement="bottom"
+            v-if="$store.getters.creds.hasPrivilege('reporteditor')"
+          >
             <el-button
-              v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
               :icon="$icons.RefreshRight"
               @click="regenerateReport(scope.$index, scope.row)"

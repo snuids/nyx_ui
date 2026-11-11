@@ -1,5 +1,13 @@
 # Version History
 
+## V3.6.28 11/Nov/2026
+* **`ElementPlusError: [ElOnlyChild] no valid child node found`** in the list of generated reports. A tooltip needs one element child to hang on; the error icon of `ReportTask.vue` was hidden behind `v-if="status == 'Error'"` *inside* its own tooltip, so every row that had **not** failed left a comment node there — the warning fired as soon as the screen opened, on the rows where everything had gone well. The `v-if` is on the tooltip now, which is what was meant: nothing renders when there is no error.
+* Five more of the same shape, found by scanning: the edit and delete buttons of `ReportList.vue` and `ReportPeriodic.vue`, and the logs and regenerate buttons of `ReportTask.vue` — each tooltip wrapped a button carrying `v-if="hasPrivilege('reporteditor')"`, so a user without the privilege got an empty tooltip *and* the warning. The condition is on the tooltip, and the logs button's two conditions are merged into one attribute.
+* `tests/element-only-child.spec.js` scans for the shape: a `el-tooltip`/`el-popover` without `v-if` whose first child has one fails the suite. Verified by putting the old attribute back on the error icon — the test fails and names `ReportTask.vue:129`.
+* `tests/sfc-compile.spec.js` is new, and was earned: one of the six rewrites left a stray quote (`<el-button"`) in two files, **the suite stayed green** because nothing mounts those components, and only the build caught it. Every `.vue` file is now parsed by `@vue/compiler-sfc` — 63 components, two seconds, no mocks. Verified the same way: breaking one template fails the test that names it.
+* **733 tests**.
+
+
 ## V3.6.27 11/Nov/2026
 * **`ElementPlusError: [el-radio] label act as value is about to be deprecated in version 3.0.0`.** The console put the *value* of a radio in `label` — the Element UI 2 API — on 19 radios across six screens, so every screen that showed one logged the deprecation at mount. They carry `value="…"` now; the selected values themselves are untouched (`absolute`/`relative`, `topic`/`queue`, `jasper_jdbc`, …), so no behaviour changed.
 * `tests/element-radio-value.spec.js` checks it statically: any `el-radio` / `el-radio-button` with a `label` and no `value` fails the suite, with a second assertion on the number of tags found so a broken matcher cannot pass silently. Verified by putting the old attribute back on one radio in `Main.vue` — the test fails and names the file.
