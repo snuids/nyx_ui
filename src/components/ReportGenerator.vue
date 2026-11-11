@@ -231,6 +231,11 @@ export default {
   props: {
     record: {
       type: Object
+    },
+    // The id of the definition in `nyx_reportdef`. The id alone is sent: the definition stays in the
+    // cluster, so a browser cannot redirect the `exec`/`jasper` path of a report.
+    reportId: {
+      type: String
     }
   },
   watch: {
@@ -404,52 +409,50 @@ export default {
       this.$emit("dialogclose");
     },
     generateReport() {
-
-      console.log('generate report')
-      console.log(this.record)
-
-      var url =
+      // Only the values cross the boundary: the API loads the definition, builds the job with the
+      // authenticated session and publishes it on the report queue itself.
+      const url =
         this.$store.getters.apiurl +
-        "sendmessage?token=" +
+        "report/generate?token=" +
         this.$store.getters.creds.token;
 
-      var randomID =
-        Math.floor((1 + Math.random()) * 0x1000000) +
-        "_" +
-        Math.floor((1 + Math.random()) * 0x1000000);
+      const parameters = (this.record.parameters || []).map(param => ({
+        name: param.name,
+        value: param.value
+      }));
 
-      var task = {
-        "mailingList": this.maillingListTo,
-        "mailingListCc": this.maillingListCc,
-        "mailingListCci": this.maillingListCci,
-        "mailSubject": this.emailSubject,
-        "mailTemplate": this.emailBody
-      }
-
-      var message = {
-        destination: "/queue/NYX_REPORT_STEP1",
-        body: JSON.stringify({
-          id: "id_" + randomID,
-          creds: this.$store.getters.creds,
-          report: this.record,
-          privileges: this.$store.getters.creds.user.privileges,
-          task: task
-        })
+      const task = {
+        mailingList: this.maillingListTo,
+        mailingListCc: this.maillingListCc,
+        mailingListCci: this.maillingListCci,
+        mailSubject: this.emailSubject,
+        mailTemplate: this.emailBody
       };
 
       axios
-        .post(url, message)
+        .post(url, { report: this.reportId, parameters, task })
         .then(response => {
-          if (response.data.error != "") console.log("Report list error...");
-          else {
-            console.log(this);
-            this.$globalbus.$emit("reportgenerated");
+          if (response.data.error) {
+            this.$notify({
+              title: "Failed",
+              type: "danger",
+              message: response.data.error,
+              position: "bottom-right"
+            });
+            return;
           }
+          this.$globalbus.$emit("reportgenerated");
+          this.closeDialog();
         })
         .catch(error => {
+          this.$notify({
+            title: "Failed",
+            type: "danger",
+            message: this.$t("rep.unable_send"),
+            position: "bottom-right"
+          });
           console.log(error);
         });
-      this.closeDialog();
     }
   }
 };

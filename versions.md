@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.30 11/Nov/2026
+* **Generating a report works for anyone who may run it.** The console used to build the whole job itself — definition, privileges, credentials — and post it to `/sendmessage`, which refuses every caller but an administrator: a `reporteditor` account clicked Generate, filled the dialog, and got `403 destination not allowed` printed nowhere. It now posts `{report, parameters, task}` to `/report/generate`, and the API loads the definition, takes the session from the token and builds the job. `ReportTask` does the same with `/report/regenerate`, replaying the snapshot the task already carries.
+* What the console sends changed accordingly: only parameter **values**, no `creds`, no `privileges`, no definition body — a browser can no longer redirect a report's `exec` or `jasper` path, and the id of the definition travels as a prop (`reportId`) rather than being smuggled into the document the editor saves.
+* A refused submission now says why: the dialog shows the server's error instead of logging it and closing.
+* `tests/components/report-generator.spec.js` pins the contract — the id and the values go out, the credentials and the definition do not, the mail settings travel under `task`, the bus event fires and the dialog closes, and an error keeps it open with a danger notification. 741 tests.
+
+
 ## V3.6.29 11/Nov/2026
 * **`GET /js/mode-yaml.js` and `GET /js/theme-tomorrow_night.js` — 404 on every screen with an editor.** ACE does not fail on a module it does not know: it builds a `<script src>` from `basePath` and fetches it. With the bundle served under `/js/`, that was `/js/mode-yaml.js`, which nothing serves. The modules were in the bundle all along, but the 55 `require("ace-builds/…")` calls that register them sat in `mounted` and in the `@init` handler — and `ace.edit()` asks for the theme *before* those run. The theme was therefore never applied either: this is the same root cause as the white editor the `theme="chrome"` prop never fixed.
 * `src/utils/aceModules.js` registers the eleven modules once, as side-effect imports, before any editor exists: the core, the language tools, `mode-html`, `mode-yaml`, `mode-javascript`, `mode-less`, `mode-sql`, the `javascript` and `sql` snippets, and both themes. The 55 scattered `require`s are gone from the five editor components and from `mixins/aceTheme.js`, which loses `registerAceThemes` — it existed to compensate, and compensation is no longer needed.
