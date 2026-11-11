@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.33 11/Nov/2026
+* **The field dialog of the application editor was drawn at 28 px.** `FormFieldEditor` — the window where a form application's field is defined: name, title, type, subtype, default, colour — carried `size="small"` on all eight of its widgets. Inside a dialog 75 % wide, that read as a cramped form with half an inch of empty space around it. They use the console's size now (36 px), and the label column goes from 120 to 140 px so `Subtype`, `Clearable` and `Default` stop crowding their field.
+* `tests/components/form-field-editor.spec.js` mounts the dialog (it teleports, so it queries what the user sees) and checks that it renders its widgets, that none carries `--small`, that they all agree on one size, and that the label column was widened. Verified by putting `size="small"` back on one input — the suite fails on `--small`. **750 tests**.
+
+
 ## V3.6.32 11/Nov/2026
 * **The fields of a form application were the wrong size.** Three Element UI 2 habits survived in `Form.vue`: `formSize: "mini"`, a size Element Plus does not know (it silently falls through to "no size"), a `datetime` field hardcoded at `size="small"` — 28 px where its neighbours were 36 — and number, date and select widgets left at their intrinsic width (150 px, 220 px) beside full-width text fields. Measured before the change: heights 36/36/36/**32**, widths 1029/**150**/**220**/1029.
 * All four now use the console's size and the full width: **36 px high and 1029 px wide, uniformly**.
