@@ -147,18 +147,28 @@
               plain
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('generic.edit')" placement="bottom">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('generic.edit')"
+            placement="bottom"
+            v-if="$store.getters.creds.hasPrivilege('reporteditor')"
+          >
             <el-button
-              v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
               :icon="$icons.Setting"
               @click="editReport(scope.$index, scope.row)"
               plain
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" :content="$t('generic.delete')" placement="bottom-end">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="$t('generic.delete')"
+            placement="bottom-end"
+            v-if="$store.getters.creds.hasPrivilege('reporteditor')"
+          >
             <el-button
-              v-if="$store.getters.creds.hasPrivilege('reporteditor')"
               size="small"
               type="danger"
               :icon="$icons.Delete"
