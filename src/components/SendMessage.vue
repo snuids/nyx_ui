@@ -9,8 +9,8 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="Type">
-              <el-radio v-model="message_type" label="topic">Topic</el-radio>
-              <el-radio v-model="message_type" label="queue">Queue</el-radio>
+              <el-radio v-model="message_type" value="topic">Topic</el-radio>
+              <el-radio v-model="message_type" value="queue">Queue</el-radio>
             </el-form-item>
           </el-col>
           <el-col :span="16">

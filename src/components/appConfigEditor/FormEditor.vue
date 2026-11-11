@@ -23,8 +23,8 @@
             </el-row>
             <el-row>
               <el-radio-group v-model="currentConfig.config.formmode" size="small" ref="mode">
-                <el-radio-button label="table">{{ $t('cfg.table') }}</el-radio-button>
-                <el-radio-button label="message">{{ $t('cfg.message') }}</el-radio-button>
+                <el-radio-button value="table">{{ $t('cfg.table') }}</el-radio-button>
+                <el-radio-button value="message">{{ $t('cfg.message') }}</el-radio-button>
               </el-radio-group>
             </el-row>
           </el-col>

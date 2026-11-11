@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.27 11/Nov/2026
+* **`ElementPlusError: [el-radio] label act as value is about to be deprecated in version 3.0.0`.** The console put the *value* of a radio in `label` — the Element UI 2 API — on 19 radios across six screens, so every screen that showed one logged the deprecation at mount. They carry `value="…"` now; the selected values themselves are untouched (`absolute`/`relative`, `topic`/`queue`, `jasper_jdbc`, …), so no behaviour changed.
+* `tests/element-radio-value.spec.js` checks it statically: any `el-radio` / `el-radio-button` with a `label` and no `value` fails the suite, with a second assertion on the number of tags found so a broken matcher cannot pass silently. Verified by putting the old attribute back on one radio in `Main.vue` — the test fails and names the file.
+* Found because the warning is a runtime one, printed by the component itself: nothing in the build, the suite or the coverage said anything. Note that the deprecation will become a removal in Element Plus 3.
+* 666 tests.
+
+
 ## V3.6.26 11/Nov/2026
 * **`console.log` no longer reaches the browser.** The console had **294** of them in `src/` — one per screen, one per table, one per chart — and they shipped in every chunk: `LOGIN -- authenticate`, `START PREPARE DATA....`, `enable interceptors axios` were readable in the production bundle, along with the payloads being handled. Terser now removes `console.log` and `console.debug` outright (`pure_funcs` in `vue.config.js`), in every chunk, rather than silencing them at runtime: what is not in the bundle cannot print, and cannot be read by whoever opens the devtools.
 * `console.warn` (9) and `console.error` (11) are kept — a real failure should still say so — and the bundle still carries 122 of those, from our code and from the libraries.
