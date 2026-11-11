@@ -10,7 +10,7 @@
   <el-card shadow="never" v-if="curItem">
 
   <el-row>
-    <el-button @click="setFocus('text')" type="text">{{ $t('cfg.text') }}</el-button>
+    <el-button @click="setFocus('text')" link>{{ $t('cfg.text') }}</el-button>
   </el-row>
   <el-row>
     <el-input
@@ -21,7 +21,7 @@
         ></el-input>
   </el-row>
   <el-row>
-    <el-button @click="setFocus('type')" type="text">{{ $t('cfg.button_type') }}</el-button>
+    <el-button @click="setFocus('type')" link>{{ $t('cfg.button_type') }}</el-button>
   </el-row>
   <el-row>
     <el-input
@@ -32,7 +32,7 @@
         ></el-input>
   </el-row>
   <el-row>
-    <el-button @click="setFocus('icon')" type="text">{{ $t('cfg.button_icon') }}</el-button>
+    <el-button @click="setFocus('icon')" link>{{ $t('cfg.button_icon') }}</el-button>
   </el-row>
   <el-row>
     <el-input
@@ -43,21 +43,21 @@
         ></el-input>
   </el-row>
   <el-row>
-    <el-button type="text">{{ $t('cfg.button_plain') }}</el-button>
+    <el-button link>{{ $t('cfg.button_plain') }}</el-button>
   </el-row>
   <el-row>
     <el-switch v-model="curItem.linkbuttonplain">
     </el-switch>
   </el-row>
   <el-row>
-    <el-button type="text">{{ $t('cfg.button_round') }}</el-button>
+    <el-button link>{{ $t('cfg.button_round') }}</el-button>
   </el-row>
   <el-row>
     <el-switch v-model="curItem.linkbuttonround">
     </el-switch>
   </el-row>
   <el-row>
-    <el-button type="text">{{ $t('cfg.button_circle') }}</el-button>
+    <el-button link>{{ $t('cfg.button_circle') }}</el-button>
   </el-row>
   <el-row>
     <el-switch v-model="curItem.linkbuttoncircle">

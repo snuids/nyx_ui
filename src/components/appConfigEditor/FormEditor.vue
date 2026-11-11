@@ -6,7 +6,7 @@
         <el-row style="text-align:left;">
           <el-col :span="7">
             <el-row>
-              <el-button @click="setFocus('formtitle')" type="text">{{ $t('cfg.form_title') }}</el-button>
+              <el-button @click="setFocus('formtitle')" link>{{ $t('cfg.form_title') }}</el-button>
             </el-row>
             <el-row>
               <el-input
@@ -19,7 +19,7 @@
           </el-col>
           <el-col :offset="3" :span="6">
             <el-row>
-              <el-button type="text">{{ $t('cfg.mode') }}</el-button>
+              <el-button link>{{ $t('cfg.mode') }}</el-button>
             </el-row>
             <el-row>
               <el-radio-group v-model="currentConfig.config.formmode" size="small" ref="mode">
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :offset="1" :span="7" v-if="currentConfig.config.formmode=='table'">
             <el-row>
-              <el-button @click="setFocus('index')" type="text">{{ $t('cfg.index') }}</el-button>
+              <el-button @click="setFocus('index')" link>{{ $t('cfg.index') }}</el-button>
             </el-row>
             <el-row>
               <el-input
@@ -43,7 +43,7 @@
           </el-col>
           <el-col :offset="1" :span="7" v-else>
             <el-row>
-              <el-button @click="setFocus('index')" type="text">{{ $t('cfg.destination') }}</el-button>
+              <el-button @click="setFocus('index')" link>{{ $t('cfg.destination') }}</el-button>
             </el-row>
             <el-row>
               <el-input
@@ -58,7 +58,7 @@
         </el-row>
 
         <el-row>
-              <el-button type="text">{{ $t('cfg.fields') }}</el-button>
+              <el-button link>{{ $t('cfg.fields') }}</el-button>
         </el-row>
         <el-row>
           <el-card shadow="never" style="padding-bottom: 20px;">

@@ -15,16 +15,16 @@
         <el-card style="margin-bottom:20px;" shadow="never">
           <el-row style="text-align:left;" type="flex">
             <el-col :span="5">
-              <el-button @click="setFocus('type')" type="text">Mode</el-button>
+              <el-button @click="setFocus('type')" link>Mode</el-button>
             </el-col>
             <el-col :span="5">
-              <el-button @click="setFocus('runner')" type="text">Runner</el-button>
+              <el-button @click="setFocus('runner')" link>Runner</el-button>
             </el-col>
             <el-col :span="5">
-              <el-button @click="setFocus('notebook')" type="text">File</el-button>
+              <el-button @click="setFocus('notebook')" link>File</el-button>
             </el-col>
             <el-col :span="5">
-              <el-button @click="setFocus('function')" type="text">Function</el-button>
+              <el-button @click="setFocus('function')" link>Function</el-button>
             </el-col>
           </el-row>
           <el-row style="text-align:left;" type="flex">
@@ -105,16 +105,16 @@
 
           <el-row style="text-align:left;" type="flex" v-if="locEditMode=='edit'">
             <el-col :span="5">
-              <el-button @click="setFocus()" type="text">Runs</el-button>
+              <el-button @click="setFocus()" link>Runs</el-button>
             </el-col>
             <el-col :span="5">
-              <el-button @click="setFocus()" type="text">Error</el-button>
+              <el-button @click="setFocus()" link>Error</el-button>
             </el-col>
             <el-col :span="5">
-              <el-button @click="setFocus()" type="text">Crashed</el-button>
+              <el-button @click="setFocus()" link>Crashed</el-button>
             </el-col>
             <el-col :span="5">
-              <el-button @click="setFocus()" type="text">Result</el-button>
+              <el-button @click="setFocus()" link>Result</el-button>
             </el-col>
           </el-row>
 
@@ -165,10 +165,10 @@
 
           <el-row style="text-align:left;" type="flex" v-if="locEditMode=='edit'">
             <el-col :span="10">
-              <el-button @click="setFocus('runId')" type="text">{{ $t('ui.run_uuid') }}</el-button>
+              <el-button @click="setFocus('runId')" link>{{ $t('ui.run_uuid') }}</el-button>
             </el-col>
             <el-col :span="10">
-              <el-button @click="setFocus('return')" type="text">Return</el-button>
+              <el-button @click="setFocus('return')" link>Return</el-button>
             </el-col>
           </el-row>
           <el-row type="flex" v-if="locEditMode=='edit'">

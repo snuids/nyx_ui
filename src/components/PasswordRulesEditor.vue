@@ -14,7 +14,7 @@
         <el-col :span="12" class="pwd-rule-label">
           <el-button
             @click="setFocus('')"
-            type="text"
+            link
           >Password length ({{passwordRulesModel.length[0]}} - {{passwordRulesModel.length[1]}})</el-button>
         </el-col>
       </el-row>
@@ -32,7 +32,7 @@
               <el-button
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
-                type="text"
+                link
               >{{ $t('ui.upper_case') }}</el-button>
               <el-switch
                 style="float: right; padding: 3px 0"
@@ -65,7 +65,7 @@
               <el-button
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
-                type="text"
+                link
               >{{ $t('ui.numbers') }}</el-button>
               <el-switch
                 style="float: right; padding: 3px 0"
@@ -98,7 +98,7 @@
               <el-button
                 style="float: left; padding: 3px 0"
                 @click="setFocus('')"
-                type="text"
+                link
               >{{ $t('ui.special_char') }}</el-button>
               <el-switch
                 style="float: right; padding: 3px 0"

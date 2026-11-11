@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.31 11/Nov/2026
+* **`ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0`** on 63 buttons across eight editor screens — report dialogs, the application editors, the password rules, the link and form editors. Every render of one logged the deprecation, and Element Plus 3 removes the value outright. They carry `link` now, which is the same look; `type="text"` stays legal on `el-input` and was left alone.
+* `tests/element-button-link.spec.js` holds it: a `type="text"` inside an `el-button` tag fails the suite, with an assertion on the number of buttons scanned so a matcher that stops matching cannot stay green. Verified by putting the attribute back on one button of the report dialog — the test names `ReportGenerator.vue:66`.
+* No stylesheet referenced `.el-button--text`, so nothing else had to move. **743 tests**.
+
+
 ## V3.6.30 11/Nov/2026
 * **Generating a report works for anyone who may run it.** The console used to build the whole job itself — definition, privileges, credentials — and post it to `/sendmessage`, which refuses every caller but an administrator: a `reporteditor` account clicked Generate, filled the dialog, and got `403 destination not allowed` printed nowhere. It now posts `{report, parameters, task}` to `/report/generate`, and the API loads the definition, takes the session from the token and builds the job. `ReportTask` does the same with `/report/regenerate`, replaying the snapshot the task already carries.
 * What the console sends changed accordingly: only parameter **values**, no `creds`, no `privileges`, no definition body — a browser can no longer redirect a report's `exec` or `jasper` path, and the id of the definition travels as a prop (`reportId`) rather than being smuggled into the document the editor saves.
