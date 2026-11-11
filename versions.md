@@ -1,5 +1,13 @@
 # Version History
 
+## V3.6.26 11/Nov/2026
+* **`console.log` no longer reaches the browser.** The console had **294** of them in `src/` — one per screen, one per table, one per chart — and they shipped in every chunk: `LOGIN -- authenticate`, `START PREPARE DATA....`, `enable interceptors axios` were readable in the production bundle, along with the payloads being handled. Terser now removes `console.log` and `console.debug` outright (`pure_funcs` in `vue.config.js`), in every chunk, rather than silencing them at runtime: what is not in the bundle cannot print, and cannot be read by whoever opens the devtools.
+* `console.warn` (9) and `console.error` (11) are kept — a real failure should still say so — and the bundle still carries 122 of those, from our code and from the libraries.
+* The calls stay in the sources: they are what makes a local debugging session readable, and `.eslintrc.js` already turns `no-console` into an error when linting with `NODE_ENV=production`.
+* Measured on the build: only **7** `console.log` remain in `dist/js` (all inside vendored libraries, not ours), the marker strings are gone from every chunk, and the weight is unchanged (`app` 134,37 KiB, `chunk-vendors` 1 939 KiB) — the win is silence, not bytes.
+* 664 tests unchanged; no source file was touched.
+
+
 ## V3.6.25 11/Nov/2026
 * **The app button and the avatar were gone.** They rendered as `<apps></apps>` and `<logout></logout>` — unknown elements. `Main.vue` registers the thirty components it uses (`Apps`, `Logout`, `ChangePassword`, …) through `@/utils/vue3shim`, which queued them and replayed the queue **once, before mount**. That was right while every module was imported at startup; 3.6.24 made the routes `defineAsyncComponent`, so `Main.vue` loaded *after* that flush and its registrations were never applied. The rest of the header was unaffected, so nothing looked broken until you missed a button.
 * `registerComponent` now applies immediately when the app instance is known, and `bindApp()` remembers it; `router.js` also flushes after each route module is imported, so a late module cannot queue behind a flush that already happened. `tests/vue3shim.spec.js` pins both paths.
