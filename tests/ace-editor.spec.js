@@ -1,11 +1,11 @@
 /**
- * `vue3-ace-editor` est un composant Vue 3 qui garde la convention Vue 2 : il declare `value` et
- * emet `update:value`. Le `v-model` simple lie donc `modelValue`, que le composant ignore — l'editeur
- * s'affiche vide et les saisies ne remontent pas. Il faut `v-model:value`.
+ * `vue3-ace-editor` is a Vue 3 component that keeps the Vue 2 convention: it declares `value` and
+ * emits `update:value`. A plain `v-model` therefore binds `modelValue`, which the component
+ * ignores — the editor shows empty and keystrokes do not come back. It needs `v-model:value`.
  *
- * Il ne connait pas non plus de prop `height` : il rend un <div> et laisse Ace le remplir. Un
- * `height="600"` est un attribut inerte et l'editeur s'effondre a zero. La hauteur doit etre dans
- * le `style`.
+ * It also knows no `height` prop: it renders a <div> and lets Ace fill it. A
+ * `height="600"` is an inert attribute and the editor collapses to zero. The height must be in
+ * the `style`.
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -57,8 +57,8 @@ describe('editeurs Ace', () => {
   })
 
   it('suit le theme de la console au lieu d une valeur figee', () => {
-    // `theme="chrome"` etait ecrit dans cinq fichiers : l'editeur restait blanc sur la console
-    // sombre. Le mixin porte la prop reelle, et resynchronise les editeurs deja montes.
+    // `theme="chrome"` was written in five files: the editor stayed white on the dark
+    // console. The mixin carries the real prop, and resynchronises editors that are already mounted.
     const fautifs = []
     for (const file of files) {
       const source = readFileSync(file, 'utf8')

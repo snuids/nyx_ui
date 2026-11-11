@@ -1,23 +1,23 @@
 /**
- * Les valeurs proposees pour les parametres d'un rapport.
+ * The values offered for a report's parameters.
  *
- * Les deux ecrans de rapport (`ReportGenerator` et `ReportPeriodicEditor`) portaient la meme
- * methode `getESValues`, recopiee a l'identique : elle construit la requete d'agregation qui liste
- * les valeurs distinctes d'un champ, la lance, et remplit la liste deroulante du parametre. Cent dix
- * lignes chacune, dans des composants a 0 % de couverture, pour un code qui ne touche ni au DOM ni a
- * Vue — sauf l'appel `axios`, reste dans les composants.
+ * The two report screens (`ReportGenerator` and `ReportPeriodicEditor`) carried the same
+ * `getESValues` method, copied identically: it builds the aggregation query that lists a field's
+ * distinct values, runs it, and fills the parameter's dropdown. A hundred and ten lines each, in
+ * components at 0 % coverage, for code that touches neither the DOM nor Vue — except the `axios`
+ * call, which stays in the components.
  */
 
 /**
- * La requete d'agregation des valeurs distinctes d'un champ.
+ * The aggregation query for a field's distinct values.
  *
- * `par` est la definition du parametre : `escomboindex` / `escombokey`, et selon les cas un champ de
- * temps (`usetimestamp`, `timestampfield`) et un champ booleen (`useboolean`, `booleanfield`).
- * `interval` (une periode choisie) et `fixdate` (une date fixe) bornent la recherche ; la date fixe
- * l'emporte quand les deux sont demandees.
+ * `par` is the parameter definition: `escomboindex` / `escombokey`, and depending on the case a
+ * time field (`usetimestamp`, `timestampfield`) and a boolean field (`useboolean`,
+ * `booleanfield`). `interval` (a chosen period) and `fixdate` (a fixed date) bound the search; the
+ * fixed date wins when both are requested.
  *
- * La fin de journee est poussee a 23:59:59.999 : sans cela, un rapport du jour meme raterait tout ce
- * qui s'est passe apres minuit.
+ * The end of day is pushed to 23:59:59.999: without that, a report of the same day would miss
+ * everything that happened after midnight.
  */
 export function buildParameterValuesQuery({
   par,
@@ -74,7 +74,7 @@ export function buildParameterValuesQuery({
 
   if (par.useboolean) {
     if (par.usetimestamp) {
-      // La clause de temps occupe deja `must[0]` : le booleen la complete.
+      // The time clause already occupies `must[0]`: the boolean completes it.
       if (query.query && query.query.bool) {
         query.query.bool.must[1] = { term: { [par.booleanfield]: true } };
       }
@@ -90,16 +90,16 @@ export function buildParameterValuesQuery({
   return query;
 }
 
-/** L'URL de recherche generique pour un index, la meme que celle des tableaux. */
+/** The generic search URL for an index, the same as the tables'. */
 export function parameterValuesUrl({ apiurl = "", token, index }) {
   return apiurl + "generic_search/" + index + "?token=" + token;
 }
 
 /**
- * Les valeurs distinctes rendues par Elasticsearch, triees.
+ * The distinct values returned by Elasticsearch, sorted.
  *
- * Une reponse sans agregation rend une liste vide plutot qu'une exception : un index vide ou un
- * champ absent ne doivent pas empecher le formulaire de s'ouvrir.
+ * A response without an aggregation returns an empty list rather than an exception: an empty
+ * index or a missing field must not keep the form from opening.
  */
 export function valuesFromBuckets(responseData) {
   const buckets =
@@ -113,16 +113,16 @@ export function valuesFromBuckets(responseData) {
   return buckets.map((bucket) => bucket.key).sort();
 }
 
-/** Les parametres que l'ecran affiche : un parametre `hidden` n'est pas une question a poser. */
+/** The parameters the screen displays: a `hidden` parameter is not a question to ask. */
 export function visibleParameters(parameters) {
   return (parameters || []).filter((parameter) => !parameter.hidden);
 }
 
 /**
- * Les bornes d'un raccourci de periode (`Aujourd'hui`, `7 derniers jours`, ...).
+ * The bounds of a period shortcut (`Aujourd'hui`, `7 derniers jours`, ...).
  *
- * `today` part de minuit et va jusqu'a minuit du lendemain ; les autres reculent de N jours depuis
- * maintenant. Le `now` est un parametre pour que les tests n'aient pas d'horloge a simuler.
+ * `today` starts at midnight and runs to the next midnight; the others go back N days from now.
+ * `now` is a parameter so that the tests have no clock to simulate.
  */
 export function rangeShortcut(shortcut, now = new Date()) {
   if (shortcut === "today") {

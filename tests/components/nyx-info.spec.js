@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * `NYXInfo` — la page d'etat de l'installation.
+ * `NYXInfo` — the installation status page.
  *
- * 615 lignes a 0 % : elle interroge huit index (modules, charge, noeuds, ActiveMQ, logstash,
- * elastalert, conteneurs, lambdas) et affiche des pastilles de couleur selon des seuils. Les tests
- * ci-dessous donnent les reponses et verifient ce qui est retenu et ce que les seuils decident.
+ * 615 lines at 0%: it queries eight indexes (modules, load, nodes, ActiveMQ, logstash, elastalert,
+ * containers, lambdas) and displays coloured pills according to thresholds. The tests below provide
+ * the responses and check what is kept and what the thresholds decide.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -23,10 +23,10 @@ afterEach(() => {
   while (mounted.length) mounted.pop().unmount()
 })
 
-/** Une reponse de `generic_search` avec les enregistrements demandes. */
+/** A `generic_search` response with the requested records. */
 const records = (rows) => Promise.resolve({ data: { error: '', records: rows } })
 
-/** Repond selon l'index vise, pour les huit appels du chargement. */
+/** Answers according to the targeted index, for the eight calls of the load. */
 function serve({ modules = [], loads = [], nodes = [], containers = [], lambdas = [] } = {}) {
   post.mockImplementation((url) => {
     if (url.includes('nyx_module_info')) return records(modules)
@@ -78,7 +78,7 @@ describe('NYXInfo — chargement', () => {
     expect(wrapper.vm.data).toHaveLength(3)
     expect(wrapper.vm.activeMQ).toHaveLength(1)
     expect(wrapper.vm.WebSocketServer).toHaveLength(1)
-    // les doublons de connexion ne comptent qu'une fois
+    // duplicate connections are counted only once
     expect(wrapper.vm.webSocketLogins).toEqual(['alice', 'bob'])
     expect(wrapper.vm.webSocketClients.clients).toBe(2)
   })
@@ -90,7 +90,7 @@ describe('NYXInfo — chargement', () => {
     mounted.push(wrapper)
     await flushPromises()
 
-    // sans garde, le rendu tombait ici : `clients[0]` sur un module qui vient de demarrer
+    // without a guard, rendering crashed here: `clients[0]` on a module that has just started
     expect(wrapper.vm.webSocketClients).toEqual({ clients: 0, logins: [] })
     expect(wrapper.vm.webSocketLogins).toEqual([])
   })

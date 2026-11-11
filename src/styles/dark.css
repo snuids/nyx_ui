@@ -13,8 +13,8 @@
  */
 
 html.dark {
-  /* Une palette explicite plutot que les gris d'Element Plus : le fond de page, le bandeau et le
-     menu doivent se distinguer les uns des autres, ce que `--el-bg-color` seul ne fait pas. */
+  /* An explicit palette rather than Element Plus's greys: the page background, the header and the
+     menu must stand apart from one another, which `--el-bg-color` alone does not do. */
   --nyx-surface: #1f2430;
   --nyx-surface-raised: #262c3a;
   --nyx-surface-sunken: #161a23;
@@ -28,10 +28,10 @@ html.dark body {
   color: var(--nyx-text);
 }
 
-/* --- Titres ----------------------------------------------------------------
-   `element-legacy.css` force `h1..h6 { color: #606266 }` pour retrouver la typographie
-   d'Element UI 2. Ce gris est celui du theme clair : sur une carte sombre il tombe a un contraste
-   de 2,5:1, et les libelles de la page d'etat (« Memory: 42 % », « Load 1m ») deviennent illisibles. */
+/* --- Titles ----------------------------------------------------------------------
+   `element-legacy.css` forces `h1..h6 { color: #606266 }` to get Element UI 2's typography back.
+   That grey is the light theme's: on a dark card it falls to a contrast of 2.5:1, and the labels
+   of the status page ("Memory: 42 %", "Load 1m") become unreadable. */
 html.dark h1,
 html.dark h2,
 html.dark h3,
@@ -41,16 +41,16 @@ html.dark h6 {
   color: var(--nyx-text);
 }
 
-/* --- Bandeau ---------------------------------------------------------------
-   `ui_css` (servi par l'API) force un fond blanc avec `!important`. */
+/* --- Header ----------------------------------------------------------------------
+   `ui_css` (served by the API) forces a white background with `!important`. */
 html.dark .el-header {
   background-color: var(--nyx-surface) !important;
   border-bottom: 1px solid var(--nyx-border) !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
 }
 
-/* --- Menu lateral ---------------------------------------------------------
-   `Main.vue` pose `--el-menu-text-color: #666` en style inline, d'ou le `!important`. */
+/* --- Side menu -------------------------------------------------------------------
+   `Main.vue` sets `--el-menu-text-color: #666` in an inline style, hence the `!important`. */
 html.dark .aside {
   background-color: var(--nyx-surface);
   border-right: 1px solid var(--nyx-border);
@@ -72,8 +72,8 @@ html.dark .el-menu .el-menu-item.is-active {
   color: var(--el-color-primary) !important;
 }
 
-/* --- Cartes de modules (Overview) ----------------------------------------
-   `ProcessList.vue` les peint en blanc avec une bordure grise. */
+/* --- Module cards (Overview) -----------------------------------------------------
+   `ProcessList.vue` paints them white with a grey border. */
 html.dark .process_ok {
   background-color: var(--nyx-surface-raised);
   border-color: var(--nyx-border);
@@ -100,8 +100,8 @@ html.dark .process_title_ok {
   border-bottom-color: var(--nyx-border);
 }
 
-/* --- Dialoques -----------------------------------------------------------
-   La bande de titre reste bleue (c'est la marque), mais le corps reprend le texte clair. */
+/* --- Dialogs ---------------------------------------------------------------------
+   The title strip stays blue (that is the brand), but the body takes the light text again. */
 html.dark .el-overlay .el-dialog {
   background-color: var(--nyx-surface);
 }
@@ -114,15 +114,15 @@ html.dark .el-dialog__footer {
   background-color: var(--nyx-surface);
 }
 
-/* Ce que le dialogue contient garde les valeurs d'Element pour le sombre : les deux panneaux du
-   transfert de l'edition d'utilisateur sont peints avec `--el-bg-color-overlay` (#1d1e1f, quasi
-   noir sur la surface #1f2430 — ils occupent les deux tiers de la fenetre) et leur en-tete ecrit
-   en `--el-color-black`, du noir sur #262727 : 1,0:1, le titre du panneau est invisible. Mesure au
-   navigateur, sur la feuille servie. Les variables sont reprises dans le dialogue plutot que
-   composant par composant, pour que l'editeur d'applications en profite aussi.
-   `--el-disabled-bg-color` est declaree sur `html` comme `var(--el-fill-color-light)` et se resout
-   la-bas en #262727 : la reprendre ici est le seul moyen d'en finir avec le champ desactive qui
-   gardait une teinte a lui (ID/Courriel, non editable en edition). */
+/* What the dialog contains keeps Element's dark values: the two panels of the user edition
+   transfer are painted with `--el-bg-color-overlay` (#1d1e1f, near black on the #1f2430 surface —
+   they take up two thirds of the window) and their header writes in `--el-color-black`, black on
+   #262727: 1.0:1, the panel title is invisible. Measured in the browser, on the served sheet.
+   The variables are overridden in the dialog rather than component by component, so that the
+   application editor benefits too.
+   `--el-disabled-bg-color` is declared on `html` as `var(--el-fill-color-light)` and resolves
+   there to #262727: overriding it here is the only way to be done with the disabled field that
+   kept a tint of its own (ID/Email, not editable in edition). */
 html.dark .el-overlay .el-dialog {
   --el-bg-color-overlay: var(--nyx-surface-raised);
   --el-fill-color-light: var(--nyx-surface-raised);
@@ -131,12 +131,12 @@ html.dark .el-overlay .el-dialog {
   --el-transfer-border-color: var(--nyx-border);
 }
 
-/* `--el-fill-color-blank` ne sert pas qu'aux panneaux : c'est aussi le fond des sections d'un
-   `el-collapse`. Repris sur le dialogue, il peignait l'en-tete *et* le corps de chaque section en
-   #262c3a au milieu d'une surface #1f2430 — le formulaire utilisateur s'ouvrait sur deux noirs : un
-   bloc plus clair cerne de sombre, et un pied de page d'une autre teinte encore. Les sections
-   reprennent la surface du dialogue ; seuls les champs et les deux listes du transfert restent
-   sureleves, et les separations prennent la bordure de la palette. */
+/* `--el-fill-color-blank` is not only used by the panels: it is also the background of an
+   `el-collapse`'s sections. Overridden on the dialog, it painted the header *and* the body of
+   every section in #262c3a in the middle of a #1f2430 surface — the user form opened on two
+   blacks: a lighter block ringed in dark, and a footer in yet another shade. The sections take the
+   dialog's surface again; only the fields and the transfer's two lists stay raised, and the
+   separations take the palette's border. */
 html.dark .el-overlay .el-dialog .el-collapse,
 html.dark .el-overlay .el-dialog .el-collapse-item__header,
 html.dark .el-overlay .el-dialog .el-collapse-item__wrap {
@@ -152,13 +152,13 @@ html.dark .el-transfer-panel__header {
   color: var(--nyx-text);
 }
 
-/* --- Boites de confirmation ------------------------------------------------
-   `Main.vue` peint `.el-overlay-message-box` avec les couleurs du theme clair : titre #303133 et
-   contenu #606266. Element Plus ne reprend pas la main — une couleur explicite gagne sur l'heritage
-   des variables sombres — donc la fenetre « Info » du menu utilisateur (version, version d'API,
-   taille de fenetre, navigateur, jeton) s'ouvrait sur un texte a 1,9:1 pour le titre et 3,2:1 pour
-   le contenu, sur le fond #141414 rendu par Element Plus. Meme famille que les titres de la page
-   d'etat corriges en 3.6.10, meme remede : une regle `html.dark` qui reprend le texte. */
+/* --- Confirmation boxes ----------------------------------------------------------
+   `Main.vue` paints `.el-overlay-message-box` with the light theme's colours: title #303133 and
+   content #606266. Element Plus does not take over — an explicit colour wins over the inherited
+   dark variables — so the "Info" window of the user menu (version, API version, window size,
+   browser, token) opened on text at 1.9:1 for the title and 3.2:1 for the content, on the
+   #141414 background rendered by Element Plus. Same family as the status page titles fixed in
+   3.6.10, same remedy: an `html.dark` rule that takes the text back. */
 html.dark .el-overlay-message-box .el-message-box__title,
 html.dark .el-overlay-message-box .el-message-box__content,
 html.dark .el-overlay-message-box .el-message-box__message,
@@ -167,7 +167,7 @@ html.dark .el-overlay-message-box .el-message-box__message strong {
   color: var(--nyx-text);
 }
 
-/* --- Tableaux et cartes --------------------------------------------------- */
+/* --- Tables and cards --------------------------------------------------------- */
 html.dark .el-table {
   --el-table-bg-color: var(--nyx-surface);
   --el-table-tr-bg-color: var(--nyx-surface);
@@ -178,10 +178,10 @@ html.dark .el-table {
   --el-table-row-hover-bg-color: var(--nyx-surface-raised);
 }
 
-/* `Main.vue` force le texte des en-tetes de colonne en **noir** (`.el-table th > .cell`). Sur le
-   fond sombre des en-tetes, un noir sur gris bleute est illisible — c'est le defaut le plus
-   visible du theme. Le `!important` est necessaire : cette regle-la n'en porte pas, mais elle est
-   chargee apres Element Plus et gagne a poids egal selon l'ordre des feuilles. */
+/* `Main.vue` forces the text of column headers to **black** (`.el-table th > .cell`). On the dark
+   background of the headers, black on bluish grey is unreadable — it is the most visible defect of
+   the theme. The `!important` is necessary: that rule carries none, but it is loaded after Element
+   Plus and wins at equal weight depending on the order of the sheets. */
 html.dark .el-table th > .cell,
 html.dark .el-table th.el-table__cell > .cell,
 html.dark .el-table thead th {
@@ -197,7 +197,7 @@ html.dark .el-table .cell {
   color: var(--nyx-text);
 }
 
-/* Les bandes du tableau alterne et les cases fixes gardent leur fond clair sinon. */
+/* The alternating table rows and the fixed cells keep their light background otherwise. */
 html.dark .el-table tr,
 html.dark .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
   background-color: var(--nyx-surface);
@@ -209,7 +209,7 @@ html.dark .el-table__fixed-header-wrapper {
   background-color: var(--nyx-surface);
 }
 
-/* Textes peints en noir par les composants eux-memes. */
+/* Text painted black by the components themselves. */
 html.dark .form_title,
 html.dark .file-system-card .el-breadcrumb__inner {
   color: var(--nyx-text);
@@ -229,10 +229,10 @@ html.dark .icon-item:hover {
 }
 
 
-/* --- Graphiques SVG maison (BarChart) -------------------------------------
-   Le SVG est peint par des classes de `BarChart.vue` : le fond, les barres et les etiquettes y sont
-   ecrits en clair, et un `html.dark` suffit a les reprendre. Les marques gardent la teinte bleue de
-   la marque, seuls les fonds et les textes changent. */
+/* --- Hand-drawn SVG charts (BarChart) --------------------------------------------
+   The SVG is painted by `BarChart.vue` classes: the background, the bars and the labels are
+   written in light there, and an `html.dark` is enough to take them back. The marks keep the
+   brand's blue, only the backgrounds and the texts change. */
 html.dark .barchart_background,
 html.dark .barchart_drawrect {
   fill: var(--nyx-surface);
@@ -242,8 +242,8 @@ html.dark .barchart_drawrect {
 html.dark .barchart .barchart_tick,
 html.dark .barchart .barchart_axis,
 html.dark .barchart .barchart_title {
-  /* Le texte courant, pas le gris attenue : sur le fond sombre les etiquettes d'axes etaient
-     lisibles « a peine », ce que l'utilisateur a signale deux fois. */
+  /* The current text colour, not the muted grey: on the dark background the axis labels were
+     "barely" legible, which the user reported twice. */
   fill: var(--nyx-text);
 }
 
@@ -256,10 +256,10 @@ html.dark .barchart_selectrect {
   stroke: var(--nyx-border);
 }
 
-/* --- Activite (Activity.vue) ---------------------------------------------
-   Les barres des « top endpoints » sont un fond bleu tres clair ecrit dans un `<style scoped>` : le
-   texte du chemin, lui, prend la couleur claire du theme, donc un chemin clair sur une barre claire.
-   Les libelles gris sont aussi releves : #909399 sur le fond sombre se lit mal. */
+/* --- Activity (Activity.vue) -----------------------------------------------------
+   The "top endpoints" bars are a very light blue background written in a `<style scoped>`: the
+   path text, for its part, takes the theme's light colour, so a light path on a light bar. The
+   grey labels are raised too: #909399 on the dark background reads badly. */
 html.dark .bar {
   background: rgba(64, 158, 255, 0.22);
   border-left-color: #409eff;
@@ -278,14 +278,14 @@ html.dark .panel-meta {
 }
 
 html.dark .kpi-value {
-  /* Le neutre vient de `var(--nyx-text)` cote composant ; le rouge et le vert restent semantiques. */
+  /* The neutral comes from `var(--nyx-text)` on the component side; red and green stay semantic. */
   color: var(--nyx-text);
 }
 
-/* --- Editeur de code ACE --------------------------------------------------
-   `vue3-ace-editor` lit son `theme` une seule fois, au montage, et `ace.edit` retombe silencieusement
-   sur `ace-tm` (blanc) quand le module de theme n'est pas encore charge : le selecteur du composant
-   ne suffisait donc pas. Ces regles repeignent l'editeur quel que soit le theme ACE applique. */
+/* --- ACE code editor -------------------------------------------------------------
+   `vue3-ace-editor` reads its `theme` once, at mount, and `ace.edit` silently falls back to
+   `ace-tm` (white) when the theme module is not loaded yet: the component's selector was
+   therefore not enough. These rules repaint the editor whatever ACE theme is applied. */
 html.dark .ace_editor,
 html.dark .ace_editor .ace_scroller,
 html.dark .ace_editor .ace_content {
@@ -320,9 +320,9 @@ html.dark .ace_editor .ace_scrollbar {
   background: var(--nyx-surface);
 }
 
-/* Coloration syntaxique. Le theme ACE reste `ace-tm` sur ce build (le module de theme n'est pas
-   resolvable tel quel) : sa palette est faite pour un fond blanc — bleu `#0000ff` sur fond sombre.
-   Ces regles la remplacent pour les classes de jetons courantes. */
+/* Syntax highlighting. The ACE theme stays `ace-tm` on this build (the theme module is not
+   resolvable as it is): its palette is made for a white background — blue `#0000ff` on a dark
+   background. These rules replace it for the common token classes. */
 html.dark .ace_editor .ace_keyword,
 html.dark .ace_editor .ace_meta {
   color: #c792ea !important;
@@ -363,10 +363,10 @@ html.dark .ace_editor .ace_operator {
   color: var(--nyx-text-muted) !important;
 }
 
-/* --- Cartes de description de l'editeur d'application ---------------------
-   Elles portent un fond **en style inline** (`rgb(236,245,255)` bleute, `rgb(255,245,236)` creme) :
-   le texte herite de la couleur claire du theme et devient illisible sur ces fonds. Une regle
-   `!important` est la seule facon de reprendre un style inline. */
+/* --- Application editor description cards ----------------------------------------
+   They carry a background **in an inline style** (`rgb(236,245,255)` bluish, `rgb(255,245,236)`
+   cream): the text inherits the theme's light colour and becomes unreadable on those backgrounds.
+   An `!important` rule is the only way to take back an inline style. */
 html.dark .transition-box > .el-card,
 html.dark .transition-box .el-card,
 html.dark .desc-card .el-card {
@@ -385,7 +385,7 @@ html.dark .el-card {
   color: var(--nyx-text);
 }
 
-/* --- Page d'accueil et petits textes ------------------------------------- */
+/* --- Landing page and small text ---------------------------------------------- */
 html.dark .el-main,
 html.dark .el-container {
   background-color: var(--nyx-surface-sunken);

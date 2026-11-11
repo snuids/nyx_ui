@@ -270,8 +270,8 @@
                     <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
-                  <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
-                       reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
+                  <!-- The type selector on the same line as the switch: stacked, it reads as an
+                       independent setting. `el-row` is a flex container in Element Plus, the line holds. -->
                   <el-row>
                     <div style="display:flex; align-items:center; gap:16px;">
                       <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
@@ -316,8 +316,8 @@
               :label-width="formLabelWidth"
             >
               <el-input size="small" v-model="curConfig.config.url" autocomplete="off"></el-input>
-              <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
-                   reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
+              <!-- The type selector on the same line as the switch: stacked, it reads as an
+                   independent setting. `el-row` is a flex container in Element Plus, the line holds. -->
               <el-row>
                 <div style="display:flex; align-items:center; gap:16px;">
                   <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
@@ -442,8 +442,8 @@
                     <el-switch v-model="curConfig.queryFilterChecked" :active-text="$t('configdetails.query_filter')" @change="query_filter_changed"></el-switch>
                   </el-row>
 
-                  <!-- Le selecteur de type sur la meme ligne que l'interrupteur : empile, il se lit comme un
-                       reglage independant. Le `el-row` est un conteneur flex en Element Plus, la ligne tient. -->
+                  <!-- The type selector on the same line as the switch: stacked, it reads as an
+                       independent setting. `el-row` is a flex container in Element Plus, the line holds. -->
                   <el-row>
                     <div style="display:flex; align-items:center; gap:16px;">
                       <el-switch v-model="curConfig.timeSelectorChecked" :active-text="$t('configdetails.time_selector')"></el-switch>
@@ -1124,8 +1124,8 @@ export default {
     prepareData() {
       console.log(this.currentConfig)
       this.dialogFormVisible = true;
-      // Copie profonde, listes par defaut, valeur de rafraichissement Kibana remise en clair :
-      // c'est `normaliseConfigForForm`, teste sans monter l'ecran.
+      // Deep copy, default lists, Kibana refresh value unwrapped: this is `normaliseConfigForForm`,
+      // tested without mounting the screen.
       this.curConfig = normaliseConfigForForm(this.currentConfig);
 
       this.dialogHeaderVisible = false;
@@ -1145,8 +1145,8 @@ export default {
 
     },
     refresh2: function() {
-      // Le YAML sert d'apercu et de comparaison : editer l'apercu est le seul moyen d'ecrire ce
-      // que le formulaire ne montre pas.
+      // The YAML serves as a preview and for comparison: editing the preview is the only way to
+      // write what the form does not show.
       this.strNewRec = configYaml(this.curConfig);
       this.strOrgRec = configYaml(this.currentConfig);
     },
@@ -1169,8 +1169,8 @@ export default {
       });
     },
     computeKibanaUrlFromSelectedDash() {
-      // Le chemin du tableau de bord est construit dans `utils/kibanaUrl.js` : ici on ne garde que
-      // la periode retenue, que le formulaire doit reafficher.
+      // The dashboard path is built in `utils/kibanaUrl.js`: only the selected period is kept here,
+      // and the form has to display it again.
       const built = kibanaDashboardPath({
         dash: this.selectedDash,
         kibanaTime: this.curConfig.config && this.curConfig.config.kibanaTime,
@@ -1204,10 +1204,10 @@ export default {
         "/app/kibana#" +
         this.computeKibanaUrlFromSelectedDash();
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     handleDeleteHeader(index) {
@@ -1242,20 +1242,20 @@ export default {
       this.computeUrlFromKibana();
 
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     timeRefreshSwitchChange() {
       this.computeUrlFromKibana();
 
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
 
       console.log(this.curConfig.config.url)
@@ -1264,10 +1264,10 @@ export default {
       if (this.curConfig.timeSelectorType != null)
         this.curConfig.timeSelectorChecked = true;
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     kibanaTimeChange() {
@@ -1317,20 +1317,20 @@ export default {
       this.computeUrlFromKibana();
 
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     timeRefreshSwitchChange() {
       this.computeUrlFromKibana();
 
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
 
       console.log(this.curConfig.config.url)
@@ -1339,10 +1339,10 @@ export default {
       if (this.curConfig.timeSelectorType != null)
         this.curConfig.timeSelectorChecked = true;
 
-      // Le passage par `null` datait de Vue 2, ou il servait a forcer la reactivite des champs
-      // imbriques. Ici `curConfig` est un computed dont le setter commite dans le store : rendre le
-      // composant entre les deux affectations le faisait rendre avec `curConfig` a null, et le
-      // template tombait sur `curConfig.type`.
+      // Going through `null` dated from Vue 2, where it forced the reactivity of nested fields.
+      // Here `curConfig` is a computed whose setter commits to the store: rendering the component
+      // between the two assignments made it render with `curConfig` at null, and the template
+      // fell over on `curConfig.type`.
       this.curConfig = JSON.parse(JSON.stringify(this.curConfig));
     },
     kibanaTimeChange() {

@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * Table de routage.
+ * Routing table.
  *
- * Trois routes et une route enfant : assez peu de code, mais une entree perdue ici rend un ecran
- * injoignable (la notice de confidentialite, notamment, qui doit rester publique et sans compte).
- * Le test verifie ce que le routeur resout reellement, pas la forme du fichier.
+ * Three routes and one child route: fairly little code, but an entry lost here makes a screen
+ * unreachable (the privacy notice in particular, which must stay public and available without an
+ * account). The test checks what the router really resolves, not the shape of the file.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -52,7 +52,7 @@ describe('router', () => {
   })
 
   it('ouvre l\'application demandee comme enfant de /main', async () => {
-    // C'est le chemin que `Login.vue` pousse apres authentification (`/main/<rec_id>`).
+    // This is the path `Login.vue` pushes after authentication (`/main/<rec_id>`).
     const resolved = router.resolve('/main/rec-1')
 
     expect(resolved.name).toBe('GenericComponent')
@@ -62,7 +62,7 @@ describe('router', () => {
   })
 
   it('conserve le mode hash des URL existantes', () => {
-    // Vue Router 3 utilisait le hash ; les liens deja distribues (`/#/main/...`) doivent marcher.
+    // Vue Router 3 used the hash; links already handed out (`/#/main/...`) must work.
     expect(router.options.history.base).toBeDefined()
     expect(router.options.history.createHref('/main/rec-1')).toContain('#/main/rec-1')
   })

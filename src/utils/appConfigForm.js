@@ -1,21 +1,20 @@
 /**
- * Ce que `ConfigDetails` fait a une configuration avant de la montrer, et apres l'avoir editee.
+ * What `ConfigDetails` does to a configuration before showing it, and after editing it.
  *
- * Le composant fait 1 476 lignes, dont 587 instructions : sa mise en page d'un cote, et de l'autre
- * une poignee de transformations qui ne touchent ni au DOM ni a Vue — normaliser une configuration
- * pour le formulaire, la relire en YAML pour detecter une modification, decider ce qui part a
- * l'enregistrement, proposer les categories et sous-categories du menu, nommer un controleur. Elles
- * etaient a 0 % de couverture, faute de pouvoir les atteindre sans monter l'ecran.
+ * The component is 1 476 lines, 587 of them statements: its layout on one side, and on the other
+ * a handful of transformations that touch neither the DOM nor Vue — normalising a configuration
+ * for the form, reading it back as YAML to detect a change, deciding what goes to the save,
+ * offering the menu's categories and subcategories, naming a controller. They had 0 % coverage,
+ * for lack of a way to reach them without mounting the screen.
  */
 
 import YAML from "js-yaml";
 
 /**
- * La valeur de rafraichissement Kibana, telle que le formulaire l'affiche.
+ * The Kibana refresh value, as the form displays it.
  *
- * Le champ est stocke sous la forme `refreshInterval:(pause:!f,value:30000)` et le formulaire
- * n'attend que `30000` : on lui retire l'enveloppe, sinon la personne voit du JSON dans un champ
- * de nombre.
+ * The field is stored as `refreshInterval:(pause:!f,value:30000)` and the form expects only
+ * `30000`: the wrapper is stripped off, otherwise the person sees JSON in a number field.
  */
 export function unmangleRefreshInterval(value) {
   if (value == null) return value;
@@ -25,11 +24,11 @@ export function unmangleRefreshInterval(value) {
 }
 
 /**
- * La copie de la configuration que le formulaire edite.
+ * The copy of the configuration the form edits.
  *
- * Une copie profonde : le formulaire ecrit dans `curConfig`, et l'original (`currentConfig`) sert de
- * reference pour savoir si quelque chose a change. Les deux listes que le formulaire remplit
- * (`queryfilters`, `headercolumns`) ne doivent pas exister a moitie non plus.
+ * A deep copy: the form writes into `curConfig`, and the original (`currentConfig`) serves as the
+ * reference for knowing whether anything changed. Nor must the two lists the form fills
+ * (`queryfilters`, `headercolumns`) be left half-created.
  */
 export function normaliseConfigForForm(currentConfig) {
   const curConfig = JSON.parse(JSON.stringify(currentConfig));
@@ -44,17 +43,17 @@ export function normaliseConfigForForm(currentConfig) {
   return curConfig;
 }
 
-/** La configuration en YAML : c'est le texte que compare `resolveSavedSource`, et l'apercu. */
+/** The configuration as YAML: it is the text `resolveSavedSource` compares, and the preview. */
 export function configYaml(config) {
   return YAML.safeDump(config, 10);
 }
 
 /**
- * Ce qui part a l'enregistrement.
+ * What goes to the save.
  *
- * Si le YAML edite differe de celui d'origine — la personne a touche l'apercu — on enregistre le
- * YAML (c'est le chemin qui permet d'ecrire ce que le formulaire ne montre pas), sinon l'objet du
- * formulaire. Une creation (`isAdd`) prend toujours le formulaire : il n'y a rien a comparer.
+ * If the edited YAML differs from the original one — the person touched the preview — the YAML is
+ * saved (that is the path that writes what the form does not show), otherwise the form's object.
+ * A creation (`isAdd`) always takes the form: there is nothing to compare.
  */
 export function resolveSavedSource({ newText, orgText, curConfig, isAdd = false }) {
   if (newText != orgText && !isAdd) return YAML.safeLoad(newText);
@@ -62,9 +61,9 @@ export function resolveSavedSource({ newText, orgText, curConfig, isAdd = false 
 }
 
 /**
- * Les categories proposees par l'autocompletion, filtrees par ce qui est tape.
+ * The categories offered by the autocomplete, filtered by what is typed.
  *
- * `menus` est `store.getters.filteredmenus` : `[{category, submenus: [{loc_title}]}]`.
+ * `menus` is `store.getters.filteredmenus`: `[{category, submenus: [{loc_title}]}]`.
  */
 export function suggestCategories(menus = [], queryString = "") {
   const categories = [];
@@ -77,10 +76,10 @@ export function suggestCategories(menus = [], queryString = "") {
 }
 
 /**
- * Les sous-categories de la categorie choisie, filtrees par ce qui est tape.
+ * The subcategories of the chosen category, filtered by what is typed.
  *
- * Sans categorie (champ vide), il n'y a rien a proposer : l'ecran renvoie une liste vide plutot que
- * les sous-menus de toutes les categories.
+ * Without a category (empty field) there is nothing to offer: the screen returns an empty list
+ * rather than the submenus of every category.
  */
 export function suggestSubcategories(menus = [], category, queryString = "") {
   if (category == "") return [];
@@ -100,11 +99,11 @@ export function suggestSubcategories(menus = [], category, queryString = "") {
 }
 
 /**
- * Le texte d'aide du controleur choisi.
+ * The help text of the chosen controller.
  *
- * La traduction l'emporte quand elle existe ; sinon la description du catalogue, en anglais. Un
- * controleur absent du catalogue est forcement un composant maison : l'aide le dit au lieu de
- * laisser un cadre vide.
+ * The translation wins when it exists; otherwise the catalogue description, in English. A
+ * controller missing from the catalogue is necessarily a home-made component: the help says so
+ * instead of leaving an empty frame.
  */
 export function controllerLabel(page, hasTranslation, translate) {
   if (!page) return null;

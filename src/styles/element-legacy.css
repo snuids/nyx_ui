@@ -1,22 +1,21 @@
 /*
- * Element UI 2 avait des composants de 36 px (champs) et 40 px (boutons) ; Element Plus part de
- * 32 px. Sans ce réglage, chaque champ du console rapetisse de 4 à 8 px et les rangées se
- * décalent — c'est la première chose qui se voit en comparant les deux interfaces.
+ * Element UI 2 had 36 px components (fields) and 40 px (buttons); Element Plus starts at 32 px.
+ * Without this override every field in the console shrinks by 4 to 8 px and the rows shift —
+ * it is the first thing you notice when comparing the two interfaces.
  *
- * `--el-component-size` est la variable qu'Element Plus consulte pour la hauteur des champs, des
- * sélecteurs et des boutons : la fixer ici rétablit les hauteurs d'origine sans toucher aux 62
- * composants.
+ * `--el-component-size` is the variable Element Plus reads for the height of fields, selects
+ * and buttons: fixing it here restores the original heights without touching the 62 components.
  */
 /*
- * Element UI 2 posait la typographie sur `body` (`base.css`) : 14 px, Helvetica Neue puis Arial.
- * Element Plus ne touche pas au `body`. Tout ce qui est **teleporte** — dialogues
- * (`append-to-body`), infobulles, menus deroulants, boites de confirmation — sort de `#app` et
- * heritait donc du corps du navigateur : 16 px et une police a empattements. C'est ce qui rendait
- * les dialogues plus grands et differents de la version precedente.
+ * Element UI 2 set the typography on `body` (`base.css`): 14 px, Helvetica Neue then Arial.
+ * Element Plus does not touch `body`. Everything **teleported** — dialogs (`append-to-body`),
+ * tooltips, dropdown menus, confirmation boxes — leaves `#app` and therefore inherited the
+ * browser's body: 16 px and a serif typeface. That is what made the dialogs larger and different
+ * from the previous version.
  */
 body {
-  /* Pile exacte d'Element UI 2 (`base.css`) : c'est elle que recevaient les elements teleportes
-     dans la version precedente. */
+  /* Element UI 2's exact stack (`base.css`): it is the one teleported elements received in the
+     previous version. */
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     Arial, sans-serif;
   font-size: 14px;
@@ -24,9 +23,9 @@ body {
 }
 
 /*
- * Element UI 2 embarquait un reset typographique (`base.css`) qu'Element Plus n'a pas repris :
- * titre h1 a 20 px en gris #606266, sans graisse et sans marge. Sans lui, le titre « Step 2 of 2 »
- * des editeurs d'application sortait en 28 px gras noir (les valeurs par defaut du navigateur).
+ * Element UI 2 shipped a typographic reset (`base.css`) that Element Plus did not carry over:
+ * an h1 at 20 px in grey #606266, no weight, no margin. Without it, the "Step 2 of 2" title of
+ * the application editors came out at 28 px bold black (the browser defaults).
  */
 h1,
 h2,
@@ -58,11 +57,10 @@ h6 {
 }
 
 /*
- * Element Plus garde les 30 px d'Element UI 2 entre deux boutons radio (`.el-radio`), et ce sont eux
- * qui espacaient les cinq types de rapport de l'editeur. Une regle `.el-radio { margin-right: 0 }`
- * laissee dans le `<style>` non scope d'un composant les supprimait partout : les options se
- * touchaient. La regle est retiree la-bas, et celle-ci rend l'ecart explicite pour qu'aucune autre
- * regle orpheline ne puisse le reprendre.
+ * Element Plus keeps Element UI 2's 30 px between two radio buttons (`.el-radio`), and those were
+ * what spaced the editor's five report types. A rule `.el-radio { margin-right: 0 }` left in a
+ * component's unscoped `<style>` removed them everywhere: the options touched. The rule is gone
+ * from there, and this one makes the gap explicit so that no other orphan rule can take it back.
  */
 .el-radio-group .el-radio:not(:last-child) {
   margin-right: 30px;
@@ -71,36 +69,35 @@ h6 {
 :root {
   --el-component-size: 36px;
   --el-component-size-large: 40px;
-  /* Element UI 2 « mini » = 28 px ; Element Plus « small » = 24 px. Tous les champs `size="small"`
-     (ex-`mini`) perdaient 4 px de haut, y compris le champ de recherche des en-tetes de tableau. */
+  /* Element UI 2 "mini" = 28 px; Element Plus "small" = 24 px. Every `size="small"` field
+     (ex-`mini`) lost 4 px of height, including the search field of the table headers. */
   --el-component-size-small: 28px;
 }
 
-/* ...et le texte d'un champ « small » commence a 15 px du bord, comme dans Element UI 2 (7 px
-   dans Element Plus). */
+/* ...and the text of a "small" field starts 15 px from the edge, as in Element UI 2 (7 px in
+   Element Plus). */
 .el-input--small .el-input__wrapper {
   padding: 1px 15px;
 }
 
 /*
- * Element UI 2 rendait `el-input` en `inline-block` ; Element Plus en fait un **bloc flex**. Dans les
- * en-tetes de tableau — un conteneur de boutons suivi d'un champ de recherche — le champ passait donc
- * a la ligne, sous le bouton « + » au lieu de rester a cote.
+ * Element UI 2 rendered `el-input` as `inline-block`; Element Plus makes it a **flex block**. In
+ * table headers — a button container followed by a search field — the field therefore wrapped to
+ * the next line, under the "+" button instead of staying beside it.
  */
 .el-input {
   display: inline-flex;
 }
 
 /*
- * En-tete de tableau. Element UI 2 portait des regles de mise en page que la feuille de theme
- * emportait avec elle :
- *  - le `div` qui precede le champ de recherche est en ligne et son bloc fait 40 px de haut : c'est
- *    ce qui garde le bouton « + » et le champ cote a cote et donne a l'en-tete sa hauteur ;
- *  - le `cell` d'un `th` occupe la largeur complete de la colonne (`width: 100%` en `border-box`)
- *    et ne revient pas a la ligne.
- * Le selecteur du `div` ne vise que les **enfants directs** du `cell` : applique a tous les `div`
- * d'un `th`, il tombait aussi sur `.el-input` (un `div` en Element Plus) et lui imposait
- * `inline-block` + `line-height: 40px`, ce qui portait le champ a 58 px de haut.
+ * Table header. Element UI 2 carried layout rules that went away with its theme sheet:
+ *  - the `div` before the search field is inline and its block is 40 px high: that is what keeps
+ *    the "+" button and the field side by side and gives the header its height;
+ *  - the `cell` of a `th` occupies the full width of the column (`width: 100%` in `border-box`)
+ *    and does not wrap.
+ * The `div` selector targets only the **direct children** of the `cell`: applied to every `div` of
+ * a `th`, it also hit `.el-input` (a `div` in Element Plus) and forced `inline-block` +
+ * `line-height: 40px` on it, which pushed the field to 58 px high.
  */
 .el-table th .cell > div:not(.el-input) {
   display: inline-block;
@@ -121,14 +118,14 @@ h6 {
   white-space: nowrap;
 }
 
-/* En Element Plus le champ est un `inline-flex` de 28 px : aligne sur la ligne de base, il
- * descendait sous le bouton et poussait l'en-tete a 70 px. Centre, il reprend la place de la
- * production (80 px du haut, 150 x 28). */
+/* In Element Plus the field is a 28 px `inline-flex`: aligned on the baseline, it dropped below
+ * the button and pushed the header to 70 px. Centred, it takes back the production position
+ * (80 px from the top, 150 x 28). */
 
 /*
- * Corps du tableau : le `size="small"` d'Element Plus (4 px de padding vertical, `cell` a 8 px) a
- * remplace le « mini » d'Element UI 2 (6 px, `cell` a 10 px, en-tete en 700). Les lignes faisaient
- * 33 px au lieu de 41 et les en-tetes n'etaient plus en gras.
+ * Table body: Element Plus's `size="small"` (4 px vertical padding, `cell` at 8 px) replaced
+ * Element UI 2's "mini" (6 px, `cell` at 10 px, header at 700). Rows were 33 px instead of 41
+ * and the headers were no longer bold.
  */
 .el-table--small td.el-table__cell {
   padding: 6px 0;
@@ -144,27 +141,27 @@ h6 {
 }
 
 /*
- * Boutons « small » : Element UI 2 « mini » = 28 px de haut, padding 7 px / 15 px. Element Plus
- * « small » = 24 px, 5 px / 11 px : les boutons d'action d'un tableau faisaient 36 x 24 au lieu de
- * 44 x 28. (`mini` a disparu d'Element Plus, il a ete converti en `small` partout.)
+ * "small" buttons: Element UI 2 "mini" = 28 px high, 7 px / 15 px padding. Element Plus "small"
+ * = 24 px, 5 px / 11 px: a table's action buttons were 36 x 24 instead of 44 x 28. (`mini` is
+ * gone from Element Plus, it was converted to `small` everywhere.)
  */
 .el-button--small {
   --el-button-size: 28px;
   padding: 7px 15px;
 }
 
-/* En production, le bouton « recharger » et le champ de recherche d'un en-tete de tableau sont
- * separes de 10 px (un espace de texte entre les deux blocs en ligne) ; sans marge, ils se touchent.
- * Les boutons ronds de ces en-tetes font aussi 28 px (mini d'Element UI 2), pas 24. */
+/* In production, the "reload" button and a table header's search field are 10 px apart (a text
+ * space between the two inline blocks); without a margin they touch. The round buttons of these
+ * headers are also 28 px (Element UI 2's mini), not 24. */
 .el-table th .searchfield {
   margin-left: 10px;
-  /* Element UI 2 donnait 10 px de padding lateral au `div.el-input` de l'en-tete (la regle
-     ci-dessus) ; en Element Plus le champ est un bloc flex, donc le rembourrage se pose ici pour
-     que le texte commence au meme endroit (26 px du bord, wrapper de 130 px comme en production). */
+  /* Element UI 2 gave the header's `div.el-input` 10 px of lateral padding (the rule above); in
+     Element Plus the field is a flex block, so the padding sits here for the text to start at the
+     same place (26 px from the edge, a 130 px wrapper as in production). */
   padding-left: 10px;
   padding-right: 10px;
-  /* Aligne sur la ligne de base, ce champ de 28 px descendait sous le bouton « + » et portait
-     l'en-tete a 70 px ; centre, il reprend la position de la production (80 px du haut). */
+  /* Aligned on the baseline, this 28 px field dropped below the "+" button and pushed the header
+     to 70 px; centred, it takes back the production position (80 px from the top). */
   vertical-align: middle;
 }
 
@@ -174,17 +171,17 @@ h6 {
   padding: 0;
 }
 
-/* Les champs prennent toute la largeur de leur conteneur, comme avec Element UI 2. */
+/* Fields take the full width of their container, as with Element UI 2. */
 .el-form-item__content .el-input,
 .el-form-item__content .el-select,
 .el-form-item__content .el-textarea {
   width: 100%;
 }
 
-/* Element UI 2 : un `el-form-item` occupait toute la largeur disponible. Element Plus le rend
- * `display: flex`, donc place dans un `el-row` (lui aussi flex) il se retrecit a la largeur de son
- * contenu : dans la fenetre « User Form », le champ Login mesurait 164 px au lieu de 540, et la
- * fenetre debordait de 280 px en hauteur. */
+/* Element UI 2: an `el-form-item` took the whole available width. Element Plus renders it
+ * `display: flex`, so placed in an `el-row` (also flex) it shrinks to the width of its content:
+ * in the "User Form" window, the Login field measured 164 px instead of 540, and the window
+ * overflowed by 280 px in height. */
 .el-row > .el-form-item,
 .el-col > .el-form-item {
   flex: 1 1 auto;
@@ -192,42 +189,42 @@ h6 {
   min-width: 0;
 }
 
-/* Un `el-card` enfant direct d'un `el-row` se reduisait a la largeur de son contenu : `el-row` est un
- * conteneur flex, donc la carte devenait un element flex de la largeur de son texte. Les cartes de
- * description des editeurs d'application (« Displays a collection stored in elastic search. »)
- * s'affichaient dans un timbre-poste de 240 px, avec une barre de defilement interne. */
-/* Cible les seules cartes de description des editeurs (`.transition-box`) : appliquee a tout
- * `el-row > .el-card`, cette regle ecrasait aussi les cartes de la page d'accueil (plan du site),
- * qui s'affichaient empilees sur toute la largeur au lieu de tenir cote a cote en 126 px. */
+/* An `el-card` that is a direct child of an `el-row` shrank to the width of its content: `el-row`
+ * is a flex container, so the card became a flex item the width of its text. The description
+ * cards of the application editors ("Displays a collection stored in elastic search.") showed in
+ * a 240 px postage stamp, with an inner scrollbar. */
+/* Targets only the editors' description cards (`.transition-box`): applied to every
+ * `el-row > .el-card`, this rule also overrode the landing page cards (site map), which showed
+ * stacked across the full width instead of fitting side by side in 126 px. */
 .transition-box > .el-card {
   flex: 1 1 auto;
   width: 100%;
   min-width: 0;
 }
 
-/* Les cartes de description (`.transition-box`) placent une icone dans un `el-col` de 4 et le texte
- * dans un `el-col` de 20, a l'interieur du `el-card__body`. Element UI 2 faisait flotter ces
- * colonnes ; celles d'Element Plus ne s'alignent que dans un conteneur flex, donc l'icone passait
- * au-dessus du texte et la carte debordait (barre de defilement interne). */
+/* The description cards (`.transition-box`) put an icon in a 4-wide `el-col` and the text in a
+ * 20-wide `el-col`, inside `el-card__body`. Element UI 2 floated those columns; Element Plus's
+ * only align inside a flex container, so the icon moved above the text and the card overflowed
+ * (inner scrollbar). */
 .transition-box > .el-card > .el-card__body {
   display: flex;
   align-items: flex-start;
   padding: 10px 20px;
 }
 
-/* Pied de dialogue : boutons de 40 px comme Element UI 2 (Element Plus les rend a 32 px), avec le
- * rembourrage d'origine — `12px 23px` elargissait chaque bouton de 6 px (Cancel 95 px au lieu de
- * 89, mesure sur « User Form »). */
+/* Dialog footer: 40 px buttons as in Element UI 2 (Element Plus renders them at 32 px), with the
+ * original padding — `12px 23px` widened every button by 6 px (Cancel 95 px instead of 89,
+ * measured on "User Form"). */
 .el-dialog__footer .el-button {
   min-height: 40px;
   padding: 12px 20px;
 }
 
-/* Element UI 2 fixait la hauteur de ligne d'un `el-form-item` a 40 px (label et contenu) ; Element
- * Plus la laisse a 32 px, et surtout rend le contenu **flex** : `line-height` n'y cree aucune ligne,
- * la hauteur retombait donc a celle du champ (28 px). Chaque ligne du dialogue « User Form » se
- * tassait de 9 px et la fenetre mesurait 918 px contre 947 en production. On rend au contenu sa
- * hauteur de ligne et on y centre le champ, comme la ligne de 40 px d'Element UI 2 le faisait. */
+/* Element UI 2 fixed the line height of an `el-form-item` at 40 px (label and content); Element
+ * Plus leaves it at 32 px, and above all renders the content **flex**: `line-height` creates no
+ * line there, so the height fell back to the field's (28 px). Every row of the "User Form" dialog
+ * shrank by 9 px and the window measured 918 px against 947 in production. The content gets its
+ * line height back and the field is centred in it, as Element UI 2's 40 px row did. */
 .el-form-item__label {
   line-height: 40px;
 }
@@ -238,9 +235,9 @@ h6 {
 }
 
 /*
- * Boutons radio « small » (ex-`mini`) : Element UI 2 en faisait des boutons de 28 px avec 7 px / 15 px
- * de padding ; Element Plus en fait 22 px (5 px / 11 px). Dans l'en-tete, le groupe Absolute/Relative
- * faisait donc 6 px de moins que le selecteur de dates et descendait sous lui.
+ * "small" radio buttons (ex-`mini`): Element UI 2 made them 28 px buttons with 7 px / 15 px of
+ * padding; Element Plus makes 22 px (5 px / 11 px). In the header, the Absolute/Relative group
+ * was therefore 6 px shorter than the date picker and dropped below it.
  */
 .el-radio-button--small .el-radio-button__inner {
   padding: 7px 15px;
@@ -248,11 +245,11 @@ h6 {
 }
 
 /*
- * Selecteur de temps de l'en-tete : le groupe radio s'aligne sur la ligne de base, donc ses boutons
- * de 28 px restaient 1 px au-dessus du champ (16 contre 17, mesure sur « Modules > Calls »). Le
- * champ portait par ailleurs un `style="top:1px"` herite d'Element UI 2, retire de `Main.vue` :
- * avec `vertical-align: middle` et 1 px de decalage, le champ, le bouton « Last 4 h » et le groupe
- * Absolute/Relative sont tous a 17 px du haut pour 28 px de haut, comme en production.
+ * Header time selector: the radio group aligns on the baseline, so its 28 px buttons stayed 1 px
+ * above the field (16 against 17, measured on "Modules > Calls"). The field also carried a
+ * `style="top:1px"` inherited from Element UI 2, removed from `Main.vue`: with
+ * `vertical-align: middle` and a 1 px offset, the field, the "Last 4 h" button and the
+ * Absolute/Relative group are all 17 px from the top for 28 px of height, as in production.
  */
 .time-selector-row .el-radio-group {
   vertical-align: middle;
@@ -260,18 +257,18 @@ h6 {
   top: 1px;
 }
 
-/* En production, seule la fenetre « User Form » centre son titre et ses boutons (Element UI 2 lui
-   applique `el-dialog--center`) ; les fenetres de configuration gardent le titre a gauche. Une regle
-   globale centrait tout, y compris « Modify Application », qui doit rester aligne a gauche. */
+/* In production, only the "User Form" window centres its title and its buttons (Element UI 2
+   applies `el-dialog--center` to it); the configuration windows keep the title on the left. A
+   global rule centred everything, including "Modify Application", which must stay left-aligned. */
 .dialog-user .el-dialog__header,
 .dialog-user .el-dialog__title {
   text-align: center;
 }
 
-/* Element UI 2 affichait les deux panneaux d'un `<el-transfer>` cote a cote. En Element Plus les
- * panneaux sont des `inline-block` separes par un bloc de boutons : des que la largeur manque de
- * quelques pixels ils passent a la ligne, et la fenetre gagne 290 px de hauteur (visible dans
- * « User Form », section Privileges). */
+/* Element UI 2 showed the two panels of an `<el-transfer>` side by side. In Element Plus the
+ * panels are `inline-block` separated by a button block: as soon as the width is a few pixels
+ * short they wrap, and the window gains 290 px of height (visible in "User Form", Privileges
+ * section). */
 .el-transfer {
   display: flex;
   align-items: flex-start;
@@ -285,7 +282,7 @@ h6 {
   flex: 0 0 250px;
 }
 
-/* La croix de fermeture d'Element UI 2 est un glyphe de 16 px, celle d'Element Plus un SVG de 24. */
+/* Element UI 2's close cross is a 16 px glyph, Element Plus's a 24 px SVG. */
 .el-dialog__headerbtn .el-dialog__close {
   width: 16px;
   height: 16px;

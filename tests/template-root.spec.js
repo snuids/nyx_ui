@@ -1,10 +1,10 @@
 /**
- * Un composant dont le bloc <template> porte un `v-slot` ne rend rien : Vue attend un parent qui
- * fournisse ce slot, et il n'y en a pas. Sept composants (Form, Kibana, Grafana, External, Upload,
- * Vega, ChangePassword) se sont retrouvés dans cet état après la migration — écrans vides, sans
- * erreur en console.
+ * A component whose <template> block carries a `v-slot` renders nothing: Vue expects a parent that
+ * provides that slot, and there is none. Seven components (Form, Kibana, Grafana, External, Upload,
+ * Vega, ChangePassword) ended up in that state after the migration — blank screens, with no error
+ * in the console.
  *
- * Ce test vérifie que le bloc de template de chaque composant est un vrai racine.
+ * This test checks that the template block of every component is a real root.
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'

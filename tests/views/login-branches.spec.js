@@ -37,8 +37,8 @@ function authResponse() {
               loc_title: 'Sales',
               apps: [
                 { rec_id: 'rec-1', title: 'Sales', loc_title: 'Sales' },
-                // l'application visee par la redirection doit exister dans le catalogue, sinon
-                // `changeApp` leve avant la navigation
+                // the application targeted by the redirect must exist in the catalogue, otherwise
+                // `changeApp` throws before navigating
                 { rec_id: 'rec-9', title: 'Other', loc_title: 'Other' },
               ],
             },
@@ -200,7 +200,7 @@ describe('Login — apres l authentification', () => {
 
     expect(router.currentRoute.value.path).toBe('/main/rec-9')
     expect(store.state.activeApp.rec_id).toBe('rec-9')
-    // la redirection sert une fois : elle est consommee
+    // the redirect is good for one use: it is consumed
     expect(store.state.redirection).toBeNull()
   })
 })

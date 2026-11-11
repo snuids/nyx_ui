@@ -1,38 +1,38 @@
 /**
- * La lecture d'un mapping Elasticsearch dans l'editeur de table (`ESTableEditor`).
+ * Reading an Elasticsearch mapping in the table editor (`ESTableEditor`).
  *
- * L'editeur dechiffre le mapping renvoye par `esmapping/` : il aplatit les proprietes imbriquees en
- * chemins pointes (`client.address.city`), classe les champs `date` et `geo_point`, ajoute les deux
- * champs systeme, propose des candidats latitude/longitude quand l'index n'a pas de `geo_point`, et
- * convertit la liste des colonnes d'export dans les deux sens (`client->Client`).
+ * The editor decodes the mapping returned by `esmapping/`: it flattens the nested properties into
+ * dotted paths (`client.address.city`), classifies `date` and `geo_point` fields, adds the two
+ * system fields, offers latitude/longitude candidates when the index has no `geo_point`, and
+ * converts the export column list both ways (`client->Client`).
  *
- * Tout cela vivait dans le composant, en recursion sur `this` : aucun test ne l'atteignait sans
- * monter l'editeur et simuler un mapping complet. Ce sont des fonctions ici : elles prennent un
- * mapping, elles rendent des champs.
+ * All of that lived in the component, recursing on `this`: no test reached it without mounting
+ * the editor and simulating a complete mapping. They are functions here: they take a mapping,
+ * they return fields.
  */
 
-/** Les deux champs que tout index expose, et que l'editeur propose comme les autres. */
+/** The two fields every index exposes, and which the editor offers like the others. */
 export const SYSTEM_FIELDS = {
   _id: { field: "_id", type: "_id", title: "_id" },
   _index: { field: "_index", type: "_index", title: "_index" },
 };
 
 /**
- * Les deux entrees ajoutees au selecteur de temps quand l'index a au moins un champ `date` : une
- * pour revenir en arriere, une pour renoncer au filtre de temps.
+ * The two entries added to the time selector when the index has at least one `date` field: one to
+ * go back, one to give up the time filter.
  */
 export const TIME_SELECTOR_PLACEHOLDERS = {
   _____________________: { field: "_____________________" },
   none: { field: "I don't want to use the Time Filter" },
 };
 
-/** Ce que le formulaire envoie quand la personne renonce au filtre de temps. */
+/** What the form sends when the person gives up the time filter. */
 export const NO_TIME_FILTER = "I don't want to use the Time Filter";
 
 /**
- * Les types qui peuvent porter une latitude ou une longitude.
+ * The types that can carry a latitude or a longitude.
  *
- * `keyword` y figure : une coordonnee stockee en texte reste exploitable pour la carte.
+ * `keyword` is in there: a coordinate stored as text is still usable for the map.
  */
 export const LAT_LON_TYPES = [
   "long",
@@ -47,7 +47,7 @@ export const LAT_LON_TYPES = [
   "keyword",
 ];
 
-/** Aplatit les proprietes d'un mapping en champs pointes, en notant les dates et les geo_points. */
+/** Flattens a mapping's properties into dotted fields, noting dates and geo_points. */
 function walkProperties(path, struct, out) {
   for (const name in struct.properties || {}) {
     const child = struct.properties[name];
@@ -66,13 +66,13 @@ function walkProperties(path, struct, out) {
 }
 
 /**
- * Les champs d'un mapping `esmapping/`.
+ * The fields of an `esmapping/` mapping.
  *
- * La reponse a la forme `{ index: { obj: { mappings: {...} } } }`. Les mappings ES 6 portent un type
- * intermediaire (`mappings: { doc: { properties } }`), les recents non (`mappings: { properties }`) :
- * les deux sont acceptes, sinon un index ancien n'afficherait aucun champ.
+ * The response has the shape `{ index: { obj: { mappings: {...} } } }`. ES 6 mappings carry an
+ * intermediate type (`mappings: { doc: { properties } }`), recent ones do not
+ * (`mappings: { properties }`): both are accepted, otherwise an old index would show no field.
  *
- * Rend `{ allFields, timeFields, geoFields, noTimeField }`.
+ * Returns `{ allFields, timeFields, geoFields, noTimeField }`.
  */
 export function flattenMapping(esMapping) {
   const out = {
@@ -99,10 +99,10 @@ export function flattenMapping(esMapping) {
 }
 
 /**
- * Le selecteur de temps, avec ses deux entrees de sortie.
+ * The time selector, with its two exit entries.
  *
- * Elles ne sont ajoutees que si l'index a un champ de date : sinon le selecteur ne contient que
- * « je ne veux pas de filtre de temps », ce qui est deja le cas par defaut.
+ * They are added only when the index has a date field: otherwise the selector contains only
+ * "I don't want to use the Time Filter", which is already the default.
  */
 export function withTimeSelectors(timeFields) {
   const out = { ...(timeFields || {}) };
@@ -110,17 +110,17 @@ export function withTimeSelectors(timeFields) {
   return out;
 }
 
-/** Les champs sous la forme `{ nom: { field: nom } }` attendue par les selects. */
+/** The fields in the `{ name: { field: name } }` shape the selects expect. */
 export function allFieldsAsList(allFields) {
   return Object.assign({}, ...Object.keys(allFields || {}).map((name) => ({ [name]: { field: name } })));
 }
 
 /**
- * Les candidats latitude / longitude, quand l'index n'a pas de `geo_point`.
+ * The latitude / longitude candidates, when the index has no `geo_point`.
  *
- * On propose les champs de type numerique ou `keyword`, par ordre alphabetique. Si le mapping n'en
- * declare aucun du bon type, on rend tous les champs : une liste vide serait pire qu'une liste
- * imparfaite, la personne peut encore choisir.
+ * The fields of numeric or `keyword` type are offered, in alphabetical order. If the mapping
+ * declares none of the right type, every field is returned: an empty list would be worse than an
+ * imperfect one, the person can still choose.
  */
 export function latLonCandidates(allFields) {
   const fields = allFields || {};
@@ -129,16 +129,16 @@ export function latLonCandidates(allFields) {
   return names.sort().map((field) => ({ field }));
 }
 
-/** La liste des colonnes d'export (`[{field, title}]`) telle que la configuration la stocke. */
+/** The export column list (`[{field, title}]`) as the configuration stores it. */
 export function exportColumnsFromTableFields(tableFields) {
   return (tableFields || []).map((entry) => entry.field + "->" + entry.title).join();
 }
 
 /**
- * L'inverse : `client->Client,date->Date` devient la liste des colonnes.
+ * The reverse: `client->Client,date->Date` becomes the column list.
  *
- * Un segment sans fleche garde son nom comme titre (`client` -> `{field: 'client', title: client}`,
- * le titre valant `undefined` dans la configuration d'origine, ce que le formulaire affiche vide).
+ * A segment without an arrow keeps its name as title (`client` -> `{field: 'client', title: client}`,
+ * the title being `undefined` in the original configuration, which the form displays empty).
  */
 export function tableFieldsFromExportColumns(exportColumns) {
   return String(exportColumns || "")
@@ -151,11 +151,10 @@ export function tableFieldsFromExportColumns(exportColumns) {
 }
 
 /**
- * Ce que vaut le champ de temps choisi, et ce qu'il faut effacer avec.
+ * What the chosen time field resolves to, and what must be cleared with it.
  *
- * Le selecteur melange les vrais champs et deux entrees de service : le retour en arriere
- * (`_____...`) qui ne doit rien changer, et « pas de filtre de temps » qui doit aussi decocher le
- * graphique et le selecteur de periode.
+ * The selector mixes real fields and two service entries: the back one (`_____...`) which must
+ * change nothing, and "no time filter" which must also untick the chart and the period selector.
  */
 export function timefieldSelection(value) {
   if (value === "_____________________") {
@@ -169,17 +168,17 @@ export function timefieldSelection(value) {
   return { timefield: value, clearGraphic: false, backToNone: false };
 }
 
-/** Les noms de champs d'une liste `[{field, ...}]` : ce que les listes de glisser-deposer suivent. */
+/** Field names of a `[{field, ...}]` list: what the drag-and-drop lists follow. */
 export function fieldsOf(list) {
   return (list || []).map((entry) => entry.field);
 }
 
 /**
- * La liste des colonnes reconstruite a partir d'une selection de champs.
+ * The column list rebuilt from a field selection.
  *
- * Les deux selects de l'editeur (affichage et export) font la meme chose : garder l'entree deja
- * configuree quand le champ etait deja la — elle porte le titre et le lien que la personne a
- * saisis — et prendre la definition du mapping pour un champ nouvellement coche.
+ * The editor's two selects (display and export) do the same thing: keep the entry already
+ * configured when the field was already there — it carries the title and the link the person
+ * entered — and take the mapping's definition for a newly ticked field.
  */
 export function selectionToColumns(selected, previous, allFields) {
   const known = {};

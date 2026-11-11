@@ -3,7 +3,7 @@
 ![badge](https://img.shields.io/badge/made%20with-vuejs-blue.svg?style=flat-square)
 ![badge](https://img.shields.io/github/languages/code-size/snuids/nyx_ui)
 ![badge](https://img.shields.io/github/last-commit/snuids/nyx_ui)
-![couverture](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/snuids/nyx_ui/badges/coverage.json&style=flat-square)
+![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/snuids/nyx_ui/badges/coverage.json&style=flat-square)
 ![CI](https://img.shields.io/github/actions/workflow/status/snuids/nyx_ui/ci-tests.yml?style=flat-square&label=tests)
 
 
@@ -97,55 +97,55 @@ npm run build
 ### Tests
 
 ```
-npm test              # suite complete (logique + ecrans)
-npm run test:coverage # idem, avec le rapport de couverture
+npm test              # full suite (logic + screens)
+npm run test:coverage # same, with the coverage report
 ```
 
-Deux environnements cohabitent dans la meme suite : `node` pour les modules de logique et le
-store, `jsdom` pour les ecrans montes (le fichier de test le declare en tete :
-`// @vitest-environment jsdom`). Les composants Element Plus, le routeur memoire, l'i18n et les
-globals de `src/main.js` sont fournis par `tests/helpers/mount-view.js`.
+Two environments coexist in the same suite: `node` for the logic modules and the store, `jsdom`
+for the mounted screens (the test file declares it at the top:
+`// @vitest-environment jsdom`). The Element Plus components, the memory router, i18n and the
+globals of `src/main.js` are provided by `tests/helpers/mount-view.js`.
 
-La couverture porte sur tout `src` (javascript et `.vue`). Les seuils de `vitest.config.mjs` sont
-par glob : 97/94/96/97 sur le javascript de logique, 73 sur `src/views`, plus bas sur
-`src/components`, et un seuil global a 34/39/30/35 — un point sous la mesure (34,75 / 40,37 / 30,8 /
-35,94), assez haut pour qu'un ecran de test perdu fasse echouer la CI.
+Coverage runs over all of `src` (javascript and `.vue`). The thresholds of `vitest.config.mjs` are
+per glob: 97/94/96/97 on the logic javascript, 73 on `src/views`, lower on
+`src/components`, and a global threshold at 35/40/30/36 — one point below the measurement (36,30 /
+41,74 / 31,49 / 37,57), high enough that a lost test screen fails the CI.
 
-Etat au 10 novembre 2026 : **611 tests**, **34,75 %** des instructions de `src` (7 464). Par zone :
+Status on 11 November 2026: **736 tests**, **36,30 %** of the instructions of `src` (7 478). Per area:
 
-| zone | statements | branches | remarque |
+| area | statements | branches | remark |
 |---|---|---|---|
-| `src` (racine : `main`, `App`, i18n) | 62,5 % | 45,6 % | |
+| `src` (root: `main`, `App`, i18n) | 62,5 % | 45,6 % | |
 | `src/router` | 100 % | 91,7 % | |
 | `src/store` | 98,9 % | 95,0 % | |
 | `src/utils` | 99,6 % | 96,0 % | |
-| `src/views` | 75,4 % | 75,3 % | Login 79,7 · Main 64,7 · OAuth 100 · Privacy 100 |
-| `src/components` | 26,1 % | 31,4 % | les écrans montés tirent le chiffre vers le haut, les éditeurs restent peu couverts |
+| `src/views` | 75,4 % | 75,3 % | Login 92,0 · Main 85,3 · OAuth 100 · Privacy 100 |
+| `src/components` | 26,1 % | 31,4 % | the mounted screens pull the figure up, the editors stay poorly covered |
 
-Les composants non testes tirent le chiffre global vers le bas : c'est la mesure honnete, pas une
-regression. Prochaines cibles par taille et par risque : les éditeurs d'application
+The untested components pull the global figure down: that is the honest measurement, not a
+regression. Next targets by size and by risk: the application editors
 (`appConfigEditor/ESTableEditor`, `ConfigDetails`), `ReportGenerator` / `ReportTask`,
-`GenericTableDetails` (edition d'un enregistrement), `NYXInfo`, `PGGenericTable`.
+`GenericTableDetails` (record editing), `NYXInfo`, `PGGenericTable`.
 
-### Dependances
+### Dependencies
 
-`npm audit` signale 17 vulnerabilites (10 hautes, 7 moyennes) au 9 novembre 2026, contre 25 avant
-le lot de corrections du jour. Ce qui part dans le navigateur et ce qui ne quitte pas la chaine de
-construction n'ont pas le meme poids :
+`npm audit` reports 17 vulnerabilities (10 high, 7 moderate) on 9 November 2026, against 25 before
+the day's batch of fixes. What ships to the browser and what never leaves the build
+chain do not weigh the same:
 
-| paquet | d'ou il vient | etat |
+| package | where it comes from | status |
 |---|---|---|
-| `postcss`, `serialize-javascript`, `minimatch`, `uuid` | outillage de construction | **corriges** — les `overrides` de `package.json` les forcent a la version remediee (8.5.23, 7.1.3, 11.0.1, 11.1.1). Build de production et 608 tests verifies |
-| `webpack-dev-server`, `webpack-dev-middleware` | `@vue/cli-service` 5, uniquement `npm run serve` | rien dans cette version : vue-cli 5 exige `webpack-dev-server` 4, les avis sont corriges en 5.2. La console servie n'est pas concernee |
-| `@vue/cli-*`, `cross-spawn`, `execa`, `yorkie`, `glob`, `js-beautify` | meme outillage | `npm audit` ne propose qu'un **retour** a vue-cli 3.12 : aucune version remediee n'existe dans la 5. Construction et tests, jamais executes dans le navigateur |
-| `vue-i18n` 9.14.5 (+ `@intlify/*`) | **le bundle servi** | 9.14.5 est la derniere de la serie 9 (etiquette `legacy9`), qui n'est plus maintenue : GHSA-83rm-6c8r-g728 n'est corrige qu'a partir de 11.4.14 |
+| `postcss`, `serialize-javascript`, `minimatch`, `uuid` | build tooling | **fixed** — the `overrides` of `package.json` force them to the remedied version (8.5.23, 7.1.3, 11.0.1, 11.1.1). Production build and 608 tests verified |
+| `webpack-dev-server`, `webpack-dev-middleware` | `@vue/cli-service` 5, `npm run serve` only | nothing in this version: vue-cli 5 requires `webpack-dev-server` 4, the advisories are fixed in 5.2. The served console is not affected |
+| `@vue/cli-*`, `cross-spawn`, `execa`, `yorkie`, `glob`, `js-beautify` | same tooling | `npm audit` only offers a **downgrade** to vue-cli 3.12: no remedied version exists in the 5 line. Build and tests, never run in the browser |
+| `vue-i18n` 9.14.5 (+ `@intlify/*`) | **the served bundle** | 9.14.5 is the last of the 9 series (tag `legacy9`), which is no longer maintained: GHSA-83rm-6c8r-g728 is only fixed from 11.4.14 |
 
-L'exposition de `vue-i18n` est nulle en pratique aujourd'hui : les messages sont des fichiers JSON
-du depot, aucune chaine traduite n'est construite a partir d'une saisie, et `escapeParameter` n'est
-pas utilise. Passer a la 11 supprime le mode `legacy` : `$i18n.locale` devient une ref, donc chaque
-lecture et chaque ecriture — `this.$i18n.locale` dans quatre ecrans, le `watch` de `App.vue`, les
-tests qui lisent la locale — doit dire `.value`. C'est une migration a mener pour elle-meme, pas un
-correctif d'urgence.
+The exposure of `vue-i18n` is nil in practice today: the messages are JSON files
+of the repository, no translated string is built from user input, and `escapeParameter` is not
+used. Moving to 11 removes the `legacy` mode: `$i18n.locale` becomes a ref, so every
+read and every write — `this.$i18n.locale` in four screens, the `watch` of `App.vue`, the
+tests that read the locale — must say `.value`. That is a migration to carry out for its own sake, not an
+emergency fix.
 
 ### Extending the UI
 
@@ -167,7 +167,8 @@ docker build .
 
 ### Version History
 
-Current version: **v3.29.30** (24/Oct/2026).
+Current version: **v3.6.29** (11/Nov/2026) — the 3.29.x numbering shown here was
+superseded by the 3.5.0 restart of the line; see `versions.md`.
 
 * Fixed table header inputs (configuration filter/search) by restoring scoped header slots.
 

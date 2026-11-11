@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 /**
- * Ecran de connexion — le premier ecran de l'application, et celui dont les pannes se voient le
- * plus mal : un bouton grise sans explication, un jeton stocke mais aucune redirection, un message
- * « Request failed with status code 429 » laisse la ou il faudrait « trop de tentatives ».
+ * Login screen — the first screen of the application, and the one whose failures are the most
+ * visible: a greyed-out button with no explanation, a token stored but no redirect, a
+ * "Request failed with status code 429" left where "too many attempts" belongs.
  *
- * Les cas couverts sont ceux qui ont un effet observable pour l'utilisateur : etat du bouton,
- * erreur affichee, jeton conserve, chemin ouvert, changement de mot de passe force.
+ * The cases covered are those with an observable effect for the user: button state, displayed
+ * error, token kept, opened path, forced password change.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -22,7 +22,7 @@ import store from '@/store/store.js'
 
 vi.mock('axios')
 
-/** Reponse de `cred/login` telle que l'API la renvoie. */
+/** `cred/login` response as the API returns it. */
 function authResponse(overrides = {}) {
   const user = {
     login: 'alice',
@@ -80,7 +80,7 @@ afterEach(() => {
 const mountLogin = () =>
   mountView(Login, { mocks: { $notify: notify, $message: message, $prompt: prompt } })
 
-/** Remplit les deux champs et clique sur le bouton de connexion. */
+/** Fills both fields and clicks the sign-in button. */
 async function submitCredentials(wrapper, login = 'alice', password = 'motdepasse') {
   wrapper.vm.form.login = login
   wrapper.vm.form.password = password
@@ -111,8 +111,8 @@ describe('Login.vue — formulaire', () => {
     })
 
     const { wrapper } = await mountLogin()
-    // `created` interroge la config une seconde apres le montage : sans cette avance, l'ecran
-    // reste sur son etat « loading » que l'utilisateur voit au demarrage.
+    // `created` queries the config one second after mounting: without this advance, the screen
+    // stays on the "loading" state the user sees at start-up.
     await vi.advanceTimersByTimeAsync(1000)
     await flushPromises()
 
@@ -149,7 +149,7 @@ describe('Login.vue — connexion', () => {
   })
 
   it('traduit un 429 en « trop de tentatives » avec le delai d\'attente', async () => {
-    // Le portail repond 429 : sans ce message, l'utilisateur croit que son mot de passe est faux.
+    // The portal answers 429: without this message, the user believes their password is wrong.
     axios.post.mockRejectedValue({
       response: { status: 429, data: { error: 'TOO_MANY_ATTEMPTS', retry_after: 60 } },
     })
@@ -197,7 +197,7 @@ describe('Login.vue — connexion', () => {
   })
 
   it('avertit et revient a l\'accueil quand le compte n\'a aucune application', async () => {
-    // Compte sans application assignee : continuer faisait planter l'interface sur 'loc_title'.
+    // Account with no assigned application: carrying on crashed the interface on 'loc_title'.
     axios.post.mockResolvedValue(authResponse({ menus: [] }))
 
     const { wrapper, router } = await mountLogin()
@@ -290,7 +290,7 @@ describe('bouton GitHub et hauteur de la carte', () => {
   it("n'affiche pas le bouton quand l'API ne le declare pas configure", async () => {
     axios.get.mockResolvedValue({ data: { error: '', welcome: 'W', login: { github: false } } })
     const { wrapper } = await mountLogin()
-    // `loadConfig` part une seconde apres le montage (minuteurs simules dans ce fichier).
+    // `loadConfig` starts one second after mounting (fake timers in this file).
     await vi.advanceTimersByTimeAsync(1000)
     await flushPromises()
 
@@ -309,10 +309,10 @@ describe('bouton GitHub et hauteur de la carte', () => {
   })
 
   it('ne fige plus la hauteur de la carte', async () => {
-    // La carte avait `height: 200px`, taille du seul formulaire mot de passe : le bouton GitHub
-    // (separateur + bouton) debordait, et l'ecran demandait de defiler pour l'atteindre. Une
-    // assertion sur la feuille de style est le seul garde possible — jsdom ne calcule pas de mise
-    // en page, donc un debordement ne se voit pas au montage.
+    // The card had `height: 200px`, the size of the password form alone: the GitHub button
+    // (separator + button) overflowed, and the screen required scrolling to reach it. An assertion
+    // on the stylesheet is the only possible guard — jsdom does no layout, so an overflow is not
+    // visible at mount time.
     const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
     const rule = (selector) => {
       const m = source.match(new RegExp('\\' + selector + '\\s*{([^}]*)}'))
@@ -328,14 +328,14 @@ describe('bouton GitHub et hauteur de la carte', () => {
     expect(force.filter((l) => /^height\s*:/.test(l))).toEqual([])
     expect(force).toContain('min-height: 340px;')
 
-    // ...et une carte plus haute que la fenetre defile au lieu d'etre coupee.
+    // ...and a card taller than the window scrolls instead of being cut off.
     expect(rule('.login-container')).toContain('overflow-y: auto;')
   })
 
   it('garde le texte d’accueil sous la carte, quelle que soit sa hauteur', async () => {
-    // Avec la carte en absolu et le titre a `50% + 170px`, l'ajout du bouton GitHub faisait
-    // passer la carte par-dessus le titre : le texte blanc devenait invisible sur le fond blanc
-    // de la carte. Le groupe carte + titre est desormais en colonne, donc le titre suit.
+    // With the card positioned absolutely and the title at `50% + 170px`, adding the GitHub button
+    // pushed the card over the title: the white text became invisible on the card's white
+    // background. The card + title group is now a column, so the title follows.
     const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
     const group = source.match(/<div class="login-center"[^>]*>([\s\S]*?)<\/div>\s*\n\s*<!--/)
     expect(group, 'groupe .login-center introuvable').toBeTruthy()
@@ -358,7 +358,7 @@ describe('bouton GitHub et hauteur de la carte', () => {
     expect(group[1]).toContain('class="title-icon"')
     expect(group[1]).toContain('class="title-icon2"')
 
-    // ...et qu'ils se placent par rapport a la carte, pas au milieu de la page.
+    // ...and that they are positioned relative to the card, not to the middle of the page.
     const icon = source.match(/\.title-icon \{([^}]*)\}/)[1]
     expect(icon).toMatch(/top:\s*-\d+px/)
     expect(icon).not.toMatch(/margin-top:\s*-/)
@@ -371,8 +371,8 @@ describe('bouton GitHub et hauteur de la carte', () => {
     expect(media[1]).toMatch(/\.login-center,[\s\S]*?top:\s*8px/)
     expect(media[1]).toMatch(/display:\s*none/)
 
-    // Meme specificite que la regle generale : seule l'ordre dans la feuille decide, donc la
-    // requete media doit venir *apres* `.login-center`, sinon elle ne s'applique jamais.
+    // Same specificity as the general rule: only the order in the stylesheet decides, so the media
+    // query must come *after* `.login-center`, otherwise it never applies.
     expect(source.indexOf('@media (max-height: 470px)')).toBeGreaterThan(source.indexOf('.login-center {'))
   })
 

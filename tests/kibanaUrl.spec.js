@@ -1,10 +1,10 @@
 /**
- * L'URL d'un tableau de bord Kibana (`utils/kibanaUrl.js`).
+ * The URL of a Kibana dashboard (`utils/kibanaUrl.js`).
  *
- * Deux methodes de `ConfigDetails` construisaient cette chaine, branche par branche, a 0 % de
- * couverture : il fallait monter l'ecran et fabriquer un tableau de bord Kibana pour en atteindre
- * une seule. Ici, environnement `node`, chaque cas a son assertion — et le test de l'ecran monte
- * verifie que le composant produit exactement la meme URL qu'avant l'extraction.
+ * Two methods of `ConfigDetails` built this string, branch by branch, at 0 % coverage: reaching a
+ * single one required mounting the screen and building a Kibana dashboard. Here, a `node`
+ * environment, each case has its assertion — and the mounted-screen test checks that the component
+ * produces exactly the same URL as before the extraction.
  */
 
 import { describe, it, expect } from 'vitest'

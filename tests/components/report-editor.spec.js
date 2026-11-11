@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 /**
- * ReportEditor — l'editeur de rapport (application `Reports`) et son pied de dialogue.
+ * ReportEditor — the report editor (`Reports` application) and its dialog footer.
  *
- * Deux defauts signales y ont laisse une trace : les cartes d'aide n'etaient pas lisibles en mode
- * sombre (fond **en style inline** clair sous un texte clair, et trois des cinq lignes n'avaient pas
- * la classe commune `.desc-card`), et « Edit code » occupait sa propre ligne au-dessus
- * d'Annuler/Valider parce que deux colonnes `span="24"` ne peuvent pas cohabiter.
+ * Two reported defects left a mark there: the help cards were unreadable in dark mode (light
+ * **inline** background under light text, and three of the five lines lacked the shared
+ * `.desc-card` class), and "Edit code" took a line of its own above Cancel/Confirm because two
+ * `span="24"` columns cannot sit side by side.
  *
- * La fenetre est montee `append-to-body` (elle se teleporte) : on interroge donc `document`, comme le
- * ferait l'utilisateur, plutot que le wrapper.
+ * The window is mounted `append-to-body` (it teleports): we therefore query `document`, as the user
+ * would, rather than the wrapper.
  */
 
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
@@ -20,7 +20,7 @@ import { resetStore, mountView } from '../helpers/mount-view'
 
 vi.mock('axios')
 
-// `ReportList` passe `row._source` : le document est **aplati**, les champs a la racine.
+// `ReportList` passes `row._source`: the document is **flattened**, with fields at the root.
 const record = (source = {}) => ({
   title: 'Energy',
   reportType: 'notebook',
@@ -68,8 +68,8 @@ describe('ReportEditor — pied de dialogue', () => {
     await mountEditor()
     const columns = footerColumns()
 
-    // Deux `span="24"` ne tiennent pas sur une ligne : Element Plus empile la seconde, et « Edit
-    // code » se retrouvait seule au-dessus d'Annuler/Valider.
+    // Two `span="24"` do not fit on one line: Element Plus stacks the second, and "Edit code" ended
+    // up alone above Cancel/Confirm.
     expect(columns.length).toBe(2)
     expect(columns[0].className).toContain('el-col-12')
     expect(columns[1].className).toContain('el-col-12')
@@ -90,7 +90,7 @@ describe('ReportEditor — pied de dialogue', () => {
 
 describe('ReportEditor — aides de creation', () => {
   it('marque les cartes d\'aide de la classe commune attendue par le theme', async () => {
-    // Le theme sombre reprend `.desc-card .el-card` (fond inline clair + texte clair = illisible).
+    // The dark theme overrides `.desc-card .el-card` (light inline background + light text = unreadable).
     await mountEditor()
     const card = dialog().querySelector('.desc-card')
 
@@ -113,8 +113,8 @@ describe('ReportEditor — carte de description', () => {
     await mountEditor({ reportType: 'jasper_jdbc' })
     const card = dialog().querySelector('.desc-card .el-card')
 
-    // Les 70/90 px inline coupaient la description longue : une barre de defilement apparaissait
-    // dans la carte et la derniere ligne etait invisible.
+    // The inline 70/90 px cut long descriptions: a scrollbar appeared in the card and the last line
+    // was invisible.
     expect(card.getAttribute('style') || '').not.toMatch(/height/)
   })
 
@@ -122,8 +122,8 @@ describe('ReportEditor — carte de description', () => {
     await mountEditor({ reportType: 'python' })
     const inner = dialog().querySelector('.desc-card__inner')
 
-    // Les `el-col` etaient poses directement dans la carte, sans `el-row` : hors conteneur flex,
-    // l'icone et le texte ne partageaient pas la ligne.
+    // The `el-col` sat directly in the card, without an `el-row`: outside a flex container, the icon
+    // and the text did not share the line.
     expect(inner).toBeTruthy()
     expect(inner.querySelector('.desc-card__icon')).toBeTruthy()
     expect(inner.querySelector('.desc-card__text').textContent.trim().length).toBeGreaterThan(20)
@@ -148,8 +148,8 @@ describe('ReportEditor — depot du fichier JRXML', () => {
     await mountEditor({ reportType: 'jasper_jdbc' })
     const upload = dialog().querySelector('.upload-box')
 
-    // `style="height:30px"` sur `el-upload` avec un `dragger` de 40 px pour deux lignes de texte :
-    // le contenu debordait de 50 px sous sa ligne et passait par-dessus le champ suivant.
+    // `style="height:30px"` on `el-upload` with a 40 px `dragger` for two lines of text: the content
+    // overflowed by 50 px below its line and spilled over the next field.
     expect(upload.getAttribute('style') || '').not.toMatch(/height/)
     expect(upload.querySelector('.el-upload-dragger')).toBeTruthy()
   })
@@ -158,8 +158,8 @@ describe('ReportEditor — depot du fichier JRXML', () => {
     await mountEditor({ reportType: 'jasper' })
     const upload = dialog().querySelector('.upload-box')
 
-    // Enveloppe dans un `el-form-item` sans libelle, la zone reprend le retrait des champs voisins
-    // au lieu de partir du bord de la colonne.
+    // Wrapped in an `el-form-item` with no label, the zone takes the indent of the neighbouring
+    // fields instead of starting from the edge of the column.
     expect(upload.closest('.el-form-item')).toBeTruthy()
   })
 })

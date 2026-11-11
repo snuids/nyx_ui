@@ -1,8 +1,8 @@
 <template>
   <div style="position:relative;overflow: hidden;">
     <el-dialog :title="$t('processlist.title_process')+' '+detailsName+' ('+detailsVersion+')'" v-model="dialogVisible" width="65%">
-      <!-- `handleClick` n'a jamais existe dans methods : l'attribut ne faisait rien et Vue 3
-           signale un gestionnaire invalide. -->
+      <!-- `handleClick` never existed in methods: the attribute did nothing, and Vue 3 reports
+           an invalid handler. -->
       <el-tabs v-model="tabName">
         <el-tab-pane :label="$t('processlist.tab_general')" name="first">
           <el-table
@@ -414,10 +414,10 @@ export default {
 </script>
 
 <style>
-/* Les cartes de modules sont construites par `:class="'process_' + dat.css_class"` : le nom de la
-   classe n'apparait donc nulle part en clair dans le template, et une regle `.process_ok` retiree
-   comme « morte » casse l'affichage des modules sains sans rien casser au build (c'est arrive). Les
-   deux variantes se gardent ensemble. */
+/* The module cards are built by `:class="'process_' + dat.css_class"`: the class name
+   therefore appears nowhere in plain text in the template, and a `.process_ok` rule removed
+   as "dead" breaks the display of healthy modules without breaking anything at build time
+   (it happened). The two variants are kept together. */
 .process_ok {
   width: 280px;
   height: 120px;

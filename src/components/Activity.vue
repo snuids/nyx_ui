@@ -575,7 +575,7 @@ export default {
 .panel-title {
   font-size: 13px;
   font-weight: 600;
-  /* `#606266` en dur : identique en clair, illisible sur une carte sombre. */
+  /* Hard-coded `#606266`: identical in light, unreadable on a dark card. */
   color: var(--el-text-color-regular);
   margin-bottom: 4px;
 }

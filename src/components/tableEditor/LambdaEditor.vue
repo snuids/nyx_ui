@@ -220,8 +220,8 @@
             </el-col> -->
           </el-row>
         </el-card>
-        <!-- Un `div`, pas un `el-row` : en Element Plus `el-row` est un conteneur flex, et la carte
-             des logs s'y reduisait a la largeur de son contenu (672 px dans une fenetre de 767). -->
+        <!-- A `div`, not an `el-row`: in Element Plus `el-row` is a flex container, and the log
+             card shrank to the width of its content there (672 px in a 767 window). -->
         <div v-if="selectedRun" class="lambda-log">
           <LogViewer :logObj="logObj"></LogViewer>
         </div>
@@ -843,8 +843,8 @@ export default {
 </style>
 
 <style>
-/* La carte des logs prend toute la largeur du dialogue, et `min-width: 0` la laisse se reduire
-   quand la fenetre se retrecit au lieu de pousser une barre de defilement horizontale. */
+/* The log card takes the full width of the dialog, and `min-width: 0` lets it shrink when
+   the window narrows instead of pushing a horizontal scrollbar. */
 .lambda-log,
 .lambda-log > .el-card {
   width: 100%;

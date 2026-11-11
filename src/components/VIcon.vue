@@ -35,15 +35,15 @@ export default {
   props: {
     name: { type: String, required: true },
     scale: { type: [String, Number], default: 1 },
-    // vue-awesome prenait une prop `color`. Sans elle, la couleur passee par les appelants
-    // (`<v-icon :color="...">` dans les colonnes « format: icon ») etait perdue et les icones
-    // sortaient en noir la ou la version precedente les affichait en vert.
+    // vue-awesome took a `color` prop. Without it, the colour passed by the callers
+    // (`<v-icon :color="...">` in the "format: icon" columns) was lost and the icons came out
+    // black where the previous version showed them green.
     color: { type: String, default: '' },
     /**
-     * `vue-awesome` tournait l'icone avec une prop `spin` ; FontAwesome n'a pas d'equivalent en
-     * props, et son animation vit dans sa feuille de style, que ce projet ne charge pas. Sans cette
-     * prop, `<v-icon name="spinner" spin>` rendait un glyphe fixe : l'etat « Waiting » du tableau
-     * des rapports affichait un rond immobile au lieu d'un rond qui tourne.
+     * `vue-awesome` spun the icon with a `spin` prop; FontAwesome has no equivalent in props,
+     * and its animation lives in its stylesheet, which this project does not load. Without this
+     * prop, `<v-icon name="spinner" spin>` rendered a still glyph: the "Waiting" state of the
+     * report table showed a motionless circle instead of a spinning one.
      */
     spin: { type: Boolean, default: false },
   },
@@ -51,8 +51,8 @@ export default {
     return { icon: null }
   },
   watch: {
-    // le nom peut changer sans que le composant soit recree (colonnes d'un tableau, apercu du
-    // selecteur d'icones) : on resout a chaque fois, et on ignore une reponse arrivee trop tard
+    // the name can change without the component being recreated (table columns, icon picker
+    // preview): it is resolved every time, and a response arriving too late is ignored
     name: { immediate: true, handler: 'resolve' },
   },
   methods: {
@@ -106,9 +106,9 @@ export default {
   vertical-align: -0.125em;
 }
 
-/* La hauteur vient de `font-size` (scale x 1em), posee sur le conteneur. On ne fixe PAS la largeur :
-   FontAwesome la deduit du viewBox, et les icones larges (640 de large, comme « cogs ») sont plus
-   larges que hautes. Les forcer a 1em les rapetissait. */
+/* The height comes from `font-size` (scale x 1em), set on the container. The width is NOT
+   fixed: FontAwesome derives it from the viewBox, and wide icons (640 wide, like "cogs") are
+   wider than tall. Forcing them to 1em shrank them. */
 .nyx-icon svg {
   height: 1em;
   overflow: visible;

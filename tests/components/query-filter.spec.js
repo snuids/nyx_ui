@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /**
- * QueryFilter — les filtres d'ecran, et la chaine de requete qui en sort.
+ * QueryFilter — the screen filters, and the query string that comes out of them.
  *
- * Ce composant transforme des champs de formulaire en requete Elasticsearch
- * (`field:"valeur" AND (*texte*)`). C'est une logique pure, sans rendu a verifier, et une erreur
- * ici ne se voit pas : l'ecran repond, avec les mauvaises lignes.
+ * This component turns form fields into an Elasticsearch query (`field:"value" AND (*text*)`). It is
+ * pure logic, with no rendering to check, and an error here does not show: the screen answers, with
+ * the wrong rows.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -49,13 +49,13 @@ const mountFilter = async (queryfilters, overrides = {}) => {
     at: '/main/rec-1',
     props: { config: config(queryfilters, overrides) },
   })
-  await vi.advanceTimersByTimeAsync(1100) // le throttle de `refresh` est de 1 s
+  await vi.advanceTimersByTimeAsync(1100) // `refresh`'s throttle is 1 s
   return bar
 }
 
 describe('QueryFilter — construction de la requete', () => {
   it('cherche un champ texte en joker, meme sans etoile saisie', async () => {
-    // Comportement reel : un filtre `text` est encadre d'etoiles (recherche « contient »).
+    // Actual behaviour: a `text` filter is wrapped in stars (a "contains" search).
     const { wrapper } = await mountFilter([
       { title: 'Client', field: 'client', type: 'text', default: 'acme' },
     ])
@@ -64,8 +64,8 @@ describe('QueryFilter — construction de la requete', () => {
   })
 
   it('accepte une valeur numerique comme valeur de filtre', async () => {
-    // Avant la conversion en texte, un `default: 42` levait « valq.indexOf is not a function » et
-    // l'ecran ne filtrait plus du tout.
+    // Before the conversion to text, a `default: 42` threw "valq.indexOf is not a function" and
+    // the screen stopped filtering altogether.
     const { wrapper } = await mountFilter([
       { title: 'Montant', field: 'amount', type: 'text', default: 42 },
     ])
@@ -112,8 +112,8 @@ describe('QueryFilter — construction de la requete', () => {
   })
 
   it('perd l\'inversion sur un filtre texte, l\'etoile ajoutee passant devant', async () => {
-    // Quirk a garder en tete : `-annule` devient `status:*-annule*`, donc une recherche, pas une
-    // exclusion. Corriger changerait le sens des filtres deja enregistres dans `nyx_app`.
+    // Quirk to keep in mind: `-annule` becomes `status:*-annule*`, hence a search, not an
+    // exclusion. Fixing it would change the meaning of filters already saved in `nyx_app`.
     const { wrapper } = await mountFilter([
       { title: 'Etat', field: 'status', type: 'text', default: '-annule' },
     ])
@@ -207,7 +207,7 @@ describe('QueryFilter — donnees des filtres', () => {
   })
 
   it('charge les valeurs d\'un selecteur dynamique avant de filtrer', async () => {
-    // `queryselecter` : les valeurs viennent de l'API, pas de la configuration.
+    // `queryselecter`: the values come from the API, not from the configuration.
     axios.post.mockResolvedValue({
       data: {
         queryfilters: [
@@ -227,12 +227,12 @@ describe('QueryFilter — donnees des filtres', () => {
     await flushPromises()
     await vi.advanceTimersByTimeAsync(1100)
 
-    // Au premier chargement il n'y a pas encore de valeurs a joindre : la requete part avec la
-    // seule periode (ici aucune, `timefield` n'est pas configure).
+    // On first load there are no values to join yet: the request goes out with the period alone
+    // (none here, `timefield` is not configured).
     expect(axios.post).toHaveBeenCalledWith('api/v1/queryFilter/rec-1?token=tok', {})
-    // `*` est ajoute en tete pour offrir « pas de filtre ».
+    // `*` is prepended to offer "no filter".
     expect(wrapper.vm.queryFilterCopy[0].buckets[0]).toEqual({ key: '*' })
-    // `*` est justement la valeur « pas de filtre » : la requete reste vide.
+    // `*` is precisely the "no filter" value: the query stays empty.
     expect(wrapper.emitted('queryfilterchanged').pop()).toEqual([''])
   })
 

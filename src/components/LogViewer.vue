@@ -38,9 +38,9 @@
             prop="message"
             >
             <template #default="scope">              
-              <!-- `style="{...}"` etait du balisage Vue 2 laisse en attribut : le navigateur ignore
-                   une declaration invalide, donc NI la couleur NI le `pre-wrap` ne s'appliquaient et
-                   les longues lignes ne se repliaient pas (la table s'elargissait). -->
+              <!-- `style="{...}"` was Vue 2 markup left as an attribute: the browser ignores an invalid
+                   declaration, so NEITHER the colour NOR the `pre-wrap` applied and long lines did not
+                   wrap (the table widened). -->
               <span class="log-message">{{scope.row.message}}</span>
             </template>   
                       
@@ -181,8 +181,8 @@ export default {
   padding:0px !important;
 }
 
-/* Les logs contiennent des lignes longues (du JSON) : `pre-wrap` garde la mise en forme et replie
-   ce qui depasse, sinon la colonne s'elargit et pousse une barre de defilement horizontale. */
+/* The logs contain long lines (JSON): `pre-wrap` keeps the formatting and wraps what
+   overflows, otherwise the column widens and pushes a horizontal scrollbar. */
 .log-message {
   white-space: pre-wrap;
   overflow-wrap: anywhere;

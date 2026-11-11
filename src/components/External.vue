@@ -36,8 +36,8 @@ export default {
   name: "External",
   data: () => ({
     url: "",
-    // Le theme en cours, reactif : une application externe ne connait pas notre theme, elle le lit
-    // dans son URL. Sans cette valeur suivie, l'iframe gardait le theme du jour de son ouverture.
+    // The current theme, reactive: an external application does not know our theme, it reads it
+    // from its URL. Without this tracked value, the iframe kept the theme of the day it opened.
     themeName: currentTheme()
   }),
   props: {
@@ -136,11 +136,11 @@ export default {
           );
         }
 
-        // Une application branchee sur notre contexte (elle porte TOKEN, API ou LANG) recoit aussi
-        // le theme, meme si sa configuration ne cite pas THEME. Oublier le jeton dans une
-        // configuration ne produit aucune erreur : l'application s'ouvre simplement sans theme, et
-        // rien ne le dit. Les liens tiers (kibana, grafana, cerebro…) ne portent pas ces jetons et
-        // restent donc intacts.
+        // An application wired to our context (it carries TOKEN, API or LANG) also receives the
+        // theme, even when its configuration does not mention THEME. Forgetting the token in a
+        // configuration produces no error: the application simply opens without a theme, and
+        // nothing says so. Third-party links (kibana, grafana, cerebro…) stay untouched, since
+        // they do not carry those tokens.
         const usesConsoleContext = /token=TOKEN|\bAPI\b|\bLANG\b/.test(
           this.config.config.url
         );
@@ -154,8 +154,8 @@ export default {
   mounted: function() {
     console.log("===============  REGISTERING EXTERNAL:");
 
-    // `nyx:theme` est emis par `applyTheme` a chaque bascule clair/sombre : on recalcule alors
-    // l'URL de l'iframe, donc le parametre THEME qu'elle porte.
+    // `nyx:theme` is emitted by `applyTheme` on every light/dark switch: the iframe URL is then
+    // recomputed, hence the THEME parameter it carries.
     this.themeHandler = () => {
       this.themeName = currentTheme();
     };

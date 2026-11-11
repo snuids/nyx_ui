@@ -2,9 +2,9 @@
  * `vue-browser-geolocation` has no Vue 3 release; Form.vue only needs a promise around
  * navigator.geolocation, which is what `$geolocation.getCurrentPosition(options)` provides.
  */
-/* `vue-browser-geolocation` exposait `Vue.prototype.$getLocation(options)` ; les formulaires
- * l'appellent (`this.$getLocation({...}).then(...)`). Sans cet alias, chaque soumission levait
- * `TypeError: this.$getLocation is not a function` et le bouton restait bloque sur son spinner. */
+/* `vue-browser-geolocation` exposed `Vue.prototype.$getLocation(options)`; the forms call it
+ * (`this.$getLocation({...}).then(...)`). Without this alias, every submission raised
+ * `TypeError: this.$getLocation is not a function` and the button stayed stuck on its spinner. */
 export const getLocation = (options = {}) => geolocation.getCurrentPosition(options)
 
 export const geolocation = {

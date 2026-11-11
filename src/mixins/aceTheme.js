@@ -30,7 +30,7 @@ export default {
     aceTheme: aceThemeFor(currentTheme())
   }),
   mounted: function() {
-    // Le theme est deja applique au montage ; seul un changement ensuite demande un nouveau rendu.
+    // The theme is already applied on mount; only a later change needs a new render.
     this.aceThemeHandler = () => {
       this.aceTheme = aceThemeFor(currentTheme());
       this.syncAceEditors();

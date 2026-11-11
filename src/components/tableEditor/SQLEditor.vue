@@ -317,7 +317,7 @@ export default {
   padding: 20px;
 }
 .sql-editor .el-form-item__label {
-  /* Même gris clair écrit en dur que dans l'éditeur d'enregistrement : illisible en mode sombre. */
+  /* Same hard-coded light grey as in the record editor: unreadable in dark mode. */
   color: var(--el-text-color-regular);
   font-weight: 600;
 }

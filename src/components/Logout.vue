@@ -19,8 +19,8 @@
           <v-icon class="menuicon" name="shield-alt" scale="1" />
           &nbsp;&nbsp;{{ $t("logout.privacy") }}
         </el-dropdown-item>
-        <!-- Apparence : trois choix, celui en cours coche. Le theme suit le compte (champ `theme`
-             du document utilisateur), donc le choix survit a un autre navigateur. -->
+        <!-- Appearance: three choices, the current one ticked. The theme follows the account
+             (`theme` field of the user document), so the choice survives another browser. -->
         <el-dropdown-item divided disabled class="theme-heading">
           {{ $t("theme.appearance") }}
         </el-dropdown-item>
@@ -50,8 +50,9 @@ import { THEMES, applyTheme, readStoredTheme, rememberInSession, storeTheme } fr
 export default {
   name: "Logout",
   data: () => ({
-    // Le theme en cours, pour la coche du menu. `readStoredTheme` lit la copie locale, ecrite au
-    // boot et a chaque choix ; a defaut, le compte fournit la valeur (voir la mutation `login`).
+    // The current theme, for the menu tick. `readStoredTheme` reads the local copy, written at
+    // boot and on every choice; failing that, the account provides the value (see the `login`
+    // mutation).
     theme: readStoredTheme() || "auto"
   }),
   props: {},
@@ -80,8 +81,8 @@ export default {
         this.setTheme(e.slice("theme:".length));
       } else this.logout();
     },
-    // Applique tout de suite, puis enregistre sur le compte. Un echec d'enregistrement est dit a
-    // l'utilisateur : le theme tient localement, mais l'annoncer comme sauve garde serait faux.
+    // Applied straight away, then saved on the account. A save failure is reported to the user:
+    // the theme holds locally, but announcing it as saved would be a lie.
     setTheme(preference) {
       this.theme = preference;
       applyTheme(preference);
@@ -159,8 +160,7 @@ export default {
   margin-bottom: -3px;
 }
 
-/* L'en-tete « Apparence » est un element desactive : il ne doit pas reagir au survol comme une
-   commande. */
+/* The "Appearance" header is a disabled item: it must not react to hover like a command. */
 .el-dropdown-menu__item.theme-heading {
   font-size: 12px;
   text-transform: uppercase;
@@ -175,8 +175,9 @@ export default {
   color: inherit;
 }
 
-/* La coche du choix en cours. `.el-dropdown-menu__item` est deja un flex : `margin-left: auto` la
-   pousse a droite sans deborder du menu (un `float: right` la faisait sortir de la zone cliquable). */
+/* The tick of the current choice. `.el-dropdown-menu__item` is already a flex container:
+   `margin-left: auto` pushes it right without overflowing the menu (a `float: right` moved
+   it out of the clickable area). */
 .theme-check {
   margin-left: auto;
 }

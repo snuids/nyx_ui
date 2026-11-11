@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 /**
- * Ecran /privacy — la notice de protection des donnees.
+ * /privacy screen — the data protection notice.
  *
- * Page publique, donc joignable avant toute connexion et sans API : c'est justement l'endpoint qui
- * la remplit (`config.privacy`) qui peut ne pas repondre. Le test verifie les deux etats — texte
- * avec ses placeholders « a completer », puis texte rempli — parce que le contrat est que la notice
- * s'affiche dans tous les cas.
+ * A public page, hence reachable before any sign-in and without an API: it is precisely the
+ * endpoint that fills it (`config.privacy`) that may fail to answer. The test checks both states —
+ * text with its "to be completed" placeholders, then filled text — because the contract is that the
+ * notice shows in every case.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -44,7 +44,7 @@ describe('Privacy.vue', () => {
   })
 
   it('garde les placeholders quand l\'API ne repond pas', async () => {
-    // Le pire cas : la page doit rester lisible, pas vide.
+    // The worst case: the page must stay readable, not empty.
     axios.get.mockRejectedValue(new Error('network down'))
 
     const { wrapper } = await mountView(Privacy)

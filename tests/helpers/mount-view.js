@@ -1,14 +1,14 @@
 /**
- * Montage des ecrans (.vue) dans jsdom.
+ * Mounting the (.vue) screens in jsdom.
  *
- * Jusqu'ici les tests ne couvraient que les modules de logique (`vitest.config.mjs` : environnement
- * `node`). Les 63 composants mono-fichier — 24 000 lignes, l'essentiel de l'interface — n'etaient
- * executes par aucun test. Ce helper monte un ecran avec les memes globals que `src/main.js`
- * (`$icons`, `$filters`, `$numeral`, les bus, la geolocalisation) pour que le rendu soit celui de
- * l'application, pas celui d'un composant isole dans un environnement irrealiste.
+ * Until now the tests only covered the logic modules (`vitest.config.mjs`: `node` environment).
+ * The 63 single-file components — 24,000 lines, the bulk of the interface — were executed by no
+ * test at all. This helper mounts a screen with the same globals as `src/main.js` (`$icons`,
+ * `$filters`, `$numeral`, the buses, geolocation) so that the rendering is the application's, not
+ * that of an isolated component in an unrealistic environment.
  *
- * Le store est le singleton de l'application, comme dans `tests/store.spec.js` : chaque test le
- * remet dans son etat initial avec `resetStore`, sinon l'ordre d'execution devient significatif.
+ * The store is the application singleton, as in `tests/store.spec.js`: each test puts it back into
+ * its initial state with `resetStore`, otherwise execution order becomes significant.
  */
 
 import { mount } from '@vue/test-utils'
@@ -25,10 +25,10 @@ import { geolocation, getLocation } from '@/utils/geolocation'
 import VIcon from '@/components/VIcon.vue'
 import store from '@/store/store.js'
 
-/** Etat du store au chargement du module : reference pour `resetStore`. */
+/** Store state at module load: the reference used by `resetStore`. */
 const initialState = JSON.parse(JSON.stringify(store.state))
 
-/** Remet le store dans son etat de depart, en appliquant les valeurs du test. */
+/** Puts the store back into its starting state, applying the test's own values. */
 export function resetStore(patch = {}) {
   store.replaceState({ ...JSON.parse(JSON.stringify(initialState)), ...patch })
   return store
@@ -36,7 +36,7 @@ export function resetStore(patch = {}) {
 
 const Blank = { template: '<div />' }
 
-/** Routeur memoire : les ecrans testent `$router.push`/`back` sans toucher a l'URL reelle. */
+/** Memory router: screens exercise `$router.push`/`back` without touching the real URL. */
 export function makeRouter() {
   return createRouter({
     history: createMemoryHistory(),
@@ -50,10 +50,10 @@ export function makeRouter() {
 }
 
 /**
- * Monte un composant avec les plugins et globals de l'application.
+ * Mounts a component with the application's plugins and globals.
  *
- * `mocks` prend le dessus sur les globals (`$notify`, `$prompt`, `$message`) : c'est par la qu'un
- * test observe ce qui aurait ete affiche a l'utilisateur.
+ * `mocks` takes precedence over the globals (`$notify`, `$prompt`, `$message`): that is how a test
+ * observes what would have been displayed to the user.
  */
 export async function mountView(component, options = {}) {
   const {

@@ -87,12 +87,12 @@ export default {
   margin-bottom: -3px;
 }
 
-/* La capture de la version Vue 2 montre, dans ce panneau, de grands boutons carres (~80 x 64 px)
-   avec une icone de 40 px et le libelle SOUS le bouton. Les forcer a 40 x 40 laissait les cellules de
-   90 px presque vides : c'est ce qui donnait l'impression de « trop de padding ». On rend au bouton
-   sa taille naturelle et on fixe l'icone a 40 px. */
-/* Cible uniquement le panneau des applications : `.el-popover .el-button` touchait aussi les autres
-   infobulles, dont celle du telechargement, dont les boutons .xlsx/.csv passaient de 24 a 64 px. */
+/* The Vue 2 screenshots show, in this panel, large square buttons (~80 x 64 px) with a 40 px
+   icon and the label UNDER the button. Forcing them to 40 x 40 left the 90 px cells almost
+   empty: that is what gave the impression of "too much padding". The button gets its natural
+   size back and the icon is fixed at 40 px. */
+/* Targets the applications panel only: `.el-popover .el-button` also hit the other
+   popovers, including the download one, whose .xlsx/.csv buttons went from 24 to 64 px. */
 .app-popover-panel .el-button,
 #app-popover .el-button {
   width: auto;

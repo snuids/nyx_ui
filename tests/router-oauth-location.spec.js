@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 /**
- * Le retour GitHub arrive sur un chemin (`/oauth?code=…`), la console est servie en mode hash.
- * Sans ce report, l'application demarrerait sur `/`, monterait l'ecran de connexion, et la session
- * ne serait jamais terminee — le symptome serait « le bouton GitHub ne fait rien ».
+ * The GitHub return arrives on a path (`/oauth?code=…`), while the console is served in hash mode.
+ * Without this forwarding, the application would start on `/`, mount the login screen, and the
+ * session would never be completed — the symptom would be "the GitHub button does nothing".
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'

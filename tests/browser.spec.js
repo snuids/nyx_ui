@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
- * `vue-browser-detect-plugin` n'a pas de version Vue 3. Kibana.vue ne lisait que quatre drapeaux,
- * recalcules ici depuis `detect-browser`.
+ * `vue-browser-detect-plugin` has no Vue 3 version. Kibana.vue only read four flags,
+ * recomputed here from `detect-browser`.
  */
 import { describe, it, expect } from 'vitest'
 import { browserDetect } from '@/utils/browser'
@@ -19,7 +19,7 @@ describe('browserDetect', () => {
   })
 
   it('ne confond pas un navigateur avec les autres', () => {
-    // au moins un drapeau doit rester faux, sinon la table est ecrasee
+    // at least one flag must stay false, otherwise the table is overwritten
     const flags = ['isIE', 'isEdge', 'isChrome', 'isChromeIOS'].map((f) => browserDetect[f])
     expect(flags.some((v) => v === false)).toBe(true)
   })

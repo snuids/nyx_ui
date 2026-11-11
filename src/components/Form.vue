@@ -153,8 +153,8 @@ export default {
           this.commitunderway = false;
         })
         .catch(error => {
-          // Sans cette remise a zero, le bouton restait bloque sur son spinner des que la
-          // geolocalisation etait refusee (ou indisponible) : l'utilisateur voyait « send plante ».
+          // Without this reset, the button stayed stuck on its spinner as soon as geolocation was
+          // refused (or unavailable): the user saw "send crashed".
           this.commitunderway = false;
           alert(error);
         });

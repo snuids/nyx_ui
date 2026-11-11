@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
 /**
- * LambdaEditor — la fenetre « Lambda Status » d'une fonction (app `Lambdas`, index `nyx_lambda`).
+ * LambdaEditor — the "Lambda Status" window of a function (app `Lambdas`, index `nyx_lambda`).
  *
- * Deux defauts y ont ete signales le meme jour : le log ne prenait pas la largeur du dialogue (il
- * etait dans un `el-row`, conteneur flex en Element Plus, donc reduit a son contenu) et les longues
- * lignes de log ne se repliaient pas (un `style="{...}"` invalide herite de Vue 2). Les tests
- * verrouillent la structure qui corrige les deux, plus ce que le composant decide : copie de travail
- * du document, URL du bloc-notes, ecoute des runs.
+ * Two defects were reported there on the same day: the log did not take the dialog's width (it sat
+ * in an `el-row`, a flex container in Element Plus, hence shrunk to its content) and long log lines
+ * did not wrap (an invalid `style="{...}"` inherited from Vue 2). The tests lock the structure that
+ * fixes both, plus what the component decides: working copy of the document, notebook URL,
+ * listening to runs.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -26,7 +26,7 @@ const record = (source = {}) => ({
     runner: 'runner_a',
     file: 'report_energy',
     orgfunction: 'cron_energy',
-    // le gabarit lit `result_icon.split('>')` : sans champ, le rendu leve
+    // the template reads `result_icon.split('>')`: without the field, rendering throws
     result_icon: 'info-circle>#409eff',
     ...source,
   },
@@ -43,8 +43,8 @@ const lambdas = {
   },
 }
 
-// `el-dialog` ouvre un teleport : sans ce double, le contenu part dans `document.body` et
-// `wrapper.find` ne le voit pas. Le double rend les deux slots a leur place.
+// `el-dialog` opens a teleport: without this double, the content goes into `document.body` and
+// `wrapper.find` does not see it. The double renders both slots in place.
 const DialogStub = { template: '<div class="dialog-stub"><slot /><slot name="footer" /></div>' }
 const stubs = {
   LogViewer: { template: '<div class="log-viewer-stub" />' },
@@ -86,13 +86,13 @@ describe('LambdaEditor — mise en page du log', () => {
 
     const holder = wrapper.find('.lambda-log')
     expect(holder.exists()).toBe(true)
-    // `el-row` est un conteneur flex : la carte s'y reduisait a la largeur de son contenu.
+    // `el-row` is a flex container: the card shrank there to the width of its content.
     expect(holder.element.closest('.el-row')).toBe(null)
     expect(holder.find('.log-viewer-stub').exists()).toBe(true)
   })
 
   it('cache le log quand aucun run n\'est selectionne', async () => {
-    // Le composant selectionne lui-meme le dernier run : c'est en le retirant qu'on verifie le `v-if`.
+    // The component selects the last run itself: removing it is how we check the `v-if`.
     const { wrapper } = await mountEditor()
     wrapper.vm.selectedRun = { time: '2026-11-07T10:00:00Z' }
     await wrapper.vm.$nextTick()
@@ -107,8 +107,8 @@ describe('LambdaEditor — mise en page du log', () => {
     const { wrapper } = await mountEditor()
     const button = Array.from(wrapper.findAll('button')).find((b) => /edit/i.test(b.text()))
     expect(button).toBeTruthy()
-    // Un `min-width: 112px` sur ce bouton, avec les quatre colonnes de champs de la meme ligne,
-    // poussait la ligne au-dela de la largeur disponible (barre de defilement horizontale).
+    // A `min-width: 112px` on this button, together with the four field columns of the same line,
+    // pushed the line past the available width (horizontal scrollbar).
     expect(button.attributes('style') || '').not.toContain('min-width')
   })
 })
@@ -154,7 +154,7 @@ describe('LambdaEditor — donnees', () => {
   it('reste en lecture seule hors du mode edition', async () => {
     const { wrapper } = await mountEditor('view')
     expect(wrapper.vm.locEditMode).toBe('view')
-    // Les champs Mode / Runner / File sont desactives dans ce mode
+    // The Mode / Runner / File fields are disabled in this mode
     expect(wrapper.find('.el-dialog').exists() || true).toBe(true)
   })
 })

@@ -3,8 +3,8 @@ const path = require('path')
 // baseUrl: '/nyx',
 
 module.exports = {
-    // Permet de servir la meme construction sous un sous-chemin (/nyxv3/) sans toucher au code :
-    // la valeur par defaut reste la racine.
+    // Lets the same build be served under a sub-path (/nyxv3/) without touching the code:
+    // the default value stays the root.
     publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
     lintOnSave: false,
     productionSourceMap: false,

@@ -1,8 +1,8 @@
 /**
- * vue-i18n 8 exposait `i18n.t(...)` sur l'instance ; la version 9 le deplace sur `i18n.global`.
- * Les appels restes en v8 levaient `TypeError: i18n.t is not a function` **dans `data()`**, donc
- * avant tout rendu : la fenetre ne s'ouvrait pas du tout, sans message (c'est ce qui cassait
- * l'edition d'un utilisateur et l'edition d'un rapport).
+ * vue-i18n 8 exposed `i18n.t(...)` on the instance; version 9 moves it to `i18n.global`.
+ * Calls left in v8 raised `TypeError: i18n.t is not a function` **inside `data()`**, hence
+ * before any render: the window did not open at all, with no message (that is what broke
+ * editing a user and editing a report).
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'

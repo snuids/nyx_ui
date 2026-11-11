@@ -1,18 +1,18 @@
 // @vitest-environment jsdom
 /**
- * Element UI 2 -> Element Plus a renomme des composants, et un nom qui n'existe plus ne casse rien :
- * Vue le prend pour un composant inconnu, n'affiche rien, et la fonction disparait sans message.
- * C'est ainsi que la barre de gauche a cesse de s'ouvrir (`el-submenu` s'appelle `el-sub-menu`).
+ * Element UI 2 -> Element Plus renamed components, and a name that no longer exists breaks nothing:
+ * Vue takes it for an unknown component, renders nothing, and the feature disappears without a
+ * message. That is how the left bar stopped opening (`el-submenu` is now called `el-sub-menu`).
  *
- * Ce test lit les 62 composants du projet et verifie que chaque balise `el-*` utilisee existe
- * vraiment dans Element Plus. Il attrape les renommages restants et les fautes de frappe.
+ * This test reads the 62 components of the project and checks that every `el-*` tag used really
+ * exists in Element Plus. It catches the remaining renames and the typos.
  */
 import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import * as ElementPlus from 'element-plus'
 
-// vitest lance depuis la racine du projet
+// vitest runs from the project root
 const SRC = resolve(process.cwd(), 'src')
 
 function vueFiles(dir) {
@@ -25,7 +25,7 @@ function vueFiles(dir) {
   return out
 }
 
-// el-sub-menu -> ElSubMenu, ainsi de suite
+// el-sub-menu -> ElSubMenu, and so on
 const exported = new Set(
   Object.keys(ElementPlus)
     .filter((name) => /^El[A-Z]/.test(name))

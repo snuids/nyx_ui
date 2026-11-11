@@ -13,11 +13,11 @@ import { elementLocale } from "./i18n-setup";
 /* eslint-disable */
 export default {
   name: "App",
-  // Element Plus etait installe une fois pour toutes avec la langue lue au demarrage
-  // (`app.use(ElementPlus, { locale })`) : le selecteur de date gardait donc la langue du boot, alors
-  // que les libelles de la console suivaient le compte des la connexion. Un utilisateur dont le
-  // navigateur se souvenait du grec voyait sa console en francais et son calendrier en grec.
-  // `el-config-provider` rend la langue des composants Element Plus reactive.
+  // Element Plus used to be installed once and for all with the language read at startup
+  // (`app.use(ElementPlus, { locale })`): the date picker therefore kept the boot language,
+  // while the console labels followed the account from login on. A user whose browser
+  // remembered Greek saw a French console and a Greek calendar.
+  // `el-config-provider` makes the Element Plus component language reactive.
   watch: {
     "$i18n.locale": function(locale) {
       this.rememberLanguage(locale);
@@ -28,10 +28,10 @@ export default {
     wsInterval:null
   }),
   methods: {
-    // La langue d'Element Plus, pour `el-config-provider` : reactive, elle suit `$i18n.locale`.
+    // The Element Plus language, for `el-config-provider`: reactive, it follows `$i18n.locale`.
     elementLocale: elementLocale,
-    // Une langue choisie doit aussi se retenir et se dire au document, sinon le prochain demarrage
-    // repart d'une autre et le navigateur signale la mauvaise langue aux lecteurs d'ecran.
+    // A chosen language must also be remembered and announced to the document, otherwise the next
+    // start begins from another one, and the browser reports the wrong language to screen readers.
     rememberLanguage(locale) {
       if (!locale) return;
       document.documentElement.lang = locale;
@@ -58,11 +58,11 @@ export default {
             this.reportApiError(response.data)
             return response
         }, (error) => {
-            /* Depuis nyx_rest 3.22.23 les refus de token ne repondent plus 200 : NO_TOKEN et
-             * UNKNOWN_TOKEN sont des 401, NO_PRIVILEGE et MUST_CHANGE_PASSWORD des 403. Sans ce
-             * branchement, `axios` rejette la promesse et aucun `.then()` ne s'execute : l'ecran
-             * restait fige au lieu de deconnecter. Le corps garde sa forme, c'est donc le meme
-             * traitement que pour un 200 d'erreur. */
+            /* Since nyx_rest 3.22.23 token refusals no longer answer 200: NO_TOKEN and
+             * UNKNOWN_TOKEN are 401s, NO_PRIVILEGE and MUST_CHANGE_PASSWORD 403s. Without this
+             * branch, `axios` rejects the promise and no `.then()` runs: the screen stayed frozen
+             * instead of logging out. The body keeps its shape, so the handling is the same as
+             * for an error answered with a 200. */
             const payload = error.response && error.response.data
             this.reportApiError(payload)
             if (!(payload && payload.error)) {
@@ -73,8 +73,8 @@ export default {
         })
     },
 
-    /* Un refus d'authentification deconnecte, toute autre erreur de l'API se signale. Un 401 sur
-     * l'ecran de connexion n'est pas une session perdue : il reste silencieux. */
+    /* An authentication refusal logs out, any other API error is reported. A 401 on the
+     * login screen is not a lost session: it stays silent. */
     reportApiError(data) {
         if (data == null || data.error == null || data.error == '') {
             return
@@ -205,11 +205,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  /* `#2c3e50` etait le gris du theme clair, pose sur la racine de l'application : tout texte qui
-     n'a pas de couleur propre heritait de celui-la, donc restait sombre sur fond sombre (1,7:1 sur
-     `--nyx-surface`). Element Plus bascule cette variable avec le theme (#303133 en clair,
-     #e5eaf3 en sombre). Les regles `#nav`, heritees du squelette Vue CLI et sans element
-     correspondant, partent avec (l'une peignait un fond `aqua`). */
+  /* `#2c3e50` was the light theme's grey, set on the application root: any text without a
+     colour of its own inherited it, so it stayed dark on a dark background (1.7:1 on
+     `--nyx-surface`). Element Plus switches that variable with the theme (#303133 in light,
+     #e5eaf3 in dark). The `#nav` rules, inherited from the Vue CLI skeleton and with no
+     matching element, go with it (one of them painted an `aqua` background). */
   color: var(--el-text-color-primary);
 }
 /* 

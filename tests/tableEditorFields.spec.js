@@ -1,9 +1,9 @@
 /**
- * La lecture du mapping dans l'editeur de table (`utils/tableEditorFields.js`).
+ * Reading the mapping in the table editor (`utils/tableEditorFields.js`).
  *
- * Ces fonctions etaient en recursion dans `ESTableEditor`, donc atteignables seulement en montant
- * l'editeur et en lui donnant un mapping complet. Ici chaque cas — mapping imbrique, mapping ES 6
- * avec type intermediaire, index sans date, pas de `geo_point` — est une assertion.
+ * These functions were recursive inside `ESTableEditor`, hence reachable only by mounting the
+ * editor and giving it a complete mapping. Here each case — nested mapping, ES 6 mapping with an
+ * intermediate type, index without a date, no `geo_point` — is an assertion.
  */
 
 import { describe, it, expect } from 'vitest'
@@ -21,7 +21,7 @@ import {
   withTimeSelectors,
 } from '@/utils/tableEditorFields.js'
 
-/** Un `esmapping/` recent : `mappings: { properties }`. */
+/** A recent `esmapping/`: `mappings: { properties }`. */
 const modernMapping = {
   'deliveries*': {
     obj: {

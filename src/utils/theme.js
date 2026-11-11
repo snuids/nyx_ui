@@ -71,14 +71,14 @@ export function applyTheme(preference, now) {
   root.setAttribute("data-theme", resolved);
   root.setAttribute("data-theme-preference", preference || "auto");
   root.style.colorScheme = resolved;
-  // Les graphiques ne sont pas en CSS : Vega et le SVG maison doivent redessiner. Ils ecoutent cet
-  // evenement sur `document` plutot que de surveiller le DOM.
+  // Charts are not CSS: Vega and the hand-drawn SVG have to redraw. They listen for this event
+  // on `document` rather than watching the DOM.
   try {
     document.dispatchEvent(new CustomEvent("nyx:theme", {
       detail: { theme: resolved, preference: preference || "auto" },
     }));
   } catch (e) {
-    /* pas d'API d'evenements (test double, navigateur ancien) : les graphiques gardent leur rendu */
+    /* no event API (test double, old browser): the charts keep their rendering */
   }
   return resolved;
 }
@@ -89,7 +89,7 @@ export function currentTheme() {
   try {
     return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
   } catch (e) {
-    return "light"; // un DOM sans `getAttribute` (harnais de test) ne doit pas casser un rendu
+    return "light"; // a DOM without `getAttribute` (test harness) must not break a render
   }
 }
 

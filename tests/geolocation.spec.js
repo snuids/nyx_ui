@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
- * `vue-browser-geolocation` n'a pas de version Vue 3 : Form.vue utilise une promesse autour de
- * navigator.geolocation, qui est ce que ce module fournit.
+ * `vue-browser-geolocation` has no Vue 3 version: Form.vue uses a promise around
+ * navigator.geolocation, which is what this module provides.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { geolocation } from '@/utils/geolocation'

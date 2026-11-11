@@ -37,9 +37,9 @@
             </el-col>            
            </el-row >
 
-            <!-- Une seule carte, pilotee par le type choisi. Les cinq blocs precedents portaient une
-                 hauteur fixe (70 ou 90 px) et un `el-col` sans `el-row` : le texte des descriptions
-                 longues etait coupe, avec une barre de defilement dans la carte. -->
+            <!-- A single card, driven by the chosen type. The five previous blocks carried a fixed
+                 height (70 or 90 px) and an `el-col` without `el-row`: the text of long descriptions
+                 was cut, with a scrollbar inside the card. -->
             <el-row v-if="reportTypeDescription" class="desc-card">
               <el-card shadow="never" class="desc-card__card">
                 <div class="desc-card__inner">
@@ -181,8 +181,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" v-show="newRec.reportType=='jasper' || newRec.reportType=='jasper_jdbc'">
-            <!-- Dans un `el-form-item` sans libelle : la zone de depot s'aligne ainsi sur le champ
-                 de la colonne de gauche (meme retrait de libelle), au lieu de partir du bord. -->
+            <!-- Inside an `el-form-item` without a label: the drop zone thus lines up with the field
+                 of the left column (same label indent), instead of starting at the edge. -->
             <el-form-item :label-width="formLabelWidth">
             <el-upload
                 class="jasper-upload upload-box"
@@ -413,10 +413,10 @@
     </el-form>
 
     <template #footer><span class="dialog-footer">
-      <!-- Deux colonnes de `span="24"` ne peuvent pas cohabiter : Element Plus les empilait, donc
-           « Editer le code » occupait sa propre ligne au-dessus (ou en dessous) de Annuler/Valider.
-           Un pied de dialogue se lit sur une ligne : l'action secondaire a gauche, les deux boutons
-           de sortie a droite. -->
+      <!-- Two `span="24"` columns cannot coexist: Element Plus stacked them, so
+           "Editer le code" took a line of its own above (or below) Annuler/Valider.
+           A dialog footer reads on one line: the secondary action on the left, the two exit
+           buttons on the right. -->
       <el-row type="flex" class="row-bg" justify="space-between" align="middle">
       <el-col :span="12" style="text-align: left;">
         <el-button
@@ -451,8 +451,8 @@ import IconPicker from "@/components/IconPicker";
 import { i18n } from "../i18n-setup";
 import { jupyterLabToken, withJupyterLabToken } from "@/utils/jupyter";
 
-// Description et icone de chaque type de rapport : elles etaient recopiees dans cinq blocs de
-// template, avec leur propre hauteur de carte.
+// Description and icon of each report type: they were copied into five template blocks,
+// with their own card height.
 const REPORT_TYPE_DESCRIPTIONS = {
   notebook_doc: { key: "rep.desc_notebook_doc", icon: "regular/file-word" },
   notebook: { key: "rep.desc_notebook", icon: "regular/file-excel" },
@@ -997,9 +997,9 @@ export default {
 }
 
 
-/* Carte de description : hauteur libre. Les 70/90 px fixes coupaient le texte des descriptions
-   longues (une barre de defilement apparaissait dans la carte) ; `el-col` sans `el-row` ne
-   s'aligne pas non plus, d'ou la ligne flex. */
+/* Description card: free height. The fixed 70/90 px cut the text of long descriptions (a
+   scrollbar appeared inside the card); `el-col` without `el-row` does not line up either,
+   hence the flex line. */
 .desc-card__card {
   background-color: rgb(236, 245, 255);
 }
@@ -1024,8 +1024,8 @@ export default {
   line-height: 1.5;
 }
 
-/* Zone de depot : `el-upload` portait `height:30px` et le `dragger` 40 px, pour deux lignes de
-   texte. Le contenu debordait de 50 px sous sa ligne et passait par-dessus le champ suivant. */
+/* Drop zone: `el-upload` carried `height:30px` and the `dragger` 40 px, for two lines of
+   text. The content overflowed 50 px below its line and ran over the next field. */
 .jasper-upload {
   width: 100%;
 }

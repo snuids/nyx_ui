@@ -39,8 +39,8 @@ export default {
   data: () => ({
     url: "",
     downloadLoading: false,
-    // Le theme en cours : reactive, pour que `computedUrl` recalcule l'URL de l'iframe quand on
-    // bascule clair/sombre (Grafana ne connait pas notre theme, il le lit dans l'URL).
+    // The current theme: reactive, so that `computedUrl` recomputes the iframe URL on a
+    // light/dark switch (Grafana does not know our theme, it reads it from the URL).
     themeName: currentTheme()
   }),
   props: {
@@ -75,8 +75,8 @@ export default {
         alignItems: "center",
         gap: "10px",
         padding: "0 10px",
-        // `#fff` en dur : la barre restait un bandeau blanc au-dessus de la console sombre.
-        // `--nyx-surface` n'existe qu'en sombre, d'ou le repli sur blanc pour le theme clair.
+        // Hard-coded `#fff`: the bar stayed a white strip above the dark console.
+        // `--nyx-surface` only exists in dark, hence the fallback to white for the light theme.
         background: "var(--nyx-surface, #fff)",
         zIndex: 10
       };
@@ -227,8 +227,8 @@ export default {
         if (this.config.timeSelectorChecked && timestring != null)
           url = url + timestring;
 
-        // `theme=light|dark` : sans lui, le panneau garde son propre theme dans une console sombre.
-        // Une application qui fixe `theme=` dans ses parametres libres garde son choix.
+        // `theme=light|dark`: without it, the panel keeps its own theme inside a dark console.
+        // An application that sets `theme=` in its free parameters keeps its choice.
         url = withGrafanaTheme(url, this.themeName, this.config.config.extraParameters);
 
         if (this.config.config.extraParameters != null)
@@ -377,8 +377,8 @@ export default {
       console.log("GLOBALBUS/KIBANATIMERANGE/");
       this.createUrl();
     });
-    // Grafana ne peut pas suivre notre theme autrement que par l'URL : on recalcule `computedUrl`
-    // (donc l'`src` de l'iframe) a chaque bascule clair/sombre.
+    // Grafana can only follow our theme through the URL: `computedUrl` is recomputed (hence the
+    // iframe `src`) on every light/dark switch.
     this.themeHandler = () => {
       this.themeName = currentTheme();
     };
@@ -404,8 +404,8 @@ export default {
   font-size: 12px;
 }
 
-/* La barre est posee au-dessus de l'iframe : sans bordure, sa limite se confond avec le fond de
-   la page en mode sombre. */
+/* The bar sits above the iframe: without a border, its edge blends into the page
+   background in dark mode. */
 html.dark .grafana-toolbar {
   border-bottom: 1px solid var(--nyx-border);
 }

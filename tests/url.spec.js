@@ -1,9 +1,9 @@
 /**
- * `appendQueryParam` — ajouter un parametre a l'URL d'une application externe.
+ * `appendQueryParam` — appending a parameter to the URL of an external application.
  *
- * L'application recoit son contexte (token, API, langue, theme) dans l'URL. Un parametre oublie ne
- * produit aucune erreur : l'application s'ouvre simplement sans lui. C'est ainsi qu'un theme sombre
- * est reste clair sans que rien ne le signale.
+ * The application receives its context (token, API, language, theme) in the URL. A forgotten
+ * parameter produces no error: the application simply opens without it. That is how a dark theme
+ * stayed light with nothing to report it.
  */
 import { describe, it, expect } from 'vitest'
 
