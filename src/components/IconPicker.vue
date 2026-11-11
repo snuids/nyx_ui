@@ -43,10 +43,10 @@
 
         <!-- Category Filter -->
         <el-radio-group v-model="categoryFilter" size="small" style="margin-bottom: 20px;">
-          <el-radio-button label="all">{{ $t('iconpicker.all') }} ({{ filteredIcons.length }})</el-radio-button>
-          <el-radio-button label="regular">{{ $t('iconpicker.regular') }}</el-radio-button>
-          <el-radio-button label="brands">{{ $t('iconpicker.brands') }}</el-radio-button>
-          <el-radio-button label="solid">{{ $t('iconpicker.solid') }}</el-radio-button>
+          <el-radio-button value="all">{{ $t('iconpicker.all') }} ({{ filteredIcons.length }})</el-radio-button>
+          <el-radio-button value="regular">{{ $t('iconpicker.regular') }}</el-radio-button>
+          <el-radio-button value="brands">{{ $t('iconpicker.brands') }}</el-radio-button>
+          <el-radio-button value="solid">{{ $t('iconpicker.solid') }}</el-radio-button>
         </el-radio-group>
 
         <!-- Icons Grid -->

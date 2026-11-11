@@ -94,8 +94,8 @@
                 size="small"
                 v-model="timeType"
               >
-                <el-radio-button label="absolute">{{$t('time.absolute')}}</el-radio-button>
-                <el-radio-button label="relative">{{$t('time.relative')}}</el-radio-button>
+                <el-radio-button value="absolute">{{$t('time.absolute')}}</el-radio-button>
+                <el-radio-button value="relative">{{$t('time.relative')}}</el-radio-button>
               </el-radio-group>&nbsp;&nbsp;
             </div>
 

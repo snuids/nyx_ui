@@ -27,11 +27,11 @@
             <el-col :span="22">
               <el-form-item :label="$t('rep.report_type')" :label-width="formLabelWidth" style="text-align:left">
                 <el-radio-group v-model="newRec.reportType" @change="reportTypeChanged">
-                  <el-radio label="notebook_doc">{{ $t('rep.notebook_word') }}</el-radio>
-                  <el-radio label="notebook">{{ $t('rep.notebook') }}</el-radio>
-                  <el-radio label="python">{{ $t('rep.python') }}</el-radio>
-                  <el-radio label="jasper">{{ $t('rep.jasper') }}</el-radio>
-                  <el-radio label="jasper_jdbc">{{ $t('rep.jasper_jdbc') }}</el-radio>
+                  <el-radio value="notebook_doc">{{ $t('rep.notebook_word') }}</el-radio>
+                  <el-radio value="notebook">{{ $t('rep.notebook') }}</el-radio>
+                  <el-radio value="python">{{ $t('rep.python') }}</el-radio>
+                  <el-radio value="jasper">{{ $t('rep.jasper') }}</el-radio>
+                  <el-radio value="jasper_jdbc">{{ $t('rep.jasper_jdbc') }}</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>            

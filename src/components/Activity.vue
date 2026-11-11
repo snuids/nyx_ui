@@ -7,10 +7,10 @@
       <el-row :gutter="8" type="flex" align="middle">
         <el-col :span="9">
           <el-radio-group v-model="preset" size="small" @change="onPresetChange">
-            <el-radio-button label="1h">1h</el-radio-button>
-            <el-radio-button label="24h">24h</el-radio-button>
-            <el-radio-button label="7d">7d</el-radio-button>
-            <el-radio-button label="30d">30d</el-radio-button>
+            <el-radio-button value="1h">1h</el-radio-button>
+            <el-radio-button value="24h">24h</el-radio-button>
+            <el-radio-button value="7d">7d</el-radio-button>
+            <el-radio-button value="30d">30d</el-radio-button>
           </el-radio-group>
         </el-col>
         <el-col :span="9">
