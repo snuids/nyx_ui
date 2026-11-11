@@ -63,7 +63,7 @@
 
     <el-form v-if="sendByEmail">
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('maillingListTo')" type="text">{{ $t('reportgenerator.to') }} </el-button>
+        <el-button @click="setFocus('maillingListTo')" link>{{ $t('reportgenerator.to') }} </el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -86,7 +86,7 @@
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('maillingListCc')" type="text">{{ $t('reportgenerator.cc') }} </el-button>
+        <el-button @click="setFocus('maillingListCc')" link>{{ $t('reportgenerator.cc') }} </el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -109,7 +109,7 @@
         </el-col>
       </el-row>
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('maillingListCci')" type="text">{{ $t('reportgenerator.cci') }} </el-button>
+        <el-button @click="setFocus('maillingListCci')" link>{{ $t('reportgenerator.cci') }} </el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">

@@ -23,7 +23,7 @@
       </el-row>
 
       <el-row v-if="currentConfig.queryFilterChecked">
-        <el-button @click="setFocus('fieldsToFilter')" type="text">{{ $t('cfg.fields_to_filter') }}</el-button>        
+        <el-button @click="setFocus('fieldsToFilter')" link>{{ $t('cfg.fields_to_filter') }}</el-button>        
       </el-row>
       <el-row v-if="currentConfig.queryFilterChecked">
         <el-col
@@ -96,7 +96,7 @@
 
               <el-col :span="12" class="padding-right">
                 <el-row>
-                  <el-button @click="setFocus('label')" type="text">{{ $t('cfg.label') }}</el-button>
+                  <el-button @click="setFocus('label')" link>{{ $t('cfg.label') }}</el-button>
                 </el-row>
                 <el-row>
                   <el-input
@@ -109,7 +109,7 @@
               </el-col>
               <el-col :span="12">
                 <el-row>
-                  <el-button @click="setFocus('default')" type="text">{{ $t('cfg.default') }}</el-button>
+                  <el-button @click="setFocus('default')" link>{{ $t('cfg.default') }}</el-button>
                 </el-row>
                 <el-row>
                   <el-input
@@ -125,7 +125,7 @@
             <el-row>
               <el-col :span="12" v-if="filterFieldToConfigure.type != 'globaltext'">
                 <el-row>
-                  <el-button @click="setFocus('type')" type="text">{{ $t('cfg.type') }}</el-button>
+                  <el-button @click="setFocus('type')" link>{{ $t('cfg.type') }}</el-button>
                 </el-row>
                 <el-row>
                   <el-select
@@ -146,7 +146,7 @@
             <el-row v-if="filterFieldToConfigure.type == 'selecter'">
               <el-col :span="12">
                 <el-row>
-                  <el-button type="text">{{ $t('cfg.options') }}</el-button>
+                  <el-button link>{{ $t('cfg.options') }}</el-button>
                       <el-popover
                         placement="left-end"
                         :title="$t('cfg.format_options')"
@@ -158,7 +158,7 @@
                         <el-row> <el-icon style="margin-left:5px; margin-right:5px"><component :is="$icons.CaretRight" /></el-icon> <i>value </i></el-row>
                         
                         
-                        <template #reference><el-button type="text" :icon="$icons.InfoFilled" style="margin-left:15px;"></el-button></template>
+                        <template #reference><el-button link :icon="$icons.InfoFilled" style="margin-left:15px;"></el-button></template>
                       </el-popover>
                 </el-row>
               </el-col>
@@ -176,12 +176,12 @@
             <!-- <el-row v-if="filterFieldToConfigure.type == 'queryselecter'">
               <el-col :span="12">
                 <el-row>
-                  <el-button type="text">Index</el-button>                      
+                  <el-button link>Index</el-button>                      
                 </el-row>
               </el-col>
               <el-col :span="12">
                 <el-row>
-                  <el-button type="text">Column</el-button>                      
+                  <el-button link>Column</el-button>                      
                 </el-row>
               </el-col>
             </el-row>

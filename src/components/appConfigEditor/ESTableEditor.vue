@@ -4,7 +4,7 @@
       <h1 style="text-align:left;">{{ $t('cfg.step1') }}</h1>
 
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('indexPattern')" type="text">{{ $t('cfg.index_pattern') }}</el-button>
+        <el-button @click="setFocus('indexPattern')" link>{{ $t('cfg.index_pattern') }}</el-button>
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -50,7 +50,7 @@
               <el-button
                 style="padding: 0px;"
                 @click="setIndex(scope.row.id)"
-                type="text"
+                link
               >{{scope.row.id}}</el-button>
             </template>
           </el-table-column>
@@ -85,13 +85,13 @@
       </el-row>
       <el-row style="text-align:left;">
         <el-col :span="12" style="text-align:left;" v-if="!noTimeField">
-          <el-button @click="setFocus('timeField')" type="text">{{ $t('cfg.time_filter_field') }}</el-button>
+          <el-button @click="setFocus('timeField')" link>{{ $t('cfg.time_filter_field') }}</el-button>
         </el-col>
         <el-col :span="6" style="text-align:left;">
-          <el-button @click="setFocus('docType')" type="text">{{ $t('cfg.document_type') }}</el-button>
+          <el-button @click="setFocus('docType')" link>{{ $t('cfg.document_type') }}</el-button>
         </el-col>
         <el-col :span="6" style="text-align:left;">
-          <el-button @click="setFocus('refreshtime')" type="text">{{ $t('cfg.auto_refresh') }}</el-button>
+          <el-button @click="setFocus('refreshtime')" link>{{ $t('cfg.auto_refresh') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -168,7 +168,7 @@
       </el-row>
 
       <el-row style="text-align:left;">
-        <el-button @click="setFocus('fieldsToDisplay')" type="text">{{ $t('cfg.fields_to_display') }}</el-button>
+        <el-button @click="setFocus('fieldsToDisplay')" link>{{ $t('cfg.fields_to_display') }}</el-button>
       </el-row>
       <el-row>
         <el-col :span="24" style="text-align:left;">
@@ -278,10 +278,10 @@
 
       <el-row>
         <el-col :span="12">
-          <el-button @click="setFocus('order')" type="text">{{ $t('cfg.sort') }}</el-button>
+          <el-button @click="setFocus('order')" link>{{ $t('cfg.sort') }}</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button @click="setFocus('hiddenQuery')" type="text">{{ $t('cfg.hidden_query') }}</el-button>
+          <el-button @click="setFocus('hiddenQuery')" link>{{ $t('cfg.hidden_query') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -327,7 +327,7 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button @click="setFocus('')" type="text">{{ $t('cfg.user_queries') }}</el-button>
+          <el-button @click="setFocus('')" link>{{ $t('cfg.user_queries') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -338,10 +338,10 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button @click="setFocus('download')" type="text">{{ $t('cfg.download_records') }}</el-button>
+          <el-button @click="setFocus('download')" link>{{ $t('cfg.download_records') }}</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button @click="setFocus('geofields')" type="text">{{ $t('cfg.geo_fields') }}</el-button>
+          <el-button @click="setFocus('geofields')" link>{{ $t('cfg.geo_fields') }}</el-button>
         </el-col>
       </el-row>
 
@@ -355,7 +355,7 @@
               
                 <el-button
                   @click="copyFieldsToDisplayToDownload()"
-                  type="text"
+                  link
                   size="small"
                   
                 >{{ $t('cfg.copy_from_fields') }}</el-button>
@@ -430,10 +430,10 @@
             </el-row>
             <el-row v-if="currentConfig.mapChecked" style="margin-top: 15px;">
               <el-col :span="12">
-                <el-button @click="setFocus('geoField')" type="text">{{ $t('cfg.geo_field') }}</el-button>
+                <el-button @click="setFocus('geoField')" link>{{ $t('cfg.geo_field') }}</el-button>
               </el-col>
               <el-col :span="12">
-                <el-button @click="setFocus('zoom')" type="text">{{ $t('cfg.zoom') }}</el-button>
+                <el-button @click="setFocus('zoom')" link>{{ $t('cfg.zoom') }}</el-button>
               </el-col>
             </el-row>
             <el-row  v-if="currentConfig.mapChecked">
@@ -466,10 +466,10 @@
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="12">
-                <el-button @click="setFocus('lat')" type="text">Lat.</el-button>
+                <el-button @click="setFocus('lat')" link>Lat.</el-button>
               </el-col>
               <el-col :span="12">
-                <el-button @click="setFocus('long')" type="text">Lon.</el-button>
+                <el-button @click="setFocus('long')" link>Lon.</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -498,10 +498,10 @@
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="12">
-                <el-button @click="setFocus('latfield')" type="text">{{ $t('cfg.lat_field') }}</el-button>
+                <el-button @click="setFocus('latfield')" link>{{ $t('cfg.lat_field') }}</el-button>
               </el-col>
               <el-col :span="12">
-                <el-button @click="setFocus('lonfield')" type="text">{{ $t('cfg.lon_field') }}</el-button>
+                <el-button @click="setFocus('lonfield')" link>{{ $t('cfg.lon_field') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -543,7 +543,7 @@
 
           <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('transparency')" type="text">{{ $t('cfg.transparency') }}</el-button>
+                <el-button @click="setFocus('transparency')" link>{{ $t('cfg.transparency') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -554,7 +554,7 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('colorfunc')" type="text">{{ $t('cfg.fields_used_by_functions') }}</el-button>
+                <el-button @click="setFocus('colorfunc')" link>{{ $t('cfg.fields_used_by_functions') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -571,7 +571,7 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('colorfunc')" type="text">{{ $t('cfg.color_function') }}</el-button>
+                <el-button @click="setFocus('colorfunc')" link>{{ $t('cfg.color_function') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -588,7 +588,7 @@
 
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
               <el-col :span="24">
-                <el-button @click="setFocus('iconfunc')" type="text">{{ $t('cfg.icon_function') }}</el-button>
+                <el-button @click="setFocus('iconfunc')" link>{{ $t('cfg.icon_function') }}</el-button>
               </el-col>
             </el-row>
             <el-row style="text-align:left;" v-if="currentConfig.mapChecked">
@@ -608,10 +608,10 @@
      
       <el-row style="text-align:left;">
         <el-col :span="12">
-          <el-button @click="setFocus('specificEditor')" type="text">{{ $t('cfg.specific_editor') }}</el-button>
+          <el-button @click="setFocus('specificEditor')" link>{{ $t('cfg.specific_editor') }}</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button @click="setFocus('writePrivileges')" type="text">{{ $t('cfg.write_privileges') }}</el-button>
+          <el-button @click="setFocus('writePrivileges')" link>{{ $t('cfg.write_privileges') }}</el-button>
         </el-col>
       </el-row>
       <el-row>
