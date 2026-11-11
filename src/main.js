@@ -24,7 +24,7 @@ import { apiOverride } from '@/utils/devOverrides'
 import { globalBus, localBus } from '@/utils/bus'
 import { browserDetect } from '@/utils/browser'
 import { geolocation, getLocation } from '@/utils/geolocation'
-import { flushRegistrations } from '@/utils/vue3shim'
+import { bindApp } from '@/utils/vue3shim'
 // `theme/index.css` etait le theme Element UI 2 compile (1 Mo, 4474 regles `.el-*`). Charge apres
 // Element Plus, il ecrasait ses composants : doubles bordures sur les champs, largeurs faussees.
 // Le theme de l'application vient de `api/v1/ui_css`, servi par l'API (degrade, en-tete, dialogues).
@@ -98,6 +98,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // The 53 `Vue.component(...)` calls made at import time are replayed here, before mount.
-flushRegistrations(app)
+bindApp(app)
 
 app.mount('#app')

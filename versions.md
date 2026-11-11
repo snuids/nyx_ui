@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.25 11/Nov/2026
+* **The app button and the avatar were gone.** They rendered as `<apps></apps>` and `<logout></logout>` — unknown elements. `Main.vue` registers the thirty components it uses (`Apps`, `Logout`, `ChangePassword`, …) through `@/utils/vue3shim`, which queued them and replayed the queue **once, before mount**. That was right while every module was imported at startup; 3.6.24 made the routes `defineAsyncComponent`, so `Main.vue` loaded *after* that flush and its registrations were never applied. The rest of the header was unaffected, so nothing looked broken until you missed a button.
+* `registerComponent` now applies immediately when the app instance is known, and `bindApp()` remembers it; `router.js` also flushes after each route module is imported, so a late module cannot queue behind a flush that already happened. `tests/vue3shim.spec.js` pins both paths.
+* The regression was mine, introduced by the deferred routes in 3.6.24 and shipped without opening the console past the login screen — the router test asserted which screen each path mounts, not that the screens still resolve their children. Verified after this fix by logging in to the production console: `<apps>` and `<logout>` resolve, the popover and the avatar dropdown are back.
+* 637 tests.
+
+
 ## V3.6.24 10/Nov/2026
 * **The first screen downloads half the JavaScript it used to.** Measured on the production build, per file and gzipped: `chunk-vendors` + `app` were 2 327 + 166 KiB and now weigh 583 + 42 KiB; the login screen then pulls the three icon sets it displays (solid 311, brands 219, regular 37 KiB) and two small view chunks (10 KiB) — **1 202 KiB against 2 493 KiB, −52 %**. The script tags alone go from 2 493 to 629 KiB; the rest of the drop is only realised on screens that show no icon, which the console never does. Nothing is removed from the console; three things stopped being loaded before the first screen.
 * **Routes are deferred.** `Login`, `Main`, `Privacy`, `OAuth` and `GenericComponent` were imported at startup, so the login form downloaded the tables, Kibana, Grafana and every editor behind it. They are `defineAsyncComponent` now — the test resolves the loader, so it still pins which screen each path mounts.
