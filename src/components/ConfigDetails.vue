@@ -938,6 +938,7 @@
   </el-dialog>
 </template>
 <script>
+import "@/utils/aceModules";
 import { registerComponent } from '@/utils/vue3shim'
 import { VAceEditor } from "vue3-ace-editor";
 import freetextdetails from "@/components/FreeTextDetails";
@@ -1089,27 +1090,11 @@ export default {
       );
     },
     editorInitRO: function(editor) {
-      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
-      require("ace-builds/src-noconflict/mode-html");
-      require("ace-builds/src-noconflict/mode-yaml");
-      require("ace-builds/src-noconflict/mode-javascript"); //language
-      require("ace-builds/src-noconflict/mode-less");
-      require("ace-builds/src-noconflict/theme-chrome");
-      require("ace-builds/src-noconflict/theme-tomorrow_night");
-      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
 
       editor.setReadOnly(true);
     },
     editorInit: function() {
       // eslint-disable-line
-      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
-      require("ace-builds/src-noconflict/mode-html");
-      require("ace-builds/src-noconflict/mode-yaml");
-      require("ace-builds/src-noconflict/mode-javascript"); //language
-      require("ace-builds/src-noconflict/mode-less");
-      require("ace-builds/src-noconflict/theme-chrome");
-      require("ace-builds/src-noconflict/theme-tomorrow_night");
-      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
     handleMoveHeader(index, row, down) {
       this.curConfig.config.headercolumns.splice(index, 1);

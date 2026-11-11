@@ -216,6 +216,7 @@
   </el-col>
 </template>
 <script>
+import "@/utils/aceModules";
 import { VAceEditor } from "vue3-ace-editor";
 import _ from "lodash";
 import aceThemeMixin from "@/mixins/aceTheme";
@@ -414,14 +415,6 @@ export default {
     },
     editorInit: function() {
       // eslint-disable-line
-      require("ace-builds/src-noconflict/ext-language_tools"); //language extension prerequsite...
-      require("ace-builds/src-noconflict/mode-html");
-      require("ace-builds/src-noconflict/mode-yaml");
-      require("ace-builds/src-noconflict/mode-javascript"); //language
-      require("ace-builds/src-noconflict/mode-less");
-      require("ace-builds/src-noconflict/theme-chrome");
-      require("ace-builds/src-noconflict/theme-tomorrow_night");
-      require("ace-builds/src-noconflict/snippets/javascript"); //snippet
     },
   }
 };

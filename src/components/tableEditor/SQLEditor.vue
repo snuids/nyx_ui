@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import "@/utils/aceModules";
 import { VAceEditor } from "vue3-ace-editor";
 import aceThemeMixin from "@/mixins/aceTheme";
 export default {
@@ -150,11 +151,6 @@ export default {
   },
   methods: {
     editorInit: function(editor) {
-      require("ace-builds/src-noconflict/ext-language_tools");
-      require("ace-builds/src-noconflict/mode-sql");
-      require("ace-builds/src-noconflict/theme-chrome");
-      require("ace-builds/src-noconflict/theme-tomorrow_night");
-      require("ace-builds/src-noconflict/snippets/sql");
       editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
