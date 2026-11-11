@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.32 11/Nov/2026
+* **The fields of a form application were the wrong size.** Three Element UI 2 habits survived in `Form.vue`: `formSize: "mini"`, a size Element Plus does not know (it silently falls through to "no size"), a `datetime` field hardcoded at `size="small"` — 28 px where its neighbours were 36 — and number, date and select widgets left at their intrinsic width (150 px, 220 px) beside full-width text fields. Measured before the change: heights 36/36/36/**32**, widths 1029/**150**/**220**/1029.
+* All four now use the console's size and the full width: **36 px high and 1029 px wide, uniformly**.
+* **Selects were 4 px shorter than the fields everywhere in the console**, not only in forms: Element Plus hardcodes `min-height: 32px` on `.el-select__wrapper` instead of reading `--el-component-size`, so every select sat 4 px above the baseline of its neighbouring field. `styles/element-legacy.css` points the three size variants back at the variables; that is what brings the form's select to 36 px.
+* `tests/components/form.spec.js` mounts the component with one field of each type and checks that no widget carries a deprecated size class, that the four agree on one size, and that the number/date/select take the full width. Verified by putting `mini` and the intrinsic widths back — the suite names it. **746 tests**.
+
+
 ## V3.6.31 11/Nov/2026
 * **`ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0`** on 63 buttons across eight editor screens — report dialogs, the application editors, the password rules, the link and form editors. Every render of one logged the deprecation, and Element Plus 3 removes the value outright. They carry `link` now, which is the same look; `type="text"` stays legal on `el-input` and was left alone.
 * `tests/element-button-link.spec.js` holds it: a `type="text"` inside an `el-button` tag fails the suite, with an assertion on the number of buttons scanned so a matcher that stops matching cannot stay green. Verified by putting the attribute back on one button of the report dialog — the test names `ReportGenerator.vue:66`.

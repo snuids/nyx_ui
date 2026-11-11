@@ -74,6 +74,25 @@ h6 {
   --el-component-size-small: 28px;
 }
 
+/*
+ * A select does not read `--el-component-size`: Element Plus hardcodes `min-height: 32px` on
+ * `.el-select__wrapper` (40 px for `large`, 24 px for `small`). Next to a 36 px field, every select
+ * of the console was 4 px shorter — visible on any form that mixes a text field and a select, and
+ * reported as "the fields are not the right size". Pointing the three variants back at the variables
+ * keeps the four widgets of a form on the same baseline.
+ */
+.el-select__wrapper {
+  min-height: var(--el-component-size);
+}
+
+.el-select--large .el-select__wrapper {
+  min-height: var(--el-component-size-large);
+}
+
+.el-select--small .el-select__wrapper {
+  min-height: var(--el-component-size-small);
+}
+
 /* ...and the text of a "small" field starts 15 px from the edge, as in Element UI 2 (7 px in
    Element Plus). */
 .el-input--small .el-input__wrapper {
