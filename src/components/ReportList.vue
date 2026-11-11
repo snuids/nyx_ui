@@ -15,6 +15,7 @@
     <!--DIALOG REPORT GENERATOR -->
     <ReportGenerator
       :record="curReport"
+      :report-id="curReportId"
       v-if="reportGeneratorVisible"
       v-on:dialogclose="closeEditor()"
     ></ReportGenerator>
@@ -324,7 +325,10 @@ export default {
         });
     },
     askParameters(index, row) {
+      // The generator no longer carries the definition to the API: it sends its id, and the server
+      // rebuilds the job from the stored document. The copy keeps `_source` intact for the editor.
       this.curReport = JSON.parse(JSON.stringify(row._source));
+      this.curReportId = row._id;
       this.reportGeneratorVisible = true;
     },
     recordUpdated() {

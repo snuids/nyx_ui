@@ -331,37 +331,23 @@ export default {
       });
     },
     regenerateReport(index, row) {
-      console.log("regenerate");
-      console.log(index);
-      console.log(row._source.report);
-
+      // The API replays the definition snapshot the task carries; the console only names the task.
       var url =
         this.$store.getters.apiurl +
-        "sendmessage?token=" +
+        "report/regenerate?token=" +
         this.$store.getters.creds.token;
 
-      var randomID =
-        Math.floor((1 + Math.random()) * 0x1000000) +
-        "_" +
-        Math.floor((1 + Math.random()) * 0x1000000);
-
-      var message = {
-        destination: "/queue/NYX_REPORT_STEP1",
-        body: JSON.stringify({
-          id: "id_" + randomID,
-          creds: this.$store.getters.creds,
-          report: row._source.report,
-          privileges: this.$store.getters.creds.user.privileges
-        })
-      };
-
       axios
-        .post(url, message)
+        .post(url, { task: row._id, index: row._index })
         .then(response => {
-          if (response.data.error != "") console.log("Report list error...");
-          else {
-            console.log(this);
-            // this.$globalbus.$emit("reportgenerated");
+          if (response.data.error) {
+            this.$notify({
+              title: "Failed",
+              type: "danger",
+              message: response.data.error,
+              position: "bottom-right"
+            });
+            return;
           }
 
           this.$notify({
@@ -376,6 +362,12 @@ export default {
           }, 500);
         })
         .catch(error => {
+          this.$notify({
+            title: "Failed",
+            type: "danger",
+            message: this.$t("rep.unable_send"),
+            position: "bottom-right"
+          });
           console.log(error);
         });
     },
