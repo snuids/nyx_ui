@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.34 11/Nov/2026
+* **The fields panel of the form editor did not take the width of its dialog.** Measured in the application editor: the fields table was **333 px wide in a 1139 px dialog**, stuck in the left third with empty space beside it. Element Plus's `el-row` is a flex container, and a card placed directly in it is `flex: 0 1 auto` — Element UI 2's `el-row` was a float clearer, so the layout only broke with the migration. Its two columns also had no row of their own, so they were block children of the card body.
+* `styles/element-legacy.css` gives a card in a row the width of that row (`.el-row > .el-card { flex: 1 1 auto }`) — one rule for the 21 places the console puts a card there — and `FormEditor.vue` moves its fields card into a block with a proper `el-row` around its two columns.
+* `tests/layout-cards.spec.js` checks both halves: the stylesheet rule is present, and the editor no longer relies on it. Verified by putting the card back in the row — the suite names the pattern. **752 tests**.
+
+
 ## V3.6.33 11/Nov/2026
 * **The field dialog of the application editor was drawn at 28 px.** `FormFieldEditor` — the window where a form application's field is defined: name, title, type, subtype, default, colour — carried `size="small"` on all eight of its widgets. Inside a dialog 75 % wide, that read as a cramped form with half an inch of empty space around it. They use the console's size now (36 px), and the label column goes from 120 to 140 px so `Subtype`, `Clearable` and `Default` stop crowding their field.
 * `tests/components/form-field-editor.spec.js` mounts the dialog (it teleports, so it queries what the user sees) and checks that it renders its widgets, that none carries `--small`, that they all agree on one size, and that the label column was widened. Verified by putting `size="small"` back on one input — the suite fails on `--small`. **750 tests**.

@@ -60,9 +60,12 @@
         <el-row>
               <el-button link>{{ $t('cfg.fields') }}</el-button>
         </el-row>
-        <el-row>
+        <div>
           <el-card shadow="never" style="padding-bottom: 20px;">
-
+          <!-- `el-row` is a flex container in Element Plus: a single card placed in one shrank to
+               its content (the fields table measured 333 px in a 1139 px dialog). The card is
+               therefore in a block, and the two columns below are put in a row of their own. -->
+          <el-row :gutter="12">
           <el-col :span="4">
             <el-button size="small" @click="handleAddField()">{{ $t('cfg.add_field') }}</el-button>
           </el-col>
@@ -119,8 +122,9 @@
               </el-table-column>
             </el-table>
           </el-col>
+          </el-row>
           </el-card>
-        </el-row>
+        </div>
       </div>
     </el-card>
   </div>
