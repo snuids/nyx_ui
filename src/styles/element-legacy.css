@@ -75,6 +75,18 @@ h6 {
 }
 
 /*
+ * A card placed directly in an `el-row` shrinks to its content: `el-row` is a flex container in
+ * Element Plus, and a flex child is `flex: 0 1 auto` — so a panel holding a 333 px table sat in the
+ * left third of a 1139 px dialog. Element UI 2's `el-row` was a float clearer, not a flex container,
+ * which is why this only showed up after the migration. A card is meant to fill its row; the ones
+ * that live inside an `el-col` are laid out by the column and are untouched.
+ */
+.el-row > .el-card {
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+
+/*
  * A select does not read `--el-component-size`: Element Plus hardcodes `min-height: 32px` on
  * `.el-select__wrapper` (40 px for `large`, 24 px for `small`). Next to a 36 px field, every select
  * of the console was 4 px shorter — visible on any form that mixes a text field and a select, and
