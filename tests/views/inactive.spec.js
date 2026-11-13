@@ -67,6 +67,27 @@ describe('Login — an inactive account', () => {
   })
 })
 
+describe('Login — an inactive account behind the second factor', () => {
+  it('lands on the same page once the code is accepted', async () => {
+    // first call: the account is asked for its code; second call: the account is refused
+    axios.post
+      .mockResolvedValueOnce({ status: 200, data: { error: 'DoublePhase' } })
+      .mockResolvedValueOnce({ status: 200, data: { error: 'ACCOUNT_INACTIVE' } })
+
+    const { wrapper, router } = await mountView(Login, { at: '/' })
+    await flushPromises()
+
+    wrapper.vm.form.login = 'ada@example.com'
+    wrapper.vm.form.password = 'whatever'
+    wrapper.vm.$prompt = vi.fn(() => Promise.resolve({ value: '12345' }))
+    await wrapper.vm.validateUser()
+    await flushPromises()
+    await flushPromises()
+
+    expect(router.currentRoute.value.path).toBe('/inactive')
+  })
+})
+
 /** Whether the store kept a session: an inactive account must not have one. */
 function credentialsStored() {
   const store = document.querySelector('#app')

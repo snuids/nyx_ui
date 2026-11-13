@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.37 11/Nov/2026
+* **An inactive account behind the second factor landed nowhere.** With MFA the sign-in is answered twice — first « send the code », then the code itself — and the second answer was only logged to the console: the user typed a correct code and nothing happened. That path routes to `/inactive` like the password-only one.
+* `tests/views/inactive.spec.js` covers it: two answers, `DoublePhase` then `ACCOUNT_INACTIVE`, and the route ends on `/inactive`. **761 tests**.
+
+
 ## V3.6.36 11/Nov/2026
 * **An inactive account is sent to a page, not to a form it cannot fill.** The API refuses to mint a token (`ACCOUNT_INACTIVE`) once the password is right; the sign-in screen used to print the raw code under the fields, which invited the user to try again for ever. It now routes to **`/inactive`**, a page that says the account was deactivated by an administrator and that it has to be reactivated, with a button back to the sign-in screen. Four languages.
 * The session stays on the API's side: an account disabled while signed in keeps its token until it expires, but the next sign-in is refused.
