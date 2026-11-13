@@ -29,6 +29,7 @@ const Login = route(() => import('../views/Login.vue'))
 const Main = route(() => import('../views/Main.vue'))
 const Privacy = route(() => import('../views/Privacy.vue'))
 const OAuth = route(() => import('../views/OAuth.vue'))
+const Inactive = route(() => import('../views/Inactive.vue'))
 const GenericComponent = route(() => import('../components/GenericComponent.vue'))
 // import User from '../components/User.vue'
 // import Config from '../components/Config.vue'
@@ -66,6 +67,13 @@ export default createRouter({
       path: '/privacy',
       name: 'Privacy',
       component: Privacy
+    },
+    {
+      // Where an inactive account lands: the account exists and its password is right, it is the
+      // account that is disabled — the sign-in form cannot help it.
+      path: '/inactive',
+      name: 'Inactive',
+      component: Inactive
     },
     {
       // Landing page of the GitHub sign-in (`?code=…&state=…`). A sibling of `/main`, never a

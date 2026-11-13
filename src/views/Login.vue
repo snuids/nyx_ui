@@ -214,6 +214,13 @@ export default {
         } else {
           this.loginunderway = false;
 
+          if (response.data.error == "ACCOUNT_INACTIVE") {
+            // The account exists and the password was right: retrying on the form would only
+            // repeat the same refusal, so the console says what to do about it.
+            this.$router.push("/inactive");
+            return;
+          }
+
           if (response.data.error == "DoublePhase") {
             this.$prompt("Please input your code", "Second Phase", {
               confirmButtonText: "OK",

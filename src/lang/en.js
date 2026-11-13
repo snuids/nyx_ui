@@ -158,6 +158,12 @@ export const messages = {
         mfa:"MFA",
         inactive:"Inactive",
         inactive_hint:"The account is disabled: it can no longer sign in. A user without this field is active.",
+        inactive_page: {
+          title: "Account inactive",
+          message: "Your account has been deactivated by an administrator. It can no longer sign in.",
+          hint: "Ask an administrator to reactivate it; until then the console and the API stay closed.",
+          back: "Back to sign-in"
+        },
         language:"language",
         reset_password:"Reset Password"
       }
