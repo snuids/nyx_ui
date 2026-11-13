@@ -64,6 +64,12 @@ export default {
       }
 
       const data = response && response.data;
+      if (data && data.error === "ACCOUNT_INACTIVE") {
+        // The identity was filed as a disabled account (GITHUB_UNKNOWN_ACCOUNTS=inactive on the
+        // API): it exists, it just may not come in. Same page as the password sign-in.
+        this.$router.push("/inactive");
+        return;
+      }
       if (!data || data.error != "" || !data.cred) {
         // The API answers "Bad Credentials" for an identity without an account as well as for a
         // refused code: the message says what the user can act on.

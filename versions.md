@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.39 13/Nov/2026
+* **A GitHub identity filed as an inactive account is told so.** When the API runs with `GITHUB_UNKNOWN_ACCOUNTS=inactive`, an unknown GitHub identity is created disabled; the OAuth landing page used to answer « No NYX account is linked to this GitHub identity », which is now false — the account exists, it may not come in. `ACCOUNT_INACTIVE` routes to `/inactive`, the same page as the password sign-in.
+* `tests/views/oauth.spec.js` covers it: the route ends on `/inactive`, no message is shown and no session is stored. **766 tests**.
+
+
 ## V3.6.38 11/Nov/2026
 * **No red toast on top of the inactive page.** Every API answer carrying an `error` is reported by the interceptor in `App.vue`, so the refused sign-in also popped « Error ACCOUNT_INACTIVE » while the route sent the user to `/inactive`. That code is now handled like a lost token: silent, the page says what to do.
 * `tests/app-error-reporting.spec.js` pins all four branches: empty error, `ACCOUNT_INACTIVE` (silent), `UNKNOWN_TOKEN`/`NO_TOKEN` (logout), anything else (reported). **765 tests**.
