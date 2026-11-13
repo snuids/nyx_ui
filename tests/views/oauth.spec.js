@@ -157,6 +157,19 @@ describe('retour de la connexion GitHub', () => {
     expect(router.currentRoute.value.path).not.toContain('/main')
   })
 
+  it('un compte inactive par le serveur renvoie vers la page dediee', async () => {
+    // `GITHUB_UNKNOWN_ACCOUNTS=inactive`: the identity is filed as a disabled account, so it exists
+    // and the message must not say "no account is linked".
+    openAt('?code=the-code&state=the-state')
+    axios.post.mockResolvedValue({ data: { error: 'ACCOUNT_INACTIVE' } })
+
+    const { wrapper, router } = await mountOAuth()
+
+    expect(router.currentRoute.value.path).toBe('/inactive')
+    expect(wrapper.vm.errorMessage).toBe('')
+    expect(store.state.creds.token).toBeFalsy()
+  })
+
   it('un mot de passe provisoire renvoie a la connexion par mot de passe', async () => {
     openAt('?code=the-code&state=the-state')
     axios.post.mockResolvedValue(authResponse({ user: { mustResetPassword: true } }))
