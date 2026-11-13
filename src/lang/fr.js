@@ -90,6 +90,7 @@ export const messages = {
         delete:'Effaçer',
         user:'Utilisateur',
         status:'Statut', 
+        active: "Actif",
         creation:'Création', 
         create:'Créer', 
         pleaseinput:'Entrer une requête',
@@ -151,6 +152,8 @@ export const messages = {
         lastname:"Nom",
         phone:"Téléphone",
         mfa:"AMF",
+        inactive:"Inactif",
+        inactive_hint:"Le compte est désactivé : il ne peut plus se connecter. Un utilisateur sans ce champ est actif.",
         language:"Langue",
         reset_password:"Ré-init M.D.P."
       }

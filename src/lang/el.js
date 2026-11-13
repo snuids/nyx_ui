@@ -65,6 +65,7 @@ export const messages = {
       delete:'Διαγραφή',
       user:'Χρήστης',
       status:'Κατάσταση',
+      active: "Ενεργός",
       creation:'Δημιουργία',
       create:'Δημιουργία',
       privileges:'Προνόμια',
@@ -402,6 +403,8 @@ export const messages = {
       lastname:"Επώνυμο",
       phone:"Τηλέφωνο",
       mfa:"MFA",
+        inactive:"Ανενεργός",
+        inactive_hint:"Ο λογαριασμός είναι απενεργοποιημένος: δεν μπορεί πλέον να συνδεθεί.",
       language:"Γλώσσα",
       reset_password:"Επαναφορά κωδικού"
     },

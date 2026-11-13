@@ -94,6 +94,7 @@ export const messages = {
         delete:'Verwijderen',
         user:'Gebruiker',
         status:'Status', 
+        active: "Actief",
         creation:'Aanmaak',
         create:'Aanmaken', 
         pleaseinput:'Voer een waarde in',   
@@ -155,6 +156,8 @@ export const messages = {
         lastname:"Achternaam",
         phone:"Telefoon",
         mfa:"MFA",
+        inactive:"Inactief",
+        inactive_hint:"Het account is uitgeschakeld: het kan niet meer aanmelden.",
         language:"taal",
         reset_password:"Wachtwoord opnieuw instellen"
       }

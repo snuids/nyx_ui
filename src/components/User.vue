@@ -19,6 +19,15 @@
       <el-table-column prop="_id" label="ID" sortable width="250"></el-table-column>
       <el-table-column prop="_source.firstname" :label="$t('user.firstname')" sortable width="180"></el-table-column>
       <el-table-column prop="_source.lastname" :label="$t('user.lastname')" sortable width="180"></el-table-column>
+      <!-- A user document without the field is an active account, so only `true` is shown. -->
+      <el-table-column :label="$t('generic.status')" width="110">
+        <template #default="scope">
+          <el-tag v-if="scope.row._source.inactive" type="danger" size="small">
+            {{ $t('user.inactive') }}
+          </el-tag>
+          <el-tag v-else type="success" size="small">{{ $t('generic.active') }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('generic.privileges')">
         <template #default="scope">
           <el-popover placement="left-start" :title="$t('generic.privileges')" width="200" trigger="hover">
