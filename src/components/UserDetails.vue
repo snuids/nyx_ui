@@ -53,7 +53,7 @@
                 <el-input size="small" v-model="newRec._source.phone" autocomplete="off"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12" style="text-align:left;">
+            <el-col :span="8" style="text-align:left;">
               <el-form-item :label="this.$t('user.mfa')" :label-width="formLabelWidth" prop="doublePhase">
                 <el-switch
                   @change="MFAChanged()"
@@ -61,6 +61,21 @@
                   v-model="newRec._source.doublePhase"
                   autocomplete="off"
                 ></el-switch>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" style="text-align:left;">
+              <!-- A document that does not carry the field is an active account: the switch reads
+                   `inactive` and writes it, nothing else has to be set on creation. -->
+              <el-form-item :label="this.$t('user.inactive')" :label-width="formLabelWidth">
+                <el-tooltip :content="$t('user.inactive_hint')" placement="top">
+                  <el-switch
+                    size="small"
+                    v-model="newRec._source.inactive"
+                    :active-value="true"
+                    :inactive-value="false"
+                    autocomplete="off"
+                  ></el-switch>
+                </el-tooltip>
               </el-form-item>
             </el-col>
           </el-row>

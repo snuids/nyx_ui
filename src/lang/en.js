@@ -94,6 +94,7 @@ export const messages = {
         delete:'Delete',
         user:'User',
         status:'Status', 
+        active: "Active",
         creation:'Creation',
         create:'Create', 
         pleaseinput:'Please input',   
@@ -155,6 +156,8 @@ export const messages = {
         lastname:"Lastname",
         phone:"Phone",
         mfa:"MFA",
+        inactive:"Inactive",
+        inactive_hint:"The account is disabled: it can no longer sign in. A user without this field is active.",
         language:"language",
         reset_password:"Reset Password"
       }

@@ -1,5 +1,12 @@
 # Version History
 
+## V3.6.35 11/Nov/2026
+* **An `inactive` flag on the user record.** The account editor gains a switch beside MFA, and the users list a status column (`Active` / `Inactive`). A document that does **not** carry the field is an **active** account: nothing has to be migrated, and accounts created by a script or before this release keep working unchanged.
+* The switch reads the absent value as `false` and writes `inactive: true` only when an administrator turns it on; translations added in the four languages (`en`, `fr`, `el`, `nl`), with a tooltip saying what the flag is for.
+* `tests/components/user-details-inactive.spec.js` pins the semantics: a record without the field reads as active and stays without the field, a record carrying `inactive: true` shows the switch on, and setting it writes the boolean without touching login or privileges. **756 tests**.
+* Note: the flag is **not enforced yet** — refusing the sign-in of an inactive account is a server-side decision (`nyx_rest`), left for a separate change.
+
+
 ## V3.6.34 11/Nov/2026
 * **The fields panel of the form editor did not take the width of its dialog.** Measured in the application editor: the fields table was **333 px wide in a 1139 px dialog**, stuck in the left third with empty space beside it. Element Plus's `el-row` is a flex container, and a card placed directly in it is `flex: 0 1 auto` — Element UI 2's `el-row` was a float clearer, so the layout only broke with the migration. Its two columns also had no row of their own, so they were block children of the card body.
 * `styles/element-legacy.css` gives a card in a row the width of that row (`.el-row > .el-card { flex: 1 1 auto }`) — one rule for the 21 places the console puts a card there — and `FormEditor.vue` moves its fields card into a block with a proper `el-row` around its two columns.
