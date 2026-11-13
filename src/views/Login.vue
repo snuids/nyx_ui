@@ -237,9 +237,13 @@ export default {
                     doublecode: value
                   })
                   .then(response => {
-                    if (response.data.error != "")
+                    if (response.data.error === "ACCOUNT_INACTIVE") {
+                      // The second factor was right and the account is disabled: same page as a
+                      // password-only account, instead of a silent console line.
+                      this.$router.push("/inactive");
+                    } else if (response.data.error != "") {
                       console.log("Double AUth Error...");
-                    else {
+                    } else {
                       this.authenticate(response);
                     }
                   })
