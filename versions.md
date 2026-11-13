@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.36 11/Nov/2026
+* **An inactive account is sent to a page, not to a form it cannot fill.** The API refuses to mint a token (`ACCOUNT_INACTIVE`) once the password is right; the sign-in screen used to print the raw code under the fields, which invited the user to try again for ever. It now routes to **`/inactive`**, a page that says the account was deactivated by an administrator and that it has to be reactivated, with a button back to the sign-in screen. Four languages.
+* The session stays on the API's side: an account disabled while signed in keeps its token until it expires, but the next sign-in is refused.
+* `tests/views/inactive.spec.js` mounts both screens: the page explains and offers the way back, and a sign-in answering `ACCOUNT_INACTIVE` lands on `/inactive` without storing any credentials — verified by putting the plain error message back, the test fails on `expected '/' to be '/inactive'`. **760 tests**.
+
+
 ## V3.6.35 11/Nov/2026
 * **An `inactive` flag on the user record.** The account editor gains a switch beside MFA, and the users list a status column (`Active` / `Inactive`). A document that does **not** carry the field is an **active** account: nothing has to be migrated, and accounts created by a script or before this release keep working unchanged.
 * The switch reads the absent value as `false` and writes `inactive: true` only when an administrator turns it on; translations added in the four languages (`en`, `fr`, `el`, `nl`), with a tooltip saying what the flag is for.

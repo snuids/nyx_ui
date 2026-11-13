@@ -154,6 +154,12 @@ export const messages = {
         mfa:"AMF",
         inactive:"Inactif",
         inactive_hint:"Le compte est désactivé : il ne peut plus se connecter. Un utilisateur sans ce champ est actif.",
+        inactive_page: {
+          title: "Compte inactif",
+          message: "Votre compte a été désactivé par un administrateur. Il ne peut plus se connecter.",
+          hint: "Demandez à un administrateur de le réactiver ; d'ici là la console et l'API restent fermées.",
+          back: "Retour à la connexion"
+        },
         language:"Langue",
         reset_password:"Ré-init M.D.P."
       }

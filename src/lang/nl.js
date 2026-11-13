@@ -158,6 +158,12 @@ export const messages = {
         mfa:"MFA",
         inactive:"Inactief",
         inactive_hint:"Het account is uitgeschakeld: het kan niet meer aanmelden.",
+        inactive_page: {
+          title: "Account inactief",
+          message: "Uw account is door een beheerder gedeactiveerd. Het kan niet meer aanmelden.",
+          hint: "Vraag een beheerder om het opnieuw te activeren.",
+          back: "Terug naar aanmelden"
+        },
         language:"taal",
         reset_password:"Wachtwoord opnieuw instellen"
       }
