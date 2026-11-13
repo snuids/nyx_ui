@@ -79,6 +79,12 @@ export default {
         if (data == null || data.error == null || data.error == '') {
             return
         }
+        if (data.error == 'ACCOUNT_INACTIVE') {
+            /* The sign-in route sends the account to /inactive, a page that says what happened and
+             * who to ask. A red toast repeating the raw code on top of it would only add noise. */
+            console.warn('ACCOUNT_INACTIVE')
+            return
+        }
         if (data.error == 'UNKNOWN_TOKEN' || data.error == 'NO_TOKEN') {
             console.warn(data.error)
             if (this.$route.path != '/') {
