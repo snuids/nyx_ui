@@ -143,6 +143,63 @@ describe('User', () => {
     expect(notify).toHaveBeenCalledWith(expect.objectContaining({ type: 'info' }))
   })
 
+  it('ne montre que les comptes inactifs quand la case est cochee', async () => {
+    axios.post.mockResolvedValue({
+      data: {
+        error: '',
+        records: [
+          userRecord('alice', { firstname: 'Ada', lastname: 'Lovelace' }),
+          userRecord('stub', { firstname: 'WM8233_equans', lastname: '', inactive: true }),
+        ],
+      },
+    })
+
+    const { wrapper } = await mountUsers()
+    expect(wrapper.findAll('.el-table__row')).toHaveLength(2)
+
+    wrapper.vm.onlyInactive = true
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.findAll('.el-table__row')).toHaveLength(1)
+    expect(wrapper.text()).toContain('WM8233_equans')
+    expect(wrapper.text()).not.toContain('Lovelace')
+  })
+
+  it('affiche le nombre de comptes inactifs, meme a zero', async () => {
+    axios.post.mockResolvedValue({
+      data: { error: '', records: [userRecord('alice')] },
+    })
+
+    const { wrapper } = await mountUsers()
+
+    expect(wrapper.vm.inactiveCount).toBe(0)
+    expect(wrapper.find('.inactive-filter').text()).toContain('(0)')
+  })
+
+  it('combine le filtre des inactifs et la recherche', async () => {
+    axios.post.mockResolvedValue({
+      data: {
+        error: '',
+        records: [
+          userRecord('stub1', { firstname: 'WM8233_equans', inactive: true }),
+          userRecord('stub2', { firstname: 'OTHER_equans', inactive: true }),
+          userRecord('alice', { firstname: 'Ada', inactive: true }),
+          userRecord('bob', { firstname: 'Bob' }),
+        ],
+      },
+    })
+
+    const { wrapper } = await mountUsers()
+    wrapper.vm.onlyInactive = true
+    wrapper.vm.search = 'equans'
+    await wrapper.vm.$nextTick()
+
+    const rows = wrapper.findAll('.el-table__row')
+    expect(rows).toHaveLength(2)
+    expect(wrapper.text()).toContain('WM8233_equans')
+    expect(wrapper.text()).toContain('OTHER_equans')
+  })
+
   it('filtre la liste sur la saisie de recherche', async () => {
     axios.post.mockResolvedValue({
       data: {

@@ -9,8 +9,7 @@
 
     <el-table
       size="small"
-      :data="tableData.filter(data => !search || ((JSON.stringify(data._source).toLowerCase().includes(search.toLowerCase())))      
-      )"
+      :data="visibleData"
       :default-sort="{prop: '_id', order: 'descending'}"
       style="width: 100%"
       highlight-current-row
@@ -71,6 +70,11 @@
             ></el-button>
           </div>
           <el-input v-model="search" size="small" :placeholder="$t('generic.type_to_search')" class="searchfield" />
+          <!-- An account filed by a GitHub sign-in waits here, disabled, until an administrator
+               decides: the count makes sure it is not lost among the active ones. -->
+          <el-checkbox v-model="onlyInactive" size="small" class="inactive-filter">
+            {{ $t('user.inactive_only') }} ({{ inactiveCount }})
+          </el-checkbox>
         </template>
         <template #default="scope">
           <el-button
@@ -106,8 +110,31 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       currentRecord: null,
-      search: ""
+      search: "",
+      onlyInactive: false
     };
+  },
+  computed: {
+    /** Accounts an administrator has disabled — the ones waiting for a decision, mostly. */
+    inactiveCount() {
+      return this.tableData.filter(row => (row._source || {}).inactive).length;
+    },
+    visibleData() {
+      let rows = this.tableData;
+
+      if (this.onlyInactive) {
+        rows = rows.filter(row => (row._source || {}).inactive);
+      }
+
+      const needle = (this.search || "").toLowerCase();
+      if (needle) {
+        rows = rows.filter(row =>
+          JSON.stringify(row._source || {}).toLowerCase().includes(needle)
+        );
+      }
+
+      return rows;
+    }
   },
   methods: {
     setCurrent(row) {

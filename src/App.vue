@@ -80,9 +80,15 @@ export default {
             return
         }
         if (data.error == 'ACCOUNT_INACTIVE') {
-            /* The sign-in route sends the account to /inactive, a page that says what happened and
-             * who to ask. A red toast repeating the raw code on top of it would only add noise. */
+            /* Two moments carry this code. A refused sign-in: the login route already sends the
+             * account to /inactive, so this stays silent — the page says what happened and who to
+             * ask. A session cut because an administrator disabled the account while it was open:
+             * the store has to be cleared and the route changed here, with the same page instead of
+             * the generic "lost session" toast, which would suggest trying again. */
             console.warn('ACCOUNT_INACTIVE')
+            if (this.$route.path != '/') {
+                this.endInactiveSession()
+            }
             return
         }
         if (data.error == 'UNKNOWN_TOKEN' || data.error == 'NO_TOKEN') {
@@ -98,6 +104,18 @@ export default {
             type: "error",
             position: "bottom-right"
         });
+    },
+
+    endInactiveSession() {
+      /* The account was disabled under the session: nothing is left to keep, and the page that
+       * explains why is the only useful destination. */
+      this.$store.commit({
+        type: "logout",
+        data: {}
+      });
+      if (this.$route.path != '/inactive') {
+        this.$router.push('/inactive');
+      }
     },
 
     disableInterceptor() {
