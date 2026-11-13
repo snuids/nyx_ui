@@ -1,5 +1,10 @@
 # Version History
 
+## V3.6.38 11/Nov/2026
+* **No red toast on top of the inactive page.** Every API answer carrying an `error` is reported by the interceptor in `App.vue`, so the refused sign-in also popped « Error ACCOUNT_INACTIVE » while the route sent the user to `/inactive`. That code is now handled like a lost token: silent, the page says what to do.
+* `tests/app-error-reporting.spec.js` pins all four branches: empty error, `ACCOUNT_INACTIVE` (silent), `UNKNOWN_TOKEN`/`NO_TOKEN` (logout), anything else (reported). **765 tests**.
+
+
 ## V3.6.37 11/Nov/2026
 * **An inactive account behind the second factor landed nowhere.** With MFA the sign-in is answered twice — first « send the code », then the code itself — and the second answer was only logged to the console: the user typed a correct code and nothing happened. That path routes to `/inactive` like the password-only one.
 * `tests/views/inactive.spec.js` covers it: two answers, `DoublePhase` then `ACCOUNT_INACTIVE`, and the route ends on `/inactive`. **761 tests**.
