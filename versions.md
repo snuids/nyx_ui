@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.40 13/Nov/2026
+* **A session cut by an administrator ends on the page that explains it.** The API now answers `ACCOUNT_INACTIVE` to a request carrying the token of a disabled account, and drops the token. The console used to do nothing with that code on a live session; it now clears the store and routes to `/inactive`, instead of the generic « lost session » toast that would invite the person to try again. On the sign-in screen nothing changes: the route already left for that page.
+* **The users list can show only the disabled accounts**, with their count in the filter label — the accounts filed by a GitHub sign-in wait there until an administrator decides, and they were lost among the active ones. The filter composes with the search box. Four languages.
+* `tests/app-error-reporting.spec.js` (six cases, both moments of the code) and three cases in `tests/components/user.spec.js` (filter alone, count at zero, filter combined with search). **771 tests**.
+
+
 ## V3.6.39 13/Nov/2026
 * **A GitHub identity filed as an inactive account is told so.** When the API runs with `GITHUB_UNKNOWN_ACCOUNTS=inactive`, an unknown GitHub identity is created disabled; the OAuth landing page used to answer « No NYX account is linked to this GitHub identity », which is now false — the account exists, it may not come in. `ACCOUNT_INACTIVE` routes to `/inactive`, the same page as the password sign-in.
 * `tests/views/oauth.spec.js` covers it: the route ends on `/inactive`, no message is shown and no session is stored. **766 tests**.

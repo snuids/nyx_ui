@@ -154,6 +154,7 @@ export const messages = {
         mfa:"AMF",
         inactive:"Inactif",
         inactive_hint:"Le compte est désactivé : il ne peut plus se connecter. Un utilisateur sans ce champ est actif.",
+        inactive_only:"Uniquement les comptes inactifs",
         inactive_page: {
           title: "Compte inactif",
           message: "Votre compte a été désactivé par un administrateur. Il ne peut plus se connecter.",

@@ -12,16 +12,22 @@ import { describe, it, expect, vi } from 'vitest'
 
 import App from '@/App.vue'
 
-/** The method taken on its own: the component only needs `$route` and `$notify`. */
-function reporting() {
+/** The methods taken on their own: the component only needs `$route`, `$notify` and `$store`. */
+function reporting(at = '/main/x') {
   const notify = vi.fn()
+  const commit = vi.fn()
+  const push = vi.fn()
   const self = {
     $notify: notify,
-    $route: { path: '/main/x' },
+    $route: { path: at },
+    $store: { commit },
+    $router: { push },
     logoutDebounce: vi.fn(),
   }
+  // bound after the object exists: `self` inside the literal would be read before its own init
+  self.endInactiveSession = App.methods.endInactiveSession.bind(self)
   const report = App.methods.reportApiError.bind(self)
-  return { report, notify, self }
+  return { report, notify, commit, push, self }
 }
 
 describe('reportApiError', () => {
@@ -34,13 +40,33 @@ describe('reportApiError', () => {
     expect(notify).not.toHaveBeenCalled()
   })
 
-  it('stays silent on ACCOUNT_INACTIVE, the page says it', () => {
-    const { report, notify, self } = reporting()
+  it('stays silent on the sign-in screen: the login route already left for /inactive', () => {
+    const { report, notify, push } = reporting('/')
 
     report({ error: 'ACCOUNT_INACTIVE' })
 
     expect(notify).not.toHaveBeenCalled()
-    expect(self.logoutDebounce).not.toHaveBeenCalled()
+    expect(push).not.toHaveBeenCalled()
+  })
+
+  it('ends a live session instead of showing the raw code', () => {
+    // an administrator disabled the account while it was open: the store goes, the page explains
+    const { report, notify, commit, push } = reporting('/main/rec-users')
+
+    report({ error: 'ACCOUNT_INACTIVE' })
+
+    expect(notify).not.toHaveBeenCalled()
+    expect(commit).toHaveBeenCalledWith({ type: 'logout', data: {} })
+    expect(push).toHaveBeenCalledWith('/inactive')
+  })
+
+  it('does not push twice when the console is already on the page', () => {
+    const { report, commit, push } = reporting('/inactive')
+
+    report({ error: 'ACCOUNT_INACTIVE' })
+
+    expect(commit).toHaveBeenCalled()
+    expect(push).not.toHaveBeenCalled()
   })
 
   it('logs out on a lost token instead of shouting', () => {
