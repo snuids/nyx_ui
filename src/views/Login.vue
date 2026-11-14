@@ -605,6 +605,14 @@ export default {
   margin-top: 6px;
 }
 
+/* Element Plus gives a button that follows another a 12 px left margin — meant for a row of
+   buttons. Two stacked full-width provider buttons are not that row: the rule pushed the second one
+   12 px right of the form, out of the card, and the two no longer lined up with the password field.
+   The separator div used to sit between them, which is why the GitHub button alone never showed it. */
+.login-button + .login-button {
+  margin-left: 0;
+}
+
 .login-container {
   position: absolute;
   top: 0px;
