@@ -623,32 +623,35 @@ export default {
   background-color: #048;
   /* A card taller than the window (laptop, zoom) scrolls here instead of being cut off. */
   overflow-y: auto;
+  /* The card, the welcome text and the two decorations are one composition, and it is the
+     composition that must sit in the middle of the window. A fixed `top` used to stand in for that:
+     it was computed for the password form, so each way of signing in added (the GitHub button, then
+     the Microsoft one) made the card taller and pushed the whole block below the middle — measured
+     at 320 px against a centre of 289. The padding reserves the room the decorations (140 px above
+     the card) and the privacy link (at the bottom) need; the group is centred in what is left. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 148px 16px 40px;
+  box-sizing: border-box;
 }
 
-/* The card and the welcome text form a single group, centred horizontally, whose top edge is
-   the one the card had. The text therefore stays *under* the card whatever its height: with the
-   card in absolute position and the title at `50% + 170px`, adding the GitHub button made the
-   card cover the title, and the white text became invisible on the white background of the card. */
+/* The card and the welcome text form a single group: the text therefore stays *under* the card
+   whatever its height, instead of the card covering it. `margin: auto` centres the group in the
+   room the padding leaves, and collapses to nothing when there is none — which is what keeps a
+   short window scrollable instead of cutting the top of the composition off. */
 .login-center {
-  position: absolute;
-  /* 50% - 70px is the cruising position. On a short window (laptop, zoom) the group moves up
-     to leave room for the footer: without that the card pushes the welcome text under the
-     privacy link, which is anchored at the bottom. `clamp` keeps the decorations visible up top. */
-  top: clamp(96px, calc(50% - 70px), calc(100% - 400px));
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   width: 400px;
+  margin: auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 18px;
 }
 
-/* The first-change panel is taller: it keeps the offset it had (top edge at `50% - 180px`),
-   otherwise it would overflow at the bottom on a laptop screen. */
-.login-center.force {
-  top: clamp(96px, calc(50% - 180px), calc(100% - 520px));
-}
+/* The first-change panel is taller than the sign-in one; it needs no offset of its own now that
+   the group is centred on its own height. */
 
 /* The card sizes itself to its content. The fixed 200px height dated from the password form
    alone: the GitHub button (separator + button, ~60px) overflowed the card, and the login screen
@@ -676,17 +679,16 @@ export default {
   height: 40px;
   width: 100%;
 }
-/* Very short window (phone in landscape, strong zoom): the decorations above the card add
-   nothing and take the room the welcome text is missing. Without that, the title slides under
-   the privacy link, which is anchored at the bottom. */
-@media (max-height: 470px) {
+/* Short window (phone in landscape, strong zoom): the decorations add nothing and take the 148 px
+   the padding reserved for them — hiding them gives that room back to the card and the welcome text,
+   which otherwise slide under the privacy link. */
+@media (max-height: 520px) {
   .title-icon,
   .title-icon2 {
     display: none;
   }
-  .login-center,
-  .login-center.force {
-    top: 8px;
+  .login-container {
+    padding-top: 24px;
   }
 }
 
