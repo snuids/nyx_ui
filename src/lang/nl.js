@@ -3,10 +3,18 @@ export const messages = {
       github: {
         or: "of",
         signin: "Inloggen met GitHub",
-        waiting: "Bezig met inloggen via GitHub…",
-        failed: "Inloggen via GitHub is mislukt.",
-        no_account: "Er is geen NYX-account gekoppeld aan deze GitHub-identiteit.",
-        unavailable: "Inloggen via GitHub is niet beschikbaar.",
+        unavailable: "Inloggen via GitHub is niet beschikbaar."
+      },
+      entra: {
+        signin: "Inloggen met Microsoft",
+        unavailable: "Inloggen via Microsoft is niet beschikbaar."
+      },
+      // De terugkeerpagina (`/oauth`) is dezelfde voor elke provider en weet niet welke ze afrondt
+      // — de API leest dat uit de state — dus haar berichten noemen er geen.
+      sso: {
+        waiting: "Bezig met inloggen…",
+        failed: "Inloggen is mislukt.",
+        no_account: "Er is geen NYX-account gekoppeld aan deze identiteit.",
         back: "Terug naar inloggen",
         change_password: "Dit account moet eerst zijn wachtwoord wijzigen via het inloggen met wachtwoord."
       },

@@ -109,14 +109,23 @@
               :loading="loginunderway"
             >{{ $t("ui.login_button") }}</el-button>
             <div class="login_error" v-if="form.error">{{form.error}}</div>
-            <template v-if="githubEnabled">
+            <template v-if="githubEnabled || entraEnabled">
               <div class="login-separator"><span>{{ $t("github.or") }}</span></div>
               <el-button
+                v-if="githubEnabled"
                 class="login-button github-button"
                 @click="startGithubLogin()"
                 :loading="githubunderway"
               >
                 <v-icon name="github" scale="1" />&nbsp;{{ $t("github.signin") }}
+              </el-button>
+              <el-button
+                v-if="entraEnabled"
+                class="login-button entra-button"
+                @click="startEntraLogin()"
+                :loading="entraunderway"
+              >
+                <v-icon name="brands/microsoft" scale="1" />&nbsp;{{ $t("entra.signin") }}
               </el-button>
             </template>
           </el-col>
@@ -154,8 +163,10 @@ export default {
       welcome: "loading"
     },
     loginunderway: false,
-    // GitHub sign-in: the button is shown only when the API answers that it is configured.
+    // Sign-in through an identity provider: a button is shown only when the API answers that it is
+    // configured, and only one of them runs at a time.
     githubunderway: false,
+    entraunderway: false,
     // Provisional password: the API only allows the password change until one is chosen.
     forceChange: false,
     newPassword: { current: "", first: "", second: "", error: "" },
@@ -186,19 +197,37 @@ export default {
     },
 
     async startGithubLogin() {
-      this.githubunderway = true;
+      return this.startSsoLogin("github");
+    },
+
+    async startEntraLogin() {
+      return this.startSsoLogin("entra");
+    },
+
+    /**
+     * Asks the API where to send the browser, and goes there.
+     *
+     * The provider is a parameter rather than a copy of this method per provider: the API answers
+     * the URL and sets the state cookie this browser must give back, and the return page is the
+     * same for all of them (`/oauth` → `cred/login_sso`). The client id and the directory never
+     * reach the bundle.
+     */
+    async startSsoLogin(provider) {
+      this[provider + "underway"] = true;
       try {
-        const response = await axios.get(this.$store.getters.apiurl + "cred/oauth/state");
+        const response = await axios.get(this.$store.getters.apiurl + "cred/oauth/state", {
+          params: { provider }
+        });
         if (response.data.error == "" && response.data.url) {
           // The API also set the `state` cookie this browser must give back.
           window.location.href = response.data.url;
           return;
         }
-        this.form.error = this.$t("github.unavailable");
+        this.form.error = this.$t(provider + ".unavailable");
       } catch (e) {
-        this.form.error = this.$t("github.unavailable");
+        this.form.error = this.$t(provider + ".unavailable");
       }
-      this.githubunderway = false;
+      this[provider + "underway"] = false;
     },
 
     async validateUser() {
@@ -420,10 +449,14 @@ export default {
     privacyLink() {
       return privacyNotice((this.$i18n && this.$i18n.locale) || "en").link;
     },
-    // `/config` carries `login.github`: the API is the one that knows whether it holds a GitHub
-    // client id, secret and redirect URI, so the console never builds the URL itself.
+    // `/config` carries `login.github` and `login.entra`: the API is the one that knows whether it
+    // holds the client id, secret and redirect URI each sign-in needs, so the console never builds
+    // the URL itself and never shows a button that cannot work.
     githubEnabled() {
       return !!(this.config && this.config.login && this.config.login.github);
+    },
+    entraEnabled() {
+      return !!(this.config && this.config.login && this.config.login.entra);
     },
     loginDisabled() {
       return (
@@ -566,7 +599,9 @@ export default {
   border-top: 1px solid #dcdfe6;
 }
 
-.github-button {
+/* One provider button per line: the separator already gives the first its breathing room. */
+.github-button,
+.entra-button {
   margin-top: 6px;
 }
 

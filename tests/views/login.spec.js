@@ -386,3 +386,85 @@ describe('bouton GitHub et hauteur de la carte', () => {
     expect(rule).toMatch(/transform:\s*translateX\(-50%\)/)
   })
 })
+
+describe('bouton Microsoft Entra ID', () => {
+  // The second provider follows the same rule as the first: the button exists only when the API
+  // says it can run the exchange, and the URL comes from the API — the client id and the directory
+  // never reach the bundle.
+  it("n'affiche pas le bouton quand l'API ne le declare pas configure", async () => {
+    axios.get.mockResolvedValue({ data: { error: '', welcome: 'W', login: { github: false, entra: false } } })
+    const { wrapper } = await mountLogin()
+    await vi.advanceTimersByTimeAsync(1000)
+    await flushPromises()
+
+    expect(wrapper.vm.entraEnabled).toBe(false)
+    expect(wrapper.text()).not.toContain('Sign in with Microsoft')
+  })
+
+  it("affiche le bouton quand l'API repond login.entra", async () => {
+    axios.get.mockResolvedValue({ data: { error: '', welcome: 'W', login: { github: false, entra: true } } })
+    const { wrapper } = await mountLogin()
+    await vi.advanceTimersByTimeAsync(1000)
+    await flushPromises()
+
+    expect(wrapper.vm.entraEnabled).toBe(true)
+    expect(wrapper.text()).toContain('Sign in with Microsoft')
+    // The separator is shared, so it must appear for Entra alone as well.
+    expect(wrapper.text()).toContain(i18n.global.t('github.or'))
+  })
+
+  it('affiche les deux boutons quand les deux fournisseurs sont configures', async () => {
+    axios.get.mockResolvedValue({ data: { error: '', welcome: 'W', login: { github: true, entra: true } } })
+    const { wrapper } = await mountLogin()
+    await vi.advanceTimersByTimeAsync(1000)
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('Sign in with GitHub')
+    expect(wrapper.text()).toContain('Sign in with Microsoft')
+    // One separator, not one per provider.
+    expect(wrapper.findAll('.login-separator')).toHaveLength(1)
+  })
+
+  it('demande a l API le fournisseur choisi', async () => {
+    axios.get.mockImplementation((url) => {
+      if (url.includes('cred/oauth/state')) {
+        return Promise.resolve({ data: { error: '', url: 'https://login.microsoftonline.com/x' } })
+      }
+      return Promise.resolve({ data: { error: '', welcome: 'W', icon: 'f', login: { entra: true } } })
+    })
+    // jsdom cannot navigate: the `href` setter is replaced, as the GitHub branch test does, and the
+    // descriptor is put back so the tests that follow read the real `window.location`.
+    const descriptor = Object.getOwnPropertyDescriptor(window, 'location')
+    const location = { href: '', origin: 'http://localhost', pathname: '/', search: '' }
+    Object.defineProperty(window, 'location', { configurable: true, value: location })
+    try {
+      const { wrapper } = await mountLogin()
+      await vi.advanceTimersByTimeAsync(1000)
+      await flushPromises()
+
+      await wrapper.vm.startEntraLogin()
+
+      const call = axios.get.mock.calls.find(([url]) => url.includes('cred/oauth/state'))
+      expect(call[1]).toEqual({ params: { provider: 'entra' } })
+      expect(window.location.href).toBe('https://login.microsoftonline.com/x')
+    } finally {
+      Object.defineProperty(window, 'location', descriptor)
+    }
+  })
+
+  it("dit l'indisponibilite avec le message du fournisseur", async () => {
+    axios.get.mockImplementation((url) =>
+      url.includes('cred/oauth/state')
+        ? Promise.resolve({ data: { error: 'entra login not configured', url: '' } })
+        : Promise.resolve({ data: { error: '', welcome: 'W', icon: 'f', login: { entra: true } } }),
+    )
+    const { wrapper } = await mountLogin()
+    await vi.advanceTimersByTimeAsync(1000)
+    await flushPromises()
+
+    await wrapper.vm.startEntraLogin()
+
+    expect(wrapper.vm.form.error).toBe(i18n.global.t('entra.unavailable'))
+    expect(wrapper.vm.entraunderway).toBe(false)
+  })
+})
