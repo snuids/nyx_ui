@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.41 14/Nov/2026
+* **A Microsoft account signs the console in the way a GitHub one does.** The sign-in screen shows a second button when `/config` answers `login.entra`, with the Microsoft logo the icon set already carries. The API remains the only one that knows whether the exchange can run: it answers the URL, and the client id, the secret and the directory never reach the bundle.
+* **The return page no longer names a provider.** Both providers come back to `/oauth`, and the page posts `{code, state}` to `cred/login_sso`: the API reads the provider from the state it issued, so a page that picked one would be choosing the exchange. Its messages move to `sso.*` in the four languages and name no provider — a person arriving from Microsoft is not told that « the GitHub sign-in failed »; `github.*` keeps the button label and its unavailability, `entra.*` the Microsoft one.
+* **One code path for both buttons.** `startGithubLogin()` and `startEntraLogin()` both delegate to `startSsoLogin(provider)`: one `cred/oauth/state?provider=…` call, one navigation, one failure message per provider.
+* Five cases in `tests/views/login.spec.js` (button hidden, shown alone, both at once — one separator only —, the provider in the request, the provider's own message) and one in `tests/views/oauth.spec.js` pinning that the callback sends nothing but the code and the state. **777 tests**.
+
 ## V3.6.40 13/Nov/2026
 * **A session cut by an administrator ends on the page that explains it.** The API now answers `ACCOUNT_INACTIVE` to a request carrying the token of a disabled account, and drops the token. The console used to do nothing with that code on a live session; it now clears the store and routes to `/inactive`, instead of the generic « lost session » toast that would invite the person to try again. On the sign-in screen nothing changes: the route already left for that page.
 * **The users list can show only the disabled accounts**, with their count in the filter label — the accounts filed by a GitHub sign-in wait there until an administrator decides, and they were lost among the active ones. The filter composes with the search box. Four languages.

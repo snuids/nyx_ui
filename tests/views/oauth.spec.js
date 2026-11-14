@@ -1,12 +1,17 @@
 // @vitest-environment jsdom
 /**
- * Return page of the GitHub sign-in (`/oauth?code=…&state=…`).
+ * Return page of a sign-in through an identity provider (`/oauth?code=…&state=…`).
  *
  * What the screen must do fits in three lines: read the `code` and the `state` from the URL, give
  * them to the API, then finish the session like the password form. What actually breaks is around
  * that: a URL with no code (the user comes back by hand), an identity with no account, an account
  * that must first change its password, an account with no application — and the URL keeping the
  * code in memory if the redirect is not a `replace`.
+ *
+ * The page is the same for GitHub and Microsoft Entra ID, and it does not know which one it is
+ * finishing: `/cred/login_sso` reads the provider from the state, and the messages name none of
+ * them. One test pins that, because a page that picked the provider itself would be choosing the
+ * exchange.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -67,7 +72,7 @@ async function mountOAuth() {
   return view
 }
 
-describe('retour de la connexion GitHub', () => {
+describe('retour de la connexion par fournisseur', () => {
   beforeEach(() => {
     // The catalogue is resolved from the instance locale: messages are read by their key so that
     // the test does not depend on the active language.
@@ -86,7 +91,7 @@ describe('retour de la connexion GitHub', () => {
     const { wrapper } = await mountOAuth()
 
     expect(axios.post).not.toHaveBeenCalled()
-    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('github.failed'))
+    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('sso.failed'))
   })
 
   it('le bouton de retour ramene a la connexion', async () => {
@@ -106,7 +111,7 @@ describe('retour de la connexion GitHub', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     const [url, body] = axios.post.mock.calls[0]
-    expect(url).toContain('cred/login_github')
+    expect(url).toContain('cred/login_sso')
     expect(body).toEqual({ code: 'the-code', state: 'the-state' })
   })
 
@@ -151,7 +156,7 @@ describe('retour de la connexion GitHub', () => {
 
     const { wrapper, router } = await mountOAuth()
 
-    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('github.no_account'))
+    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('sso.no_account'))
     expect(store.state.creds.token).toBeFalsy()
     expect(localStorage.authResponse).toBeUndefined()
     expect(router.currentRoute.value.path).not.toContain('/main')
@@ -176,7 +181,7 @@ describe('retour de la connexion GitHub', () => {
 
     const { wrapper, router } = await mountOAuth()
 
-    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('github.change_password'))
+    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('sso.change_password'))
     expect(router.currentRoute.value.path).not.toContain('/main')
   })
 
@@ -196,6 +201,24 @@ describe('retour de la connexion GitHub', () => {
 
     const { wrapper } = await mountOAuth()
 
-    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('github.unavailable'))
+    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('sso.unavailable'))
+  })
+
+  it('la page ne choisit pas le fournisseur : elle poste a sso avec le seul code et l etat', async () => {
+    // GitHub and Entra come back to the same page. The API reads the provider from the state it
+    // issued, so the page must send nothing that could name one — a wrong guess here would run the
+    // other exchange and fail with an answer nobody could act on.
+    openAt('?code=the-code&state=the-state')
+    axios.post.mockResolvedValue({ data: { error: 'Bad Credentials' } })
+
+    const { wrapper } = await mountOAuth()
+
+    const [url, body] = axios.post.mock.calls[0]
+    expect(url).toContain('cred/login_sso')
+    expect(body).toEqual({ code: 'the-code', state: 'the-state' })
+    expect(Object.keys(body)).toHaveLength(2)
+    // ...and the message names no provider, since this page does not know which one it finished.
+    expect(wrapper.vm.errorMessage).toBe(i18n.global.t('sso.no_account'))
+    expect(wrapper.vm.errorMessage).not.toMatch(/GitHub|Microsoft/)
   })
 })

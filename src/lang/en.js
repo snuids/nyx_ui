@@ -3,10 +3,18 @@ export const messages = {
       github: {
         or: "or",
         signin: "Sign in with GitHub",
-        waiting: "Signing in with GitHub…",
-        failed: "The GitHub sign-in failed.",
-        no_account: "No NYX account is linked to this GitHub identity.",
-        unavailable: "The GitHub sign-in is not available.",
+        unavailable: "The GitHub sign-in is not available."
+      },
+      entra: {
+        signin: "Sign in with Microsoft",
+        unavailable: "The Microsoft sign-in is not available."
+      },
+      // The return page (`/oauth`) is the same for every provider and cannot know which one it is
+      // finishing — the API decides from the state — so its messages name none of them.
+      sso: {
+        waiting: "Signing you in…",
+        failed: "The sign-in failed.",
+        no_account: "No NYX account is linked to this identity.",
         back: "Back to sign-in",
         change_password: "This account must first change its password through the password sign-in."
       },

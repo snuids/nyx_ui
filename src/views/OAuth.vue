@@ -4,13 +4,13 @@
       <div class="oauth-inner">
         <template v-if="!errorMessage">
           <v-icon name="spinner" scale="2" spin />
-          <p class="oauth-text">{{ $t("github.waiting") }}</p>
+          <p class="oauth-text">{{ $t("sso.waiting") }}</p>
         </template>
 
         <template v-else>
           <v-icon name="exclamation-triangle" scale="2" class="oauth-error-icon" />
           <p class="oauth-text oauth-error">{{ errorMessage }}</p>
-          <el-button type="primary" @click="backToLogin()">{{ $t("github.back") }}</el-button>
+          <el-button type="primary" @click="backToLogin()">{{ $t("sso.back") }}</el-button>
         </template>
       </div>
     </el-card>
@@ -19,13 +19,17 @@
 
 <script>
 /**
- * Landing page of the GitHub sign-in: `/oauth?code=…&state=…`.
+ * Landing page of a sign-in through an identity provider: `/oauth?code=…&state=…`.
  *
- * GitHub sends the browser back here after the user has authorised the app. This page does one
- * thing — hand the `code` and its `state` to POST `/cred/login_github` — and then finishes the
- * session exactly the way the password form does (`Login.vue`'s `authenticate()`): the payload is
- * kept in `localStorage`, the store commits `login`, and the console opens the first application
- * of the account.
+ * The provider sends the browser back here after the person has authorised the application. This
+ * page does one thing — hand the `code` and its `state` to POST `/cred/login_sso` — and then
+ * finishes the session exactly the way the password form does (`Login.vue`'s `authenticate()`): the
+ * payload is kept in `localStorage`, the store commits `login`, and the console opens the first
+ * application of the account.
+ *
+ * It does not know, and must not choose, which provider it is finishing: the state kept by the API
+ * carries that, so `/cred/login_sso` runs the exchange the state was issued for. That is why its
+ * messages name no provider.
  *
  * The `code` is single-use and the `state` dies with this call; neither is kept in the history once
  * the page has run, so the URL is replaced by the application route as soon as it succeeds.
@@ -50,30 +54,30 @@ export default {
       const state = (vars.state || "").split("#")[0];
 
       if (!code || !state) {
-        this.errorMessage = this.$t("github.failed");
+        this.errorMessage = this.$t("sso.failed");
         return;
       }
 
       let response = null;
       try {
-        response = await axios.post(this.$store.getters.apiurl + "cred/login_github", { code, state });
+        response = await axios.post(this.$store.getters.apiurl + "cred/login_sso", { code, state });
       } catch (e) {
         const data = e && e.response && e.response.data;
-        this.errorMessage = (data && data.error) ? this.$t("github.failed") : this.$t("github.unavailable");
+        this.errorMessage = (data && data.error) ? this.$t("sso.failed") : this.$t("sso.unavailable");
         return;
       }
 
       const data = response && response.data;
       if (data && data.error === "ACCOUNT_INACTIVE") {
-        // The identity was filed as a disabled account (GITHUB_UNKNOWN_ACCOUNTS=inactive on the
-        // API): it exists, it just may not come in. Same page as the password sign-in.
+        // The identity was filed as a disabled account (`*_UNKNOWN_ACCOUNTS=inactive` on the API):
+        // it exists, it just may not come in. Same page as the password sign-in.
         this.$router.push("/inactive");
         return;
       }
       if (!data || data.error != "" || !data.cred) {
         // The API answers "Bad Credentials" for an identity without an account as well as for a
         // refused code: the message says what the user can act on.
-        this.errorMessage = this.$t("github.no_account");
+        this.errorMessage = this.$t("sso.no_account");
         return;
       }
 
@@ -90,7 +94,7 @@ export default {
         // lives on the password login: send the user back there rather than showing a console
         // that answers MUST_CHANGE_PASSWORD to every click.
         this.$store.commit({ type: "login", data });
-        this.errorMessage = this.$t("github.change_password");
+        this.errorMessage = this.$t("sso.change_password");
         return;
       }
 

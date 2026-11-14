@@ -36,10 +36,18 @@ export const messages = {
       github: {
         or: "ou",
         signin: "Se connecter avec GitHub",
-        waiting: "Connexion à GitHub…",
-        failed: "La connexion GitHub a échoué.",
-        no_account: "Aucun compte NYX n'est associé à cette identité GitHub.",
-        unavailable: "La connexion GitHub n'est pas disponible.",
+        unavailable: "La connexion GitHub n'est pas disponible."
+      },
+      entra: {
+        signin: "Se connecter avec Microsoft",
+        unavailable: "La connexion Microsoft n'est pas disponible."
+      },
+      // La page de retour (`/oauth`) est la même pour tous les fournisseurs et ne sait pas lequel
+      // elle termine — c'est l'API qui le lit dans l'état — donc ses messages n'en nomment aucun.
+      sso: {
+        waiting: "Connexion en cours…",
+        failed: "La connexion a échoué.",
+        no_account: "Aucun compte NYX n'est associé à cette identité.",
         back: "Retour à la connexion",
         change_password: "Ce compte doit d'abord changer son mot de passe via la connexion par mot de passe."
       },
