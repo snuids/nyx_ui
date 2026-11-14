@@ -1,5 +1,11 @@
 # Version History
 
+## V3.6.43 14/Nov/2026
+* **The sign-in screen is centred again, logo included.** The group was placed with a fixed `top: calc(50% - 70px)` computed for the password form alone: each way of signing in added made the card taller and pushed the whole block below the middle — measured on the production instance at a composition centre of 320 px against a window centre of 289, with the welcome text landing on the privacy link (24 px overlap). The page is now a flex column whose padding reserves the room the decorations (140 px above the card) and the privacy link need, and the group is centred by `margin: auto` — which collapses when there is no room left, so a short window scrolls instead of losing the top of the composition. Measured after the change: 291 against 289 at 577 px of height, 348 against 350 at 700, 448 against 450 at 900.
+* The forced-password panel loses its own offset — it was compensating for the same fixed `top`, and is now centred on its height like the sign-in one.
+* Below 520 px of height (the threshold was 470) the decorations are hidden and the reserved padding drops to 24 px, giving that room back to the card instead of leaving a gap.
+* Two cases in `tests/views/login.spec.js`: the short-window media query asserts the new contract, and a new one pins that the composition is centred on its own height (`position: absolute`, `top: clamp` and the offsets must not come back). **779 tests**.
+
 ## V3.6.42 14/Nov/2026
 * **The two sign-in buttons line up.** Element Plus gives `.el-button + .el-button` a 12 px left margin, meant for a row of buttons: between the stacked GitHub and Microsoft buttons it pushed the second one 12 px right of the password field and out of the card (`x=472` against `x=460`, measured in the browser). The separator div used to break that sibling pair, which is why the GitHub button alone never showed it. The stylesheet now neutralises it for our stacked buttons.
 * One case in `tests/views/login.spec.js` reads the rule from the stylesheet: jsdom does no layout, so the 12 px shift cannot be caught at mount time — only once both providers are configured. **778 tests**.

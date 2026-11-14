@@ -364,16 +364,35 @@ describe('bouton GitHub et hauteur de la carte', () => {
     expect(icon).not.toMatch(/margin-top:\s*-/)
   })
 
-  it('remonte le groupe et masque les decors sur une fenetre tres courte', async () => {
+  it('masque les decors et rend leur place a la carte sur une fenetre courte', async () => {
     const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
-    const media = source.match(/@media \(max-height: 470px\) \{([\s\S]*?)\n\}/)
+    const media = source.match(/@media \(max-height: 520px\) \{([\s\S]*?)\n\}/)
     expect(media, 'requete media introuvable').toBeTruthy()
-    expect(media[1]).toMatch(/\.login-center,[\s\S]*?top:\s*8px/)
-    expect(media[1]).toMatch(/display:\s*none/)
+    expect(media[1]).toMatch(/\.title-icon,[\s\S]*?\.title-icon2 \{\s*display:\s*none/)
+    // The padding reserved 148 px above the card for those decorations: hidden, that room goes back
+    // to the card and the welcome text instead of leaving a gap.
+    expect(media[1]).toMatch(/\.login-container \{\s*padding-top:\s*24px/)
 
-    // Same specificity as the general rule: only the order in the stylesheet decides, so the media
-    // query must come *after* `.login-center`, otherwise it never applies.
-    expect(source.indexOf('@media (max-height: 470px)')).toBeGreaterThan(source.indexOf('.login-center {'))
+    // Same specificity as the general rules: only the order in the stylesheet decides, so the media
+    // query must come *after* them, otherwise it never applies.
+    expect(source.indexOf('@media (max-height: 520px)')).toBeGreaterThan(source.indexOf('.login-container {'))
+  })
+
+  it('centre la composition sur sa propre hauteur, pas sur un decalage fixe', async () => {
+    // The card grows with each way of signing in (a second provider, a forced password change). A
+    // fixed `top: calc(50% - 70px)` was computed for the password form alone: with the Microsoft
+    // button the block ended up 31 px below the middle, measured in production (composition centre
+    // 320 against a window centre of 289), and the welcome text landed on the privacy link.
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const container = source.match(/\.login-container \{([^}]*)\}/)[1]
+    const group = source.match(/\.login-center \{([^}]*)\}/)[1]
+
+    expect(container).toMatch(/display:\s*flex/)
+    expect(container).toMatch(/flex-direction:\s*column/)
+    expect(container).toMatch(/padding:\s*\d+px \d+px \d+px/)
+    expect(group).toMatch(/margin:\s*auto/)
+    expect(group, 'aucun positionnement absolu ne doit subsister').not.toMatch(/position:\s*absolute/)
+    expect(group).not.toMatch(/\btop:\s*clamp/)
   })
 
   it('place le lien de confidentialite au milieu, en bas', async () => {
