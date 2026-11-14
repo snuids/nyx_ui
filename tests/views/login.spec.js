@@ -467,4 +467,16 @@ describe('bouton Microsoft Entra ID', () => {
     expect(wrapper.vm.form.error).toBe(i18n.global.t('entra.unavailable'))
     expect(wrapper.vm.entraunderway).toBe(false)
   })
+
+  it('aligne les deux boutons : pas de marge de frere entre eux', async () => {
+    // Element Plus adds `margin-left: 12px` to `.el-button + .el-button`, meant for a row of
+    // buttons. Between the two stacked provider buttons it pushed the second one 12 px right of the
+    // password field and out of the card — invisible in jsdom, which does no layout, and visible
+    // only once both providers were configured (the separator used to break the sibling pair).
+    const source = readFileSync(resolve(process.cwd(), 'src/views/Login.vue'), 'utf8')
+    const rule = source.match(/\.login-button \+ \.login-button \{([^}]*)\}/)
+
+    expect(rule, 'regle .login-button + .login-button introuvable').toBeTruthy()
+    expect(rule[1]).toMatch(/margin-left:\s*0/)
+  })
 })

@@ -1,5 +1,9 @@
 # Version History
 
+## V3.6.42 14/Nov/2026
+* **The two sign-in buttons line up.** Element Plus gives `.el-button + .el-button` a 12 px left margin, meant for a row of buttons: between the stacked GitHub and Microsoft buttons it pushed the second one 12 px right of the password field and out of the card (`x=472` against `x=460`, measured in the browser). The separator div used to break that sibling pair, which is why the GitHub button alone never showed it. The stylesheet now neutralises it for our stacked buttons.
+* One case in `tests/views/login.spec.js` reads the rule from the stylesheet: jsdom does no layout, so the 12 px shift cannot be caught at mount time — only once both providers are configured. **778 tests**.
+
 ## V3.6.41 14/Nov/2026
 * **A Microsoft account signs the console in the way a GitHub one does.** The sign-in screen shows a second button when `/config` answers `login.entra`, with the Microsoft logo the icon set already carries. The API remains the only one that knows whether the exchange can run: it answers the URL, and the client id, the secret and the directory never reach the bundle.
 * **The return page no longer names a provider.** Both providers come back to `/oauth`, and the page posts `{code, state}` to `cred/login_sso`: the API reads the provider from the state it issued, so a page that picked one would be choosing the exchange. Its messages move to `sso.*` in the four languages and name no provider — a person arriving from Microsoft is not told that « the GitHub sign-in failed »; `github.*` keeps the button label and its unavailability, `entra.*` the Microsoft one.
