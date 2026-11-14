@@ -224,6 +224,19 @@ export default {
 };
 </script>
 <style>
+/* The browser's default `body` margin (8 px) was never reset, and every full-page view sizes
+   itself against the window: the sign-in return page (`height: 100vh`), the inactive-account page
+   and the privacy notice (`min-height: 100vh`). Each was therefore inset by 8 px and stopped short
+   of the window on three sides, letting the page canvas show through — white in the light theme,
+   the sunken surface (#161a23, from `html.dark body`) in the dark one, which is what one sees as a
+   black or white border above and to the right of the page. The sign-in screen itself escaped it
+   only because its container is an absolutely positioned layer covering the viewport. */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
