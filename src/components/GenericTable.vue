@@ -424,16 +424,46 @@ export default {
 
       newObj._source[headerName] = newRec._source[headerName];
 
-      this.$store.commit({
-        type: "updateRecord",
-        data: newObj
-      });
+      // The action, because this cell edit can be refused: another operator may have saved the
+      // row since the grid was loaded, and the grid must then show what is actually stored.
+      this.$store
+        .dispatch("saveRecord", newObj)
+        .then(response => {
+          // Keep the row's version in step with the cluster: the next edit of the same cell
+          // asserts it, and a grid that kept the old number would refuse its own second save.
+          var written = (response && response.data) || {};
+          if (written.seq_no !== undefined) {
+            newObj._seq_no = written.seq_no;
+            newObj._primary_term = written.primary_term;
+          }
+          this.$notify({
+            title: this.$t("rep.record_updated"),
+            type: "success",
+            message: this.$t("rep.record_updated"),
+            position: "bottom-right",
+            duration: 1000
+          });
+        })
+        .catch(error => this.partialUpdateFailed(error));
+    },
+    partialUpdateFailed: function(error) {
+      var response = error && error.response;
+      if (response && response.status === 409) {
+        this.$notify({
+          title: this.$t("generictable.conflict_title"),
+          message: this.$t("generictable.conflict_reloaded"),
+          type: "warning",
+          position: "bottom-right",
+          duration: 5000
+        });
+        this.loadData();
+        return;
+      }
       this.$notify({
-        title: this.$t("rep.record_updated"),
-        type: "success",
-        message: this.$t("rep.record_updated"),
-        position: "bottom-right",
-        duration: 1000
+        title: this.$t("rep.record_error"),
+        message: (response && response.data && response.data.error) || this.$t("ui.query_failed"),
+        type: "error",
+        position: "bottom-right"
       });
     },
     selectChanged: function(newRec, header) {

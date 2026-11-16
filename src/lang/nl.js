@@ -140,7 +140,13 @@ export const messages = {
         modifyrecord:'Record wijzigen',
         fields:'Velden',
         original:'Origineel',
-        new:'Nieuw'
+        new:'Nieuw',
+        conflict_title:"Iemand heeft eerder opgeslagen",
+        conflict_body:"Dit record is door iemand anders gewijzigd terwijl u het bewerkte. Er is niets opgeslagen: de versie die u ziet is niet meer de opgeslagen versie.",
+        conflict_fields:"Intussen gewijzigde velden: {fields}",
+        conflict_reload:"Opgeslagen versie herladen",
+        conflict_overwrite:"Toch overschrijven",
+        conflict_reloaded:"Dit record was gewijzigd: de lijst is herladen met de opgeslagen versie."
       }
       ,sendmessage:{
         send_message:'Bericht versturen'
@@ -670,6 +676,7 @@ export const messages = {
         file_uploaded:"Het bestand is geüpload",
         record_saved:"Record opgeslagen.",
         record_updated:"Record bijgewerkt.",
+        record_error:"Opslaan mislukt",
         unable_send:"Kan het bericht niet versturen.",
         edit_report:"Rapport bewerken",
         new_report:"Nieuw rapport",

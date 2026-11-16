@@ -46,6 +46,41 @@ function stopSocket(wsObject)
   }
 }
 
+/**
+ * The version a record was read at, as the `If-Match` the API expects.
+ *
+ * `_seq_no`/`_primary_term` come with the document: `GET /generic/<index>/<id>` serves them,
+ * and every row of a list carries them because `loadData` asks the cluster for
+ * `seq_no_primary_term`. A row read before this change has neither, and answers `null` — the
+ * write then goes unasserted, which is the historical behaviour and must keep working.
+ */
+export function versionTag(data) {
+  if (!data || data._seq_no === undefined || data._seq_no === null)
+    return null;
+  const primaryTerm =
+    data._primary_term === undefined || data._primary_term === null ? 1 : data._primary_term;
+  return '"' + data._seq_no + "-" + primaryTerm + '"';
+}
+
+/**
+ * Posts a record through the generic route and returns the axios promise.
+ *
+ * The route refuses the write with a 409 when the record has changed since it was read: the
+ * caller gets the document that won, and decides — reload it, or overwrite it deliberately.
+ */
+export function postRecord(state, record) {
+  const url =
+    state.apiurl +
+    "generic/" + record._index + "/" + record._id + "?token=" +
+    state.creds.token;
+
+  const tag = versionTag(record);
+  // Exactly two arguments when there is nothing to assert: the call a test, a proxy or a
+  // `toHaveBeenCalledWith` sees must stay the one every existing writer makes.
+  if (!tag) return axios.post(url, record._source);
+  return axios.post(url, record._source, { headers: { "If-Match": tag } });
+}
+
 export default createStore({
   state: {
     apiurl: "api/v1/",
@@ -198,6 +233,12 @@ export default createStore({
       }
       
       
+    }
+    ,
+    saveRecord(context, payload) {
+      // The same write, with its answer: the record editor opens a dialog when the API answers
+      // 409, so the operator sees that someone else saved first instead of a silent loss.
+      return postRecord(context.state, payload);
     }
     ,
   },
@@ -520,14 +561,10 @@ export default createStore({
     }
     ,
     updateRecord(state, payload) {
-      var url =
-        state.apiurl +
-        "generic/" + payload.data._index + "/" + payload.data._id + "?token=" +
-        state.creds.token;
-
-      axios
-        .post(url, payload.data._source)
-        .catch(() => { /* intentional no-op */ });
+      // Most callers are editors that close on save and never look at the answer: the promise
+      // is dropped on purpose. `saveRecord` (the action) returns it, for the screens that must
+      // tell a refused write from a saved one.
+      postRecord(state, payload.data).catch(() => { /* intentional no-op */ });
     }
     ,
     deleteRecord(state, payload) {
