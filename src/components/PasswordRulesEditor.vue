@@ -147,6 +147,8 @@
 </template>
 
 <script>
+import { generatePassword } from "@/utils/passwordGenerator";
+
 export default {
   name: "PasswordRuleEditor",
   data() {
@@ -283,67 +285,10 @@ export default {
   },
   methods: {
     setFocus() {},
-    randomIntFromInterval(min, max) {
-      // min and max included
-      return Math.floor(Math.random() * (max - min + 1) + min);
-    },
     generateRandom(pwdRules) {
-      let uppers = pwdRules.forceUpper
-        ? pwdRules.minUpper
-        : -1;
-      let numbers = pwdRules.forceNumber
-        ? pwdRules.minNumber
-        : -1;
-      let specials = pwdRules.forceSpecial
-        ? pwdRules.minSpecial
-        : -1;
-      let either = 0;
-
-      var chars = [
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ", // upper
-        "0123456789", // numbers
-        " !\"#$%&'()*+,-./:;<=>?@[]^_`{|}~", // specials
-        "abcdefghijklmnopqrstuvwxyz" // either
-      ];
-
-      if (uppers >= 0) chars[3] += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      else uppers = 0;
-
-      if (numbers >= 0) chars[3] += "0123456789";
-      else numbers = 0;
-
-      if (specials >= 0) chars[3] += " !\"#$%&'()*+,-./:;<=>?@[]^_`{|}~";
-      else specials = 0;
-
-      let randomLength = this.randomIntFromInterval(
-        Math.max(pwdRules.length[0], uppers + numbers + specials),
-        pwdRules.length[1]
-      );
-
-      either = randomLength - uppers - numbers - specials;
-
-      console.log('randomLength:',randomLength)
-      console.log('uppers:',uppers)
-      console.log('numbers:',numbers)
-      console.log('specials:',specials)
-      console.log('either:',either)
-
-      this.testPwdForm.testPwd = [uppers, numbers, specials, either]
-        .map(function(len, i) {
-          return Array(len)
-            .fill(chars[i])
-            .map(function(x) {
-              return x[Math.floor(Math.random() * x.length)];
-            })
-            .join("");
-        })
-        .concat()
-        .join("")
-        .split("")
-        .sort(function() {
-          return 0.5 - Math.random();
-        })
-        .join("");
+      // One generator for the whole console: CSPRNG, unbiased shuffle, and the rules of the
+      // instance honoured (see `utils/passwordGenerator.js`).
+      this.testPwdForm.testPwd = generatePassword(pwdRules);
 
       this.submitForm('testPwdForm')
     },
