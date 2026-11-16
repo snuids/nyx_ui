@@ -7,6 +7,26 @@
     :close-on-click-modal="false"
     class="table-details"
   >
+    <el-alert
+      v-if="conflict"
+      type="warning"
+      :closable="false"
+      show-icon
+      class="table-conflict"
+    >
+      <p class="table-conflict-text">{{ $t("generictable.conflict_body") }}</p>
+      <p class="table-conflict-fields" v-if="conflict.keys.length">
+        {{ $t("generictable.conflict_fields", { fields: conflict.keys.join(", ") }) }}
+      </p>
+      <div class="table-conflict-actions">
+        <el-button size="small" type="primary" @click="reloadConflict()">
+          {{ $t("generictable.conflict_reload") }}
+        </el-button>
+        <el-button size="small" @click="forceSave()">
+          {{ $t("generictable.conflict_overwrite") }}
+        </el-button>
+      </div>
+    </el-alert>
     <el-tabs v-model="activeName" @tab-click="refresh">
       <el-tab-pane :label="$t('generictable.fields')" name="first">
         <el-form >
@@ -104,6 +124,8 @@ export default {
     formLabelWidth: "180px",
     fields: [],
     changed: false,
+    saving: false,
+    conflict: null,
     modulo: 2
   }),
   computed: {
@@ -191,26 +213,32 @@ export default {
     },
     prepareData: function() {
       this.dialogFormVisible = true;
-      console.log("prepare data");
-      console.log(this.record._id);
+      this.conflict = null;
+      this.openRecord(this.record);
+    },
+    openRecord: function(record) {
+      // The editor works on a copy: `orgRec` is what the record held when it was opened, and the
+      // dialog only allows a save when the two differ. `_seq_no`/`_primary_term` travel with the
+      // record and are what the write asserts.
       this.strNewRec = "";
       this.strOrgRec = "";
 
-      this.newRec = JSON.parse(JSON.stringify(this.record));
-      this.orgRec = JSON.parse(JSON.stringify(this.record));
+      this.newRec = JSON.parse(JSON.stringify(record));
+      this.orgRec = JSON.parse(JSON.stringify(record));
 
       this.strNewRec = YAML.safeDump(this.newRec, 10);
       this.strOrgRec = YAML.safeDump(this.orgRec, 10);
 
-      console.log(this.newRec._id);
-      console.log(this.orgRec._id);
-
       this.changed = false;
+      this.buildFields(this.newRec);
+    },
+    buildFields: function(record) {
+      var source = (record && record._source) || {};
       var lines = [];
       var curline = [];
 
-      for (var i in this.record._source) {
-        var rec = this.record._source[i];
+      for (var i in source) {
+        var rec = source[i];
         if (typeof rec == "string" || typeof rec == "number") {
           curline.push({ key: i, value: rec });
           if (curline.length >= this.modulo) {
@@ -221,16 +249,23 @@ export default {
       }
       if (curline.length > 0) {
         lines.push(curline);
-        curline = [];
       }
       this.fields = lines;
-      //alert(JSON.stringify(lines));
     },
     saveRecord: function() {
-      this.$store.commit({
-        type: "updateRecord",
-        data: this.newRec
-      });
+      this.conflict = null;
+      this.saving = true;
+      // The action, not the mutation: it hands back the promise, so a refused write is told
+      // apart from a saved one instead of closing the dialog on a lie.
+      return this.$store
+        .dispatch("saveRecord", this.newRec)
+        .then(() => this.saved())
+        .catch(error => this.saveFailed(error))
+        .finally(() => {
+          this.saving = false;
+        });
+    },
+    saved: function() {
       this.$emit("dialogcloseupdated");
       this.$notify({
         title: this.$t("rep.record_saved"),
@@ -238,6 +273,48 @@ export default {
         message: this.$t("rep.record_updated"),
         position: "bottom-right"
       });
+    },
+    saveFailed: function(error) {
+      var response = error && error.response;
+      if (response && response.status === 409) {
+        // Someone saved between the read and this write: nothing was stored. Show the fields
+        // that changed meanwhile and let the operator choose — the dialog stays open.
+        this.conflict = this.describeConflict((response.data || {}).data);
+        return;
+      }
+      this.$notify({
+        title: this.$t("rep.record_error"),
+        message: (response && response.data && response.data.error) || this.$t("ui.query_failed"),
+        type: "error",
+        position: "bottom-right"
+      });
+    },
+    describeConflict: function(current) {
+      var mine = (this.newRec && this.newRec._source) || {};
+      var theirs = (current && current._source) || {};
+      var keys = [];
+      Object.keys(theirs).forEach(key => {
+        if (JSON.stringify(mine[key]) !== JSON.stringify(theirs[key])) keys.push(key);
+      });
+      return { record: current, keys: keys };
+    },
+    reloadConflict: function() {
+      // Take the stored version: the dialog then edits what the index actually holds, and the
+      // next save asserts its version.
+      var current = (this.conflict || {}).record;
+      this.conflict = null;
+      if (!current) return;
+      this.openRecord(current);
+    },
+    forceSave: function() {
+      // An explicit overwrite, asked for by the operator who just read the warning. The version
+      // is dropped so the API accepts it as the last write — the same thing the console did
+      // silently before this change, now a decision.
+      var forced = JSON.parse(JSON.stringify(this.newRec));
+      delete forced._seq_no;
+      delete forced._primary_term;
+      this.newRec = forced;
+      return this.saveRecord();
     }
   }
 };

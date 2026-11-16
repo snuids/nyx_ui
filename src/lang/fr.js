@@ -135,7 +135,13 @@ export const messages = {
         modifyrecord:'Modifier l\'entrée',
         fields:'Champs',
         original:'Original',
-        new:'Nouveau'
+        new:'Nouveau',
+        conflict_title:"Quelqu'un a enregistré avant vous",
+        conflict_body:"Cet enregistrement a été modifié par quelqu'un d'autre pendant que vous l'éditiez. Rien n'a été enregistré : la version que vous voyez n'est plus celle qui est stockée.",
+        conflict_fields:"Champs modifiés entre-temps : {fields}",
+        conflict_reload:"Recharger la version enregistrée",
+        conflict_overwrite:"Écraser quand même",
+        conflict_reloaded:"Cet enregistrement avait changé : la liste a été rechargée avec la version stockée."
       }
       ,sendmessage:{
         send_message:'Envoyer un message'
@@ -674,6 +680,7 @@ export const messages = {
         file_uploaded:"Le fichier a été téléversé",
         record_saved:"Enregistrement sauvegardé.",
         record_updated:"Enregistrement mis à jour.",
+        record_error:"Échec de l'enregistrement",
         unable_send:"Impossible d'envoyer le message.",
         edit_report:"Modifier le rapport",
         new_report:"Nouveau rapport",

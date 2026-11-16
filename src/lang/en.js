@@ -140,7 +140,13 @@ export const messages = {
         modifyrecord:'Modify Record',
         fields:'Fields',
         original:'Original',
-        new:'New'
+        new:'New',
+        conflict_title:"Someone saved before you",
+        conflict_body:"This record was changed by someone else while you were editing it. Nothing was saved: the version you are looking at is not the one stored any more.",
+        conflict_fields:"Fields changed meanwhile: {fields}",
+        conflict_reload:"Reload the stored version",
+        conflict_overwrite:"Overwrite anyway",
+        conflict_reloaded:"This record had changed: the list was reloaded with the stored version."
       }
       ,sendmessage:{
         send_message:'Send Message'
@@ -670,6 +676,7 @@ export const messages = {
         file_uploaded:"The file has been uploaded",
         record_saved:"Record saved.",
         record_updated:"Record updated.",
+        record_error:"Save failed",
         unable_send:"Unable to send message.",
         edit_report:"Edit Report",
         new_report:"New Report",

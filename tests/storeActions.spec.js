@@ -334,6 +334,42 @@ describe('record mutations', () => {
     expect(axiosMock.post).toHaveBeenCalledWith('api/v1/generic/nyx_app/a1?token=TOK', { title: 'x' })
   })
 
+  it('asserts the version the record was read at', () => {
+    // The API refuses a write whose `If-Match` no longer matches, so the number has to travel.
+    store.commit('updateRecord', {
+      data: { _index: 'nyx_app', _id: 'a1', _seq_no: 4, _primary_term: 2, _source: { title: 'x' } },
+    })
+    expect(axiosMock.post).toHaveBeenCalledWith(
+      'api/v1/generic/nyx_app/a1?token=TOK',
+      { title: 'x' },
+      { headers: { 'If-Match': '"4-2"' } }
+    )
+  })
+
+  it('leaves the call untouched for a record that carries no version', () => {
+    // a row read before the API served the numbers: last-write-wins, exactly as before
+    store.commit('updateRecord', {
+      data: { _index: 'nyx_app', _id: 'a1', _source: { title: 'y' } },
+    })
+    expect(axiosMock.post).toHaveBeenLastCalledWith('api/v1/generic/nyx_app/a1?token=TOK',
+                                                    { title: 'y' })
+    expect(axiosMock.post.mock.lastCall).toHaveLength(2)
+  })
+
+  it('hands the answer of the write to the caller through the saveRecord action', async () => {
+    // the record editor needs the promise: a 409 must keep its dialog open
+    axiosMock.post.mockResolvedValueOnce({ data: { error: '', seq_no: 5, primary_term: 1 } })
+    const answer = await store.dispatch('saveRecord', {
+      _index: 'nyx_app', _id: 'a1', _seq_no: 4, _primary_term: 1, _source: { title: 'x' },
+    })
+    expect(answer.data.seq_no).toBe(5)
+    expect(axiosMock.post).toHaveBeenLastCalledWith(
+      'api/v1/generic/nyx_app/a1?token=TOK',
+      { title: 'x' },
+      { headers: { 'If-Match': '"4-1"' } }
+    )
+  })
+
   it('deletes a record through the generic route', () => {
     store.commit('deleteRecord', { data: { _index: 'nyx_app', _id: 'a1' } })
     expect(axiosMock.delete).toHaveBeenCalledWith('api/v1/generic/nyx_app/a1?token=TOK')
